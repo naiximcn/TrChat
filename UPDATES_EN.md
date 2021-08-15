@@ -1,5 +1,11 @@
 # TrChat Update Logs #
 
+#### VERSION 1.8
+- #### 1.80 (by ItsFlicker)
+  - Since: 2021.8.12
+  - Updates:
+    coming soon
+
 #### VERSION 1.7
   - #### 1.70
     - Since: 2020.1.15

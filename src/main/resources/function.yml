@@ -55,10 +55,11 @@ GENERAL:
 # Custom Functions
 # Match chat text, format into JSON
 CUSTOM:
-
   # 示例 —— QQ 分享
   shareQQ:
     # 满足条件表达式才能使用这个功能
+    # $player = 玩家
+    # $bukkitServer = 服务器
     requirement: '1!=0'
     # 匹配表达式
     # 示例模块的表达式部分来自互联网
@@ -81,8 +82,8 @@ CUSTOM:
 
   # 示例 —— B站视频 分享
   shareBilibili:
-    pattern: 'av( )?[1-9]([0-9]{0,9})'
-    text-filter: '[1-9]([0-9]{0,9})'
+    pattern: 'BV( )?.{10}'
+    text-filter: '.{10}'
     # 自定义显示 JSON 组件
     display:
       text: '&8[&f&lBilibili&8]'
@@ -91,8 +92,8 @@ CUSTOM:
         - '&7这可能是一个 Bilibili 视频,'
         - '&7点击即可访问'
         - ''
-        - '&3Av号: &b{0}'
-      url: 'https://www.bilibili.com/video/av{0}'
+        - '&3BV号: &b{0}'
+      url: 'https://www.bilibili.com/video/BV{0}'
 
   # 示例 —— 防止玩家暴露、分享真实手机号
   hidePhoneNumber:

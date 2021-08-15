@@ -18,7 +18,9 @@
 ######################################################################
 
 NORMAL:
-  # Requirement to use this format, for example: 'player.isOp()'
+  # Requirement to use this format, for example: '$player.isOp()'
+  # $player = 玩家
+  # $bukkitServer = 服务器
   - requirement: null
 
     # Message part
@@ -34,9 +36,9 @@ NORMAL:
         text: '&8[&3%player_world%&8]'
         hover: |-
           &r
-          &8▪ &7Location: &3%player_world%&7, &2%player_x%/%player_y%/%player_z%
+          &8▪ &7位置: &3%player_world%&7, &2%player_x%/%player_y%/%player_z%
           &r
-          &6▶ &eClick here to send a teleport request
+          &6▶ &e点击发送传送请求
           &r
         command: '/tpa %player_name%'
         # (Optional) Requirement to display this JSON part for the player
@@ -48,9 +50,9 @@ NORMAL:
         hover: |-
           &r
           &8▪ &7Ping: &3%player_ping% Ms
-          &8▪ &7Health: &c%player_health_rounded% ❤
+          &8▪ &7生命值: &c%player_health_rounded% ❤
           &r
-          &6▶ &eClick to chat with me
+          &6▶ &e点击发送私聊
           &r
         suggest: '/msg %player_name% '
       part-before-msg:
@@ -68,7 +70,7 @@ PRIVATE_SEND:
         text: '&8[&a%player_name% &7➦ %toplayer_name%&3&8] '
     msg:
       default-color: 'f'
-      hover: '&7Date: %server_time_h:mm:ss a%'
+      hover: '&7日期: %server_time_HH:mm:ss%'
 
 ######################################################################
 #
@@ -82,7 +84,7 @@ PRIVATE_RECEIVE:
         text: '&8[&6%player_name% &7➥ &2%toplayer_name%&8] '
     msg:
       default-color: 'f'
-      hover: '&7Date: %server_time_h:mm:ss a%'
+      hover: '&7日期: %server_time_HH:mm:ss%'
 
 ######################################################################
 #
@@ -95,16 +97,16 @@ GLOBAL:
       server:
         text: '&8[&3%server_name%&8] '
         hover: |-
-          &7Server &3%server_name%
+          &7服务器 &3%server_name%
           &r
-          &7Version: &6%server_version%
-          &7Online: &a%server_online%&7/&2%server_max_players%
+          &7版本: &6%server_version%
+          &7在线人数: &a%server_online%&7/&2%server_max_players%
           &7TPS: &b%server_tps%
       player:
         text: '&e%player_name%&8: '
     msg:
       default-color: 'f'
-      hover: '&7Date: %server_time_h:mm:ss a%'
+      hover: '&7日期: %server_time_HH:mm:ss%'
 
 ######################################################################
 #
@@ -117,16 +119,16 @@ STAFF:
       staff:
         text: '&8[&cSTAFF&8] '
         hover: |-
-          &7Server &3%server_name%
+          &7服务器 &3%server_name%
           &r
-          &7Version: &6%server_version%
-          &7Online: &a%server_online%&7/&2%server_max_players%
+          &7版本: &6%server_version%
+          &7在线人数: &a%server_online%&7/&2%server_max_players%
           &7TPS: &b%server_tps%
           &7
-          &a▶ &2Click to connect to this server
+          &a▶ &2点击进入这个服务器
         command: '/server %server_name%'
       player:
         text: '&e%player_name%&8: '
     msg:
       default-color: 'a'
-      hover: '&7Date: %server_time_h:mm:ss a%'
+      hover: '&7日期: %server_time_HH:mm:ss%'

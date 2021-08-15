@@ -2,11 +2,31 @@
 
 #### VERSION 1.8
   ```
-  - 这将会是 TrChat 的最后一个版本,
-  - 无新增内容, 主要是修复一些小问题和优化
+  - 这是一个由ItsFlicker维护的版本
+  - 注意, TabooLib6目前仍处于预览版，可能存在不稳定因素，
+    如有bug请及时在issue反馈
   
-  - 注意, 1.13+ 的命令补全绕过权限是: trchat.bypass.tabcomplete
+  - tips: 1.13+ 的命令补全绕过权限是: trchat.bypass.tabcomplete
   ```
+- #### 1.81
+  - 计划: 
+    - 添加撤回消息功能
+- #### 1.80
+  - Since 2021.8.15
+  - Updates:
+    - 升级 TabooLib 至 6.0.0-pre45
+    - 主要代码用kotlin重写
+    - 扁平化语言文件,优化一些节点
+    - 支持1.17
+    - 支持1.16HEX颜色代码(perm: trchat.color.*) ```eg: &{#FFFFFF}```
+    - 增加屏蔽功能(/ignore)
+    - 修复Java16的js执行
+    - 修复敏感词过滤器
+    - 修复日志系统
+    - 优化配置文件
+    - 修复在1.17中的发包监听器
+    - 修复无法展示带有PublicBukkitValues标签的物品
+    - 添加GlobalShoutEvent
 
 #### VERSION 1.7
   - #### 1.70
