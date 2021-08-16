@@ -1,12 +1,12 @@
 package me.arasple.mc.trchat.module.channels
 
 import com.google.common.collect.Lists
-import me.arasple.mc.trchat.module.bstats.Metrics
+import me.arasple.mc.trchat.Metrics
 import me.arasple.mc.trchat.module.chat.ChatFormats
 import me.arasple.mc.trchat.module.chat.obj.ChatType
 import me.arasple.mc.trchat.module.cmds.CommandReply
 import me.arasple.mc.trchat.module.logs.ChatLogs
-import me.arasple.mc.trchat.util.Bungees
+import me.arasple.mc.trchat.module.bungee.Bungees
 import net.md_5.bungee.chat.ComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player

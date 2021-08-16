@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.module.filter.processer;
 
-import me.arasple.mc.trchat.module.bstats.Metrics;
+import me.arasple.mc.trchat.Metrics;
 
 import java.util.*;
 

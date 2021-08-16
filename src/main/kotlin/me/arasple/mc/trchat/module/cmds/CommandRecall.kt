@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.module.cmds
 
-import me.arasple.mc.trchat.util.MessageTransmit.releaseTransmit
+import me.arasple.mc.trchat.module.chat.MessageTransmit.releaseTransmit
 import org.bukkit.entity.Player
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide

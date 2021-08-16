@@ -1,7 +1,6 @@
 package me.arasple.mc.trchat.module.logs
 
-import com.google.common.collect.Lists
-import me.arasple.mc.trchat.TrChatFiles.settings
+import me.arasple.mc.trchat.api.TrChatFiles.settings
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.io.newFile

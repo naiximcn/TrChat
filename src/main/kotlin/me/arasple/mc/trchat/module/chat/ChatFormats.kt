@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.module.chat
 
-import me.arasple.mc.trchat.TrChatFiles
+import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.module.chat.format.Format
 import me.arasple.mc.trchat.module.chat.format.PriFormat
 import me.arasple.mc.trchat.module.chat.obj.ChatType

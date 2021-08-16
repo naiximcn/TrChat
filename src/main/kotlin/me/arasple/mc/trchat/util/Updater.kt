@@ -1,9 +1,9 @@
-package me.arasple.mc.trchat.module.updater
+package me.arasple.mc.trchat.util
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import me.arasple.mc.trchat.TrChat
-import me.arasple.mc.trchat.TrChatFiles
+import me.arasple.mc.trchat.api.TrChatFiles
 import org.bukkit.event.player.PlayerJoinEvent
 import taboolib.common.LifeCycle
 import taboolib.common.env.DependencyDownloader.readFully

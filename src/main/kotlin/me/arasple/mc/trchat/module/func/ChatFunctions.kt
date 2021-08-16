@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.module.func
 
-import me.arasple.mc.trchat.TrChatFiles.function
+import me.arasple.mc.trchat.api.TrChatFiles.function
 import me.arasple.mc.trchat.module.func.imp.Function
 import me.arasple.mc.trchat.util.notify
 import taboolib.common.platform.ProxyCommandSender

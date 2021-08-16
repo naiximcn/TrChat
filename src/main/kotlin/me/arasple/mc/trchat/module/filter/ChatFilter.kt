@@ -1,7 +1,7 @@
 package me.arasple.mc.trchat.module.filter
 
 import com.google.gson.JsonParser
-import me.arasple.mc.trchat.TrChatFiles.filter
+import me.arasple.mc.trchat.api.TrChatFiles.filter
 import me.arasple.mc.trchat.module.filter.processer.Filter
 import me.arasple.mc.trchat.module.filter.processer.FilteredObject
 import me.arasple.mc.trchat.util.notify

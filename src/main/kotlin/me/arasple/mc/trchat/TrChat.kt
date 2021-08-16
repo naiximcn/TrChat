@@ -3,8 +3,8 @@ package me.arasple.mc.trchat
 import me.arasple.mc.trchat.module.chat.ChatFormats
 import me.arasple.mc.trchat.module.filter.ChatFilter
 import me.arasple.mc.trchat.module.func.ChatFunctions
-import me.arasple.mc.trchat.module.updater.Updater
-import me.arasple.mc.trchat.util.Bungees
+import me.arasple.mc.trchat.util.Updater
+import me.arasple.mc.trchat.module.bungee.Bungees
 import org.bukkit.Bukkit
 import taboolib.common.env.Repository.downloadToFile
 import taboolib.common.platform.Platform

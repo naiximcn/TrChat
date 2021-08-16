@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.module.chat.listeners
 
-import me.arasple.mc.trchat.TrChatFiles.function
+import me.arasple.mc.trchat.api.TrChatFiles.function
 import org.bukkit.Bukkit
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import taboolib.common.platform.*

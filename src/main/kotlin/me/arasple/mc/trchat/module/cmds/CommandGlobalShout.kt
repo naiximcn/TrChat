@@ -1,7 +1,7 @@
 package me.arasple.mc.trchat.module.cmds
 
 import me.arasple.mc.trchat.module.channels.ChannelGlobal.execute
-import me.arasple.mc.trchat.util.Bungees
+import me.arasple.mc.trchat.module.bungee.Bungees
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake

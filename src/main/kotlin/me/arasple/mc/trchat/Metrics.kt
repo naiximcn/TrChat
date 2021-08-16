@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.module.bstats
+package me.arasple.mc.trchat
 
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake

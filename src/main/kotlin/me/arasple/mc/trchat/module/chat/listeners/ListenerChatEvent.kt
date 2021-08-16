@@ -1,7 +1,7 @@
 package me.arasple.mc.trchat.module.chat.listeners
 
-import me.arasple.mc.trchat.TrChatFiles
-import me.arasple.mc.trchat.module.bstats.Metrics
+import me.arasple.mc.trchat.api.TrChatFiles
+import me.arasple.mc.trchat.Metrics
 import me.arasple.mc.trchat.module.channels.ChannelGlobal.execute
 import me.arasple.mc.trchat.module.channels.ChannelStaff
 import me.arasple.mc.trchat.module.channels.ChannelStaff.isInStaffChannel

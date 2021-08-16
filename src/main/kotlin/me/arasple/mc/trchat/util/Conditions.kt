@@ -15,8 +15,8 @@ import javax.script.SimpleBindings
  * @author Arasple, wlys
  * @date 2019/11/30 13:21
  */
-fun checkCondition(player: Player, requirement: String?): Boolean {
-    val condition = requirement?.replacePlaceholder(player)
+fun checkCondition(player: Player, script: String?): Boolean {
+    val condition = script?.replacePlaceholder(player)
 
     if (Strings.isEmpty(condition) || condition.equals("null", ignoreCase = true)) {
         return true

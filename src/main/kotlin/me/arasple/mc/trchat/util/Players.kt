@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.util
 
+import me.arasple.mc.trchat.module.bungee.Bungees
 import org.bukkit.Bukkit
 import taboolib.common.LifeCycle
 import taboolib.common.platform.*

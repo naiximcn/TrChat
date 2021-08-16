@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat
+package me.arasple.mc.trchat.api
 
 import me.arasple.mc.trchat.module.chat.ChatFormats
 import me.arasple.mc.trchat.module.filter.ChatFilter
@@ -40,14 +40,8 @@ object TrChatFiles {
 
     @Awake(LifeCycle.ENABLE)
     fun init() {
-        FileWatcher.INSTANCE.addSimpleListener(
-            filter.file, { ChatFilter.loadFilter(false) }, true
-        )
-        FileWatcher.INSTANCE.addSimpleListener(
-            formats.file, { ChatFormats.loadFormats() }, true
-        )
-        FileWatcher.INSTANCE.addSimpleListener(
-            function.file, { ChatFunctions.loadFunctions() }, true
-        )
+        FileWatcher.INSTANCE.addSimpleListener(filter.file) { ChatFilter.loadFilter(false) }
+        FileWatcher.INSTANCE.addSimpleListener(formats.file) { ChatFormats.loadFormats() }
+        FileWatcher.INSTANCE.addSimpleListener(function.file) { ChatFunctions.loadFunctions() }
     }
 }

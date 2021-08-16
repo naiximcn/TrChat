@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.util
 
-import me.arasple.mc.trchat.TrChatFiles.settings
+import me.arasple.mc.trchat.api.TrChatFiles.settings
 import me.clip.placeholderapi.PlaceholderAPIPlugin
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -27,7 +27,7 @@ object Vars {
      *
      * @param expansions 拓展
      */
-    fun downloadExpansions(expansions: List<String>) {
+    private fun downloadExpansions(expansions: List<String>) {
         try {
             if (expansions.isNotEmpty()) {
                 if (PlaceholderAPIPlugin.getInstance().cloudExpansionManager.cloudExpansions.isEmpty()) {

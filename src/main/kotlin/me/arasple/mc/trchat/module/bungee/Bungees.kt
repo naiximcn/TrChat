@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.util
+package me.arasple.mc.trchat.module.bungee
 
 import com.google.common.io.ByteStreams
 import me.arasple.mc.trchat.TrChat.plugin
