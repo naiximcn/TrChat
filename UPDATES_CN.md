@@ -9,8 +9,12 @@
   - tips: 1.13+ 的命令补全绕过权限是: trchat.bypass.tabcomplete
   ```
 - #### 1.81
-  - 计划: 
-    - 添加撤回消息功能
+  - Since ???
+  - Updates:
+    - 修复强制聊天颜色权限不生效
+    - formats和function支持替换优先级
+    - 修复展示空气时报错
+    - 可选择展示物品是否展示经过铁砧改动的名字
 - #### 1.80
   - Since 2021.8.15
   - Updates:

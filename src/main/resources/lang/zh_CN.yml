@@ -46,14 +46,14 @@ Plugin-Updater-Too-Old:
   - "&8--------------------------------------------------"
 Plugin-Updater-Header:
   - ''
-  - '§3--------------------------------------------------'
+  - '&3--------------------------------------------------'
   - '&7▪ &3TrChat &a更新通知 &8{0} &7➦ &8{1}'
   - ''
   - '&7▪ &e内容: '
 Plugin-Updater-Footer:
   - ''
   - '&7▪ &2Github下载: &a&nhttps://github.com/FlickerProjects/TrChat/actions'
-  - '§3--------------------------------------------------'
+  - '&3--------------------------------------------------'
 Plugin-Debug-On:
   - type: title
     title: '&7&l调试模式'
@@ -84,7 +84,7 @@ Error-Kether:
 General-Too-Long: '&8[&3Tr&bChat&8] &7你的聊天内容过长. &8[&6{0}&8/&2{1}&8]'
 General-Too-Similar: '&8[&3Tr&bChat&8] &7你的两次聊天内容过于相似, 请勿复读.'
 General-No-Permission: '&8[&3Tr&bChat&8] &7你没有足够的权限执行此操作.'
-General-Cant-Air: '&8[&3Tr&bChat&8] &c你不能展示空气!'
+General-Cant-Show-Air: '&8[&3Tr&bChat&8] &c你不能展示空气!'
 
 Cooldowns-Chat:
   - type: actionbar

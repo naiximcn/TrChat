@@ -30,11 +30,11 @@ Plugin-Updater-Too-Old:
   - "&8--------------------------------------------------"
 Plugin-Updater-Header:
   - ''
-  - '§3--------------------------------------------------'
+  - '&3--------------------------------------------------'
   - '&7▪ &3TrChat &aUpdate Notify &8{0} &7➦ &8{1}'
 Plugin-Updater-Footer:
   - '&7▪ &2Github: &a&nhttps://github.com/FlickerProjects/TrChat/actions'
-  - '§3--------------------------------------------------'
+  - '&3--------------------------------------------------'
 Plugin-Debug-On:
   - type: title
     title: '&7&lDEBUG MODE'
@@ -65,7 +65,7 @@ Error-Kether:
 General-Too-Long: '&8[&3Tr&bChat&8] &7Message is too long. &8[&6{0}&8/&2{1}&8]'
 General-Too-Similar: '&8[&3Tr&bChat&8] &7Please do not repeat your message.'
 General-No-Permission: '&8[&3Tr&bChat&8] &7You do not have enough permission to do this.'
-General-Cant-Air: '&8[&3Tr&bChat&8] &cYou can not show AIR!'
+General-Cant-Show-Air: '&8[&3Tr&bChat&8] &cYou can not show AIR!'
 
 Cooldowns-Chat:
   - type: actionbar

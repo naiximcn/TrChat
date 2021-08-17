@@ -1,8 +1,8 @@
 package me.arasple.mc.trchat.module.chat.listeners
 
-import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.Metrics
-import me.arasple.mc.trchat.module.channels.ChannelGlobal.execute
+import me.arasple.mc.trchat.api.TrChatFiles
+import me.arasple.mc.trchat.module.channels.ChannelGlobal
 import me.arasple.mc.trchat.module.channels.ChannelStaff
 import me.arasple.mc.trchat.module.channels.ChannelStaff.isInStaffChannel
 import me.arasple.mc.trchat.module.chat.ChatFormats
@@ -12,7 +12,9 @@ import me.arasple.mc.trchat.module.data.Users
 import me.arasple.mc.trchat.module.logs.ChatLogs
 import net.md_5.bungee.chat.ComponentSerializer
 import org.bukkit.event.player.AsyncPlayerChatEvent
-import taboolib.common.platform.*
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
+import taboolib.common.platform.ProxyPlayer
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.adaptPlayer
@@ -53,7 +55,7 @@ object ListenerChatEvent {
         if (TrChatFiles.channels.getBoolean("FORCE-GLOBAL", false)
             || e.message.startsWith(TrChatFiles.channels.getString("FORCE-GLOBAL-PREFIX", "!all"))) {
             e.isCancelled = true
-            execute(player, e.message.replace(TrChatFiles.channels.getString("FORCE-GLOBAL-PREFIX", "!all"), ""))
+            ChannelGlobal.execute(player, e.message.replace(TrChatFiles.channels.getString("FORCE-GLOBAL-PREFIX", "!all"), ""))
             return
         }
         val format = ChatFormats.getFormat(ChatType.NORMAL, player)

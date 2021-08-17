@@ -10,7 +10,6 @@ import taboolib.common.env.DependencyDownloader.readFully
 import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
-import taboolib.common.platform.event.OptionalEvent
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.*
 import taboolib.module.lang.sendLang
@@ -93,9 +92,8 @@ object Updater {
         }
     }
 
-    @SubscribeEvent(bind = "org.bukkit.event.player.PlayerJoinEvent")
-    fun onJoin(ope: OptionalEvent) {
-        val e = ope.cast(PlayerJoinEvent::class.java)
+    @SubscribeEvent
+    fun onJoin(e: PlayerJoinEvent) {
         val p = e.player
 
         if (isOld && !noticed.contains(p.uniqueId) && p.hasPermission("trmenu.admin")) {

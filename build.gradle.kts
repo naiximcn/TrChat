@@ -24,7 +24,7 @@ taboolib {
     install("module-ui")
     install("platform-bukkit", "platform-bungee")
     classifier = null
-    version = "6.0.0-pre49"
+    version = "6.0.0-pre51"
 }
 
 repositories {
@@ -36,9 +36,9 @@ repositories {
 }
 
 dependencies {
-    compileOnly("ink.ptms.core:v11604:11604:all")
     compileOnly("ink.ptms.core:v11701:11701:mapped")
     compileOnly("ink.ptms.core:v11701:11701:universal")
+    compileOnly("ink.ptms.core:v11604:11604:all")
     compileOnly("net.md-5:bungeecord-bootstrap:1.17-R0.1-SNAPSHOT")
 //    compileOnly("com.velocitypowered:velocity-api:1.1.8")
     compileOnly("me.clip:placeholderapi:2.10.9")

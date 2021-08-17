@@ -1,14 +1,17 @@
 package me.arasple.mc.trchat.module.chat.format.objects
 
+import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.api.TrChatFiles.function
 import me.arasple.mc.trchat.module.data.Cooldowns
 import me.arasple.mc.trchat.module.data.Users
 import me.arasple.mc.trchat.module.func.ChatFunctions
-import me.arasple.mc.trchat.util.*
+import me.arasple.mc.trchat.util.MessageColors
+import me.arasple.mc.trchat.util.Players
+import me.arasple.mc.trchat.util.checkCondition
+import me.arasple.mc.trchat.util.replacePattern
 import org.apache.commons.lang.math.NumberUtils
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
-import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.function.getProxyPlayer
@@ -31,16 +34,17 @@ import taboolib.platform.util.sendLang
 class MsgComponent : JsonComponent {
 
     var isPrivateChat = false
-    private var defualtColor: ChatColor? = null
+    private var defaultColor: ChatColor? = null
 
     constructor(text: String?, hover: List<String?>?, suggest: String?, command: String?, url: String?) : super(text, hover, suggest, command, url)
 
     constructor(partSection: LinkedHashMap<*, *>) : super(partSection) {
-        defualtColor = ChatColor.getByChar(partSection["default-color"].toString())
+        defaultColor = ChatColor.getByChar(partSection["default-color"].toString())
     }
 
-    fun toMsgTellraw(player: Player, m: String): TellrawJson {
-        var message = m
+    fun toMsgTellraw(player: Player, msg: String): TellrawJson {
+        val defaultColor2 = MessageColors.catchDefaultMessageColor(player, defaultColor)
+        var message = msg
         message = MessageColors.replaceWithPermission(player, message)
 
         val tellraw = TellrawJson()
@@ -61,7 +65,7 @@ class MsgComponent : JsonComponent {
         }
         val itemDisplayEnabled = function.getBoolean("GENERAL.ITEM-SHOW.ENABLE", true)
         val itemKeys = function.getStringList("GENERAL.ITEM-SHOW.KEYS")
-        val itemFormat = function.getString("GENERAL.ITEM-SHOW.FORMAT", "§8[§3{0} §bx{1}§8]").colored()
+        val itemFormat = function.getString("GENERAL.ITEM-SHOW.FORMAT", "&8[&3{0} &bx{1}&8]").colored()
         if (itemDisplayEnabled) {
             for (key in itemKeys) {
                 for (i in 0..8) {
@@ -79,12 +83,12 @@ class MsgComponent : JsonComponent {
                     val slot = NumberUtils.toInt(args[1], player.inventory.heldItemSlot)
                     val item = player.inventory.getItem(slot)
                     if (item.isAir()) {
-                        player.sendLang("General-Cant-Air")
+                        player.sendLang("General-Cant-Show-Air")
                         continue
                     }
                     tellraw.append(Users.itemCache.computeIfAbsent(item!!) {
                         TellrawJson()
-                            .append(itemFormat.replaceWithOrder(getName(item), if (item.isNotAir()) item.amount else 1) + defualtColor)
+                            .append(itemFormat.replaceWithOrder(getName(item, player), if (item.isNotAir()) item.amount else 1) + defaultColor2)
                             .hoverItem(item)
                     })
                     continue
@@ -92,7 +96,7 @@ class MsgComponent : JsonComponent {
                 // At
                 if (atEnabled && "AT".equals(args[0], ignoreCase = true) && !isPrivateChat) {
                     val atPlayer = args[1]
-                    tellraw.append(atFormat.replaceWithOrder(atPlayer) + defualtColor)
+                    tellraw.append(atFormat.replaceWithOrder(atPlayer) + defaultColor2)
                     if (function.getBoolean("GENERAL.MENTION.NOTIFY") && Bukkit.getPlayerExact(atPlayer) != null && Bukkit.getPlayerExact(atPlayer)!!.isOnline) {
                         getProxyPlayer(atPlayer)!!.sendLang("Mentions-Notify", player.name)
                     }
@@ -106,14 +110,14 @@ class MsgComponent : JsonComponent {
                     continue
                 }
             }
-            tellraw.append(toTellrawPart(player, defualtColor.toString() + v.text, message))
+            tellraw.append(toTellrawPart(player, defaultColor2.toString() + v.text, message))
         }
         return tellraw
     }
 
     fun toTellrawPart(player: Player, text: String?, message: String?): TellrawJson {
         val tellraw = TellrawJson()
-        tellraw.append((text ?: "§8[§fNull§8]").replace("\$message", message!!))
+        tellraw.append((text ?: "&8[&fNull&8]".colored()).replace("\$message", message!!))
         if (hover != null) {
             tellraw.hoverText(hover!!.replacePlaceholder(player).replace("\$message", message))
         }
@@ -129,7 +133,12 @@ class MsgComponent : JsonComponent {
         return tellraw
     }
 
-    private fun getName(item: ItemStack): String {
-        return item.getI18nName(null)
+    private fun getName(item: ItemStack, player: Player): String {
+        return if (TrChatFiles.settings.getBoolean("GENERAL.ITEM-SHOW.ORIGIN-NAME", true)
+            || item.itemMeta?.hasDisplayName() == false) {
+            item.getI18nName(player)
+        } else {
+            item.itemMeta!!.displayName
+        }
     }
 }

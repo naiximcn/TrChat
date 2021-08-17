@@ -4,6 +4,7 @@ import me.arasple.mc.trchat.util.checkCondition
 import org.bukkit.entity.Player
 import taboolib.common.util.replaceWithOrder
 import taboolib.module.chat.TellrawJson
+import taboolib.module.chat.colored
 import taboolib.platform.compat.replacePlaceholder
 
 /**
@@ -68,7 +69,7 @@ open class JsonComponent {
                 text = text!!.replace("%toplayer_name%".toRegex(), vars[2])
             }
         }
-        tellraw.append(text?.replaceWithOrder(*vars)?.replacePlaceholder(player) ?: "§8[§fNull§8]")
+        tellraw.append(text?.replaceWithOrder(*vars)?.replacePlaceholder(player) ?: "&8[&fNull&8]".colored())
         if (hover != null) {
             tellraw.hoverText(hover!!.replaceWithOrder(*vars).replacePlaceholder(player))
         }
