@@ -85,7 +85,7 @@ open class JsonComponent {
         return tellraw
     }
 
-    fun convertHoverText(any: Any?): String {
+    private fun convertHoverText(any: Any?): String {
         val hovers = if (any is List<*>) {
             any
         } else {
@@ -101,7 +101,7 @@ open class JsonComponent {
     companion object {
 
         fun loadList(parts: Any): List<JsonComponent> {
-            val jsonComponents: MutableList<JsonComponent> = ArrayList()
+            val jsonComponents = mutableListOf<JsonComponent>()
             (parts as LinkedHashMap<*, *>).values.forEach { part -> jsonComponents.add(JsonComponent(part as LinkedHashMap<*, *>)) }
             return jsonComponents
         }
