@@ -12,7 +12,7 @@ import taboolib.library.configuration.MemorySection
  */
 object ChatFunctions {
 
-    val functions: MutableList<Function> = ArrayList()
+    val functions = mutableListOf<Function>()
 
     fun loadFunctions(vararg notify: ProxyCommandSender) {
         val start = System.currentTimeMillis()
@@ -25,7 +25,7 @@ object ChatFunctions {
         notify(notify, "Plugin-Loaded-Functions", System.currentTimeMillis() - start)
     }
 
-    fun mathFunction(key: String): Function? {
+    fun matchFunction(key: String): Function? {
         return functions.firstOrNull { f -> f.name.equals(key, ignoreCase = true) }
     }
 }

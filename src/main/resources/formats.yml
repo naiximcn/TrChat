@@ -18,11 +18,12 @@
 ######################################################################
 
 NORMAL:
-  # Requirement to use this format, for example: '$player.isOp()'
-  # $player = 玩家
-  # $bukkitServer = 服务器
+    # Requirement to use this format, for example: '$player.isOp()'
+    # $player = 玩家
+    # $bukkitServer = 服务器
   - requirement: null
-
+    # (Optional) Priority to format (Default: 2147483647)
+    priority: 2147483647
     # Message part
     msg:
       # Default chat color

@@ -61,6 +61,8 @@ CUSTOM:
     # $player = 玩家
     # $bukkitServer = 服务器
     requirement: '1!=0'
+    # (Optional) Priority to replace (Default: 2147483647)
+    priority: 2147483647
     # 匹配表达式
     # 示例模块的表达式部分来自互联网
     pattern: 'QQ( )?[1-9]([0-9]{5,11})'

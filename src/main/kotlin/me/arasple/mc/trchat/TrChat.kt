@@ -60,7 +60,6 @@ object TrChat : Plugin() {
 
     override fun onEnable() {
         console().sendLang("Plugin-Enabled", pluginVersion)
-        console().sendLang("Plugin-Updater-Dev")
     }
 
     override fun onDisable() {

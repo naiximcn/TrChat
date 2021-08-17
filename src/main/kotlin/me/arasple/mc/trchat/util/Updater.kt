@@ -56,7 +56,11 @@ object Updater {
             }
         } else {
             if (!isNoticedConsole) {
-                console().sendLang("Plugin-Updater-Latest")
+                if (version!! > newVersion!!) {
+                    console().sendLang("Plugin-Updater-Dev")
+                } else {
+                    console().sendLang("Plugin-Updater-Latest")
+                }
                 isNoticedConsole = true
             }
         }

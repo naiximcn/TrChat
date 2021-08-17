@@ -33,7 +33,7 @@ Plugin-Enabled: '&8[&3Tr&bChat&8] &bINFO &8| &3加载完毕. TrChat &av{0} &3现
 Plugin-Disabled: '&8[&3Tr&bChat&8] &bINFO &8| &7感谢使用本插件, 您在论坛为本插件评分即是对作者最大的鼓励!'
 Plugin-Command-Title: '&3「&8&m--------------------------------------------------&3」'
 Plugin-Updater-Latest: '&8[&3Tr&bChat&8] &8你正在运行最新版的 TrChat.'
-Plugin-Updater-Dev: '&8[&3Tr&bChat&8] &7你正在运行开发版本的 TrChat, 请及时反馈漏洞/提出建议!'
+Plugin-Updater-Dev: '&8[&3Tr&bChat&8] &7你正在运行开发版本的 TrChat, 请及时反馈漏洞!'
 Plugin-Updater-Too-Old:
   - "&8--------------------------------------------------"
   - "&r"
@@ -84,6 +84,7 @@ Error-Kether:
 General-Too-Long: '&8[&3Tr&bChat&8] &7你的聊天内容过长. &8[&6{0}&8/&2{1}&8]'
 General-Too-Similar: '&8[&3Tr&bChat&8] &7你的两次聊天内容过于相似, 请勿复读.'
 General-No-Permission: '&8[&3Tr&bChat&8] &7你没有足够的权限执行此操作.'
+General-Cant-Air: '&8[&3Tr&bChat&8] &c你不能展示空气!'
 
 Cooldowns-Chat:
   - type: actionbar

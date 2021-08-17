@@ -65,6 +65,7 @@ Error-Kether:
 General-Too-Long: '&8[&3Tr&bChat&8] &7Message is too long. &8[&6{0}&8/&2{1}&8]'
 General-Too-Similar: '&8[&3Tr&bChat&8] &7Please do not repeat your message.'
 General-No-Permission: '&8[&3Tr&bChat&8] &7You do not have enough permission to do this.'
+General-Cant-Air: '&8[&3Tr&bChat&8] &cYou can not show AIR!'
 
 Cooldowns-Chat:
   - type: actionbar

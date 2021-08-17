@@ -20,6 +20,7 @@ import taboolib.common.platform.function.console
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.util.Strings
 import taboolib.module.lang.sendLang
+import taboolib.platform.util.sendLang
 
 /**
  * @author Arasple, wlys
@@ -33,6 +34,11 @@ object ListenerChatEvent {
         val player = e.player
         if (TrChatFiles.settings.getStringList("GENERAL.DISABLED-WORLDS").contains(player.world.name)) {
             e.isCancelled = false
+            return
+        }
+        if (Users.isMuted(player)) {
+            e.isCancelled = true
+            player.sendLang("GENERAL.MUTE")
             return
         }
         if (isInStaffChannel(player)) {
@@ -59,7 +65,7 @@ object ListenerChatEvent {
             }
             message.sendTo(console())
             ChatLogs.log(player, e.message)
-            Users.formatedMessage[player.uniqueId] = ComponentSerializer.toString(*message.componentsAll.toTypedArray())
+            Users.formattedMessage[player.uniqueId] = ComponentSerializer.toString(*message.componentsAll.toTypedArray())
             Metrics.increase(0)
         }
     }
@@ -74,13 +80,9 @@ object ListenerChatEvent {
         }
         if (!p.hasPermission("trchat.bypass.itemcd")) {
             val itemShowCooldown = Users.getCooldownLeft(p.uniqueId, Cooldowns.CooldownType.ITEM_SHOW)
-            if (TrChatFiles.function.getStringList("GENERAL.ITEM-SHOW.KEYS").stream()
-                    .anyMatch { sequence: String? ->
-                        message.contains(
-                            sequence!!
-                        )
-                    }
-            ) {
+            if (TrChatFiles.function.getStringList("GENERAL.ITEM-SHOW.KEYS").any { sequence ->
+                        message.contains(sequence!!)
+                    }) {
                 if (itemShowCooldown > 0) {
                     p.sendLang("Cooldowns-Item-Show", (itemShowCooldown / 1000.0).toString())
                     return false

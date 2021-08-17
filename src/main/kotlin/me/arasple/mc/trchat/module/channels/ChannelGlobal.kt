@@ -23,7 +23,7 @@ object ChannelGlobal {
                 val raw = ComponentSerializer.toString(*format.componentsAll.toTypedArray())
                 Bungees.sendBungeeData(from, "TrChat", "BroadcastRaw", raw)
                 format.sendTo(console())
-                Users.formatedMessage[from.uniqueId] = raw
+                Users.formattedMessage[from.uniqueId] = raw
                 Metrics.increase(0)
             }
         }

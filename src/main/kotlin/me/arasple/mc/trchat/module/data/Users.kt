@@ -18,8 +18,8 @@ object Users {
 
     val itemCache = HashMap<ItemStack, TellrawJson>()
     val cooldowns = HashMap<UUID, Cooldowns>()
-    private val rawMessage = HashMap<UUID, String>()
-    val formatedMessage = HashMap<UUID, String>()
+    private val originMessage = HashMap<UUID, String>()
+    val formattedMessage = HashMap<UUID, String>()
 
     fun getCooldownLeft(uuid: UUID, type: CooldownType): Long {
         cooldowns.putIfAbsent(uuid, Cooldowns())
@@ -65,10 +65,18 @@ object Users {
     }
 
     fun getLastMessage(uuid: UUID): String {
-        return rawMessage.getOrDefault(uuid, "")
+        return originMessage.getOrDefault(uuid, "")
     }
 
     fun setLastMessage(uuid: UUID, msg: String) {
-        rawMessage[uuid] = msg
+        originMessage[uuid] = msg
+    }
+
+    fun updateMuteTime(user: Player, time: Long) {
+        database.pull(user).set("MUTE_TIME", System.currentTimeMillis() + time)
+    }
+
+    fun isMuted(user: Player): Boolean {
+       return database.pull(user).getLong("MUTE_TIME", 0) > System.currentTimeMillis()
     }
 }

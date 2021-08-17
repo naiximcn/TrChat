@@ -20,7 +20,9 @@ import taboolib.module.lang.sendLang
 import taboolib.module.nms.getI18nName
 import taboolib.platform.compat.replacePlaceholder
 import taboolib.platform.util.hoverItem
+import taboolib.platform.util.isAir
 import taboolib.platform.util.isNotAir
+import taboolib.platform.util.sendLang
 
 /**
  * @author Arasple
@@ -42,7 +44,8 @@ class MsgComponent : JsonComponent {
         message = MessageColors.replaceWithPermission(player, message)
 
         val tellraw = TellrawJson()
-        ChatFunctions.functions.filter { f -> checkCondition(player, f.requirement) }.forEach { function ->
+        // Custom Functions
+        ChatFunctions.functions.filter { f -> checkCondition(player, f.requirement) }.sortedBy { it.priority }.forEach { function ->
             message = replacePattern(message, function.pattern, function.filterTextPattern, "<" + function.name + ":{0}>")
         }
         // At & Item Show
@@ -68,30 +71,36 @@ class MsgComponent : JsonComponent {
             }
         }
 
-        // Custom Functions
         for (v in VariableReader(message, '<', '>').parts) {
             if (v.isVariable) {
                 val args = v.text.split(":".toRegex(), 2)
+                // Item Show
                 if (itemDisplayEnabled && args[0].equals("ITEM", ignoreCase = true)) {
                     val slot = NumberUtils.toInt(args[1], player.inventory.heldItemSlot)
-                    val item = player.inventory.getItem(slot) ?: ItemStack(Material.AIR)
-                    tellraw.append(Users.itemCache.computeIfAbsent(item) {
+                    val item = player.inventory.getItem(slot)
+                    if (item.isAir()) {
+                        player.sendLang("General-Cant-Air")
+                        continue
+                    }
+                    tellraw.append(Users.itemCache.computeIfAbsent(item!!) {
                         TellrawJson()
                             .append(itemFormat.replaceWithOrder(getName(item), if (item.isNotAir()) item.amount else 1) + defualtColor)
                             .hoverItem(item)
                     })
                     continue
                 }
+                // At
                 if (atEnabled && "AT".equals(args[0], ignoreCase = true) && !isPrivateChat) {
                     val atPlayer = args[1]
                     tellraw.append(atFormat.replaceWithOrder(atPlayer) + defualtColor)
                     if (function.getBoolean("GENERAL.MENTION.NOTIFY") && Bukkit.getPlayerExact(atPlayer) != null && Bukkit.getPlayerExact(atPlayer)!!.isOnline) {
-                        getProxyPlayer(atPlayer)!!.sendLang("MENTIONS@NOTIFY", player.name)
+                        getProxyPlayer(atPlayer)!!.sendLang("Mentions-Notify", player.name)
                     }
                     Users.updateCooldown(player.uniqueId, Cooldowns.CooldownType.MENTION, function.getLong("GENERAL.MENTION.COOLDOWNS"))
                     continue
                 }
-                val function = ChatFunctions.mathFunction(args[0])
+                // Custom Functions
+                val function = ChatFunctions.matchFunction(args[0])
                 if (function != null) {
                     tellraw.append(function.displayJson.toTellrawJson(player, true, args[1]))
                     continue

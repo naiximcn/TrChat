@@ -18,7 +18,7 @@ import taboolib.platform.util.modifyLore
 import taboolib.platform.util.modifyMeta
 
 /**
- * @author Arasple
+ * @author Arasple, wlys
  * @date 2019/8/18 0:18
  */
 object TrChatAPI {

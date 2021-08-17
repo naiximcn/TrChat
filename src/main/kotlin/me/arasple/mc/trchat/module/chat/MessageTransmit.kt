@@ -35,10 +35,10 @@ object MessageTransmit {
 
     // TODO
     fun Player.releaseTransmit() {
-        Users.formatedMessage[uniqueId] = ""
+        Users.formattedMessage[uniqueId] = ""
         playerMessageCache.entries.forEach { (k, v) ->
             v.forEach {
-                if (it.getProperty<Any>(if (isUniversal) "message" else "a") == Users.formatedMessage[uniqueId]) {
+                if (it.getProperty<Any>(if (isUniversal) "message" else "a") == Users.formattedMessage[uniqueId]) {
                     playerMessageCache[k]!!.remove(it)
                 }
             }

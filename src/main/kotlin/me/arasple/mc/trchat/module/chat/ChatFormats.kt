@@ -18,7 +18,7 @@ object ChatFormats {
     private val formats = HashMap<ChatType, List<Format>>()
 
     fun getFormat(type: ChatType, player: Player): Format? {
-        return formats.computeIfAbsent(type) { ArrayList() }.firstOrNull { format ->
+        return formats.computeIfAbsent(type) { ArrayList() }.sortedBy { it.priority }.firstOrNull { format ->
             checkCondition(player, format.requirement)
         }
     }
@@ -29,7 +29,7 @@ object ChatFormats {
 
         for (chatType in ChatType.values()) {
             if (TrChatFiles.formats.contains(chatType.name)) {
-                val formats: MutableList<Format> = ArrayList()
+                val formats = mutableListOf<Format>()
                 TrChatFiles.formats.getMapList(chatType.name).forEach { formatMap ->
                     formats.add(if (chatType.isPrivate) PriFormat(formatMap) else Format(formatMap))
                 }
