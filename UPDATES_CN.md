@@ -16,6 +16,8 @@
     - 修复展示空气时报错
     - 可选择展示物品是否展示经过铁砧改动的名字(ORIGIN-NAME: false)
     - 非私聊支持消息后缀(suffix)
+    - 修改语言文件中的BLOCK_NOTE_BLOCK_PLING(低版本不存在)
+    - 优化启动时的motd(感谢@Tontto )
 - #### 1.80
   - Since 2021.8.15
   - Updates:

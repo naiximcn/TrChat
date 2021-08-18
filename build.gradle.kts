@@ -24,7 +24,7 @@ taboolib {
     install("module-ui")
     install("platform-bukkit", "platform-bungee")
     classifier = null
-    version = "6.0.0-pre51"
+    version = "6.0.0-pre52"
 }
 
 repositories {
