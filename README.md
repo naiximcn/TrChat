@@ -2,7 +2,7 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/flickerprojects/trchat/badge)](https://www.codefactor.io/repository/github/flickerprojects/trchat)
 
-***Advanced chat control for Minecraft servers***
+**Advanced chat control for Minecraft servers**
 
 API usage: 
 ```kotlin

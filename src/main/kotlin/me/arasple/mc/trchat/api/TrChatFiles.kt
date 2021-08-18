@@ -7,6 +7,7 @@ import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
+import taboolib.common.platform.function.console
 import taboolib.common5.FileWatcher
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.SecuredFile
@@ -40,8 +41,8 @@ object TrChatFiles {
 
     @Awake(LifeCycle.ENABLE)
     fun init() {
-        FileWatcher.INSTANCE.addSimpleListener(filter.file) { ChatFilter.loadFilter(false) }
-        FileWatcher.INSTANCE.addSimpleListener(formats.file) { ChatFormats.loadFormats() }
-        FileWatcher.INSTANCE.addSimpleListener(function.file) { ChatFunctions.loadFunctions() }
+        FileWatcher.INSTANCE.addSimpleListener(filter.file) { ChatFilter.loadFilter(false, console()) }
+        FileWatcher.INSTANCE.addSimpleListener(formats.file) { ChatFormats.loadFormats(console()) }
+        FileWatcher.INSTANCE.addSimpleListener(function.file) { ChatFunctions.loadFunctions(console()) }
     }
 }

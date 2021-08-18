@@ -40,9 +40,9 @@ Plugin-Debug-On:
     title: '&7&lDEBUG MODE'
     subtitle: '&3&lis now &a&lEnabled&3&l.'
   - type: sound
-    sound: 'BLOCK_NOTE_BLOCK_PLING'
+    sound: 'BLOCK_ANVIL_LAND'
     volume: 1
-    pitch: 0
+    pitch: 2
 Plugin-Debug-Off:
   - type: title
     title: '&7&lDEBUG MODE'
@@ -90,18 +90,18 @@ Mentions-Notify:
   - type: actionbar
     text: '&d&l&k|&r &3&lPlayer &a&l{0} &3&lmentioned you in the chat &d&l&k|'
   - type: sound
-    sound: 'BLOCK_NOTE_BLOCK_PLING'
+    sound: 'BLOCK_ANVIL_LAND'
     volume: 1
-    pitch: 0
+    pitch: 2
 
 Private-Message-Spy-Format: '&8[&3Spy&8] &6{0} &2-> &3{1}&f: &7{2}'
 Private-Message-Spy-On:
   - type: actionbar
     text: '&c&l&k|&r &a&lSpy Mode Enabled &c&l&k|'
   - type: sound
-    sound: 'BLOCK_NOTE_BLOCK_PLING'
+    sound: 'BLOCK_ANVIL_LAND'
     volume: 1
-    pitch: 0
+    pitch: 2
 Private-Message-Spy-Off:
   - type: actionbar
     text: '&c&l&k|&r &c&lSpy Mode Disabled &c&l&k|'
@@ -127,7 +127,7 @@ Private-Message-Receive:
   - type: actionbar
     text: '&8[ &a! &8] &3You''ve received a message from &a{0} &3.'
   - type: sound
-    sound: 'BLOCK_NOTE_BLOCK_PLING'
+    sound: 'BLOCK_ANVIL_LAND'
     volume: 1
     pitch: 2
 
@@ -153,9 +153,9 @@ Staff-Channel-Join:
   - type: text
     text: '&8[&3Tr&bChat&8] &3You''ve been into the staff chat channel, Re-type the command to exit'
   - type: sound
-    sound: 'BLOCK_NOTE_BLOCK_PLING'
+    sound: 'BLOCK_ANVIL_LAND'
     volume: 1
-    pitch: 0
+    pitch: 2
 Staff-Channel-Quit:
   - type: actionbar
     text: '&3&lStaff chat mode disabled.'

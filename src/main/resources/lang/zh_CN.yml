@@ -59,9 +59,9 @@ Plugin-Debug-On:
     title: '&7&l调试模式'
     subtitle: '&3&l当前已 &a&l开启&3&l.'
   - type: sound
-    sound: 'BLOCK_NOTE_BLOCK_PLING'
+    sound: 'BLOCK_ANVIL_LAND'
     volume: 1
-    pitch: 0
+    pitch: 2
 Plugin-Debug-Off:
   - type: title
     title: '&7&l调试模式'
@@ -109,18 +109,18 @@ Mentions-Notify:
   - type: actionbar
     text: '&d&l&k|&r &3&l玩家 &a&l{0} &3&l在聊天中At了你 &d&l&k|'
   - type: sound
-    sound: 'BLOCK_NOTE_BLOCK_PLING'
+    sound: 'BLOCK_ANVIL_LAND'
     volume: 1
-    pitch: 0
+    pitch: 2
 
 Private-Message-Spy-Format: '&8[&3监听&8] &6{0} &2-> &3{1}&f: &7{2}'
 Private-Message-Spy-On:
   - type: actionbar
     text: '&c&l&k|&r &a&l开启监听私聊模式 &c&l&k|'
   - type: sound
-    sound: 'BLOCK_NOTE_BLOCK_PLING'
+    sound: 'BLOCK_ANVIL_LAND'
     volume: 1
-    pitch: 0
+    pitch: 2
 Private-Message-Spy-Off:
   - type: actionbar
     text: '&c&l&k|&r &c&l关闭监听私聊模式 &c&l&k|'
@@ -146,7 +146,7 @@ Private-Message-Receive:
   - type: actionbar
     text: '&8[ &a! &8] &3你收到来自 &a{0} &3的一条私聊消息'
   - type: sound
-    sound: 'BLOCK_NOTE_BLOCK_PLING'
+    sound: 'BLOCK_ANVIL_LAND'
     volume: 1
     pitch: 2
 
@@ -172,9 +172,9 @@ Staff-Channel-Join:
   - type: text
     text: '&8[&3Tr&bChat&8] &3你已经加入到管理频道, 再次输入相同命令即可退出.'
   - type: sound
-    sound: 'BLOCK_NOTE_BLOCK_PLING'
+    sound: 'BLOCK_ANVIL_LAND'
     volume: 1
-    pitch: 0
+    pitch: 2
 Staff-Channel-Quit:
   - type: actionbar
     text: '&3&l离开管理频道聊天'
