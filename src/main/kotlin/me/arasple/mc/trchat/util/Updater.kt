@@ -33,6 +33,7 @@ object Updater {
     private var isOld = false
     private var newVersion: Double? = null
     private var isNoticedConsole = false
+    private var information: String? = null
 
     fun init() {
         isCheckUpdate = TrChatFiles.settings.getBoolean("GENERAL.CHECK-UPDATE")
@@ -48,10 +49,11 @@ object Updater {
 
     private fun notifyVersion() {
         if (isOld) {
+            console().sendLang("Plugin-Updater-Header", version!!, newVersion!!)
+            console().sendMessage(information!!)
+            console().sendLang("Plugin-Updater-Footer")
             if (newVersion!! - version!! >= 0.2) {
                 console().sendLang("Plugin-Updater-Too-Old")
-            } else {
-                console().sendLang("Plugin-Updater-Old", newVersion!!)
             }
         } else {
             if (!isNoticedConsole) {
@@ -84,6 +86,7 @@ object Updater {
                             isOld = true
                         }
                         newVersion = latestVersion
+                        information = json["body"].asString
                     }
                 }
             } catch (ignored: Exception) {

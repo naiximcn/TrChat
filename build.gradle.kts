@@ -18,6 +18,7 @@ taboolib {
     install("module-chat")
     install("module-configuration")
     install("module-database")
+    install("module-kether")
     install("module-lang")
     install("module-metrics")
     install("module-nms", "module-nms-util")

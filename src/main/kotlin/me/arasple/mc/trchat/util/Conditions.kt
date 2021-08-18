@@ -5,10 +5,14 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.adaptPlayer
 import taboolib.common.platform.function.console
+import taboolib.common5.Coerce
 import taboolib.common5.compileJS
+import taboolib.library.kether.LocalizedException
+import taboolib.module.kether.KetherShell
 import taboolib.module.lang.sendLang
 import taboolib.platform.compat.replacePlaceholder
 import java.util.*
+import java.util.concurrent.CompletableFuture
 import javax.script.SimpleBindings
 
 /**
@@ -22,20 +26,18 @@ fun checkCondition(player: Player, script: String?): Boolean {
         return true
     }
 
-    return checkJs(player, condition!!)
-
-//    return when {
-//        condition!!.startsWith('$') -> checkJs(player, condition.substring(1))
-//        condition.startsWith("js:") -> checkJs(player, condition.substring(3))
-//        condition.startsWith("ke:") -> checkKether(player, condition.substring(3)).get()
-//        else -> checkKether(player, condition).get()
-//    }
+    return when {
+        condition!!.startsWith("\$:") -> checkJs(player, condition.substring(2))
+        condition.startsWith("js:") -> checkJs(player, condition.substring(3))
+        condition.startsWith("ke:") -> checkKether(player, condition.substring(3)).get()
+        else -> checkKether(player, condition).get()
+    }
 }
 
 private fun checkJs(player: Player, condition: String): Boolean {
     val bind = mapOf(
-        "player" to player,
-        "bukkitServer" to Bukkit.getServer()
+        "\$player" to player,
+        "\$bukkitServer" to Bukkit.getServer()
     )
     try {
         return condition.compileJS()!!.eval(SimpleBindings(bind)) as Boolean
@@ -46,24 +48,24 @@ private fun checkJs(player: Player, condition: String): Boolean {
     return false
 }
 
-//private fun checkKether(player: Player, condition: String): CompletableFuture<Boolean> {
-//    return if (condition.isEmpty()) {
-//        CompletableFuture.completedFuture(true)
-//    } else {
-//        try {
-//            KetherShell.eval(condition) {
-//                sender = adaptPlayer(player)
-//            }.thenApply {
-//                Coerce.toBoolean(it)
-//            }
-//        } catch (e: LocalizedException) {
-//            adaptPlayer(player).sendLang("Error-Kether", condition, e.message!!, Arrays.toString(e.stackTrace))
-//            console().sendLang("Error-Kether", condition, e.message!!, Arrays.toString(e.stackTrace))
-//            CompletableFuture.completedFuture(false)
-//        } catch (e: Throwable) {
-//            adaptPlayer(player).sendLang("Error-Kether", condition, e.message!!, Arrays.toString(e.stackTrace))
-//            console().sendLang("Error-Kether", condition, e.message!!, Arrays.toString(e.stackTrace))
-//            CompletableFuture.completedFuture(false)
-//        }
-//    }
-//}
+private fun checkKether(player: Player, condition: String): CompletableFuture<Boolean> {
+    return if (condition.isEmpty()) {
+        CompletableFuture.completedFuture(true)
+    } else {
+        try {
+            KetherShell.eval(condition) {
+                sender = adaptPlayer(player)
+            }.thenApply {
+                Coerce.toBoolean(it)
+            }
+        } catch (e: LocalizedException) {
+            adaptPlayer(player).sendLang("Error-Kether", condition, e.message!!, Arrays.toString(e.stackTrace))
+            console().sendLang("Error-Kether", condition, e.message!!, Arrays.toString(e.stackTrace))
+            CompletableFuture.completedFuture(false)
+        } catch (e: Throwable) {
+            adaptPlayer(player).sendLang("Error-Kether", condition, e.message!!, Arrays.toString(e.stackTrace))
+            console().sendLang("Error-Kether", condition, e.message!!, Arrays.toString(e.stackTrace))
+            CompletableFuture.completedFuture(false)
+        }
+    }
+}
