@@ -42,7 +42,7 @@ object ListenerCommandController {
                 }
             }
             // 黑名单下，匹配到 或 白名单下，未匹配到
-            if ((matched && !whitelist) || (!matched && whitelist)) {
+            if (matched && !whitelist || !matched && whitelist) {
                 e.isCancelled = true
                 adaptPlayer(player).sendLang("Command-Controller-Deny")
             }

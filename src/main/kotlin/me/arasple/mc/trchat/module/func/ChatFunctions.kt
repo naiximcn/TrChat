@@ -19,7 +19,7 @@ object ChatFunctions {
         functions.clear()
 
         function.getConfigurationSection("CUSTOM").getValues(false).forEach { (name, funObj) ->
-            functions.add(Function(name, (funObj as MemorySection)))
+            functions.add(Function(name, funObj as MemorySection))
         }
 
         notify(notify, "Plugin-Loaded-Functions", System.currentTimeMillis() - start)

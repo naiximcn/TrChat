@@ -15,20 +15,23 @@ open class Format(
     val priority: Int,
     val requirement: String?,
     val jsons: List<JsonComponent>,
-    val msg: MsgComponent
+    val msg: MsgComponent,
+    val suffix: List<JsonComponent>
     ) {
 
     constructor(formatMap: Map<*, *>) : this(
         if (formatMap.containsKey("priority")) Coerce.toInteger(formatMap["priority"]) else Int.MAX_VALUE,
         if (formatMap.containsKey("requirement")) formatMap["requirement"].toString() else null,
         JsonComponent.loadList(formatMap["parts"]!!),
-        MsgComponent(formatMap["msg"] as LinkedHashMap<*, *>)
+        MsgComponent(formatMap["msg"] as LinkedHashMap<*, *>),
+        if (formatMap.containsKey("suffix")) JsonComponent.loadList(formatMap["suffix"]!!) else emptyList()
     )
 
     open fun apply(player: Player, vararg message: String): TellrawJson {
         val format = TellrawJson()
         jsons.forEach { x -> format.append(x.toTellrawJson(player)) }
         format.append(msg.toMsgTellraw(player, message[0]))
+        suffix.forEach { x -> format.append(x.toTellrawJson(player)) }
         return format
     }
 

@@ -59,6 +59,11 @@ NORMAL:
       part-before-msg:
         text: '&7: '
 
+    # (Optional) Json Format Parts after msg
+    suffix:
+      example:
+        text: ''
+
 ######################################################################
 #
 # PRIVATE FORMAT (SENDER)

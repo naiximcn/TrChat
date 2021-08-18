@@ -35,7 +35,7 @@ object Players {
 
     fun isPlayerOnline(target: String): Boolean {
         val player = Bukkit.getPlayerExact(target)
-        return (player != null && player.isOnline) || players.any { p -> p.equals(target, ignoreCase = true) }
+        return player != null && player.isOnline || players.any { p -> p.equals(target, ignoreCase = true) }
     }
 
     fun getPlayerFullName(target: String): String? {

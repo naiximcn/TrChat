@@ -12,9 +12,10 @@
   - Since ???
   - Updates:
     - 修复强制聊天颜色权限不生效
-    - formats和function支持替换优先级
+    - 支持formats和function替换优先级(priority)
     - 修复展示空气时报错
-    - 可选择展示物品是否展示经过铁砧改动的名字
+    - 可选择展示物品是否展示经过铁砧改动的名字(ORIGIN-NAME: false)
+    - 非私聊支持消息后缀(suffix)
 - #### 1.80
   - Since 2021.8.15
   - Updates:

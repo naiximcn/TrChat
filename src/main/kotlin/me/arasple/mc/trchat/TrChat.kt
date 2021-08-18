@@ -15,6 +15,7 @@ import taboolib.common.platform.function.pluginVersion
 import taboolib.module.lang.sendLang
 import taboolib.platform.BukkitPlugin
 import java.io.File
+import java.io.IOException
 import java.net.URL
 
 /**
@@ -80,7 +81,7 @@ object TrChat : Plugin() {
             console().sendLang("Plugin-Depend-Download", "PlaceholderAPI")
             try {
                 downloadToFile(url, jarFile)
-            } catch (e: Throwable) {
+            } catch (e: IOException) {
                 e.printStackTrace()
                 console().sendLang("Plugin-Depend-Install-Failed", "PlaceholderAPI")
                 Bukkit.shutdown()
