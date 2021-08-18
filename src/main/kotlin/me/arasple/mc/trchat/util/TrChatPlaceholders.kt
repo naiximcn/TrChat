@@ -17,7 +17,7 @@ import taboolib.platform.compat.PlaceholderExpansion
 object TrChatPlaceholders : PlaceholderExpansion {
 
     override val identifier: String
-        get() = "TRCHAT"
+        get() = "trchat"
 
     override fun onPlaceholderRequest(player: Player, args: String): String {
         if (!player.isOnline) {
@@ -25,7 +25,7 @@ object TrChatPlaceholders : PlaceholderExpansion {
         }
 
         return when {
-            args.equals("FILTER", ignoreCase = true) -> isFilterEnabled(player).toString()
+            args.equals("filter", ignoreCase = true) -> isFilterEnabled(player).toString()
             else -> ""
         }
     }
