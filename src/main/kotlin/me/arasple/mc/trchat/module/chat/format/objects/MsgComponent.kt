@@ -60,7 +60,7 @@ class MsgComponent : JsonComponent {
                 if (!function.getBoolean("GENERAL.MENTION.SELF-MENTION", false) && p.equals(player.name, ignoreCase = true)) {
                     continue
                 }
-                message = message.replace("(?i)(@)?" + p.toRegex(), "<AT:$p>")
+                message = message.replace("(?i)(@)?$p".toRegex(), "<AT:$p>")
             }
         }
         val itemDisplayEnabled = function.getBoolean("GENERAL.ITEM-SHOW.ENABLE", true)
