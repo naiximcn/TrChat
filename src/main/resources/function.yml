@@ -132,4 +132,4 @@ CUSTOM:
       hover:
         - '&7这是一个 IP地址'
         - '&7点击复制!'
-      suggest: '{0}'
+      copy: '{0}'

@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.module.chat.format
 
+import me.arasple.mc.trchat.api.TrChatHook
 import me.arasple.mc.trchat.module.chat.format.objects.JsonComponent
 import me.arasple.mc.trchat.module.chat.format.objects.MsgComponent
 import org.apache.commons.lang.math.NumberUtils
@@ -30,7 +31,7 @@ open class Format(
     open fun apply(player: Player, vararg message: String): TellrawJson {
         val format = TellrawJson()
         jsons.forEach { x -> format.append(x.toTellrawJson(player)) }
-        format.append(msg.toMsgTellraw(player, message[0]))
+        format.append(msg.toMsgTellraw(player, message[0]).also { TrChatHook.postToDynmap(player, it) })
         suffix.forEach { x -> format.append(x.toTellrawJson(player)) }
         return format
     }

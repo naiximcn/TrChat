@@ -43,6 +43,7 @@ object ListenerChatEvent {
             player.sendLang("GENERAL.MUTE")
             return
         }
+        // STAFF
         if (isInStaffChannel(player)) {
             e.isCancelled = true
             ChannelStaff.execute(player, e.message)
@@ -52,12 +53,14 @@ object ListenerChatEvent {
             e.isCancelled = true
             return
         }
+        // GLOBAL
         if (TrChatFiles.channels.getBoolean("FORCE-GLOBAL", false)
             || e.message.startsWith(TrChatFiles.channels.getString("FORCE-GLOBAL-PREFIX", "!all"))) {
             e.isCancelled = true
             ChannelGlobal.execute(player, e.message.replace(TrChatFiles.channels.getString("FORCE-GLOBAL-PREFIX", "!all"), ""))
             return
         }
+        // NORMAL
         val format = ChatFormats.getFormat(ChatType.NORMAL, player)
         if (format != null) {
             e.isCancelled = true

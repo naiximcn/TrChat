@@ -5,6 +5,7 @@ import me.arasple.mc.trchat.module.data.Users.isFilterEnabled
 import me.arasple.mc.trchat.module.filter.ChatFilter.filter
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.chat.ComponentSerializer
+import org.bukkit.event.server.BroadcastMessageEvent
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.event.SubscribeEvent
@@ -16,10 +17,10 @@ import taboolib.module.nms.PacketSendEvent
  * @date 2019/11/30 10:16
  */
 @PlatformSide([Platform.BUKKIT])
-object PacketListener {
+object FilterListener {
 
     @SubscribeEvent
-    fun filterChat(e: PacketSendEvent) {
+    fun filterPacket(e: PacketSendEvent) {
         if (isFilterEnabled(e.player)) {
             when (e.packet.name) {
                 "PacketPlayOutChat" -> {
