@@ -9,7 +9,7 @@
   - tips: 1.13+ 的命令补全绕过权限是: trchat.bypass.tabcomplete
   ```
 - #### 1.81
-  - Since ???
+  - Since 2021.8.19
   - Updates:
     - 修复强制聊天颜色权限不生效
     - 支持formats和function替换优先级(priority)
