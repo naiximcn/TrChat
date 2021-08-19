@@ -36,11 +36,14 @@ class PacketUtilsImpl : PacketUtils() {
         items ?: return
         try {
             (items as List<*>).forEach { item -> filterItem(item) }
-        } catch (e: Throwable) {
+        } catch (e: Exception) {
             try {
                 (items as NonNullList<*>).forEach { item -> filterItem(item) }
-            } catch (e2: Throwable) {
-                (items as Array<*>).forEach { item -> filterItem(item) }
+            } catch (e2: Exception) {
+                try {
+                    (items as Array<*>).forEach { item -> filterItem(item) }
+                } catch (ignored: Exception) {
+                }
             }
         }
     }

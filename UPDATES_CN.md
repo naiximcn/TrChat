@@ -18,6 +18,7 @@
     - 非私聊支持消息后缀(suffix)
     - 修改语言文件中的BLOCK_NOTE_BLOCK_PLING(低版本不存在)
     - 优化启动时的motd(感谢@Tontto )
+    - 修复上个版本中AT无效
     - 支持所有JSON的HEX颜色
     - 支持JSON复制到剪贴板动作(copy)
     - 支持Dynmap聊天
