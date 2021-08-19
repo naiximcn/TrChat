@@ -20,6 +20,7 @@
     - 优化启动时的motd(感谢@Tontto )
     - 支持所有JSON的HEX颜色
     - 支持JSON复制到剪贴板动作(copy)
+    - 支持Dynmap聊天
 - #### 1.80
   - Since 2021.8.15
   - Updates:

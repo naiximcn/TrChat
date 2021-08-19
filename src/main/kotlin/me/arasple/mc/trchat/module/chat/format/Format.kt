@@ -3,7 +3,6 @@ package me.arasple.mc.trchat.module.chat.format
 import me.arasple.mc.trchat.api.TrChatHook
 import me.arasple.mc.trchat.module.chat.format.objects.JsonComponent
 import me.arasple.mc.trchat.module.chat.format.objects.MsgComponent
-import org.apache.commons.lang.math.NumberUtils
 import org.bukkit.entity.Player
 import taboolib.common5.Coerce
 import taboolib.module.chat.TellrawJson
