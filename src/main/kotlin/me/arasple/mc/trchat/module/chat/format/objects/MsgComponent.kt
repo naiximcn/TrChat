@@ -36,7 +36,7 @@ class MsgComponent : JsonComponent {
     var isPrivateChat = false
     private var defaultColor: ChatColor? = null
 
-    constructor(text: String?, hover: List<String?>?, suggest: String?, command: String?, url: String?) : super(text, hover, suggest, command, url)
+    constructor(text: String?, hover: List<String?>?, suggest: String?, command: String?, url: String?, copy: String?) : super(text, hover, suggest, command, url, copy)
 
     constructor(partSection: LinkedHashMap<*, *>) : super(partSection) {
         defaultColor = ChatColor.getByChar(partSection["default-color"].toString())
@@ -115,7 +115,7 @@ class MsgComponent : JsonComponent {
         return tellraw
     }
 
-    fun toTellrawPart(player: Player, text: String?, message: String?): TellrawJson {
+    private fun toTellrawPart(player: Player, text: String?, message: String?): TellrawJson {
         val tellraw = TellrawJson()
         tellraw.append((text ?: "&8[&fNull&8]".colored()).replace("\$message", message!!))
         if (hover != null) {
@@ -129,6 +129,9 @@ class MsgComponent : JsonComponent {
         }
         if (url != null) {
             tellraw.openURL(url!!.replacePlaceholder(player).replace("\$message", message))
+        }
+        if (copy != null) {
+            tellraw.copyToClipboard(copy!!.replacePlaceholder(player).replace("\$message", message))
         }
         return tellraw
     }

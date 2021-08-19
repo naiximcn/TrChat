@@ -18,6 +18,8 @@
     - 非私聊支持消息后缀(suffix)
     - 修改语言文件中的BLOCK_NOTE_BLOCK_PLING(低版本不存在)
     - 优化启动时的motd(感谢@Tontto )
+    - 支持所有JSON的HEX颜色
+    - 支持JSON复制到剪贴板动作(copy)
 - #### 1.80
   - Since 2021.8.15
   - Updates:

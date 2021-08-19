@@ -19,13 +19,15 @@ open class JsonComponent {
     var suggest: String? = null
     var command: String? = null
     var url: String? = null
+    var copy: String? = null
 
-    constructor(text: String?, hover: List<String?>?, suggest: String?, command: String?, url: String?) {
+    constructor(text: String?, hover: List<String?>?, suggest: String?, command: String?, url: String?, copy: String?) {
         this.text = text?.colored()
         this.hover = convertHoverText(hover)
         this.suggest = suggest
         this.command = command
         this.url = url
+        this.copy = copy
     }
 
     constructor(partSection: LinkedHashMap<*, *>) {
@@ -46,6 +48,9 @@ open class JsonComponent {
         }
         if (partSection.containsKey("requirement")) {
             requirement = partSection["requirement"].toString()
+        }
+        if (partSection.containsKey("copy")) {
+            copy = partSection["copy"].toString()
         }
     }
 
@@ -81,6 +86,9 @@ open class JsonComponent {
         }
         if (url != null) {
             tellraw.openURL(url!!.replaceWithOrder(*vars).replacePlaceholder(player))
+        }
+        if (copy != null) {
+            tellraw.copyToClipboard(copy!!.replaceWithOrder(*vars).replacePlaceholder(player))
         }
         return tellraw
     }
