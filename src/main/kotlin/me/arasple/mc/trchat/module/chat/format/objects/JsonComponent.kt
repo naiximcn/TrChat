@@ -21,7 +21,7 @@ open class JsonComponent {
     var url: String? = null
 
     constructor(text: String?, hover: List<String?>?, suggest: String?, command: String?, url: String?) {
-        this.text = text
+        this.text = text?.colored()
         this.hover = convertHoverText(hover)
         this.suggest = suggest
         this.command = command
@@ -30,7 +30,7 @@ open class JsonComponent {
 
     constructor(partSection: LinkedHashMap<*, *>) {
         if (partSection.containsKey("text")) {
-            text = partSection["text"].toString()
+            text = partSection["text"].toString().colored()
         }
         if (partSection.containsKey("hover")) {
             hover = convertHoverText(partSection["hover"])
@@ -86,16 +86,11 @@ open class JsonComponent {
     }
 
     private fun convertHoverText(any: Any?): String {
-        val hovers = if (any is List<*>) {
-            any
+        return if (any is List<*>) {
+            any.joinToString("\n") { it.toString().colored() }
         } else {
-            return any.toString()
+            any.toString().colored()
         }
-        val hover = StringBuilder()
-        hovers.forEach { l -> hover.append(l).append("\n") }
-        var result = hover.toString()
-        result = result.substring(0, result.length - 1)
-        return result
     }
 
     companion object {
