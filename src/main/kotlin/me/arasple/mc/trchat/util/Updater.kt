@@ -76,7 +76,7 @@ object Updater {
             if (isOld) {
                 return@submit
             }
-            try {
+            kotlin.runCatching {
                 URL(url).openStream().use { inputStream ->
                     BufferedInputStream(inputStream).use { bufferedInputStream ->
                         val read = readFully(bufferedInputStream, StandardCharsets.UTF_8)
@@ -89,7 +89,6 @@ object Updater {
                         information = json["body"].asString
                     }
                 }
-            } catch (ignored: Exception) {
             }
             submit { notifyVersion() }
         }

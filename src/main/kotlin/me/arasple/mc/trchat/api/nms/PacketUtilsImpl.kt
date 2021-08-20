@@ -25,10 +25,9 @@ class PacketUtilsImpl : PacketUtils() {
 
     override fun filterItem(item: Any?) {
         item ?: return
-        try {
+        kotlin.runCatching {
             val itemStack = CraftItemStack.asCraftMirror(item as net.minecraft.server.v1_16_R3.ItemStack)
             TrChatAPI.filterItemStack(itemStack)
-        } catch (ignored: Exception) {
         }
     }
 
@@ -36,13 +35,12 @@ class PacketUtilsImpl : PacketUtils() {
         items ?: return
         try {
             (items as List<*>).forEach { item -> filterItem(item) }
-        } catch (e: Exception) {
+        } catch (t: Throwable) {
             try {
                 (items as NonNullList<*>).forEach { item -> filterItem(item) }
-            } catch (e2: Exception) {
-                try {
+            } catch (t2: Throwable) {
+                kotlin.runCatching {
                     (items as Array<*>).forEach { item -> filterItem(item) }
-                } catch (ignored: Exception) {
                 }
             }
         }

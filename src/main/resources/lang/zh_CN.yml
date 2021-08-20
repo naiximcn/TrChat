@@ -86,6 +86,8 @@ General-Too-Long: '&8[&3Tr&bChat&8] &7你的聊天内容过长. &8[&6{0}&8/&2{1}
 General-Too-Similar: '&8[&3Tr&bChat&8] &7你的两次聊天内容过于相似, 请勿复读.'
 General-No-Permission: '&8[&3Tr&bChat&8] &7你没有足够的权限执行此操作.'
 General-Cant-Show-Air: '&8[&3Tr&bChat&8] &c你不能展示空气!'
+General-Muted: '&8[&3Tr&bChat&8] &c你被禁言了!'
+General-Global-Muting: '&8[&3Tr&bChat&8] &c全员禁言中.'
 
 Cooldowns-Chat:
   - type: actionbar
@@ -199,3 +201,21 @@ Ignore-Add:
 Ignore-Remove:
   - type: actionbar
     text: '&3&l你已取消屏蔽{0}的聊天'
+
+Mute-No-Player:
+  - type: actionbar
+    text: '&3&l请提供你要禁言的玩家'
+  - type: sound
+    sound: 'ENTITY_ITEM_BREAK'
+    volume: 1
+    pitch: 0
+Mute-Time-Not-Specified:
+  - type: actionbar
+    text: '&7&l你必须提供禁言时间(分钟)'
+  - type: sound
+    sound: 'ENTITY_ITEM_BREAK'
+    volume: 1
+    pitch: 0
+Mute-Muted-Player: '&8[&3Tr&bChat&8] &7你已禁言 {0} {1} 分钟.'
+Mute-Muted-All: '&8[&3Tr&bChat&8] &7全员禁言已开启.'
+Mute-Cancel-Muted-All: '&8[&3Tr&bChat&8] &7全员禁言已关闭.'

@@ -9,7 +9,11 @@ import taboolib.module.chat.TellrawJson
  */
 class PriFormat(formatMap: Map<*, *>) : Format(formatMap) {
 
-    override fun apply(player: Player, vararg message: String): TellrawJson {
+    init {
+        msg.isPrivateChat = true
+    }
+
+    override fun apply(player: Player, vararg message: String, post: Boolean): TellrawJson {
         val format = TellrawJson()
         jsons.forEach { x -> format.append(x.toTellrawJson(player, false, "true", message[1], message[2])) }
         format.append(msg.toTellrawJson(player, message[0]))

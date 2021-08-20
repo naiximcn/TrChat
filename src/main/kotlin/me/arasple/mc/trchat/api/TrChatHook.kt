@@ -5,6 +5,8 @@ import org.bukkit.entity.Player
 import org.dynmap.DynmapAPI
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.function.console
 import taboolib.module.chat.TellrawJson
 import taboolib.module.lang.sendLang
@@ -16,6 +18,7 @@ import taboolib.module.lang.sendLang
  * @author wlys
  * @since 2021/8/19 13:10
  */
+@PlatformSide([Platform.BUKKIT])
 object TrChatHook {
 
     var isDynmapHooked = false

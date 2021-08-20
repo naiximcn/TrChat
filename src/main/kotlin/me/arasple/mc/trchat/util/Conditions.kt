@@ -9,6 +9,7 @@ import taboolib.common5.Coerce
 import taboolib.common5.compileJS
 import taboolib.library.kether.LocalizedException
 import taboolib.module.kether.KetherShell
+import taboolib.module.kether.printKetherErrorMessage
 import taboolib.module.lang.sendLang
 import taboolib.platform.compat.replacePlaceholder
 import java.util.*
@@ -59,8 +60,7 @@ private fun checkKether(player: Player, condition: String): CompletableFuture<Bo
                 Coerce.toBoolean(it)
             }
         } catch (e: LocalizedException) {
-            adaptPlayer(player).sendLang("Error-Kether", condition, e.message ?: "", Arrays.toString(e.stackTrace))
-            console().sendLang("Error-Kether", condition, e.message ?: "", Arrays.toString(e.stackTrace))
+            e.printKetherErrorMessage()
             CompletableFuture.completedFuture(false)
         } catch (e: Throwable) {
             adaptPlayer(player).sendLang("Error-Kether", condition, e.message ?: "", Arrays.toString(e.stackTrace))

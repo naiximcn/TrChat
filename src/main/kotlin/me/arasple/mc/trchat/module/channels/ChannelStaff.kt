@@ -20,7 +20,7 @@ object ChannelStaff {
 
     fun execute(player: Player, message: String) {
         if (player.hasPermission("trchat.staff")) {
-            val format = ChatFormats.getFormat(ChatType.STAFF, player)!!.apply(player, message)
+            val format = ChatFormats.getFormat(ChatType.STAFF, player)!!.apply(player, message, post = false)
             if (Bungees.isEnable) {
                 val raw = ComponentSerializer.toString(*format.componentsAll.toTypedArray())
                 Bungees.sendBungeeData(player, "TrChat", "SendRawPerm", raw, "trchat.staff")

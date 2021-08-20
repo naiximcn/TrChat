@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.module.chat.listeners
+package me.arasple.mc.trchat.module.listeners
 
 import me.arasple.mc.trchat.api.TrChatFiles.function
 import org.bukkit.Bukkit
@@ -22,9 +22,7 @@ object ListenerCommandController {
         val player = e.player
         val command = e.message.substring(1)
         val mCmd = Bukkit.getCommandAliases().entries.firstOrNull { (_, value) ->
-            value.any { m ->
-                m.equals(e.message.substring(1).split(" ").toTypedArray()[0], ignoreCase = true)
-            }
+            value.any { m -> m.equals(e.message.substring(1).split(" ").toTypedArray()[0], ignoreCase = true) }
         }
 
         if (function.getBoolean("GENERAL.COMMAND-CONTROLLER.ENABLE", true) && command.isNotEmpty()

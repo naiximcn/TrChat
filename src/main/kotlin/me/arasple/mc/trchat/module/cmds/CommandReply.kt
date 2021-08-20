@@ -1,6 +1,8 @@
 package me.arasple.mc.trchat.module.cmds
 
 import me.arasple.mc.trchat.module.channels.ChannelPrivate.execute
+import me.arasple.mc.trchat.module.data.Users
+import me.arasple.mc.trchat.module.listeners.ListenerChatEvent
 import me.arasple.mc.trchat.util.Players
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
@@ -29,6 +31,14 @@ object CommandReply {
         command("reply", listOf("r"), "回复私聊", permission = "trchat.private") {
             dynamic {
                 execute<Player> { sender, _, argument ->
+                    if (ListenerChatEvent.isGlobalMuted && !sender.hasPermission("trchat.bypass.globalmute")) {
+                        sender.sendLang("General-Global-Muting")
+                        return@execute
+                    }
+                    if (Users.isMuted(sender)) {
+                        sender.sendLang("General-Muted")
+                        return@execute
+                    }
                     if (lastMessageFrom.containsKey(sender.uniqueId)) {
                         Players.getPlayerFullName(lastMessageFrom[sender.uniqueId]!!)?.let {
                             execute(sender, it, argument)

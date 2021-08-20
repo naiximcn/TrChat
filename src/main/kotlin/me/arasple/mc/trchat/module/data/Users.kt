@@ -73,7 +73,7 @@ object Users {
     }
 
     fun updateMuteTime(user: Player, time: Long) {
-        database.pull(user).set("MUTE_TIME", System.currentTimeMillis() + time)
+        database.pull(user).set("MUTE_TIME", System.currentTimeMillis() + time * 1000)
     }
 
     fun isMuted(user: Player): Boolean {

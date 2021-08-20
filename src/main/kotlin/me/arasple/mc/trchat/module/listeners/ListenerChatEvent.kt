@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.module.chat.listeners
+package me.arasple.mc.trchat.module.listeners
 
 import me.arasple.mc.trchat.Metrics
 import me.arasple.mc.trchat.api.TrChatFiles
@@ -31,16 +31,23 @@ import taboolib.platform.util.sendLang
 @PlatformSide([Platform.BUKKIT])
 object ListenerChatEvent {
 
+    var isGlobalMuted = false
+
     @SubscribeEvent(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onChat(e: AsyncPlayerChatEvent) {
         val player = e.player
         if (TrChatFiles.settings.getStringList("GENERAL.DISABLED-WORLDS").contains(player.world.name)) {
-            e.isCancelled = false
+            e.isCancelled = true
+            return
+        }
+        if (isGlobalMuted && !player.hasPermission("trchat.bypass.globalmute")) {
+            e.isCancelled = true
+            player.sendLang("General-Global-Muting")
             return
         }
         if (Users.isMuted(player)) {
             e.isCancelled = true
-            player.sendLang("GENERAL.MUTE")
+            player.sendLang("General-Muted")
             return
         }
         // STAFF

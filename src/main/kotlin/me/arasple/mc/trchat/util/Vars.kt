@@ -28,7 +28,7 @@ object Vars {
      * @param expansions 拓展
      */
     private fun downloadExpansions(expansions: List<String>) {
-        try {
+        kotlin.runCatching {
             if (expansions.isNotEmpty()) {
                 if (PlaceholderAPIPlugin.getInstance().cloudExpansionManager.cloudExpansions.isEmpty()) {
                     PlaceholderAPIPlugin.getInstance().cloudExpansionManager.fetch(false)
@@ -50,7 +50,6 @@ object Vars {
                     }
                 }
             }
-        } catch (ignored: Throwable) {
         }
     }
 }

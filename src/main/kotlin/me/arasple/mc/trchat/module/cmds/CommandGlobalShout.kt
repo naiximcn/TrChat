@@ -2,6 +2,8 @@ package me.arasple.mc.trchat.module.cmds
 
 import me.arasple.mc.trchat.module.bungee.Bungees
 import me.arasple.mc.trchat.module.channels.ChannelGlobal
+import me.arasple.mc.trchat.module.data.Users
+import me.arasple.mc.trchat.module.listeners.ListenerChatEvent
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -26,6 +28,14 @@ object CommandGlobalShout {
         command("shout", listOf("all", "global"), "全服喊话", permission = "trchat.global") {
             dynamic {
                 execute<Player> { sender, _, argument ->
+                    if (ListenerChatEvent.isGlobalMuted && !sender.hasPermission("trchat.bypass.globalmute")) {
+                        sender.sendLang("General-Global-Muting")
+                        return@execute
+                    }
+                    if (Users.isMuted(sender)) {
+                        sender.sendLang("General-Muted")
+                        return@execute
+                    }
                     if (!Bungees.isEnable) {
                         sender.sendLang("Global-Message-Not-Enable")
                         return@execute

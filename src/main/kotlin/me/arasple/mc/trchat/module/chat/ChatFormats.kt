@@ -37,9 +37,6 @@ object ChatFormats {
             }
         }
 
-        formats[ChatType.PRIVATE_RECEIVE]!!.forEach { format -> format.msg.isPrivateChat = true }
-        formats[ChatType.PRIVATE_SEND]!!.forEach { format -> format.msg.isPrivateChat = true }
-
         notify(notify, "Plugin-Loaded-Chat-Formats", System.currentTimeMillis() - start)
     }
 }

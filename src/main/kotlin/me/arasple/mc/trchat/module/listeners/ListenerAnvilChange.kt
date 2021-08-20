@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.module.chat.listeners
+package me.arasple.mc.trchat.module.listeners
 
 import me.arasple.mc.trchat.api.TrChatFiles.settings
 import me.arasple.mc.trchat.api.TrChatAPI

@@ -28,7 +28,7 @@ object TrChat : Plugin() {
         BukkitPlugin.getInstance()
     }
 
-    fun getTrVersion(): Double = 1.81
+    fun getTrVersion(): Double = 1.82
 
     val motd = arrayOf(
         "",

@@ -67,6 +67,8 @@ General-Too-Long: '&8[&3Tr&bChat&8] &7Message is too long. &8[&6{0}&8/&2{1}&8]'
 General-Too-Similar: '&8[&3Tr&bChat&8] &7Please do not repeat your message.'
 General-No-Permission: '&8[&3Tr&bChat&8] &7You do not have enough permission to do this.'
 General-Cant-Show-Air: '&8[&3Tr&bChat&8] &cYou can not show AIR!'
+General-Muted: '&8[&3Tr&bChat&8] &cYou have been muted!'
+General-Global-Muting: '&8[&3Tr&bChat&8] &cAll members are being muted.'
 
 Cooldowns-Chat:
   - type: actionbar
@@ -180,3 +182,21 @@ Ignore-Add:
 Ignore-Remove:
   - type: actionbar
     text: '&3&lYou are no longer ignored {0}'
+
+Mute-No-Player:
+  - type: actionbar
+    text: '&3&lPlayer name required'
+  - type: sound
+    sound: 'ENTITY_ITEM_BREAK'
+    volume: 1
+    pitch: 0
+Mute-Time-Not-Specified:
+  - type: actionbar
+    text: '&7&lTime required (in minutes)'
+  - type: sound
+    sound: 'ENTITY_ITEM_BREAK'
+    volume: 1
+    pitch: 0
+Mute-Muted-Player: '&8[&3Tr&bChat&8] &7You muted {0} for {1} minute(s).'
+Mute-Muted-All: '&8[&3Tr&bChat&8] &7Global muted.'
+Mute-Cancel-Muted-All: '&8[&3Tr&bChat&8] &7Global mute canceled.'
