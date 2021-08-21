@@ -1,6 +1,6 @@
-package me.arasple.mc.trchat.util
+package me.arasple.mc.trchat.internal.proxy
 
-import me.arasple.mc.trchat.internal.bungee.Bungees
+import me.arasple.mc.trchat.internal.proxy.bungee.Bungees
 import org.bukkit.Bukkit
 import taboolib.common.LifeCycle
 import taboolib.common.platform.*
@@ -19,7 +19,7 @@ object Players {
     @Awake(LifeCycle.ENABLE)
     fun startTask() {
         submit(delay = 20) {
-            if (Bungees.isEnable) {
+            if (Bungees.isEnabled) {
                 submit(period = 60) {
                     if (Bukkit.getOnlinePlayers().isNotEmpty()) {
                         Bungees.sendBungeeData(Bukkit.getOnlinePlayers().iterator().next(), "PlayerList", "ALL")

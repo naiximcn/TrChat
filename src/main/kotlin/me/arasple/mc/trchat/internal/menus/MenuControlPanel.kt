@@ -75,6 +75,7 @@ object MenuControlPanel {
             }
             set('M', XMaterial.REDSTONE) {
                 name = "&c禁言"
+                colored()
             }
             onClick(lock = true) { clickEvent ->
                 when (clickEvent.slot) {

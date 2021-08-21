@@ -24,7 +24,7 @@ taboolib {
     install("module-metrics")
     install("module-nms", "module-nms-util")
     install("module-ui")
-    install("platform-bukkit", "platform-bungee")
+    install("platform-bukkit", "platform-bungee", "platform-velocity")
     classifier = null
     version = "6.0.0-pre55"
 }
@@ -47,7 +47,7 @@ dependencies {
     compileOnly("ink.ptms.core:v11604:11604:all")
     compileOnly("ink.ptms.core:v11200:11200:all")
     compileOnly("net.md-5:bungeecord-bootstrap:1.17-R0.1-SNAPSHOT")
-    compileOnly("com.velocitypowered:velocity-api:1.1.8")
+    compileOnly("com.velocitypowered:velocity-api:3.0.0")
     compileOnly("us.dynmap:dynmap-api:2.5")
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly(kotlin("stdlib"))

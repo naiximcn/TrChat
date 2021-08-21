@@ -23,6 +23,7 @@ GENERAL:
     - 'player'
     - 'server'
     - 'vault'
+  PREVENT-TAB-COMPLETE: false
 
 # Chat Color
 # Perm Node: trchat.color.<CODE>

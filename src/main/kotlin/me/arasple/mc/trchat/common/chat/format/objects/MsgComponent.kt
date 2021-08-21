@@ -6,7 +6,7 @@ import me.arasple.mc.trchat.internal.data.Cooldowns
 import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.common.function.ChatFunctions
 import me.arasple.mc.trchat.util.MessageColors
-import me.arasple.mc.trchat.util.Players
+import me.arasple.mc.trchat.internal.proxy.Players
 import me.arasple.mc.trchat.util.checkCondition
 import me.arasple.mc.trchat.util.replacePattern
 import org.apache.commons.lang.math.NumberUtils

@@ -82,7 +82,10 @@ object ListenerChatEvent {
     }
 
     private fun checkLimits(p: ProxyPlayer, message: String): Boolean {
-        if (!p.hasPermission("trchat.bypass.*")) {
+        if (p.hasPermission("trchat.bypass.*")) {
+            return true
+        }
+        if (!p.hasPermission("trchat.bypass.chatlength")) {
             val limit = TrChatFiles.settings.getLong("CHAT-CONTROL.LENGTH-LIMIT", 100)
             if (message.length > limit) {
                 p.sendLang("General-Too-Long", message.length, limit)

@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.internal.command
 
-import me.arasple.mc.trchat.internal.bungee.Bungees
+import me.arasple.mc.trchat.internal.proxy.bungee.Bungees
 import me.arasple.mc.trchat.common.channels.ChannelGlobal
 import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.internal.listener.ListenerChatEvent
@@ -36,7 +36,7 @@ object CommandGlobalShout {
                         sender.sendLang("General-Muted")
                         return@execute
                     }
-                    if (!Bungees.isEnable) {
+                    if (!Bungees.isEnabled) {
                         sender.sendLang("Global-Message-Not-Enable")
                         return@execute
                     }

@@ -1,17 +1,15 @@
 package me.arasple.mc.trchat.common.channels
 
-import com.google.common.collect.Lists
 import me.arasple.mc.trchat.Metrics
 import me.arasple.mc.trchat.common.chat.ChatFormats
-import me.arasple.mc.trchat.common.chat.obj.ChatType
-import me.arasple.mc.trchat.internal.command.CommandReply
 import me.arasple.mc.trchat.common.chat.ChatLogs
-import me.arasple.mc.trchat.internal.bungee.Bungees
-import net.md_5.bungee.chat.ComponentSerializer
+import me.arasple.mc.trchat.common.chat.obj.ChatType
+import me.arasple.mc.trchat.internal.proxy.bungee.Bungees
+import me.arasple.mc.trchat.internal.command.CommandReply
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
-import taboolib.common.platform.*
+import taboolib.common.platform.Awake
 import taboolib.common.platform.command.command
 import taboolib.common.platform.function.adaptPlayer
 import taboolib.common.platform.function.console
@@ -27,7 +25,7 @@ import java.util.*
  */
 object ChannelPrivate {
 
-    private val spying: MutableList<UUID> = Lists.newArrayList()
+    private val spying = mutableListOf<UUID>()
 
     @Awake(LifeCycle.ENABLE)
     fun c() {
@@ -48,7 +46,7 @@ object ChannelPrivate {
 
         val toPlayer = Bukkit.getPlayerExact(to)
         if (toPlayer == null || !toPlayer.isOnline) {
-            val raw: String = ComponentSerializer.toString(*receiver.componentsAll.toTypedArray())
+            val raw = receiver.toRawMessage()
             Bungees.sendBungeeData(from, "TrChat", "SendRaw", to, raw)
         } else {
             receiver.sendTo(getProxyPlayer(to)!!)
@@ -56,21 +54,20 @@ object ChannelPrivate {
         }
         sender.sendTo(adaptPlayer(from))
 
-        val spyFormat = console().asLangText("Private-Message-Spy-Format", from.name, to, message)
-
+        // Spy
         spying.forEach { spy ->
             val spyPlayer = Bukkit.getPlayer(spy)
             if (spyPlayer != null && spyPlayer.isOnline) {
-                spyPlayer.sendMessage(spyFormat)
+                spyPlayer.sendLang("Private-Message-Spy-Format", from.name, to, message)
             }
         }
-        Bukkit.getConsoleSender().sendMessage(spyFormat)
+        console().sendLang("Private-Message-Spy-Format", from.name, to, message)
         ChatLogs.logPrivate(from.name, to, message)
         CommandReply.lastMessageFrom[from.uniqueId] = to
         Metrics.increase(0)
     }
 
-    fun switchSpy(player: Player): Boolean {
+    private fun switchSpy(player: Player): Boolean {
         if (!spying.contains(player.uniqueId)) {
             spying.add(player.uniqueId)
         } else {

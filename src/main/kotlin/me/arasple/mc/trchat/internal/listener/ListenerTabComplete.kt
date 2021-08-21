@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.internal.listener
 
 import com.mojang.brigadier.suggestion.Suggestions
+import me.arasple.mc.trchat.api.TrChatFiles
 import org.bukkit.Bukkit
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
@@ -19,7 +20,9 @@ object ListenerTabComplete {
     @SubscribeEvent
     fun onTabCommandSend(e: PacketSendEvent) {
         if (!MinecraftVersion.isSupported) return
-        if (e.packet.name == "PacketPlayOutTabComplete" && !e.player.hasPermission("trchat.bypass.tabcomplete")) {
+        if (TrChatFiles.settings.getBoolean("GENERAL.PREVENT-TAB-COMPLETE", false)
+            && e.packet.name == "PacketPlayOutTabComplete"
+            && !e.player.hasPermission("trchat.bypass.tabcomplete")) {
             if (majorLegacy >= 11700) {
                 e.isCancelled = (e.packet.read<Suggestions>("suggestions") ?: Suggestions.empty().get())
                     .list.none { Bukkit.getPlayerExact(it.text) != null }

@@ -32,7 +32,7 @@ open class JsonComponent {
 
     constructor(partSection: LinkedHashMap<*, *>) {
         if (partSection.containsKey("text")) {
-            text = partSection["text"].toString().colored()
+            text = partSection["text"].toString()
         }
         if (partSection.containsKey("hover")) {
             hover = convertHoverText(partSection["hover"])
@@ -74,9 +74,9 @@ open class JsonComponent {
                 text = text!!.replace("%toplayer_name%".toRegex(), vars[2])
             }
         }
-        tellraw.append(text?.replaceWithOrder(*vars)?.replacePlaceholder(player) ?: "&8[&fNull&8]".colored())
+        tellraw.append(text?.replaceWithOrder(*vars)?.replacePlaceholder(player)?.colored() ?: "&8[&fNull&8]".colored())
         if (hover != null) {
-            tellraw.hoverText(hover!!.replaceWithOrder(*vars).replacePlaceholder(player))
+            tellraw.hoverText(hover!!.replaceWithOrder(*vars).replacePlaceholder(player).colored())
         }
         if (suggest != null) {
             tellraw.suggestCommand(suggest!!.replaceWithOrder(*vars).replacePlaceholder(player))
@@ -95,9 +95,9 @@ open class JsonComponent {
 
     private fun convertHoverText(any: Any?): String {
         return if (any is List<*>) {
-            any.joinToString("\n") { it.toString().colored() }
+            any.joinToString("\n") { it.toString() }
         } else {
-            any.toString().colored()
+            any.toString()
         }
     }
 

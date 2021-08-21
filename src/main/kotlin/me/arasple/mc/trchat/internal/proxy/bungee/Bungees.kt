@@ -1,10 +1,11 @@
-package me.arasple.mc.trchat.internal.bungee
+package me.arasple.mc.trchat.internal.proxy.bungee
 
 import com.google.common.io.ByteStreams
-import me.arasple.mc.trchat.TrChat.plugin
-import me.arasple.mc.trchat.util.Players.setPlayers
+import me.arasple.mc.trchat.TrChat
+import me.arasple.mc.trchat.internal.proxy.Players.setPlayers
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.plugin.messaging.PluginMessageListener
 import taboolib.common.platform.function.console
 import taboolib.module.lang.sendLang
@@ -33,14 +34,14 @@ class Bungees : PluginMessageListener {
 
     companion object {
 
-        var isEnable = false
+        var isEnabled = false
 
-        fun init() {
+        fun init(plugin: JavaPlugin) {
             if (!Bukkit.getMessenger().isOutgoingChannelRegistered(plugin, "BungeeCord")) {
                 Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord")
                 Bukkit.getMessenger().registerIncomingPluginChannel(plugin, "BungeeCord", Bungees())
-                isEnable = Bukkit.getServer().spigot().config.getBoolean("settings.bungeecord", false)
-                console().sendLang(if (isEnable) "Plugin-Registered-Bungee" else "Plugin-None-Bungee")
+                isEnabled = Bukkit.getServer().spigot().config.getBoolean("settings.bungeecord", false)
+                console().sendLang(if (isEnabled) "Plugin-Proxy-Bungee" else "Plugin-Proxy-None")
             }
         }
 
@@ -53,7 +54,7 @@ class Bungees : PluginMessageListener {
                     e.printStackTrace()
                 }
             }
-            player.sendPluginMessage(plugin, "BungeeCord", out.toByteArray())
+            player.sendPluginMessage(TrChat.plugin, "BungeeCord", out.toByteArray())
         }
     }
 }

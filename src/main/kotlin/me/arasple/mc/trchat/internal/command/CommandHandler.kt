@@ -8,6 +8,7 @@ import taboolib.common.platform.command.CommandHeader
 import taboolib.common.platform.command.mainCommand
 import taboolib.common.platform.command.subCommand
 import taboolib.module.lang.sendLang
+import taboolib.platform.compat.replacePlaceholder
 
 /**
  * CommandHandler

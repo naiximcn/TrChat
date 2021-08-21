@@ -43,8 +43,8 @@ private fun checkJs(player: Player, condition: String): Boolean {
     try {
         return condition.compileJS()!!.eval(SimpleBindings(bind)) as Boolean
     } catch (e: Throwable) {
-        adaptPlayer(player).sendLang("Error-Js", condition, e.message ?: "", Arrays.toString(e.stackTrace))
-        console().sendLang("Error-Js", condition, e.message ?: "", Arrays.toString(e.stackTrace))
+        adaptPlayer(player).sendLang("Error-Js", condition, e.message ?: "null", Arrays.toString(e.stackTrace))
+        console().sendLang("Error-Js", condition, e.message ?: "null", Arrays.toString(e.stackTrace))
     }
     return false
 }
@@ -63,8 +63,8 @@ private fun checkKether(player: Player, condition: String): CompletableFuture<Bo
             e.printKetherErrorMessage()
             CompletableFuture.completedFuture(false)
         } catch (e: Throwable) {
-            adaptPlayer(player).sendLang("Error-Kether", condition, e.message ?: "", Arrays.toString(e.stackTrace))
-            console().sendLang("Error-Kether", condition, e.message ?: "", Arrays.toString(e.stackTrace))
+            adaptPlayer(player).sendLang("Error-Kether", condition, e.message ?: "null", Arrays.toString(e.stackTrace))
+            console().sendLang("Error-Kether", condition, e.message ?: "null", Arrays.toString(e.stackTrace))
             CompletableFuture.completedFuture(false)
         }
     }
