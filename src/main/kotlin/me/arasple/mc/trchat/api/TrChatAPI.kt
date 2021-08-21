@@ -1,9 +1,9 @@
 package me.arasple.mc.trchat.api
 
-import me.arasple.mc.trchat.module.data.DatabaseLocal
-import me.arasple.mc.trchat.module.filter.ChatFilter.filter
-import me.arasple.mc.trchat.module.filter.processer.Filter
-import me.arasple.mc.trchat.module.filter.processer.FilteredObject
+import me.arasple.mc.trchat.internal.data.DatabaseLocal
+import me.arasple.mc.trchat.common.filter.ChatFilter.filter
+import me.arasple.mc.trchat.common.filter.processer.Filter
+import me.arasple.mc.trchat.common.filter.processer.FilteredObject
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack

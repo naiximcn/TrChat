@@ -71,6 +71,8 @@ Plugin-Debug-Off:
     sound: 'BLOCK_ANVIL_LAND'
     volume: 1
     pitch: 0
+Plugin-Done: '&8[&3Tr&bChat&8] &f操作成功.'
+Plugin-Failed: '&8[&3Tr&bChat&8] &c操作失败.'
 
 Error-Version: '&8[&3Tr&bChat&8] &cERROR &8| &7检测版本号时发生异常... 请重新下载插件!'
 Error-Js:

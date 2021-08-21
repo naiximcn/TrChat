@@ -52,6 +52,8 @@ Plugin-Debug-Off:
     sound: 'BLOCK_ANVIL_LAND'
     volume: 1
     pitch: 0
+Plugin-Done: '&8[&3Tr&bChat&8] &fOperate successfully.'
+Plugin-Failed: '&8[&3Tr&bChat&8] &cOperation failure.'
 
 Error-Version: '&8[&3Tr&bChat&8] &cERROR &8| &7Plugin version error. Please re-download the plugin.'
 Error-Js:

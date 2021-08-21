@@ -1,10 +1,14 @@
 package me.arasple.mc.trchat.api.nms
 
 import me.arasple.mc.trchat.api.TrChatAPI
-import me.arasple.mc.trchat.module.filter.ChatFilter.filter
+import me.arasple.mc.trchat.common.filter.ChatFilter.filter
+import net.md_5.bungee.api.chat.BaseComponent
+import net.md_5.bungee.chat.ComponentSerializer
 import net.minecraft.server.v1_16_R3.IChatBaseComponent
 import net.minecraft.server.v1_16_R3.NonNullList
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack
+import taboolib.module.nms.MinecraftVersion.majorLegacy
+import taboolib.module.nms.Packet
 
 /**
  * @author Arasple
@@ -44,5 +48,23 @@ class PacketUtilsImpl : PacketUtils() {
                 }
             }
         }
+    }
+
+    override fun packetToMessage(packet: Packet): String {
+        return kotlin.runCatching {
+            if (majorLegacy >= 11700) {
+                if (packet.read<IChatBaseComponent>("message") != null) {
+                    IChatBaseComponent.ChatSerializer.a(packet.read<IChatBaseComponent>("message"))
+                } else {
+                    ComponentSerializer.toString(*packet.read<Array<BaseComponent>>("components")!!)
+                }
+            } else {
+                if (packet.read<IChatBaseComponent>("a") != null) {
+                    IChatBaseComponent.ChatSerializer.a(packet.read<IChatBaseComponent>("a"))
+                } else {
+                    ComponentSerializer.toString(*packet.read<Array<BaseComponent>>("components")!!)
+                }
+            }
+        }.getOrElse { "" }
     }
 }

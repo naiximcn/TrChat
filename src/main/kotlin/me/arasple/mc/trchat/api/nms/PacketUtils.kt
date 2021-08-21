@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.api.nms
 
+import taboolib.module.nms.Packet
 import taboolib.module.nms.nmsProxy
 
 /**
@@ -19,6 +20,8 @@ abstract class PacketUtils {
     abstract fun filterItem(item: Any?)
 
     abstract fun filterItemList(items: Any?)
+
+    abstract fun packetToMessage(packet: Packet): String
 
     companion object {
 

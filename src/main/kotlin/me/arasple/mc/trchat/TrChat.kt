@@ -1,10 +1,10 @@
 package me.arasple.mc.trchat
 
-import me.arasple.mc.trchat.module.chat.ChatFormats
-import me.arasple.mc.trchat.module.filter.ChatFilter
-import me.arasple.mc.trchat.module.func.ChatFunctions
+import me.arasple.mc.trchat.common.chat.ChatFormats
+import me.arasple.mc.trchat.common.filter.ChatFilter
+import me.arasple.mc.trchat.common.function.ChatFunctions
 import me.arasple.mc.trchat.util.Updater
-import me.arasple.mc.trchat.module.bungee.Bungees
+import me.arasple.mc.trchat.internal.bungee.Bungees
 import org.bukkit.Bukkit
 import taboolib.common.env.Repository.downloadToFile
 import taboolib.common.platform.Platform
