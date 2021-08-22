@@ -10,6 +10,7 @@ import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.platform.function.pluginVersion
 import taboolib.common.platform.function.submit
 import taboolib.module.lang.sendLang
+import taboolib.module.metrics.Metrics
 import taboolib.platform.VelocityPlugin
 import java.io.IOException
 
@@ -45,6 +46,7 @@ object TrChatVelocity : Plugin() {
 
     override fun onEnable() {
         console().sendLang("Plugin-Enabled", pluginVersion)
+        Metrics(12541, pluginVersion, Platform.VELOCITY)
 
         submit(period = 60, async = true) {
             plugin.server.allServers.forEach { server ->

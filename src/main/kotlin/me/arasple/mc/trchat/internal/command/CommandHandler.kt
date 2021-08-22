@@ -27,7 +27,7 @@ import taboolib.module.lang.sendLang
 @CommandHeader("trchat", ["trc"], "TrChat主命令", permission = "trchat.access")
 object CommandHandler {
 
-    @CommandBody(permission = "trchat.controlpanel", optional = true)
+    @CommandBody(permission = "trchat.admin", optional = true)
     val controlPanel = subCommand {
         execute<Player> { sender, _, _ ->
             MenuControlPanel.displayFor(sender)
@@ -41,7 +41,7 @@ object CommandHandler {
         }
     }
 
-    @CommandBody(permission = "trchat.reload", optional = true)
+    @CommandBody(permission = "trchat.admin", optional = true)
     val reload = subCommand {
         execute<ProxyCommandSender> { sender, _, _ ->
             TrChatFiles.formats.reload()

@@ -27,7 +27,7 @@ object ListenerTrChatInfo {
     fun onChat(e: AsyncPlayerChatEvent) {
         e.isCancelled = react(e.player, if (e.message.startsWith("#")) e.message.substring(1) else null)
 
-        if (e.message == "#TRCHAT-RELOAD" && e.player.hasPermission("trchat.reload")) {
+        if (e.message == "#TRCHAT-RELOAD" && e.player.hasPermission("trchat.admin")) {
             TrChatFiles.formats.reload()
             ChatFormats.loadFormats(adaptPlayer(e.player))
             TrChatFiles.filter.reload()
