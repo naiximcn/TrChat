@@ -8,10 +8,11 @@ taboolib {
     description {
         contributors {
             name("Arasple")
+            name("ItsFlicker")
         }
         dependencies {
-            name("PlaceholderAPI").optional(true)
-            name("Dynmap").optional(true)
+            name("PlaceholderAPI").optional(true).with("bukkit")
+            name("Dynmap").optional(true).with("bukkit")
         }
         desc("Advanced Minecraft Chat Control")
     }
@@ -26,7 +27,7 @@ taboolib {
     install("module-ui")
     install("platform-bukkit", "platform-bungee", "platform-velocity")
     classifier = null
-    version = "6.0.0-pre55"
+    version = "6.0.0-pre56"
 }
 
 repositories {

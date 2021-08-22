@@ -6,7 +6,7 @@ import me.arasple.mc.trchat.internal.data.Cooldowns
 import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.common.function.ChatFunctions
 import me.arasple.mc.trchat.util.MessageColors
-import me.arasple.mc.trchat.internal.proxy.Players
+import me.arasple.mc.trchat.internal.proxy.bukkit.Players
 import me.arasple.mc.trchat.util.checkCondition
 import me.arasple.mc.trchat.util.replacePattern
 import org.apache.commons.lang.math.NumberUtils
@@ -53,14 +53,14 @@ class MsgComponent : JsonComponent {
             message = replacePattern(message, function.pattern, function.filterTextPattern, "<" + function.name + ":{0}>")
         }
         // At & Item Show
-        val atEnabled = Users.getCooldownLeft(player.uniqueId, Cooldowns.CooldownType.MENTION) <= 0
+        val atEnabled = function.getBoolean("GENERAL.MENTION.ENABLE", true) && !Users.isInCooldown(player.uniqueId, Cooldowns.CooldownType.MENTION)
         val atFormat = function.getString("GENERAL.MENTION.FORMAT").colored()
         if (atEnabled) {
             for (p in Players.getPlayers()) {
                 if (!function.getBoolean("GENERAL.MENTION.SELF-MENTION", false) && p.equals(player.name, ignoreCase = true)) {
                     continue
                 }
-                message = message.replace("(?i)(@)?$p".toRegex(), "<AT:$p>")
+                message = message.replace("(?i)@$p".toRegex(), "<AT:$p>")
             }
         }
         val itemDisplayEnabled = function.getBoolean("GENERAL.ITEM-SHOW.ENABLE", true)
@@ -137,8 +137,9 @@ class MsgComponent : JsonComponent {
     }
 
     private fun getName(item: ItemStack, player: Player): String {
-        return if (TrChatFiles.settings.getBoolean("GENERAL.ITEM-SHOW.ORIGIN-NAME", true)
-            || item.itemMeta?.hasDisplayName() == false) {
+        return if ((function.getBoolean("GENERAL.ITEM-SHOW.ORIGIN-NAME", true)
+                || item.itemMeta == null) || !item.itemMeta!!.hasDisplayName()
+        ) {
             item.getI18nName(player)
         } else {
             item.itemMeta!!.displayName

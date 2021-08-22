@@ -3,6 +3,7 @@ package me.arasple.mc.trchat
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.filter.ChatFilter
 import me.arasple.mc.trchat.common.function.ChatFunctions
+import me.arasple.mc.trchat.internal.proxy.Proxy
 import me.arasple.mc.trchat.util.Updater
 import me.arasple.mc.trchat.internal.proxy.bungee.Bungees
 import org.bukkit.Bukkit
@@ -55,8 +56,8 @@ object TrChat : Plugin() {
         ChatFormats.loadFormats(console())
         // Chat Functions
         ChatFunctions.loadFunctions(console())
-        // Bungees
-        Bungees.init(plugin)
+        // Proxies
+        Proxy.init()
     }
 
     override fun onEnable() {

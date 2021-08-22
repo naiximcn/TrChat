@@ -9,6 +9,7 @@ import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.getProxyPlayer
 import taboolib.common.platform.function.onlinePlayers
+import taboolib.common.platform.function.server
 import java.io.ByteArrayInputStream
 import java.io.DataInputStream
 import java.io.IOException
@@ -44,17 +45,12 @@ object ListenerBungeeTransfer {
                 }
                 if (type == "BroadcastRaw") {
                     val raw = data.readUTF()
-                    onlinePlayers().forEach { p ->
-                        p.sendRawMessage(raw)
-                    }
+                    server<ProxyServer>().broadcast(*ComponentSerializer.parse(raw))
                 }
                 if (type == "SendRawPerm") {
                     val raw = data.readUTF()
                     val perm = data.readUTF()
 
-                    ProxyServer.getInstance().players.filter { p -> p.hasPermission(perm) }.forEach { p ->
-                        p.sendMessage(*ComponentSerializer.parse(raw))
-                    }
                     onlinePlayers().filter { p -> p.hasPermission(perm) }.forEach { p ->
                         p.sendRawMessage(raw)
                     }

@@ -4,6 +4,7 @@ import me.arasple.mc.trchat.internal.proxy.bungee.Bungees
 import me.arasple.mc.trchat.common.channels.ChannelGlobal
 import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.internal.listener.ListenerChatEvent
+import me.arasple.mc.trchat.internal.proxy.Proxy
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -34,10 +35,6 @@ object CommandGlobalShout {
                     }
                     if (Users.isMuted(sender)) {
                         sender.sendLang("General-Muted")
-                        return@execute
-                    }
-                    if (!Bungees.isEnabled) {
-                        sender.sendLang("Global-Message-Not-Enable")
                         return@execute
                     }
                     ChannelGlobal.execute(sender, argument)

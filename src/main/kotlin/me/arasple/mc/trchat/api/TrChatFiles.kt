@@ -41,8 +41,17 @@ object TrChatFiles {
 
     @Awake(LifeCycle.ENABLE)
     fun init() {
-        FileWatcher.INSTANCE.addSimpleListener(filter.file) { ChatFilter.loadFilter(false, console()) }
-        FileWatcher.INSTANCE.addSimpleListener(formats.file) { ChatFormats.loadFormats(console()) }
-        FileWatcher.INSTANCE.addSimpleListener(function.file) { ChatFunctions.loadFunctions(console()) }
+        FileWatcher.INSTANCE.addSimpleListener(filter.file) {
+            filter.reload()
+            ChatFilter.loadFilter(false, console())
+        }
+        FileWatcher.INSTANCE.addSimpleListener(formats.file) {
+            formats.reload()
+            ChatFormats.loadFormats(console())
+        }
+        FileWatcher.INSTANCE.addSimpleListener(function.file) {
+            function.reload()
+            ChatFunctions.loadFunctions(console())
+        }
     }
 }

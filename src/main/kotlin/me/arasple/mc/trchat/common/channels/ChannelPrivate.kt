@@ -6,6 +6,7 @@ import me.arasple.mc.trchat.common.chat.ChatLogs
 import me.arasple.mc.trchat.common.chat.obj.ChatType
 import me.arasple.mc.trchat.internal.proxy.bungee.Bungees
 import me.arasple.mc.trchat.internal.command.CommandReply
+import me.arasple.mc.trchat.internal.proxy.Proxy
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
@@ -47,7 +48,7 @@ object ChannelPrivate {
         val toPlayer = Bukkit.getPlayerExact(to)
         if (toPlayer == null || !toPlayer.isOnline) {
             val raw = receiver.toRawMessage()
-            Bungees.sendBungeeData(from, "TrChat", "SendRaw", to, raw)
+            Proxy.sendProxyData(from, "SendRaw", to, raw)
         } else {
             receiver.sendTo(getProxyPlayer(to)!!)
             getProxyPlayer(to)!!.sendLang("Private-Message-Receive", from.name)

@@ -4,7 +4,7 @@ import com.google.common.collect.Lists
 import me.arasple.mc.trchat.Metrics
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.obj.ChatType
-import me.arasple.mc.trchat.internal.proxy.bungee.Bungees
+import me.arasple.mc.trchat.internal.proxy.Proxy
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.onlinePlayers
 import java.util.*
@@ -20,9 +20,9 @@ object ChannelStaff {
     fun execute(player: Player, message: String) {
         if (player.hasPermission("trchat.staff")) {
             val format = ChatFormats.getFormat(ChatType.STAFF, player)!!.apply(player, message, post = false)
-            if (Bungees.isEnabled) {
+            if (Proxy.isEnabled) {
                 val raw = format.toRawMessage()
-                Bungees.sendBungeeData(player, "TrChat", "SendRawPerm", raw, "trchat.staff")
+                Proxy.sendProxyData(player, "TrChat", "SendRawPerm", raw, "trchat.staff")
             } else {
                 onlinePlayers().filter { it.hasPermission("trchat.staff") }.forEach {
                     format.sendTo(it)

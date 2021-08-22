@@ -24,6 +24,8 @@ GENERAL:
     - 'server'
     - 'vault'
   PREVENT-TAB-COMPLETE: false
+  # NONE, BUNGEE, VELOCITY
+  PROXY: NONE
 
 # Chat Color
 # Perm Node: trchat.color.<CODE>

@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.internal.listener
 
 import me.arasple.mc.trchat.TrChat.getTrVersion
+import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.filter.ChatFilter
 import me.arasple.mc.trchat.common.function.ChatFunctions
@@ -26,9 +27,12 @@ object ListenerTrChatInfo {
     fun onChat(e: AsyncPlayerChatEvent) {
         e.isCancelled = react(e.player, if (e.message.startsWith("#")) e.message.substring(1) else null)
 
-        if (e.message == "#TRCHAT-RELOAD" && e.player.hasPermission("trchat.admin")) {
+        if (e.message == "#TRCHAT-RELOAD" && e.player.hasPermission("trchat.reload")) {
+            TrChatFiles.formats.reload()
             ChatFormats.loadFormats(adaptPlayer(e.player))
+            TrChatFiles.filter.reload()
             ChatFilter.loadFilter(true, adaptPlayer(e.player))
+            TrChatFiles.function.reload()
             ChatFunctions.loadFunctions(adaptPlayer(e.player))
             e.isCancelled = true
         }
