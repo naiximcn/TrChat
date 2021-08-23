@@ -45,13 +45,9 @@ object Players {
     }
 
     fun getPlayers(): List<String> {
-        val players = mutableListOf<String>()
-        players.addAll(Players.players)
-        onlinePlayers().forEach { x ->
-            if (!players.contains(x.name)) {
-                players.add(x.name)
-            }
-        }
+        val players = mutableSetOf<String>()
+        players += Players.players
+        players += onlinePlayers().map { it.name }
         return players.filter { it.isNotBlank() }
     }
 

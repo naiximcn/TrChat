@@ -77,9 +77,9 @@ class MsgComponent : JsonComponent {
 
         for (v in VariableReader(message, '<', '>').parts) {
             if (v.isVariable) {
-                val args = v.text.split(":".toRegex(), 2)
+                val args = v.text.split(':', limit = 2)
                 // Item Show
-                if (itemDisplayEnabled && args[0].equals("ITEM", ignoreCase = true)) {
+                if (itemDisplayEnabled && args[0] == "ITEM") {
                     val slot = NumberUtils.toInt(args[1], player.inventory.heldItemSlot)
                     val item = player.inventory.getItem(slot)
                     if (item.isAir()) {
@@ -94,7 +94,7 @@ class MsgComponent : JsonComponent {
                     continue
                 }
                 // At
-                if (atEnabled && "AT".equals(args[0], ignoreCase = true) && !isPrivateChat) {
+                if (atEnabled && args[0] == "AT" && !isPrivateChat) {
                     val atPlayer = args[1]
                     tellraw.append(atFormat.replaceWithOrder(atPlayer) + defaultColor2)
                     if (function.getBoolean("GENERAL.MENTION.NOTIFY") && Bukkit.getPlayerExact(atPlayer) != null && Bukkit.getPlayerExact(atPlayer)!!.isOnline) {
@@ -137,7 +137,7 @@ class MsgComponent : JsonComponent {
     }
 
     private fun getName(item: ItemStack, player: Player): String {
-        return if ((function.getBoolean("GENERAL.ITEM-SHOW.ORIGIN-NAME", true)
+        return if ((function.getBoolean("GENERAL.ITEM-SHOW.ORIGIN-NAME", false)
                 || item.itemMeta == null) || !item.itemMeta!!.hasDisplayName()
         ) {
             item.getI18nName(player)

@@ -44,7 +44,7 @@ GENERAL:
       - '%item%'
       - '[i]'
       - '[item]'
-    ORIGIN-NAME: true # 展示物品原本的名字（无视改名）
+    ORIGIN-NAME: false # 展示物品原本的名字（无视改名）
   # Mention (@At) someone in chat
   MENTION:
     ENABLE: true
