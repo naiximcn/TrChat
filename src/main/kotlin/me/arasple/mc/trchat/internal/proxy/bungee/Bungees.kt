@@ -8,9 +8,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Server
 import org.bukkit.entity.Player
 import org.bukkit.plugin.messaging.PluginMessageListener
-import taboolib.common.platform.function.console
 import taboolib.common.platform.function.server
-import taboolib.module.lang.sendLang
 import java.io.IOException
 
 /**

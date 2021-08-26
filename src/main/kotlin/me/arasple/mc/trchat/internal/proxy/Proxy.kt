@@ -54,4 +54,10 @@ object Proxy {
             else -> return
         }
     }
+
+    fun sendProxyLang(player: String, node: String, vararg args: Any) {
+        if (!isEnabled) {
+
+        }
+    }
 }
