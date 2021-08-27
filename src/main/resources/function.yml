@@ -133,3 +133,27 @@ CUSTOM:
         - '&7这是一个 IP地址'
         - '&7点击复制!'
       copy: '{0}'
+
+  # 示例 —— 高亮邮箱
+  glowEmail:
+    pattern: '\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}'
+    display:
+      text: '&e&n{0}'
+      hover:
+        - '&7这是一个邮箱'
+        - '&7点击复制!'
+      copy: '{0}'
+
+  # 示例 —— 网站分享
+  shareUrl:
+    pattern: '^((https|http|ftp|rtsp|mms)?:\/\/)[^\s]+'
+    display:
+      text: '&8[&f&l网站&8]'
+      hover:
+        - ''
+        - '&3网站: {0}'
+        - ''
+        - '&7点击进入!'
+        - ''
+        - '&8[&c!&8] &7谨防任何诈骗'
+      url: '{0}'
