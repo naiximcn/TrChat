@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat
+package me.arasple.mc.trchat.internal.service
 
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake

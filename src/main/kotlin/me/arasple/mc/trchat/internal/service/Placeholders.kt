@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.util
+package me.arasple.mc.trchat.internal.service
 
 import me.arasple.mc.trchat.internal.data.Users.isFilterEnabled
 import org.bukkit.entity.Player
@@ -14,7 +14,7 @@ import taboolib.platform.compat.PlaceholderExpansion
  * @since 2021/8/9 23:09
  */
 @PlatformSide([Platform.BUKKIT])
-object TrChatPlaceholders : PlaceholderExpansion {
+object Placeholders : PlaceholderExpansion {
 
     override val identifier: String
         get() = "trchat"

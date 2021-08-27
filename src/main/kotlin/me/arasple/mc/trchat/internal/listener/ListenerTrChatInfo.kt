@@ -1,6 +1,5 @@
 package me.arasple.mc.trchat.internal.listener
 
-import me.arasple.mc.trchat.TrChat.getTrVersion
 import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.filter.ChatFilter
@@ -13,6 +12,7 @@ import taboolib.common.platform.*
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.adaptPlayer
+import taboolib.common.platform.function.pluginVersion
 import taboolib.common.util.replaceWithOrder
 import taboolib.library.xseries.XSound
 
@@ -46,7 +46,7 @@ object ListenerTrChatInfo {
     private fun react(p: Player, message: String?): Boolean {
         if (!Strings.isBlank(message) && ("trchat".equals(message, ignoreCase = true) || "trixeychat".equals(message, ignoreCase = true))) {
             adaptPlayer(p).sendTitle("§3§lTr§b§lChat", "§7Designed by §6Arasple", 10, 35, 10)
-            adaptPlayer(p).sendActionBar("§2Running version §av{0}§7".replaceWithOrder(getTrVersion()))
+            adaptPlayer(p).sendActionBar("§2Running version §av{0}§7".replaceWithOrder(pluginVersion))
             XSound.BLOCK_NOTE_BLOCK_PLING.play(p, 1f, 2f)
             return true
         }

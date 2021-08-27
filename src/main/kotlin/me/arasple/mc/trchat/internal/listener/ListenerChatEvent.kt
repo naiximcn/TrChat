@@ -1,7 +1,8 @@
 package me.arasple.mc.trchat.internal.listener
 
-import me.arasple.mc.trchat.Metrics
+import me.arasple.mc.trchat.internal.service.Metrics
 import me.arasple.mc.trchat.api.TrChatFiles
+import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.common.channels.ChannelGlobal
 import me.arasple.mc.trchat.common.channels.ChannelStaff
 import me.arasple.mc.trchat.common.channels.ChannelStaff.isInStaffChannel
@@ -67,17 +68,21 @@ object ListenerChatEvent {
             return
         }
         // NORMAL
-        val format = ChatFormats.getFormat(ChatType.NORMAL, player)
-        if (format != null) {
-            e.isCancelled = true
-            val message = format.apply(player, e.message)
-            onlinePlayers().filterNot { Users.getIgnoredList(it.cast()).contains(player.name) }.forEach {
-                message.sendTo(it)
+        TrChatEvent(ChatType.NORMAL, e.message).run {
+            if (call()) {
+                val format = ChatFormats.getFormat(ChatType.NORMAL, player)
+                if (format != null) {
+                    e.isCancelled = true
+                    val formatted = format.apply(player, message)
+                    onlinePlayers().filterNot { Users.getIgnoredList(it.cast()).contains(player.name) }.forEach {
+                        formatted.sendTo(it)
+                    }
+                    formatted.sendTo(console())
+                    ChatLogs.log(player, message)
+                    Users.putFormattedMessage(player, formatted.toRawMessage())
+                    Metrics.increase(0)
+                }
             }
-            message.sendTo(console())
-            ChatLogs.log(player, e.message)
-            Users.putFormattedMessage(player, message.toRawMessage())
-            Metrics.increase(0)
         }
     }
 

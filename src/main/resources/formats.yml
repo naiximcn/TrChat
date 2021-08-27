@@ -20,11 +20,11 @@
 
 NORMAL:
     # Requirement to use this format
-    # When starts with 'js:' or '$:', use javascript
-    # $player = sender
-    # $bukkitServer = Server instance
-    # When starts with 'ke:', use kether
-    # Default use kether
+    # When starts with 'js:' or '$ ', use javascript
+    # player = sender
+    # bukkitServer = server instance
+    # utils = assist utils
+    # Otherwise use kether
   - requirement: null
     # (Optional) Priority to format (Default: 2147483647)
     priority: 2147483647

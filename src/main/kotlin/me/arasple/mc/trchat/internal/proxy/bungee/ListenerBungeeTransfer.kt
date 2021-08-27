@@ -10,6 +10,7 @@ import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.getProxyPlayer
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.platform.function.server
+import taboolib.module.lang.sendLang
 import java.io.ByteArrayInputStream
 import java.io.DataInputStream
 import java.io.IOException
@@ -54,6 +55,13 @@ object ListenerBungeeTransfer {
                     onlinePlayers().filter { p -> p.hasPermission(perm) }.forEach { p ->
                         p.sendRawMessage(raw)
                     }
+                }
+                if (type == "SendLang") {
+                    val to = data.readUTF()
+                    val node = data.readUTF()
+                    val arg = data.readUTF()
+
+                    getProxyPlayer(to)?.sendLang(node, arg)
                 }
             }
         } catch (ignored: IOException) {

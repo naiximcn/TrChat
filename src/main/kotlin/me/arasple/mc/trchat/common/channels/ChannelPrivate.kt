@@ -1,10 +1,9 @@
 package me.arasple.mc.trchat.common.channels
 
-import me.arasple.mc.trchat.Metrics
+import me.arasple.mc.trchat.internal.service.Metrics
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.ChatLogs
 import me.arasple.mc.trchat.common.chat.obj.ChatType
-import me.arasple.mc.trchat.internal.proxy.bungee.Bungees
 import me.arasple.mc.trchat.internal.command.CommandReply
 import me.arasple.mc.trchat.internal.proxy.Proxy
 import org.bukkit.Bukkit

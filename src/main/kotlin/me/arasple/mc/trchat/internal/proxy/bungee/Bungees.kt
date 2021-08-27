@@ -42,12 +42,14 @@ class Bungees : PluginMessageListener {
             }
         }
 
-        fun sendBungeeData(player: Player, vararg args: String) {
+        fun sendBungeeData(player: Player, vararg args: String, trChannel: Boolean = true) {
             val out = ByteStreams.newDataOutput()
-            try {
-                out.writeUTF("TrChat")
-            } catch (e: IOException) {
-                e.printStackTrace()
+            if (trChannel) {
+                try {
+                    out.writeUTF("TrChat")
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
             }
             for (arg in args) {
                 try {

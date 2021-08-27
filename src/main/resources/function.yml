@@ -59,12 +59,12 @@ CUSTOM:
   # 示例 —— QQ 分享
   shareQQ:
     # 满足条件表达式才能使用这个功能
-    # When starts with 'js:' or '$:', use javascript
-    # $player = sender
-    # $bukkitServer = Server instance
-    # When starts with 'ke:', use kether
-    # Default use kether
-    requirement: '$:1!=0'
+    # When starts with 'js:' or '$ ', use javascript
+    # player = sender
+    # bukkitServer = server instance
+    # utils = assist utils
+    # Otherwise use kether
+    requirement: null
     # (Optional) Priority to replace (Default: 2147483647)
     priority: 2147483647
     # 匹配表达式

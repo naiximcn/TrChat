@@ -5,6 +5,7 @@ import me.arasple.mc.trchat.common.chat.format.objects.JsonComponent
 import me.arasple.mc.trchat.common.chat.format.objects.MsgComponent
 import org.bukkit.entity.Player
 import taboolib.common5.Coerce
+import taboolib.common5.mirrorNow
 import taboolib.module.chat.TellrawJson
 
 /**
@@ -28,15 +29,17 @@ open class Format(
     )
 
     open fun apply(player: Player, vararg message: String, post: Boolean = true): TellrawJson {
-        val format = TellrawJson()
-        jsons.forEach { x -> format.append(x.toTellrawJson(player)) }
-        format.append(msg.toMsgTellraw(player, message[0]).also {
-            if (post) {
-                TrChatHook.postToDynmap(player, it)
-            }
-        })
-        suffix.forEach { x -> format.append(x.toTellrawJson(player)) }
-        return format
+        return mirrorNow("Common:Format:normal") {
+            val format = TellrawJson()
+            jsons.forEach { x -> format.append(x.toTellrawJson(player)) }
+            format.append(msg.toMsgTellraw(player, message[0]).also {
+                if (post) {
+                    TrChatHook.postToDynmap(player, it)
+                }
+            })
+            suffix.forEach { x -> format.append(x.toTellrawJson(player)) }
+            return@mirrorNow format
+        }
     }
 
 }

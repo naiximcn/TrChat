@@ -13,6 +13,7 @@ import taboolib.common.platform.function.console
 import taboolib.common.platform.function.getProxyPlayer
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.platform.function.server
+import taboolib.module.lang.sendLang
 import java.io.IOException
 
 /**
@@ -57,6 +58,13 @@ object ListenerVelocityTransfer {
                 onlinePlayers().filter { p -> p.hasPermission(perm) }.forEach { p ->
                     p.sendRawMessage(raw)
                 }
+            }
+            if (type == "SendLang") {
+                val to = data.readUTF()
+                val node = data.readUTF()
+                val arg = data.readUTF()
+
+                getProxyPlayer(to)?.sendLang(node, arg)
             }
         } catch (ignored: IOException) {
         }

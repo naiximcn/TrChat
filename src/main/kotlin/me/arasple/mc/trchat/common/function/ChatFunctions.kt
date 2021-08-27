@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.common.function
 
-import me.arasple.mc.trchat.api.TrChatFiles.function
+import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.common.function.imp.Function
 import me.arasple.mc.trchat.util.notify
 import taboolib.common.platform.ProxyCommandSender
@@ -18,9 +18,11 @@ object ChatFunctions {
         val start = System.currentTimeMillis()
         functions.clear()
 
-        function.getConfigurationSection("CUSTOM").getValues(false).forEach { (name, funObj) ->
+        TrChatFiles.function.getConfigurationSection("CUSTOM").getValues(false).forEach { (name, funObj) ->
             functions.add(Function(name, funObj as MemorySection))
         }
+
+        functions.sortBy { it.priority }
 
         notify(notify, "Plugin-Loaded-Functions", System.currentTimeMillis() - start)
     }

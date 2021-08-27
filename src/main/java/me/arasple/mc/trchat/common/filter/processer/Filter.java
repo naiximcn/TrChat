@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.common.filter.processer;
 
-import me.arasple.mc.trchat.Metrics;
+import me.arasple.mc.trchat.internal.service.Metrics;
+import taboolib.common5.MirrorKt;
 
 import java.util.*;
 
@@ -79,56 +80,58 @@ public class Filter {
         if (!filter) {
             return new FilteredObject(src, 0);
         }
-        char[] chs = src.toCharArray();
-        int length = chs.length, curr, curry, k, count = 0;
-        WordNode node;
-        for (int i = 0; i < length; i++) {
-            curr = charConvert(chs[i]);
-            if (SET.contains(curr)) {
-                continue;
-            }
-            node = NODES.get(curr);
-            if (node == null) {
-                continue;
-            }
-            boolean couldMark = false;
-            int markNum = -1;
-            if (node.isLast()) {
-                couldMark = true;
-                markNum = 0;
-            }
-            k = i;
-            curry = curr;
-            for (; ++k < length; ) {
-                int temp = charConvert(chs[k]);
-                if (temp == curry) {
+        return MirrorKt.mirrorNow("Common:Filter:doFilter", () -> {
+            char[] chs = src.toCharArray();
+            int length = chs.length, curr, curry, k, count = 0;
+            WordNode node;
+            for (int i = 0; i < length; i++) {
+                curr = charConvert(chs[i]);
+                if (SET.contains(curr)) {
                     continue;
                 }
-                if (PUNCTUATIONS_SET.contains(temp)) {
-                    continue;
-                }
-                node = node.querySub(temp);
+                node = NODES.get(curr);
                 if (node == null) {
-                    break;
+                    continue;
                 }
+                boolean couldMark = false;
+                int markNum = -1;
                 if (node.isLast()) {
                     couldMark = true;
-                    markNum = k - i;
+                    markNum = 0;
                 }
-                curry = temp;
-            }
-            if (couldMark) {
-                for (k = 0; k <= markNum; k++) {
-                    if (!PUNCTUATIONS_SET.contains(charConvert(chs[k + i]))) {
-                        chs[k + i] = SIGN;
+                k = i;
+                curry = curr;
+                while (++k < length) {
+                    int temp = charConvert(chs[k]);
+                    if (temp == curry) {
+                        continue;
                     }
+                    if (PUNCTUATIONS_SET.contains(temp)) {
+                        continue;
+                    }
+                    node = node.querySub(temp);
+                    if (node == null) {
+                        break;
+                    }
+                    if (node.isLast()) {
+                        couldMark = true;
+                        markNum = k - i;
+                    }
+                    curry = temp;
                 }
-                count++;
-                i = i + markNum;
+                if (couldMark) {
+                    for (k = 0; k <= markNum; k++) {
+                        if (!PUNCTUATIONS_SET.contains(charConvert(chs[k + i]))) {
+                            chs[k + i] = SIGN;
+                        }
+                    }
+                    count++;
+                    i = i + markNum;
+                }
             }
-        }
-        Metrics.increase(1, count);
-        return new FilteredObject(new String(chs), count);
+            Metrics.increase(1, count);
+            return new FilteredObject(new String(chs), count);
+        });
     }
 
     private static int charConvert(char src) {

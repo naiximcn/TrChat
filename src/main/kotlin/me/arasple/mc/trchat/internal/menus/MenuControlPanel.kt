@@ -5,12 +5,12 @@ import org.bukkit.entity.Player
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.common5.Coerce
 import taboolib.library.xseries.XMaterial
-import taboolib.module.nms.inputSign
 import taboolib.module.ui.openMenu
 import taboolib.module.ui.type.Basic
 import taboolib.module.ui.type.Linked
 import taboolib.platform.util.buildItem
 import taboolib.platform.util.inventoryCenterSlots
+import taboolib.platform.util.nextChat
 import taboolib.platform.util.sendLang
 
 /**
@@ -80,9 +80,11 @@ object MenuControlPanel {
             onClick(lock = true) { clickEvent ->
                 when (clickEvent.slot) {
                     'M' -> {
-                        player.inputSign(arrayOf("", "↑请输入禁言时间(分钟)", "输入0解除禁言")) {
-                            if (Coerce.asInteger(it[0]).isPresent) {
-                                Users.updateMuteTime(target, Coerce.toLong(it[0]) * 60)
+                        player.closeInventory()
+                        player.sendMessage("请输入禁言时间(分钟), 输入0解除禁言")
+                        player.nextChat {
+                            if (Coerce.asInteger(it).isPresent) {
+                                Users.updateMuteTime(target, Coerce.toLong(it) * 60)
                                 player.sendLang("Plugin-Done")
                             } else {
                                 player.sendLang("Plugin-Failed")

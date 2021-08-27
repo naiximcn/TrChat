@@ -1,7 +1,6 @@
 package me.arasple.mc.trchat.util
 
 import taboolib.common.util.replaceWithOrder
-import java.util.regex.Pattern
 
 /**
  * @author Arasple
@@ -9,10 +8,10 @@ import java.util.regex.Pattern
  */
 fun replacePattern(s: String, pattern: String, textPattern: String?, replacement: String): String {
     var string = s
-    val matcher = Pattern.compile(pattern).matcher(string)
+    val matcher = pattern.toPattern().matcher(string)
     while (matcher.find()) {
         val str = matcher.group()
-        val m = if (textPattern != null) Pattern.compile(textPattern).matcher(str) else null
+        val m = textPattern?.toPattern()?.matcher(str)
         val rep = replacement.replaceWithOrder(if (textPattern == null) str else if (m != null && m.find()) m.group() else str)
         string = string.replace(str.toRegex(), rep)
     }

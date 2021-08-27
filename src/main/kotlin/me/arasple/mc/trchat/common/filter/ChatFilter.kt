@@ -26,11 +26,9 @@ object ChatFilter {
         "https://raw.githubusercontent.com/Arasple/TrChat-Cloud/master/database.json"
     )
 
-    @Awake(LifeCycle.ENABLE)
+    @Schedule(delay = 20 * 120, period = 30 * 60 * 20)
     fun asyncRefreshCloud() {
-        submit(delay = 20 * 120, period = 30 * 60 * 20) {
-            loadCloudFilter(0)
-        }
+        loadCloudFilter(0)
     }
 
     /**
@@ -108,10 +106,6 @@ object ChatFilter {
      * @return 过滤后的字符串
      */
     fun filter(string: String, execute: Boolean = true): FilteredObject {
-        return if (!execute) {
-            FilteredObject(string, 0)
-        } else {
-            Filter.doFilter(string)
-        }
+        return Filter.doFilter(string, execute)
     }
 }

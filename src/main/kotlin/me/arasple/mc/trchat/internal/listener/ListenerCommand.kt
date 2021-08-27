@@ -15,14 +15,14 @@ import java.util.*
  * @date 2020/1/16 21:41
  */
 @PlatformSide([Platform.BUKKIT])
-object ListenerCommandController {
+object ListenerCommand {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onCommand(e: PlayerCommandPreprocessEvent) {
         val player = e.player
-        val command = e.message.substring(1)
+        val command = e.message.removePrefix("/")
         val mCmd = Bukkit.getCommandAliases().entries.firstOrNull { (_, value) ->
-            value.any { m -> m.equals(e.message.substring(1).split(" ").toTypedArray()[0], ignoreCase = true) }
+            value.any { m -> m.equals(command.split(" ").toTypedArray()[0], ignoreCase = true) }
         }
 
         if (function.getBoolean("GENERAL.COMMAND-CONTROLLER.ENABLE", true) && command.isNotEmpty()
@@ -30,7 +30,7 @@ object ListenerCommandController {
             val whitelist = function.getString("GENERAL.COMMAND-CONTROLLER.TYPE", "BLACKLIST").equals("WHITELIST", ignoreCase = true)
             val matches = function.getStringList("GENERAL.COMMAND-CONTROLLER.LIST")
             val matched = matches.any { m ->
-                val exact = m.lowercase(Locale.getDefault()).contains("<exact>")
+                val exact = m.lowercase().contains("<exact>")
                 val m2 = m.replace("(?i)<exact>".toRegex(), "")
 
                 if (exact) {

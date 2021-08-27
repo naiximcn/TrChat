@@ -1,25 +1,22 @@
 package me.arasple.mc.trchat.common.chat.format.objects
 
-import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.api.TrChatFiles.function
 import me.arasple.mc.trchat.internal.data.Cooldowns
 import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.common.function.ChatFunctions
+import me.arasple.mc.trchat.internal.proxy.Proxy
 import me.arasple.mc.trchat.util.MessageColors
 import me.arasple.mc.trchat.internal.proxy.bukkit.Players
 import me.arasple.mc.trchat.util.checkCondition
 import me.arasple.mc.trchat.util.replacePattern
 import org.apache.commons.lang.math.NumberUtils
-import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import taboolib.common.platform.function.getProxyPlayer
 import taboolib.common.util.VariableReader
 import taboolib.common.util.replaceWithOrder
 import taboolib.module.chat.TellrawJson
 import taboolib.module.chat.colored
-import taboolib.module.lang.sendLang
 import taboolib.module.nms.getI18nName
 import taboolib.platform.compat.replacePlaceholder
 import taboolib.platform.util.hoverItem
@@ -43,13 +40,13 @@ class MsgComponent : JsonComponent {
     }
 
     fun toMsgTellraw(player: Player, msg: String): TellrawJson {
-        val defaultColor2 = MessageColors.catchDefaultMessageColor(player, defaultColor)
+        defaultColor = MessageColors.catchDefaultMessageColor(player, defaultColor)
         var message = msg
         message = MessageColors.replaceWithPermission(player, message)
 
         val tellraw = TellrawJson()
         // Custom Functions
-        ChatFunctions.functions.filter { f -> checkCondition(player, f.requirement) }.sortedBy { it.priority }.forEach { function ->
+        ChatFunctions.functions.filter { f -> checkCondition(player, f.requirement) }.forEach { function ->
             message = replacePattern(message, function.pattern, function.filterTextPattern, "<" + function.name + ":{0}>")
         }
         // At & Item Show
@@ -88,7 +85,7 @@ class MsgComponent : JsonComponent {
                     }
                     tellraw.append(Users.itemCache.computeIfAbsent(item!!) {
                         TellrawJson()
-                            .append(itemFormat.replaceWithOrder(getName(item, player), if (item.isNotAir()) item.amount else 1) + defaultColor2)
+                            .append(itemFormat.replaceWithOrder(getName(item, player), if (item.isNotAir()) item.amount else 1) + defaultColor)
                             .hoverItem(item)
                     })
                     continue
@@ -96,9 +93,9 @@ class MsgComponent : JsonComponent {
                 // At
                 if (atEnabled && args[0] == "AT" && !isPrivateChat) {
                     val atPlayer = args[1]
-                    tellraw.append(atFormat.replaceWithOrder(atPlayer) + defaultColor2)
-                    if (function.getBoolean("GENERAL.MENTION.NOTIFY") && Bukkit.getPlayerExact(atPlayer) != null && Bukkit.getPlayerExact(atPlayer)!!.isOnline) {
-                        getProxyPlayer(atPlayer)!!.sendLang("Mentions-Notify", player.name)
+                    tellraw.append(atFormat.replaceWithOrder(atPlayer) + defaultColor)
+                    if (function.getBoolean("GENERAL.MENTION.NOTIFY")) {
+                        Proxy.sendProxyLang(player, atPlayer, "Mentions-Notify", player.name)
                     }
                     Users.updateCooldown(player.uniqueId, Cooldowns.CooldownType.MENTION, function.getLong("GENERAL.MENTION.COOLDOWNS"))
                     continue
@@ -110,7 +107,7 @@ class MsgComponent : JsonComponent {
                     continue
                 }
             }
-            tellraw.append(toTellrawPart(player, defaultColor2.toString() + v.text, message))
+            tellraw.append(toTellrawPart(player, defaultColor.toString() + v.text, message))
         }
         return tellraw
     }

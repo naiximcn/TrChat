@@ -39,7 +39,7 @@ class Velocity : PluginMessageListener {
             if (!Bukkit.getMessenger().isOutgoingChannelRegistered(TrChat.plugin, "trchat:proxy")) {
                 Bukkit.getMessenger().registerOutgoingPluginChannel(TrChat.plugin, "trchat:proxy")
                 Bukkit.getMessenger().registerIncomingPluginChannel(TrChat.plugin, "trchat:server", Velocity())
-                Proxy.isEnabled = true
+                Proxy.isEnabled = !Bukkit.getServer().spigot().config.getBoolean("settings.bungeecord", false)
             }
         }
 

@@ -3,11 +3,22 @@
 #### VERSION 1.8
   ```
   - 这是一个由ItsFlicker维护的版本
-  - 注意, TabooLib6目前仍处于预览版，可能存在不稳定因素，
-    如有bug请及时在issue反馈
   
   - tips: 1.13+ 的命令补全绕过权限是: trchat.bypass.tabcomplete
   ```
+- #### 1.83
+  - Since 2021.8.27
+  - Updates:
+    - 升级TabooLib至正式版6.0.0
+    - 添加mirror功能(/trchat mirror)
+    - 增强requirement功能
+    - 修复一堆bug
+    - 优化性能
+- #### 1.82
+  - Since 2021.8.22
+  - Updates:
+    - 支持Velocity跨服端
+    - 修复上个版本中ORIGIN-NAME不生效
 - #### 1.81
   - Since 2021.8.19
   - Updates:

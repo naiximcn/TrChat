@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.common.channels
 
-import me.arasple.mc.trchat.Metrics
+import me.arasple.mc.trchat.internal.service.Metrics
 import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.obj.ChatType

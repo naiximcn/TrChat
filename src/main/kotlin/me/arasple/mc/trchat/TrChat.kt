@@ -4,8 +4,7 @@ import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.filter.ChatFilter
 import me.arasple.mc.trchat.common.function.ChatFunctions
 import me.arasple.mc.trchat.internal.proxy.Proxy
-import me.arasple.mc.trchat.util.Updater
-import me.arasple.mc.trchat.internal.proxy.bungee.Bungees
+import me.arasple.mc.trchat.internal.service.Updater
 import org.bukkit.Bukkit
 import taboolib.common.env.Repository.downloadToFile
 import taboolib.common.platform.Platform
@@ -29,8 +28,6 @@ object TrChat : Plugin() {
         BukkitPlugin.getInstance()
     }
 
-    fun getTrVersion(): Double = 1.82
-
     val motd = arrayOf(
         "",
         "§3  _______     §b _____  _              _   ",
@@ -48,8 +45,6 @@ object TrChat : Plugin() {
         if (!hookPlaceholderAPI()) {
             return
         }
-        // Updater
-        Updater.init()
         // Chat Filter
         ChatFilter.loadFilter(true, console())
         // Chat Formats

@@ -25,7 +25,7 @@ object ListenerSignChange {
             if (settings.getBoolean("CHAT-COLOR.SIGN")) {
                 line = MessageColors.replaceWithPermission(p, line ?: "")
             }
-            e.setLine(i, if (line != null) TrChatAPI.filterString(p, line, true).filtered else null)
+            e.setLine(i, if (line != null) TrChatAPI.filterString(p, line).filtered else null)
         }
     }
 }

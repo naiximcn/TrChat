@@ -37,14 +37,11 @@ object TrChatAPI {
      *
      * @param player 玩家
      * @param string 字符串
+     * @param execute 是否真的过滤
      * @return 过滤后的
      */
-    fun filterString(player: Player, string: String): FilteredObject {
-        return Filter.doFilter(string, !player.hasPermission("trchat.bypass.filter"))
-    }
-
-    fun filterString(player: Player, string: String, execute: Boolean): FilteredObject {
-        return if (execute) filterString(player, string) else FilteredObject(string, 0)
+    fun filterString(player: Player, string: String, execute: Boolean = true): FilteredObject {
+        return if (execute) Filter.doFilter(string, !player.hasPermission("trchat.bypass.filter")) else FilteredObject(string, 0)
     }
 
     fun filterItemStack(itemStack: ItemStack) {
