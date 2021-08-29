@@ -46,7 +46,6 @@ dependencies {
     compileOnly("ink.ptms.core:v11701:11701:mapped")
     compileOnly("ink.ptms.core:v11701:11701:universal")
     compileOnly("ink.ptms.core:v11604:11604:all")
-    compileOnly("ink.ptms.core:v11200:11200:all")
     compileOnly("net.md-5:bungeecord-bootstrap:1.17-R0.1-SNAPSHOT")
     compileOnly("com.velocitypowered:velocity-api:3.0.0")
     compileOnly("us.dynmap:dynmap-api:2.5")

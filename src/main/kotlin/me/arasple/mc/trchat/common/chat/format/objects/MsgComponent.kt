@@ -113,7 +113,7 @@ class MsgComponent : JsonComponent {
                     continue
                 }
             }
-            tellraw.append(toTellrawPart(player, defaultColor.toString() + v.text, message))
+            tellraw.append(toTellrawPart(player, defaultColor.toString() + v.text.filter(), message))
         }
         return tellraw
     }
@@ -148,4 +148,8 @@ class MsgComponent : JsonComponent {
             itemMeta!!.displayName
         }
     }
+
+    private fun String.filter(): String =
+        replace("cmd=[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}".toRegex(), "")
+            .replace("chat=[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}".toRegex(), "")
 }
