@@ -30,7 +30,6 @@ import taboolib.platform.util.sendLang
  */
 class MsgComponent : JsonComponent {
 
-    var isPrivateChat = false
     private var defaultColor: ChatColor? = null
 
     constructor(text: String?, hover: List<String?>?, suggest: String?, command: String?, url: String?, copy: String?) : super(text, hover, suggest, command, url, copy)
@@ -39,9 +38,9 @@ class MsgComponent : JsonComponent {
         defaultColor = ChatColor.getByChar(partSection["default-color"].toString())
     }
 
-    fun toMsgTellraw(player: Player, msg: String): TellrawJson {
+    fun toMsgTellraw(player: Player, msg: String, isPrivateChat: Boolean): TellrawJson {
         val defaultColor = MessageColors.catchDefaultMessageColor(player, defaultColor)
-        var message = msg
+        var message = defaultColor.toString() + msg
         message = MessageColors.replaceWithPermission(player, message)
 
         val tellraw = TellrawJson()

@@ -29,7 +29,7 @@ object ChatFormats {
         for (format in TrChatFiles.formats.getKeys(false)) {
             val formats = mutableListOf<Format>()
             TrChatFiles.formats.getMapList(format).forEach { formatMap ->
-                formats.add(Format(formatMap, format == "PRIVATE_SEND" || format == "PRIVATE_RECEIVE"))
+                formats.add(Format(formatMap))
             }
             formats.sortBy { it.priority }
             ChatFormats.formats[format] = formats

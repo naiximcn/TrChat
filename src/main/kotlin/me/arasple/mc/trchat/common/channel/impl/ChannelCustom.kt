@@ -44,19 +44,11 @@ class ChannelCustom(
         obj.getBoolean("SEND-TO-CONSOLE", true)
     )
 
-    init {
-        if (private) {
-            ChatFormats.formats[this.format]?.forEach {
-                it.msg.isPrivateChat = true
-            }
-        }
-    }
-
     override val chatType: ChatType
         get() = ChatType.CUSTOM
 
     override fun execute(sender: Player, vararg msg: String) {
-        val formatted = ChatFormats.getFormat(this, sender)!!.apply(sender, msg[0], forwardToDynmap = isForwardToDynmap)
+        val formatted = ChatFormats.getFormat(this, sender)!!.apply(sender, msg[0], forwardToDynmap = isForwardToDynmap, privateChat = private)
         if (!isSelfVisible) {
             if (isAlwaysReceive) {
                 if (Proxy.isEnabled) {
