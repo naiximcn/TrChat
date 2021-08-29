@@ -70,8 +70,8 @@ open class JsonComponent {
             text = vars[0]
         }
         if (vars.isNotEmpty()) {
-            if (java.lang.Boolean.parseBoolean(vars[0])) {
-                text = text!!.replace("%toplayer_name%".toRegex(), vars[2])
+            if (vars[0].toBoolean()) {
+                text = text!!.replace("%toplayer_name%", vars[1])
             }
         }
         tellraw.append(text?.replaceWithOrder(*vars)?.replacePlaceholder(player)?.colored() ?: "&8[&fNull&8]".colored())

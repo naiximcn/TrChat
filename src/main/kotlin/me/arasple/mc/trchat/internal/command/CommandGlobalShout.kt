@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.internal.command
 
-import me.arasple.mc.trchat.common.channels.ChannelGlobal
+import me.arasple.mc.trchat.common.channel.impl.ChannelGlobal
 import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.internal.listener.ListenerChatEvent
 import org.bukkit.entity.Player
@@ -27,7 +27,7 @@ object CommandGlobalShout {
         command("shout", listOf("all", "global"), "全服喊话", permission = "trchat.global") {
             dynamic {
                 execute<Player> { sender, _, argument ->
-                    if (ListenerChatEvent.isGlobalMuted && !sender.hasPermission("trchat.bypass.globalmute")) {
+                    if (ListenerChatEvent.isGlobalMuting && !sender.hasPermission("trchat.bypass.globalmute")) {
                         sender.sendLang("General-Global-Muting")
                         return@execute
                     }

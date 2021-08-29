@@ -77,7 +77,7 @@ class MsgComponent : JsonComponent {
                 val args = v.text.split(':', limit = 2)
                 // Item Show
                 if (itemDisplayEnabled && args[0] == "ITEM") {
-                    val slot = NumberUtils.toInt(args[1], player.inventory.heldItemSlot)
+                    val slot = args[1].toIntOrNull() ?: player.inventory.heldItemSlot
                     val item = player.inventory.getItem(slot)
                     if (item.isAir()) {
                         player.sendLang("General-Cant-Show-Air")

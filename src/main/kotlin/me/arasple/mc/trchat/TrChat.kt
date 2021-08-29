@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat
 
+import me.arasple.mc.trchat.common.channel.ChatChannels
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.filter.ChatFilter
 import me.arasple.mc.trchat.common.function.ChatFunctions
@@ -51,6 +52,8 @@ object TrChat : Plugin() {
         ChatFormats.loadFormats(console())
         // Chat Functions
         ChatFunctions.loadFunctions(console())
+        // Chat Channels
+        ChatChannels.loadChannels(console())
         // Proxies
         Proxy.init()
     }

@@ -1,11 +1,10 @@
 package me.arasple.mc.trchat.internal.command
 
 import me.arasple.mc.trchat.api.TrChatFiles
-import me.arasple.mc.trchat.common.chat.ChatFormats
-import me.arasple.mc.trchat.common.filter.ChatFilter
-import me.arasple.mc.trchat.common.function.ChatFunctions
+import me.arasple.mc.trchat.common.channel.ChannelPrivate
 import me.arasple.mc.trchat.internal.menus.MenuControlPanel
 import me.arasple.mc.trchat.internal.menus.MenuFilterControl
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
@@ -16,6 +15,7 @@ import taboolib.common.platform.command.mainCommand
 import taboolib.common.platform.command.subCommand
 import taboolib.common5.Mirror
 import taboolib.module.lang.sendLang
+import taboolib.platform.util.sendLang
 
 /**
  * CommandHandler
@@ -44,13 +44,8 @@ object CommandHandler {
 
     @CommandBody(permission = "trchat.admin", optional = true)
     val reload = subCommand {
-        execute<ProxyCommandSender> { sender, _, _ ->
-            TrChatFiles.formats.reload()
-            ChatFormats.loadFormats(sender)
-            TrChatFiles.filter.reload()
-            ChatFilter.loadFilter(true, sender)
-            TrChatFiles.function.reload()
-            ChatFunctions.loadFunctions(sender)
+        execute<CommandSender> { sender, _, _ ->
+            TrChatFiles.reloadAll(sender)
         }
     }
 
@@ -58,6 +53,13 @@ object CommandHandler {
     val mirror = subCommand {
         execute<ProxyCommandSender> { sender, _, _ ->
             Mirror.report(sender)
+        }
+    }
+
+    val spy = subCommand {
+        execute<Player> { sender, _, _ ->
+            val state = ChannelPrivate.switchSpy(sender)
+            sender.sendLang(if (state) "Private-Message-Spy-On" else "Private-Message-Spy-Off")
         }
     }
 

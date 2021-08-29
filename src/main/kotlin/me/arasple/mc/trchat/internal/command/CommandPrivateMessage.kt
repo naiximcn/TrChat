@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.internal.command
 
-import me.arasple.mc.trchat.common.channels.ChannelPrivate
+import me.arasple.mc.trchat.common.channel.ChannelPrivate
 import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.internal.listener.ListenerChatEvent
 import me.arasple.mc.trchat.internal.proxy.bukkit.Players
@@ -36,7 +36,7 @@ object CommandPrivateMessage {
                         }
                     }
                     execute<Player> { sender, context, argument ->
-                        if (ListenerChatEvent.isGlobalMuted && !sender.hasPermission("trchat.bypass.globalmute")) {
+                        if (ListenerChatEvent.isGlobalMuting && !sender.hasPermission("trchat.bypass.globalmute")) {
                             sender.sendLang("General-Global-Muting")
                             return@execute
                         }

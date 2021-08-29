@@ -1,16 +1,11 @@
 package me.arasple.mc.trchat.internal.listener
 
-import me.arasple.mc.trchat.internal.service.Metrics
 import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.api.event.TrChatEvent
-import me.arasple.mc.trchat.common.channels.ChannelGlobal
-import me.arasple.mc.trchat.common.channels.ChannelStaff
-import me.arasple.mc.trchat.common.channels.ChannelStaff.isInStaffChannel
-import me.arasple.mc.trchat.common.chat.ChatFormats
-import me.arasple.mc.trchat.common.chat.obj.ChatType
+import me.arasple.mc.trchat.common.channel.impl.ChannelGlobal
+import me.arasple.mc.trchat.common.channel.impl.ChannelNormal
 import me.arasple.mc.trchat.internal.data.Cooldowns
 import me.arasple.mc.trchat.internal.data.Users
-import me.arasple.mc.trchat.common.chat.ChatLogs
 import org.bukkit.event.player.AsyncPlayerChatEvent
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
@@ -18,8 +13,6 @@ import taboolib.common.platform.ProxyPlayer
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.adaptPlayer
-import taboolib.common.platform.function.console
-import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.util.Strings
 import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
@@ -31,59 +24,51 @@ import taboolib.platform.util.sendLang
 @PlatformSide([Platform.BUKKIT])
 object ListenerChatEvent {
 
-    var isGlobalMuted = false
+    var isGlobalMuting = false
 
     @SubscribeEvent(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onChat(e: AsyncPlayerChatEvent) {
         val player = e.player
+        // Disable worlds
         if (TrChatFiles.settings.getStringList("GENERAL.DISABLED-WORLDS").contains(player.world.name)) {
             e.isCancelled = true
             return
         }
-        if (isGlobalMuted && !player.hasPermission("trchat.bypass.globalmute")) {
+        // Global mute
+        if (isGlobalMuting && !player.hasPermission("trchat.bypass.globalmute")) {
             e.isCancelled = true
             player.sendLang("General-Global-Muting")
             return
         }
+        // Mute
         if (Users.isMuted(player)) {
             e.isCancelled = true
             player.sendLang("General-Muted")
             return
         }
-        // STAFF
-        if (isInStaffChannel(player)) {
-            e.isCancelled = true
-            ChannelStaff.execute(player, e.message)
-            return
-        }
+        // Limit
         if (!checkLimits(adaptPlayer(player), e.message)) {
             e.isCancelled = true
             return
         }
-        // GLOBAL
-        if (TrChatFiles.channels.getBoolean("FORCE-GLOBAL", false)
-            || e.message.startsWith(TrChatFiles.channels.getString("FORCE-GLOBAL-PREFIX", "!all"))) {
+        // Custom Channel
+        val channel = Users.getCustomChannel(player)
+        if (channel != null) {
             e.isCancelled = true
-            ChannelGlobal.execute(player, e.message.replace(TrChatFiles.channels.getString("FORCE-GLOBAL-PREFIX", "!all"), ""))
+            TrChatEvent(channel, player, e.message).call()
             return
         }
-        // NORMAL
-        TrChatEvent(ChatType.NORMAL, e.message).run {
-            if (call()) {
-                val format = ChatFormats.getFormat(ChatType.NORMAL, player)
-                if (format != null) {
-                    e.isCancelled = true
-                    val formatted = format.apply(player, message)
-                    onlinePlayers().filterNot { Users.getIgnoredList(it.cast()).contains(player.name) }.forEach {
-                        formatted.sendTo(it)
-                    }
-                    formatted.sendTo(console())
-                    ChatLogs.log(player, message)
-                    Users.putFormattedMessage(player, formatted.toRawMessage())
-                    Metrics.increase(0)
-                }
-            }
+        // Global
+        val globalPrefix = TrChatFiles.channels.getString("FORCE-GLOBAL-PREFIX", "!all")
+        if (TrChatFiles.channels.getBoolean("FORCE-GLOBAL", false)
+            || e.message.startsWith(globalPrefix)) {
+            e.isCancelled = true
+            TrChatEvent(ChannelGlobal, player, e.message.removePrefix(globalPrefix)).call()
+            return
         }
+        // Normal
+        e.isCancelled = true
+        TrChatEvent(ChannelNormal, player, e.message).call()
     }
 
     private fun checkLimits(p: ProxyPlayer, message: String): Boolean {
@@ -99,9 +84,7 @@ object ListenerChatEvent {
         }
         if (!p.hasPermission("trchat.bypass.itemcd")) {
             val itemShowCooldown = Users.getCooldownLeft(p.uniqueId, Cooldowns.CooldownType.ITEM_SHOW)
-            if (TrChatFiles.function.getStringList("GENERAL.ITEM-SHOW.KEYS").any { sequence ->
-                        message.contains(sequence!!)
-                    }) {
+            if (TrChatFiles.function.getStringList("GENERAL.ITEM-SHOW.KEYS").any { message.contains(it) }) {
                 if (itemShowCooldown > 0) {
                     p.sendLang("Cooldowns-Item-Show", (itemShowCooldown / 1000.0).toString())
                     return false
@@ -133,6 +116,10 @@ object ListenerChatEvent {
             } else {
                 Users.setLastMessage(p.uniqueId, message)
             }
+        }
+        if (message.contains("<.+?:.+?>".toRegex())) {
+            p.sendMessage("§7What's up, 你是故意找茬是吧")
+            return false
         }
         return true
     }

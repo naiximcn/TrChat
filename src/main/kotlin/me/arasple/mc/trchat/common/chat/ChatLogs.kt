@@ -4,9 +4,11 @@ import me.arasple.mc.trchat.api.TrChatFiles.settings
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.io.newFile
-import taboolib.common.platform.*
+import taboolib.common.platform.Awake
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
+import taboolib.common.platform.Schedule
 import taboolib.common.platform.function.getDataFolder
-import taboolib.common.platform.function.submit
 import taboolib.common.util.replaceWithOrder
 import taboolib.module.chat.colored
 import java.io.File
@@ -23,13 +25,7 @@ object ChatLogs {
     private val dateFormat0 = SimpleDateFormat("yyyy-MM-dd")
     private val dateFormat1 = SimpleDateFormat("HH:mm:ss")
 
-    @Awake(LifeCycle.ENABLE)
-    fun init() {
-        submit(delay = 20 * 15, period = 20 * 60 * 5, async = true) {
-            writeToFile()
-        }
-    }
-
+    @Schedule(delay = 20 * 15, period = 20 * 60 * 5, async = true)
     @Awake(LifeCycle.DISABLE)
     fun writeToFile() {
         val logFile = newFile(File(getDataFolder(), "logs"), "${dateFormat0.format(System.currentTimeMillis())}.txt", create = true)

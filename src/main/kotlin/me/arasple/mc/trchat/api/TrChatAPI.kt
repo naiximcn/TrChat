@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.api
 
-import me.arasple.mc.trchat.internal.data.DatabaseLocal
+import me.arasple.mc.trchat.internal.database.DatabaseLocal
 import me.arasple.mc.trchat.common.filter.ChatFilter.filter
 import me.arasple.mc.trchat.common.filter.processer.Filter
 import me.arasple.mc.trchat.common.filter.processer.FilteredObject

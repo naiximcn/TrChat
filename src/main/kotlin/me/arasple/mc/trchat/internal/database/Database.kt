@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.internal.data
+package me.arasple.mc.trchat.internal.database
 
 import org.bukkit.entity.Player
 import taboolib.library.configuration.FileConfiguration

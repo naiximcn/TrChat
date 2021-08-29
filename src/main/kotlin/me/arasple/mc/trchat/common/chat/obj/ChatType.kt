@@ -23,9 +23,9 @@ enum class ChatType {
     PRIVATE_RECEIVE,
 
     /**
-     * 管理交流
+     * 自定义
      */
-    STAFF;
+    CUSTOM;
 
     val isPrivate
         get() = this == PRIVATE_RECEIVE || this == PRIVATE_SEND

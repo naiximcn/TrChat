@@ -1,14 +1,12 @@
 package me.arasple.mc.trchat.internal.listener
 
 import me.arasple.mc.trchat.api.TrChatFiles
-import me.arasple.mc.trchat.common.chat.ChatFormats
-import me.arasple.mc.trchat.common.filter.ChatFilter
-import me.arasple.mc.trchat.common.function.ChatFunctions
 import org.apache.logging.log4j.util.Strings
 import org.bukkit.entity.Player
 import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
-import taboolib.common.platform.*
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.adaptPlayer
@@ -28,12 +26,7 @@ object ListenerTrChatInfo {
         e.isCancelled = react(e.player, if (e.message.startsWith("#")) e.message.substring(1) else null)
 
         if (e.message == "#TRCHAT-RELOAD" && e.player.hasPermission("trchat.admin")) {
-            TrChatFiles.formats.reload()
-            ChatFormats.loadFormats(adaptPlayer(e.player))
-            TrChatFiles.filter.reload()
-            ChatFilter.loadFilter(true, adaptPlayer(e.player))
-            TrChatFiles.function.reload()
-            ChatFunctions.loadFunctions(adaptPlayer(e.player))
+            TrChatFiles.reloadAll(e.player)
             e.isCancelled = true
         }
     }

@@ -66,8 +66,8 @@ object CommandMute {
         }
         command("muteall", listOf("globalmute"), "全员禁言", "trchat.mute") {
             execute<CommandSender> { sender, _, _ ->
-                ListenerChatEvent.isGlobalMuted = !ListenerChatEvent.isGlobalMuted
-                if (ListenerChatEvent.isGlobalMuted) {
+                ListenerChatEvent.isGlobalMuting = !ListenerChatEvent.isGlobalMuting
+                if (ListenerChatEvent.isGlobalMuting) {
                     sender.sendLang("Mute-Muted-All")
                 } else {
                     sender.sendLang("Mute-Cancel-Muted-All")

@@ -1,5 +1,34 @@
-# When enables, every message will be forwarded to Bungee servers
+# When enables, every message will be forwarded to Bungee or Velocity servers
 FORCE-GLOBAL: false
 
-# Messages starting with this will be forwarded to Bungee servers
+# Messages starting with this will be forwarded to Bungee or Velocity servers
 FORCE-GLOBAL-PREFIX: '!all'
+
+# Custom chat channels
+CUSTOM:
+  STAFF:
+    # Which format will be used, in formats.yml
+    FORMAT: STAFF
+    # Join permission
+    PERMISSION: 'trchat.channel.staff'
+    # Whether you can use at function
+    PRIVATE: false
+    # Receive messages even if left, as long as has permission
+    ALWAYS-RECEIVE: true
+    FORWARD-TO-DYNMAP: false
+    # Hint when join or quit
+    HINT: true
+    # If only sender can see
+    SELF-VISIBLE: false
+    # If send to console
+    SEND-TO-CONSOLE: false
+  # Only sender can see
+  SELF:
+    FORMAT: NORMAL
+    PERMISSION: 'trchat.channel.self'
+    PRIVATE: true
+    ALWAYS-RECEIVE: false
+    FORWARD-TO-DYNMAP: false
+    HINT: false
+    SELF-VISIBLE: true
+    SEND-TO-CONSOLE: true

@@ -1,5 +1,8 @@
-package me.arasple.mc.trchat.common.channels
+package me.arasple.mc.trchat.common.channel
 
+import me.arasple.mc.trchat.api.event.TrChatEvent
+import me.arasple.mc.trchat.common.channel.impl.ChannelPrivateReceive
+import me.arasple.mc.trchat.common.channel.impl.ChannelPrivateSend
 import me.arasple.mc.trchat.internal.service.Metrics
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.ChatLogs
@@ -10,6 +13,8 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.command.command
 import taboolib.common.platform.function.adaptPlayer
 import taboolib.common.platform.function.console
@@ -23,6 +28,7 @@ import java.util.*
  * @author Arasple
  * @date 2019/8/17 22:57
  */
+@PlatformSide([Platform.BUKKIT])
 object ChannelPrivate {
 
     private val spying = mutableListOf<UUID>()
@@ -41,18 +47,8 @@ object ChannelPrivate {
     }
 
     fun execute(from: Player, to: String, message: String) {
-        val sender = ChatFormats.getFormat(ChatType.PRIVATE_SEND, from)!!.apply(from, message, from.name, to)
-        val receiver = ChatFormats.getFormat(ChatType.PRIVATE_RECEIVE, from)!!.apply(from, message, from.name, to)
-
-        val toPlayer = Bukkit.getPlayerExact(to)
-        if (toPlayer == null || !toPlayer.isOnline) {
-            val raw = receiver.toRawMessage()
-            Proxy.sendProxyData(from, "SendRaw", to, raw)
-        } else {
-            receiver.sendTo(getProxyPlayer(to)!!)
-            getProxyPlayer(to)!!.sendLang("Private-Message-Receive", from.name)
-        }
-        sender.sendTo(adaptPlayer(from))
+        TrChatEvent(ChannelPrivateSend, from, message, to).call()
+        TrChatEvent(ChannelPrivateReceive, from, message, to).call()
 
         // Spy
         spying.forEach { spy ->
@@ -67,7 +63,7 @@ object ChannelPrivate {
         Metrics.increase(0)
     }
 
-    private fun switchSpy(player: Player): Boolean {
+    fun switchSpy(player: Player): Boolean {
         if (!spying.contains(player.uniqueId)) {
             spying.add(player.uniqueId)
         } else {

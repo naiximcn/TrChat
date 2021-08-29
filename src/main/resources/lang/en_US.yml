@@ -1,5 +1,6 @@
 Plugin-Loaded-Chat-Formats: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded chat formats... &8[{0} Ms]'
 Plugin-Loaded-Functions: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded chat functions... &8[{0} Ms]'
+Plugin-Loaded-Channels: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded &7{0} &3chat channels... &8[{1} Ms]'
 Plugin-Loaded-Filter-Local: '&8[&3Tr&bChat&8] &aFILTER &8| &3Loaded local filter words &b{0} &3.'
 Plugin-Loaded-Filter-Cloud: '&8[&3Tr&bChat&8] &aFILTER &8| &3Loaded cloud filter words &a{0} &3. &8[{1} - {2}]'
 Plugin-Reloaded: '&8[&3Tr&bChat&8] &7Settings changed, reloaded...'
@@ -146,27 +147,27 @@ Global-Message-No-Message:
     volume: 1
     pitch: 0
 
-Staff-Channel-No-Message:
+Custom-Channel-No-Message:
   - type: actionbar
     text: '&7&lMessage required'
   - type: sound
     sound: 'ENTITY_ITEM_BREAK'
     volume: 1
     pitch: 0
-Staff-Channel-Join:
+Custom-Channel-Join:
   - type: actionbar
-    text: '&a&lStaff chat mode enabled.'
+    text: '&a&lJoined the {0} chat channel.'
   - type: text
-    text: '&8[&3Tr&bChat&8] &3You''ve been into the staff chat channel, Re-type the command to exit'
+    text: '&8[&3Tr&bChat&8] &3You''ve been into the {0} chat channel, type /channel to exit'
   - type: sound
     sound: 'BLOCK_ANVIL_LAND'
     volume: 1
     pitch: 2
-Staff-Channel-Quit:
+Custom-Channel-Quit:
   - type: actionbar
-    text: '&3&lStaff chat mode disabled.'
+    text: '&3&lLeft the {0} chat channel.'
   - type: text
-    text: '&8[&3Tr&bChat&8] &7You''ve left the staff chat channel...'
+    text: '&8[&3Tr&bChat&8] &7You''ve left the {0} chat channel...'
   - type: sound
     sound: 'BLOCK_ANVIL_LAND'
     volume: 1

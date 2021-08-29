@@ -1,11 +1,13 @@
 package me.arasple.mc.trchat.internal.data
 
 import me.arasple.mc.trchat.api.TrChatAPI.database
+import me.arasple.mc.trchat.common.channel.impl.ChannelCustom
 import me.arasple.mc.trchat.internal.data.Cooldowns.Cooldown
 import me.arasple.mc.trchat.internal.data.Cooldowns.CooldownType
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.module.chat.TellrawJson
+import taboolib.platform.util.sendLang
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -17,9 +19,9 @@ import kotlin.collections.HashMap
 object Users {
 
     val itemCache = HashMap<ItemStack, TellrawJson>()
-    val cooldowns = HashMap<UUID, Cooldowns>()
+    private val cooldowns = HashMap<UUID, Cooldowns>()
     private val originMessage = HashMap<UUID, String>()
-    val formattedMessages = HashMap<UUID, MutableList<String>>()
+    private val formattedMessages = HashMap<UUID, MutableList<String>>()
 
     fun getCooldownLeft(uuid: UUID, type: CooldownType): Long {
         cooldowns.putIfAbsent(uuid, Cooldowns())
@@ -86,5 +88,21 @@ object Users {
 
     fun isMuted(user: Player): Boolean {
        return database.pull(user).getLong("MUTE_TIME", 0) > System.currentTimeMillis()
+    }
+
+    fun setCustomChannel(user: Player, channel: ChannelCustom?) {
+        database.pull(user).set("CUSTOM-CHANNEL", channel?.name)
+    }
+
+    fun getCustomChannel(user: Player): ChannelCustom? {
+        return ChannelCustom.list.firstOrNull { it.name == database.pull(user).getString("CUSTOM-CHANNEL", "") }
+    }
+
+    fun removeCustomChannel(user: Player) {
+        val channel = getCustomChannel(user) ?: return
+        if (channel.isHint){
+            user.sendLang("Custom-Channel-Quit", channel.name)
+        }
+        setCustomChannel(user, null)
     }
 }

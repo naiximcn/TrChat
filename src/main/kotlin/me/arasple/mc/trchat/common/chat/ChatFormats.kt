@@ -1,9 +1,8 @@
 package me.arasple.mc.trchat.common.chat
 
 import me.arasple.mc.trchat.api.TrChatFiles
+import me.arasple.mc.trchat.common.channel.IChannel
 import me.arasple.mc.trchat.common.chat.format.Format
-import me.arasple.mc.trchat.common.chat.format.PriFormat
-import me.arasple.mc.trchat.common.chat.obj.ChatType
 import me.arasple.mc.trchat.util.checkCondition
 import me.arasple.mc.trchat.util.notify
 import org.bukkit.entity.Player
@@ -15,10 +14,10 @@ import taboolib.common.platform.ProxyCommandSender
  */
 object ChatFormats {
 
-    private val formats = HashMap<ChatType, List<Format>>()
+    val formats = HashMap<String, List<Format>>()
 
-    fun getFormat(type: ChatType, player: Player): Format? {
-        return formats.computeIfAbsent(type) { ArrayList() }.firstOrNull { format ->
+    fun getFormat(channel: IChannel, player: Player): Format? {
+        return formats.computeIfAbsent(channel.format) { ArrayList() }.firstOrNull { format ->
             checkCondition(player, format.requirement)
         }
     }
@@ -27,15 +26,13 @@ object ChatFormats {
         val start = System.currentTimeMillis()
         formats.entries.clear()
 
-        for (chatType in ChatType.values()) {
-            if (TrChatFiles.formats.contains(chatType.name)) {
-                val formats = mutableListOf<Format>()
-                TrChatFiles.formats.getMapList(chatType.name).forEach { formatMap ->
-                    formats.add(if (chatType.isPrivate) PriFormat(formatMap) else Format(formatMap))
-                }
-                formats.sortBy { it.priority }
-                ChatFormats.formats[chatType] = formats
+        for (format in TrChatFiles.formats.getKeys(false)) {
+            val formats = mutableListOf<Format>()
+            TrChatFiles.formats.getMapList(format).forEach { formatMap ->
+                formats.add(Format(formatMap, format == "PRIVATE_SEND" || format == "PRIVATE_RECEIVE"))
             }
+            formats.sortBy { it.priority }
+            ChatFormats.formats[format] = formats
         }
 
         notify(notify, "Plugin-Loaded-Chat-Formats", System.currentTimeMillis() - start)
