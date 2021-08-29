@@ -4,6 +4,7 @@ import me.arasple.mc.trchat.internal.database.DatabaseLocal
 import me.arasple.mc.trchat.common.filter.ChatFilter.filter
 import me.arasple.mc.trchat.common.filter.processer.Filter
 import me.arasple.mc.trchat.common.filter.processer.FilteredObject
+import me.arasple.mc.trchat.internal.script.EvalResult
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
@@ -11,11 +12,19 @@ import org.bukkit.inventory.meta.ItemMeta
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.adaptPlayer
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.platform.function.submit
+import taboolib.common5.mirrorNow
+import taboolib.library.kether.LocalizedException
+import taboolib.module.kether.KetherShell
+import taboolib.module.kether.printKetherErrorMessage
 import taboolib.platform.util.isAir
 import taboolib.platform.util.modifyLore
 import taboolib.platform.util.modifyMeta
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 /**
  * @author Arasple, wlys
@@ -59,6 +68,34 @@ object TrChatAPI {
                     }
                 }
             }
+        }
+    }
+
+    @JvmStatic
+    fun eval(player: Player, script: String): CompletableFuture<Any?> {
+        return mirrorNow("API:Script:Evaluation") {
+            return@mirrorNow try {
+                KetherShell.eval(script, namespace = listOf("trmenu", "trhologram", "trchat")) {
+                    sender = adaptPlayer(player)
+                }
+            } catch (e: LocalizedException) {
+                println("§c[TrChat] §8Unexpected exception while parsing kether shell:")
+                e.localizedMessage.split("\n").forEach {
+                    println("         §8$it")
+                }
+                CompletableFuture.completedFuture(false)
+            }
+        }
+    }
+
+    @JvmStatic
+    fun instantKether(player: Player, script: String, timeout: Long = 100): EvalResult {
+        return try {
+            EvalResult(eval(player, script).get(timeout, TimeUnit.MILLISECONDS))
+        } catch (e: TimeoutException) {
+            println("§c[TrChat] §8Timeout while parsing kether shell:")
+            e.localizedMessage?.split("\n")?.forEach { println("         §8$it") }
+            EvalResult.FALSE
         }
     }
 

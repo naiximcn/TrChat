@@ -31,10 +31,10 @@ object CommandIgnore {
                 execute<Player> { sender, _, argument ->
                     if (Users.getIgnoredList(sender).contains(argument)) {
                         Users.removeIgnored(sender, argument)
-                        sender.sendLang("Ignore-Add", argument)
+                        sender.sendLang("Ignore-Remove", argument)
                     } else {
                         Users.addIgnored(sender, argument)
-                        sender.sendLang("Ignore-Remove", argument)
+                        sender.sendLang("Ignore-Add", argument)
                     }
                 }
             }

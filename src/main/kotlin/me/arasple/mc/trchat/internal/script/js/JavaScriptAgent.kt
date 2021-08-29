@@ -1,6 +1,7 @@
-package me.arasple.mc.trchat.internal.script
+package me.arasple.mc.trchat.internal.script.js
 
 import com.google.common.collect.Maps
+import me.arasple.mc.trchat.internal.script.EvalResult
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.console
@@ -15,7 +16,7 @@ import javax.script.SimpleScriptContext
 
 /**
  * JavaScriptAgent
- * me.arasple.mc.trchat.internal.script
+ * me.arasple.mc.trchat.internal.script.js
  *
  * @author wlys
  * @since 2021/8/27 16:10
@@ -48,7 +49,7 @@ object JavaScriptAgent {
         return false to null
     }
 
-    fun eval(player: Player, script: String): Any {
+    fun eval(player: Player, script: String): EvalResult {
         return try {
             val context = SimpleScriptContext()
 
@@ -56,11 +57,13 @@ object JavaScriptAgent {
                 it["player"] = player
             }, ScriptContext.ENGINE_SCOPE)
 
-            preCompile(script).eval(context)
+            EvalResult(preCompile(script).eval(context))
         } catch (e: Throwable) {
-            player.sendLang("Error-Js", script, e.message.toString(), Arrays.toString(e.stackTrace))
-            console().sendLang("Error-Js", script, e.message.toString(), Arrays.toString(e.stackTrace))
-            false
+            println("§c[TrChat] §8Unexpected exception while parsing javascript:")
+            e.localizedMessage.split("\n").forEach {
+                println("         §8$it")
+            }
+            EvalResult.FALSE
         }
     }
 }

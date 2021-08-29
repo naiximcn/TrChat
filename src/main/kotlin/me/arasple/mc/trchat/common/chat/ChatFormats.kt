@@ -3,7 +3,7 @@ package me.arasple.mc.trchat.common.chat
 import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.common.channel.IChannel
 import me.arasple.mc.trchat.common.chat.format.Format
-import me.arasple.mc.trchat.util.checkCondition
+import me.arasple.mc.trchat.internal.script.Condition
 import me.arasple.mc.trchat.util.notify
 import org.bukkit.entity.Player
 import taboolib.common.platform.ProxyCommandSender
@@ -18,7 +18,7 @@ object ChatFormats {
 
     fun getFormat(channel: IChannel, player: Player): Format? {
         return formats.computeIfAbsent(channel.format) { ArrayList() }.firstOrNull { format ->
-            checkCondition(player, format.requirement)
+            Condition.eval(player, format.requirement).asBoolean()
         }
     }
 

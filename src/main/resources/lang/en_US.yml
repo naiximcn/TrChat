@@ -58,14 +58,6 @@ Plugin-Done: '&8[&3Tr&bChat&8] &fOperate successfully.'
 Plugin-Failed: '&8[&3Tr&bChat&8] &cOperation failure.'
 
 Error-Version: '&8[&3Tr&bChat&8] &cERROR &8| &7Plugin version error. Please re-download the plugin.'
-Error-Js:
-  - '&8[&3Tr&bChat&8] &cERROR &8| &cJs Expression error: &2{0}'
-  - '&6{1}'
-  - '&8{2}'
-Error-Kether:
-  - '&8[&3Tr&bChat&8] &cERROR &8| &cKether Expression error: &2{0}'
-  - '&6{1}'
-  - '&8{2}'
 
 General-Too-Long: '&8[&3Tr&bChat&8] &7Message is too long. &8[&6{0}&8/&2{1}&8]'
 General-Too-Similar: '&8[&3Tr&bChat&8] &7Please do not repeat your message.'

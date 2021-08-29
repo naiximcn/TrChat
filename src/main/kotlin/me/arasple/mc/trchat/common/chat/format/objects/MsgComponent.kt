@@ -1,16 +1,17 @@
 package me.arasple.mc.trchat.common.chat.format.objects
 
+import me.arasple.mc.trchat.api.TrChatAPI
 import me.arasple.mc.trchat.api.TrChatFiles.function
+import me.arasple.mc.trchat.common.function.ChatFunctions
 import me.arasple.mc.trchat.internal.data.Cooldowns
 import me.arasple.mc.trchat.internal.data.Users
-import me.arasple.mc.trchat.common.function.ChatFunctions
 import me.arasple.mc.trchat.internal.proxy.Proxy
-import me.arasple.mc.trchat.util.MessageColors
 import me.arasple.mc.trchat.internal.proxy.bukkit.Players
-import me.arasple.mc.trchat.util.checkCondition
+import me.arasple.mc.trchat.internal.script.Condition
+import me.arasple.mc.trchat.util.MessageColors
 import me.arasple.mc.trchat.util.replacePattern
-import org.apache.commons.lang.math.NumberUtils
 import org.bukkit.ChatColor
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.common.util.VariableReader
@@ -21,7 +22,6 @@ import taboolib.module.nms.getI18nName
 import taboolib.platform.compat.replacePlaceholder
 import taboolib.platform.util.hoverItem
 import taboolib.platform.util.isAir
-import taboolib.platform.util.isNotAir
 import taboolib.platform.util.sendLang
 
 /**
@@ -40,13 +40,13 @@ class MsgComponent : JsonComponent {
     }
 
     fun toMsgTellraw(player: Player, msg: String): TellrawJson {
-        defaultColor = MessageColors.catchDefaultMessageColor(player, defaultColor)
+        val defaultColor = MessageColors.catchDefaultMessageColor(player, defaultColor)
         var message = msg
         message = MessageColors.replaceWithPermission(player, message)
 
         val tellraw = TellrawJson()
         // Custom Functions
-        ChatFunctions.functions.filter { f -> checkCondition(player, f.requirement) }.forEach { function ->
+        ChatFunctions.functions.filter { f -> Condition.eval(player, f.requirement).asBoolean() }.forEach { function ->
             message = replacePattern(message, function.pattern, function.filterTextPattern, "<" + function.name + ":{0}>")
         }
         // At & Item Show
@@ -66,9 +66,9 @@ class MsgComponent : JsonComponent {
         if (itemDisplayEnabled) {
             for (key in itemKeys) {
                 for (i in 0..8) {
-                    message = message.replace("$key-$i", "<ITEM:$i>")
+                    message = message.replace("$key-$i", "<ITEM:$i>", ignoreCase = true)
                 }
-                message = message.replace(key, "<ITEM:" + player.inventory.heldItemSlot + ">")
+                message = message.replace(key, "<ITEM:" + player.inventory.heldItemSlot + ">", ignoreCase = true)
             }
         }
 
@@ -85,8 +85,12 @@ class MsgComponent : JsonComponent {
                     }
                     tellraw.append(Users.itemCache.computeIfAbsent(item!!) {
                         TellrawJson()
-                            .append(itemFormat.replaceWithOrder(getName(item, player), if (item.isNotAir()) item.amount else 1) + defaultColor)
-                            .hoverItem(item)
+                            .append(itemFormat.replaceWithOrder(item.getName(player), item.amount.toString() + defaultColor))
+                            .hoverItem(item.clone().also {
+                                if (it.type.name.contains("(?i)(HEAD)|(SKULL)".toRegex())) {
+                                    it.type = Material.STONE
+                                }
+                            })
                     })
                     continue
                 }
@@ -104,6 +108,9 @@ class MsgComponent : JsonComponent {
                 val function = ChatFunctions.matchFunction(args[0])
                 if (function != null) {
                     tellraw.append(function.displayJson.toTellrawJson(player, true, args[1]))
+                    function.run?.let {
+                        TrChatAPI.instantKether(player, it)
+                    }
                     continue
                 }
             }
@@ -133,13 +140,13 @@ class MsgComponent : JsonComponent {
         return tellraw
     }
 
-    private fun getName(item: ItemStack, player: Player): String {
+    private fun ItemStack.getName(player: Player): String {
         return if ((function.getBoolean("GENERAL.ITEM-SHOW.ORIGIN-NAME", false)
-                || item.itemMeta == null) || !item.itemMeta!!.hasDisplayName()
+                || itemMeta == null) || !itemMeta!!.hasDisplayName()
         ) {
-            item.getI18nName(player)
+            getI18nName(player)
         } else {
-            item.itemMeta!!.displayName
+            itemMeta!!.displayName
         }
     }
 }

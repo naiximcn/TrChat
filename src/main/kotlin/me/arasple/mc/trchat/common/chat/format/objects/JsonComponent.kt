@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.common.chat.format.objects
 
-import me.arasple.mc.trchat.util.checkCondition
+import me.arasple.mc.trchat.internal.script.Condition
 import org.bukkit.entity.Player
 import taboolib.common.util.replaceWithOrder
 import taboolib.module.chat.TellrawJson
@@ -60,7 +60,7 @@ open class JsonComponent {
 
     fun toTellrawJson(player: Player, function: Boolean, vararg vars: String): TellrawJson {
         val tellraw = TellrawJson()
-        if (!checkCondition(player, requirement)) {
+        if (!Condition.eval(player, requirement).asBoolean()) {
             return tellraw
         }
 

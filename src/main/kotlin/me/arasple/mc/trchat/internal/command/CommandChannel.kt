@@ -37,11 +37,7 @@ object CommandChannel {
                 execute<Player> { sender, _, argument ->
                     val channel = ChannelCustom.list.first { it.name == argument }
                     if (sender.hasPermission(channel.permission)) {
-                        Users.removeCustomChannel(sender)
-                        Users.setCustomChannel(sender, channel)
-                        if (channel.isHint) {
-                            sender.sendLang("Custom-Channel-Join", channel.name)
-                        }
+                        ChannelCustom.join(sender, channel)
                     } else {
                         sender.sendLang("Command-Controller-Deny")
                     }
@@ -54,11 +50,7 @@ object CommandChannel {
                         if (sender.hasPermission("trchat.admin")) {
                             val channel = ChannelCustom.list.first { it.name == context.argument(-1) }
                             val player = Bukkit.getPlayerExact(argument) ?: return@execute
-                            Users.removeCustomChannel(player)
-                            Users.setCustomChannel(player, channel)
-                            if (channel.isHint) {
-                                player.sendLang("Custom-Channel-Join", channel.name)
-                            }
+                            ChannelCustom.join(player, channel)
                         } else {
                             sender.sendLang("Command-Controller-Deny")
                         }

@@ -11,6 +11,7 @@ import taboolib.common.platform.function.adaptPlayer
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.library.configuration.MemorySection
+import taboolib.platform.util.sendLang
 
 /**
  * ChannelCustom
@@ -82,5 +83,21 @@ class ChannelCustom(
     companion object {
 
         val list = mutableListOf<ChannelCustom>()
+
+        fun of(channel: String): ChannelCustom? {
+            return list.firstOrNull { it.name == channel }
+        }
+
+        fun join(player: Player, channel: String) {
+            join(player, of(channel) ?: return)
+        }
+
+        fun join(player: Player, cc: ChannelCustom) {
+            Users.removeCustomChannel(player)
+            Users.setCustomChannel(player, cc)
+            if (cc.isHint) {
+                player.sendLang("Custom-Channel-Join", cc.name)
+            }
+        }
     }
 }

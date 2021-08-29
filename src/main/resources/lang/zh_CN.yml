@@ -77,14 +77,6 @@ Plugin-Done: '&8[&3Tr&bChat&8] &f操作成功.'
 Plugin-Failed: '&8[&3Tr&bChat&8] &c操作失败.'
 
 Error-Version: '&8[&3Tr&bChat&8] &cERROR &8| &7检测版本号时发生异常... 请重新下载插件!'
-Error-Js:
-  - '&8[&3Tr&bChat&8] &cERROR &8| &cJs表达式计算时出错: &2{0}'
-  - '&6{1}'
-  - '&8{2}'
-Error-Kether:
-  - '&8[&3Tr&bChat&8] &cERROR &8| &cKether表达式计算时出错: &2{0}'
-  - '&6{1}'
-  - '&8{2}'
 
 General-Too-Long: '&8[&3Tr&bChat&8] &7你的聊天内容过长. &8[&6{0}&8/&2{1}&8]'
 General-Too-Similar: '&8[&3Tr&bChat&8] &7你的两次聊天内容过于相似, 请勿复读.'
@@ -184,7 +176,7 @@ Custom-Channel-Join:
     pitch: 2
 Custom-Channel-Quit:
   - type: actionbar
-    text: '&3&l离开{0}频道聊天'
+    text: '&3&l离开{0}聊天频道'
   - type: text
     text: '&8[&3Tr&bChat&8] &7你已离开{0}频道'
   - type: sound

@@ -1,11 +1,11 @@
-package me.arasple.mc.trchat.internal.script
+package me.arasple.mc.trchat.internal.script.js
 
 import org.bukkit.entity.Player
 import taboolib.platform.compat.replacePlaceholder
 
 /**
  * Assist
- * me.arasple.mc.trchat.internal.script
+ * me.arasple.mc.trchat.internal.script.js
  *
  * @author wlys
  * @since 2021/8/27 16:44
