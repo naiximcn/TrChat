@@ -6,6 +6,7 @@ import me.arasple.mc.trchat.api.nms.PacketUtils
 import me.arasple.mc.trchat.common.filter.ChatFilter.filter
 import me.arasple.mc.trchat.internal.data.Users.isFilterEnabled
 import net.md_5.bungee.api.chat.BaseComponent
+import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.chat.ComponentSerializer
 import org.bukkit.Bukkit
 import taboolib.common.platform.Platform
@@ -27,16 +28,21 @@ object ListenerPackets {
         if (isFilterEnabled(e.player)) {
             when (e.packet.name) {
                 "PacketPlayOutChat" -> {
-                    if (majorLegacy >= 11700) {
-                        e.packet.write("message", PacketUtils.INSTANCE.filterIChatComponent(e.packet.read<Any>("message")))
-                    } else {
-                        e.packet.write("a", PacketUtils.INSTANCE.filterIChatComponent(e.packet.read<Any>("a")))
-                    }
+                    // TODO: improve IChatComponent filter
+//                    if (majorLegacy >= 11700) {
+//                        e.packet.write("message", PacketUtils.INSTANCE.filterIChatComponent(e.packet.read<Any>("message")))
+//                    } else {
+//                        e.packet.write("a", PacketUtils.INSTANCE.filterIChatComponent(e.packet.read<Any>("a")))
+//                    }
                     kotlin.runCatching {
                         val components = e.packet.read<Array<BaseComponent>>("components") ?: return
-                        val raw = ComponentSerializer.toString(*components)
-                        val filtered = filter(raw).filtered
-                        e.packet.write("components", ComponentSerializer.parse(filtered))
+                        for (i in components.indices) {
+                            val component = components[i]
+                            if (component is TextComponent) {
+                                component.text = filter(component.text).filtered
+                            }
+                        }
+                        e.packet.write("components", components)
                     }
                     return
                 }

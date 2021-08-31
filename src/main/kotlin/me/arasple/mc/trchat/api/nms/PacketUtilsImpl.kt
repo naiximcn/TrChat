@@ -6,9 +6,11 @@ import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.chat.ComponentSerializer
 import net.minecraft.server.v1_16_R3.IChatBaseComponent
 import net.minecraft.server.v1_16_R3.NonNullList
-import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack
+import org.bukkit.inventory.ItemStack
+import taboolib.common.reflect.Reflex.Companion.invokeMethod
 import taboolib.module.nms.MinecraftVersion.majorLegacy
 import taboolib.module.nms.Packet
+import taboolib.module.nms.obcClass
 
 /**
  * @author Arasple
@@ -30,7 +32,7 @@ class PacketUtilsImpl : PacketUtils() {
     override fun filterItem(item: Any?) {
         item ?: return
         kotlin.runCatching {
-            val itemStack = CraftItemStack.asCraftMirror(item as net.minecraft.server.v1_16_R3.ItemStack)
+            val itemStack = classCraftItemStack.invokeMethod<ItemStack>("asCraftMirror", item as net.minecraft.server.v1_16_R3.ItemStack)!!
             TrChatAPI.filterItemStack(itemStack)
         }
     }
@@ -66,5 +68,9 @@ class PacketUtilsImpl : PacketUtils() {
                 }
             }
         }.getOrElse { "" }
+    }
+
+    private val classCraftItemStack by lazy {
+        obcClass("inventory.CraftItemStack")
     }
 }

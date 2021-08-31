@@ -20,6 +20,7 @@ import taboolib.module.chat.TellrawJson
 import taboolib.module.chat.colored
 import taboolib.module.nms.getI18nName
 import taboolib.platform.compat.replacePlaceholder
+import taboolib.platform.util.buildItem
 import taboolib.platform.util.hoverItem
 import taboolib.platform.util.isAir
 import taboolib.platform.util.sendLang
@@ -85,11 +86,7 @@ class MsgComponent : JsonComponent {
                     tellraw.append(Users.itemCache.computeIfAbsent(item!!) {
                         TellrawJson()
                             .append(itemFormat.replaceWithOrder(item.getName(player), item.amount.toString() + defaultColor))
-                            .hoverItem(item.clone().also {
-                                if (it.type.name.contains("(?i)(HEAD)|(SKULL)".toRegex())) {
-                                    it.type = Material.STONE
-                                }
-                            })
+                            .hoverItem(item.clone())
                     })
                     continue
                 }
