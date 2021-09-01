@@ -32,7 +32,7 @@ class PacketUtilsImpl : PacketUtils() {
     override fun filterItem(item: Any?) {
         item ?: return
         kotlin.runCatching {
-            val itemStack = classCraftItemStack.invokeMethod<ItemStack>("asCraftMirror", item as net.minecraft.server.v1_16_R3.ItemStack)!!
+            val itemStack = classCraftItemStack.invokeMethod<ItemStack>("asCraftMirror", item as net.minecraft.server.v1_16_R3.ItemStack, fixed = true)!!
             TrChatAPI.filterItemStack(itemStack)
         }
     }
