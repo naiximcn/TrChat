@@ -24,7 +24,7 @@ object CommandPrivateMessage {
 
     @Awake(LifeCycle.ENABLE)
     fun c() {
-        command("msg", listOf("message", "tell", "talk", "m"), "私聊", permission = "trchat.private") {
+        command("msg", listOf("message", "tell", "talk", "m", "whisper", "w"), "私聊", permission = "trchat.private") {
             dynamic {
                 suggestion<Player> { _, _ ->
                     Players.getPlayers()
