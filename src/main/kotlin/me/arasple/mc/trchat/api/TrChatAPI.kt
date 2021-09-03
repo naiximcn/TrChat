@@ -19,6 +19,7 @@ import taboolib.common5.mirrorNow
 import taboolib.library.kether.LocalizedException
 import taboolib.module.kether.KetherShell
 import taboolib.module.kether.printKetherErrorMessage
+import taboolib.module.nms.obcClass
 import taboolib.platform.util.isAir
 import taboolib.platform.util.modifyLore
 import taboolib.platform.util.modifyMeta
@@ -110,5 +111,9 @@ object TrChatAPI {
             database.push(e.player)
             database.release(e.player)
         }
+    }
+
+    val classCraftItemStack by lazy {
+        obcClass("inventory.CraftItemStack")
     }
 }

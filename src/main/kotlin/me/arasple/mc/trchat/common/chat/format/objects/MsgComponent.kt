@@ -86,7 +86,9 @@ class MsgComponent : JsonComponent {
                     tellraw.append(Users.itemCache.computeIfAbsent(item!!) {
                         TellrawJson()
                             .append(itemFormat.replaceWithOrder(item.getName(player), item.amount.toString() + defaultColor))
-                            .hoverItem(item.clone())
+                            .hoverItem(item.clone().also {
+                                it.type = Material.STONE
+                            })
                     })
                     continue
                 }

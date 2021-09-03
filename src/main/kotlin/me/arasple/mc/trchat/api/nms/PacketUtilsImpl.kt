@@ -32,7 +32,7 @@ class PacketUtilsImpl : PacketUtils() {
     override fun filterItem(item: Any?) {
         item ?: return
         kotlin.runCatching {
-            val itemStack = classCraftItemStack.invokeMethod<ItemStack>("asCraftMirror", item as net.minecraft.server.v1_16_R3.ItemStack, fixed = true)!!
+            val itemStack = TrChatAPI.classCraftItemStack.invokeMethod<ItemStack>("asCraftMirror", item as net.minecraft.server.v1_16_R3.ItemStack, fixed = true)!!
             TrChatAPI.filterItemStack(itemStack)
         }
     }
@@ -68,9 +68,5 @@ class PacketUtilsImpl : PacketUtils() {
                 }
             }
         }.getOrElse { "" }
-    }
-
-    private val classCraftItemStack by lazy {
-        obcClass("inventory.CraftItemStack")
     }
 }
