@@ -27,18 +27,18 @@ object Metrics {
 
     @Awake(LifeCycle.ENABLE)
     fun init() {
-        Metrics(5802, pluginVersion, Platform.BUKKIT).run {
+        Metrics(5802, pluginVersion, Platform.BUKKIT).apply {
             // 聊天次数统计
             addCustomChart(SingleLineChart("chat_counts") {
                 val i = counts[0]
                 counts[0] = 0
-                i
+                return@SingleLineChart i
             })
             // 敏感词过滤器启用统计
             addCustomChart(SingleLineChart("filter_counts") {
                 val i = counts[1]
                 counts[1] = 0
-                i
+                return@SingleLineChart i
             })
         }
     }

@@ -3,7 +3,9 @@ package me.arasple.mc.trchat.common.channel
 import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.common.channel.impl.*
+import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.util.notify
+import org.bukkit.event.player.PlayerJoinEvent
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.ProxyCommandSender
@@ -24,6 +26,8 @@ object ChatChannels {
 
     private val channels = mutableListOf<IChannel>()
 
+    private var default: ChannelCustom? = null
+
     fun loadChannels(vararg notify: ProxyCommandSender) {
         val start = System.currentTimeMillis()
         channels.clear()
@@ -39,14 +43,27 @@ object ChatChannels {
             ChannelCustom.list.add(ChannelCustom(name, obj as MemorySection))
         }
         channels.addAll(ChannelCustom.list)
+        default = ChannelCustom.of(TrChatFiles.channels.getString("DEFAULT-CUSTOM-CHANNEL", null))
 
         notify(notify, "Plugin-Loaded-Channels", channels.size, System.currentTimeMillis() - start)
     }
 
     @SubscribeEvent(EventPriority.HIGHEST)
     private fun callChannel(e: TrChatEvent) {
-        mirrorNow("Common:Format:${e.channel.format}") {
+        mirrorNow("Common:Channel:${e.channel.format}") {
             e.channel.execute(e.sender, *e.message)
+        }
+    }
+
+    @SubscribeEvent
+    private fun e(e: PlayerJoinEvent) {
+        val player = e.player
+        if (default != null
+            && Users.getCustomChannel(player) == null
+            && !player.hasPermission("trchat.bypass.defaultchannel")
+            && player.hasPermission(default!!.permission)
+        ) {
+            ChannelCustom.join(player, default!!)
         }
     }
 }

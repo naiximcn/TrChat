@@ -22,6 +22,9 @@ class ActionChannel(val symbol: Symbol, val channel: String?): ScriptAction<Void
 
     override fun run(frame: ScriptFrame): CompletableFuture<Void> {
         val s = frame.script()
+        if (s.sender == null) {
+            error("No sender selected.")
+        }
         when (symbol) {
             Symbol.JOIN -> ChannelCustom.join(s.sender!!.cast(), channel!!)
             Symbol.QUIT -> Users.removeCustomChannel(s.sender!!.cast())

@@ -29,7 +29,8 @@ class ChannelCustom(
     val isForwardToDynmap: Boolean,
     val isHint: Boolean,
     val isSelfVisible: Boolean,
-    val isSendToConsole: Boolean
+    val isSendToConsole: Boolean,
+    val isSingleWorld: Boolean
     ): IChannel {
 
     constructor(name: String, obj: MemorySection) : this(
@@ -41,7 +42,8 @@ class ChannelCustom(
         obj.getBoolean("FORWARD-TO-DYNMAP", false),
         obj.getBoolean("HINT", true),
         obj.getBoolean("SELF-VISIBLE", false),
-        obj.getBoolean("SEND-TO-CONSOLE", true)
+        obj.getBoolean("SEND-TO-CONSOLE", true),
+        obj.getBoolean("SINGLE-WORLD", false)
     )
 
     override val chatType: ChatType
@@ -59,8 +61,14 @@ class ChannelCustom(
                     }
                 }
             } else {
-                onlinePlayers().filter { Users.getCustomChannel(it.cast()) == this }.forEach {
-                    formatted.sendTo(it)
+                if (isSingleWorld) {
+                    onlinePlayers().filter { Users.getCustomChannel(it.cast()) == this && it.world == sender.world.name }.forEach {
+                        formatted.sendTo(it)
+                    }
+                } else {
+                    onlinePlayers().filter { Users.getCustomChannel(it.cast()) == this }.forEach {
+                        formatted.sendTo(it)
+                    }
                 }
             }
         } else {
@@ -72,12 +80,16 @@ class ChannelCustom(
         Metrics.increase(0)
     }
 
+    override fun toString(): String {
+        return name
+    }
+
     companion object {
 
         val list = mutableListOf<ChannelCustom>()
 
-        fun of(channel: String): ChannelCustom? {
-            return list.firstOrNull { it.name == channel }
+        fun of(channel: String?): ChannelCustom? {
+            return list.firstOrNull { it.name == (channel ?: return null) }
         }
 
         fun join(player: Player, channel: String) {
