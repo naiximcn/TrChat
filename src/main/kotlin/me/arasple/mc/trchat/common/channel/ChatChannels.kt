@@ -48,10 +48,12 @@ object ChatChannels {
         notify(notify, "Plugin-Loaded-Channels", channels.size, System.currentTimeMillis() - start)
     }
 
-    @SubscribeEvent(EventPriority.HIGHEST)
+    @SubscribeEvent(EventPriority.HIGHEST, ignoreCancelled = true)
     private fun callChannel(e: TrChatEvent) {
-        mirrorNow("Common:Channel:${e.channel.format}") {
-            e.channel.execute(e.sender, *e.message)
+        if (!e.isCancelled) {
+            mirrorNow("Common:Channel:${e.channel.format}") {
+                e.channel.execute(e.sender, *e.message)
+            }
         }
     }
 

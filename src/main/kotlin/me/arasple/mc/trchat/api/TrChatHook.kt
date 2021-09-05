@@ -34,7 +34,7 @@ object TrChatHook {
         }
     }
 
-    fun postToDynmap(player: Player, msg: TellrawJson) {
+    fun forwardToDynmap(player: Player, msg: TellrawJson) {
         if (isDynmapHooked) {
             (dynmap as DynmapAPI).postPlayerMessageToWeb(player, msg.toLegacyText())
         }

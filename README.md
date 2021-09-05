@@ -5,11 +5,14 @@
 **Advanced chat control for Minecraft servers**
 
 API usage: 
-```kotlin
-@EventHandler
-fun e(e: TrChatEvent) {
-    // if (e.chatType = ...)
-    e.isCancelled = true // 取消发送全服喊话
-    e.message = "..." // 改变内容
+```java
+class Example {
+    
+    @EventHandler
+    private void e(TrChatEvent e) {
+        e.getChannel(); // 获取聊天频道
+        e.setCanceled(true); // 取消发送聊天
+        e.setMessage("..."); // 改变聊天内容
+    }   
 }
 ```

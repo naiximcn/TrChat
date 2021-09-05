@@ -12,6 +12,7 @@ import taboolib.common.platform.function.console
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.library.configuration.MemorySection
 import taboolib.platform.util.sendLang
+import taboolib.platform.util.toProxyLocation
 
 /**
  * ChannelCustom
@@ -28,9 +29,8 @@ class ChannelCustom(
     val isAlwaysReceive: Boolean,
     val isForwardToDynmap: Boolean,
     val isHint: Boolean,
-    val isSelfVisible: Boolean,
     val isSendToConsole: Boolean,
-    val isSingleWorld: Boolean
+    val target: Target
     ): IChannel {
 
     constructor(name: String, obj: MemorySection) : this(
@@ -41,9 +41,11 @@ class ChannelCustom(
         obj.getBoolean("ALWAYS-RECEIVE", false),
         obj.getBoolean("FORWARD-TO-DYNMAP", false),
         obj.getBoolean("HINT", true),
-        obj.getBoolean("SELF-VISIBLE", false),
         obj.getBoolean("SEND-TO-CONSOLE", true),
-        obj.getBoolean("SINGLE-WORLD", false)
+        obj.getString("RANGE", "ALL").split(";").let {
+            Target(Range.valueOf(it[0].uppercase()), it.getOrNull(1)?.toIntOrNull())
+        }
+
     )
 
     override val chatType: ChatType
@@ -51,28 +53,37 @@ class ChannelCustom(
 
     override fun execute(sender: Player, vararg msg: String) {
         val formatted = ChatFormats.getFormat(this, sender)!!.apply(sender, msg[0], forwardToDynmap = isForwardToDynmap, privateChat = private)
-        if (!isSelfVisible) {
-            if (isAlwaysReceive) {
-                if (Proxy.isEnabled) {
-                    Proxy.sendProxyData(sender, "SendRawPerm", formatted.toRawMessage(), permission)
-                } else {
-                    onlinePlayers().filter { it.hasPermission(permission) }.forEach {
-                        formatted.sendTo(it)
-                    }
-                }
+        if (isAlwaysReceive) {
+            if (Proxy.isEnabled) {
+                Proxy.sendProxyData(sender, "SendRawPerm", formatted.toRawMessage(), permission)
             } else {
-                if (isSingleWorld) {
-                    onlinePlayers().filter { Users.getCustomChannel(it.cast()) == this && it.world == sender.world.name }.forEach {
-                        formatted.sendTo(it)
-                    }
-                } else {
+                onlinePlayers().filter { it.hasPermission(permission) }.forEach {
+                    formatted.sendTo(it)
+                }
+            }
+        } else {
+            when(target.range) {
+                Range.ALL -> {
                     onlinePlayers().filter { Users.getCustomChannel(it.cast()) == this }.forEach {
                         formatted.sendTo(it)
                     }
                 }
+                Range.SINGLE_WORLD -> {
+                    onlinePlayers().filter { Users.getCustomChannel(it.cast()) == this && it.world == sender.world.name }.forEach {
+                        formatted.sendTo(it)
+                    }
+                }
+                Range.DISTANCE -> {
+                    onlinePlayers().filter { Users.getCustomChannel(it.cast()) == this
+                            && it.world == sender.world.name
+                            && it.location.distance(sender.location.toProxyLocation()) <= target.distance!! }.forEach {
+                        formatted.sendTo(it)
+                    }
+                }
+                Range.SELF -> {
+                    formatted.sendTo(adaptPlayer(sender))
+                }
             }
-        } else {
-            formatted.sendTo(adaptPlayer(sender))
         }
         if (isSendToConsole) {
             formatted.sendTo(console())
@@ -103,5 +114,12 @@ class ChannelCustom(
                 player.sendLang("Custom-Channel-Join", cc.name)
             }
         }
+
+        enum class Range {
+
+            ALL, SINGLE_WORLD, DISTANCE, SELF
+        }
+
+        class Target(val range: Range, val distance: Int?)
     }
 }

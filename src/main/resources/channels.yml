@@ -4,7 +4,7 @@ FORCE-GLOBAL: false
 # Messages starting with this will be forwarded to Bungee or Velocity servers
 FORCE-GLOBAL-PREFIX: '!all'
 
-# If not null, Players that not in custom channel will auto join this channel (require permission)
+# If not null, players that not in custom channel will auto join this channel (require permission)
 DEFAULT-CUSTOM-CHANNEL: null
 
 # Custom chat channels
@@ -14,27 +14,15 @@ CUSTOM:
     FORMAT: STAFF
     # Join permission
     PERMISSION: 'trchat.channel.staff'
+    # Send range (ALL, SINGLE_WORLD, DISTANCE, SELF) note: invalid when ALWAYS-RECEIVE is true
+    RANGE: ALL;0
+    # Receive messages even if left, as long as has permission (support proxies)
+    ALWAYS-RECEIVE: true
+    # If send message to console
+    SEND-TO-CONSOLE: false
     # Whether you can use at function
     PRIVATE: false
-    # Receive messages even if left, as long as has permission
-    ALWAYS-RECEIVE: true
-    # If forward message to Dynmap
+    # If forward message to dynmap
     FORWARD-TO-DYNMAP: false
-    # Hint when join or quit
+    # If hint when join or quit
     HINT: true
-    # If only sender can see
-    SELF-VISIBLE: false
-    # If send to console
-    SEND-TO-CONSOLE: false
-    # If only send to the world that sender in (incompatible with ALWAYS-RECEIVE)
-    SINGLE-WORLD: false
-  # Only sender can see
-  SELF:
-    FORMAT: NORMAL
-    PERMISSION: 'trchat.channel.self'
-    PRIVATE: true
-    ALWAYS-RECEIVE: false
-    FORWARD-TO-DYNMAP: false
-    HINT: false
-    SELF-VISIBLE: true
-    SEND-TO-CONSOLE: true
