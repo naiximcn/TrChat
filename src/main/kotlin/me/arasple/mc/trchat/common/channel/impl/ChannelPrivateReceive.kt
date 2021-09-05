@@ -25,7 +25,7 @@ object ChannelPrivateReceive : IChannel {
         get() = "PRIVATE_RECEIVE"
 
     override fun execute(sender: Player, vararg msg: String) {
-        val formatted = ChatFormats.getFormat(this, sender)!!.apply(sender, msg[0], "true", msg[1], privateChat = true)
+        val formatted = ChatFormats.getFormat(this, sender)?.apply(sender, msg[0], "true", msg[1], privateChat = true) ?: return
 
         val toPlayer = Bukkit.getPlayerExact(msg[1])
         if (toPlayer == null || !toPlayer.isOnline) {

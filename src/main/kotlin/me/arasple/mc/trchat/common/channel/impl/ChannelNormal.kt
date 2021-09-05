@@ -26,7 +26,7 @@ object ChannelNormal : IChannel {
         get() = "NORMAL"
 
     override fun execute(sender: Player, vararg msg: String) {
-        val formatted = ChatFormats.getFormat(this, sender)!!.apply(sender, msg[0])
+        val formatted = ChatFormats.getFormat(this, sender)?.apply(sender, msg[0]) ?: return
         onlinePlayers().filterNot { Users.getIgnoredList(it.cast()).contains(sender.name) }.forEach {
             formatted.sendTo(it)
         }

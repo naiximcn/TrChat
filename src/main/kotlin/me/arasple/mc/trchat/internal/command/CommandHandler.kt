@@ -25,7 +25,7 @@ import taboolib.platform.util.sendLang
  * @since 2021/8/21 12:23
  */
 @PlatformSide([Platform.BUKKIT])
-@CommandHeader("trchat", ["trc"], "TrChat主命令", permission = "trchat.access")
+@CommandHeader("trchat", ["trc"], "TrChat主命令", permission = "trchat.command.access")
 object CommandHandler {
 
     @CommandBody(permission = "trchat.admin", optional = true)
@@ -56,6 +56,7 @@ object CommandHandler {
         }
     }
 
+    @CommandBody(permission = "trchat.admin", optional = true)
     val spy = subCommand {
         execute<Player> { sender, _, _ ->
             val state = ChannelPrivate.switchSpy(sender)

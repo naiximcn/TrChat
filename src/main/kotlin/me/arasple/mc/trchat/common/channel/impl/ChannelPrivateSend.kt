@@ -22,7 +22,7 @@ object ChannelPrivateSend : IChannel {
         get() = "PRIVATE_SEND"
 
     override fun execute(sender: Player, vararg msg: String) {
-        val formatted = ChatFormats.getFormat(this, sender)!!.apply(sender, msg[0], "true", msg[1], privateChat = true)
+        val formatted = ChatFormats.getFormat(this, sender)?.apply(sender, msg[0], "true", msg[1], privateChat = true) ?: return
         formatted.sendTo(adaptPlayer(sender))
     }
 }

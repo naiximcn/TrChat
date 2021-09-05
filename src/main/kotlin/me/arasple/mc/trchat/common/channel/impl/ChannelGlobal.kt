@@ -26,7 +26,7 @@ object ChannelGlobal : IChannel {
             sender.sendLang("Global-Message-Not-Enable")
             return
         }
-        val format = ChatFormats.getFormat(this, sender)!!.apply(sender, msg[0])
+        val format = ChatFormats.getFormat(this, sender)?.apply(sender, msg[0]) ?: return
         val raw = format.toRawMessage()
         Proxy.sendProxyData(sender, "BroadcastRaw", raw)
         format.sendTo(console())
