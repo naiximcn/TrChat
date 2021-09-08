@@ -90,8 +90,8 @@ CUSTOM:
 
   # 示例 —— B站视频 分享
   shareBilibili:
-    pattern: 'BV( )?.{10}'
-    text-filter: '.{10}'
+    pattern: 'BV( )?.{12}'
+    text-filter: '.{12}'
     # 自定义显示 JSON 组件
     display:
       text: '&8[&f&lBilibili&8]'

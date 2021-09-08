@@ -13,7 +13,7 @@ import taboolib.module.chat.colored
 @PlatformSide([Platform.BUKKIT])
 object MessageColors {
 
-    val COLOR_CODES = ChatColor.values().map { it.char }
+    private val COLOR_CODES = ChatColor.values().map { it.char }
 
     private const val COLOR_CHAR = ChatColor.COLOR_CHAR.toString()
     private const val COLOR_PERMISSION_NODE = "trchat.color."
