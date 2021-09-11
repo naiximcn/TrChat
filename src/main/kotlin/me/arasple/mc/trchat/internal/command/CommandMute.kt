@@ -25,11 +25,11 @@ object CommandMute {
     @Awake(LifeCycle.ENABLE)
     fun c() {
         command("mute", description = "禁言", usage = "/mute 玩家 禁言时间", permission = "trchat.mute") {
-            dynamic {
+            dynamic("player") {
                 suggestion<CommandSender> { _, _ ->
                     onlinePlayers().map { it.name }
                 }
-                dynamic {
+                dynamic("minute") {
                     suggestion<CommandSender>(uncheck = true) { _, _ ->
                         listOf("1", "5", "10", "60")
                     }

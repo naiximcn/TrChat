@@ -29,7 +29,7 @@ object CommandReply {
     @Awake(LifeCycle.ENABLE)
     fun c() {
         command("reply", listOf("r"), "回复私聊", permission = "trchat.private") {
-            dynamic {
+            dynamic("message") {
                 execute<Player> { sender, _, argument ->
                     if (ListenerChatEvent.isGlobalMuting && !sender.hasPermission("trchat.bypass.globalmute")) {
                         sender.sendLang("General-Global-Muting")

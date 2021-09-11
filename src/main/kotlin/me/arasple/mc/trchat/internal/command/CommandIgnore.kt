@@ -24,7 +24,7 @@ object CommandIgnore {
     @Awake(LifeCycle.ENABLE)
     fun c() {
         command("ignore", description = "屏蔽玩家", permission = "trchat.ignore") {
-            dynamic {
+            dynamic("player") {
                 suggestion<Player> { sender, _ ->
                     Players.getPlayers().filter { it != sender.name }
                 }

@@ -6,7 +6,7 @@
 
 API usage: 
 ```java
-class Example {
+class Demo {
     
     @EventHandler
     private void e(TrChatEvent e) {

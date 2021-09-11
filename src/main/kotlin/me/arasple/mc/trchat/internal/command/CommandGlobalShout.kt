@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.internal.command
 
+import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.common.channel.impl.ChannelGlobal
 import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.internal.listener.ListenerChatEvent
@@ -25,7 +26,7 @@ object CommandGlobalShout {
     @Awake(LifeCycle.ENABLE)
     fun c() {
         command("shout", listOf("all", "global"), "全服喊话", permission = "trchat.global") {
-            dynamic {
+            dynamic("message") {
                 execute<Player> { sender, _, argument ->
                     if (ListenerChatEvent.isGlobalMuting && !sender.hasPermission("trchat.bypass.globalmute")) {
                         sender.sendLang("General-Global-Muting")
@@ -35,7 +36,7 @@ object CommandGlobalShout {
                         sender.sendLang("General-Muted")
                         return@execute
                     }
-                    ChannelGlobal.execute(sender, argument)
+                    TrChatEvent(ChannelGlobal, sender, argument).call()
                 }
             }
             incorrectSender { sender, _ ->

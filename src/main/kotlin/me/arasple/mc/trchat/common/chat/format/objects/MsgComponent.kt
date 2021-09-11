@@ -11,11 +11,11 @@ import me.arasple.mc.trchat.internal.script.Condition
 import me.arasple.mc.trchat.util.MessageColors
 import me.arasple.mc.trchat.util.replacePattern
 import org.bukkit.ChatColor
-import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.common.util.VariableReader
 import taboolib.common.util.replaceWithOrder
+import taboolib.library.xseries.XMaterial
 import taboolib.module.chat.TellrawJson
 import taboolib.module.chat.colored
 import taboolib.module.nms.getI18nName
@@ -86,8 +86,12 @@ class MsgComponent : JsonComponent {
                     tellraw.append(Users.itemCache.computeIfAbsent(item!!) {
                         TellrawJson()
                             .append(itemFormat.replaceWithOrder(item.getName(player), item.amount.toString() + defaultColor))
-                            .hoverItem(item.clone().also {
-                                it.type = Material.STONE
+                            .hoverItem(item.run {
+                                if (function.getBoolean("GENERAL.ITEM-SHOW.COMPATIBLE", false)) {
+                                    buildItem(item)
+                                } else {
+                                    this
+                                }
                             })
                     })
                     continue

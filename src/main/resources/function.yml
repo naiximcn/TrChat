@@ -47,6 +47,8 @@ GENERAL:
       - '[item]'
     # 展示物品原本的名字（无视改名）
     ORIGIN-NAME: false
+    # Set to true if occur bug
+    COMPATIBLE: false
   # Mention (@At) someone in chat
   MENTION:
     ENABLE: true

@@ -15,6 +15,7 @@ import taboolib.common.platform.command.mainCommand
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.common5.Mirror
+import taboolib.expansion.createHelper
 import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
 
@@ -72,7 +73,13 @@ object CommandHandler {
     }
 
     @CommandBody
+    val help = subCommand {
+        createHelper()
+    }
+
+    @CommandBody
     val main = mainCommand {
+        createHelper()
         incorrectSender { sender, _ ->
             sender.sendLang("Command-Not-Player")
         }

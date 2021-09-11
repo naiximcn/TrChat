@@ -1,6 +1,5 @@
 package me.arasple.mc.trchat.internal.command
 
-import me.arasple.mc.trchat.common.chat.MessageTransmit.releaseTransmit
 import org.bukkit.entity.Player
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
@@ -17,11 +16,11 @@ import taboolib.module.lang.sendLang
 @PlatformSide([Platform.BUKKIT])
 object CommandRemoveMessage {
 
-//    @Awake(LifeCycle.ENABLE) TODO
+//    @Awake(LifeCycle.ENABLE) TODO: Not completed.
     fun c() {
         command("recall", description = "撤回消息", permission = "trchat.recall") {
-            execute<Player> { sender, _, _ ->
-                sender.releaseTransmit()
+            execute<Player> { _, _, _ ->
+
             }
             incorrectSender { sender, _ ->
                 sender.sendLang("Command-Not-Player")

@@ -25,11 +25,11 @@ object CommandPrivateMessage {
     @Awake(LifeCycle.ENABLE)
     fun c() {
         command("msg", listOf("message", "tell", "talk", "m", "whisper", "w"), "私聊", permission = "trchat.private") {
-            dynamic {
+            dynamic("player") {
                 suggestion<Player> { _, _ ->
                     Players.getPlayers()
                 }
-                dynamic {
+                dynamic("message") {
                     suggestion<Player>(uncheck = true) { _, context ->
                         Players.getPlayers().filter {
                             it.lowercase(Locale.getDefault()).startsWith(context.argument(-1)!!)

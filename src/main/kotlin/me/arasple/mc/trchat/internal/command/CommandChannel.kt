@@ -30,7 +30,7 @@ object CommandChannel {
             execute<Player> { sender, _, _ ->
                 Users.removeCustomChannel(sender)
             }
-            dynamic(optional = true) {
+            dynamic("channel", optional = true) {
                 suggestion<CommandSender> { _, _ ->
                     ChannelCustom.list.map { it.name }
                 }
@@ -42,7 +42,7 @@ object CommandChannel {
                         sender.sendLang("Command-Controller-Deny")
                     }
                 }
-                dynamic(optional = true) {
+                dynamic("player", optional = true) {
                     suggestion<CommandSender> { _, _ ->
                         onlinePlayers().map { it.name }
                     }
