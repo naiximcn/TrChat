@@ -24,9 +24,7 @@ import java.io.IOException
 @PlatformSide([Platform.VELOCITY])
 object TrChatVelocity : Plugin() {
 
-    val plugin by lazy {
-        VelocityPlugin.getInstance()
-    }
+    val plugin by lazy { VelocityPlugin.getInstance() }
 
     lateinit var incoming: MinecraftChannelIdentifier
     lateinit var outgoing: MinecraftChannelIdentifier

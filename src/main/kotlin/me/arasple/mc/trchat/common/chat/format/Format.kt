@@ -1,8 +1,8 @@
 package me.arasple.mc.trchat.common.chat.format
 
-import me.arasple.mc.trchat.api.TrChatHook
 import me.arasple.mc.trchat.common.chat.format.objects.JsonComponent
 import me.arasple.mc.trchat.common.chat.format.objects.MsgComponent
+import me.arasple.mc.trchat.internal.hook.HookPlugin
 import org.bukkit.entity.Player
 import taboolib.common5.Coerce
 import taboolib.module.chat.TellrawJson
@@ -32,7 +32,7 @@ class Format(
         prefix.forEach { x -> format.append(x.toTellrawJson(player, *message.drop(1).toTypedArray())) }
         format.append(msg.toMsgTellraw(player, message[0], privateChat).also {
             if (forwardToDynmap) {
-                TrChatHook.forwardToDynmap(player, it)
+                HookPlugin.getDynmap().forwardChat(player, it)
             }
         })
         suffix.forEach { x -> format.append(x.toTellrawJson(player, *message.drop(1).toTypedArray())) }

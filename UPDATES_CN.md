@@ -6,6 +6,15 @@
   
   - tips: 1.13+ 的命令补全绕过权限是: trchat.bypass.tabcomplete
   ```
+- #### 1.84
+  - Since 2021.9.11
+  - Updates:
+    - 重制频道功能(支持自定义频道)
+    - 重制聊天内部事件
+    - 修复私聊的严重bug
+    - 优化有关NMS和OBC的代码
+    - 升级脚本模块
+    - 修复一些兼容性bug
 - #### 1.83
   - Since 2021.8.27
   - Updates:

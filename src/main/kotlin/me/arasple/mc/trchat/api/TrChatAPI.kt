@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.common.platform.Schedule
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.adaptPlayer
 import taboolib.common.platform.function.onlinePlayers
@@ -19,6 +20,7 @@ import taboolib.common5.mirrorNow
 import taboolib.library.kether.LocalizedException
 import taboolib.module.kether.KetherShell
 import taboolib.module.kether.printKetherErrorMessage
+import taboolib.module.nms.nmsClass
 import taboolib.module.nms.obcClass
 import taboolib.platform.util.isAir
 import taboolib.platform.util.modifyLore
@@ -33,15 +35,6 @@ import java.util.concurrent.TimeoutException
  */
 object TrChatAPI {
 
-    val database by lazy {
-        DatabaseLocal()
-//        when (TrChatFiles.settings.getString("Database.method")!!.uppercase(Locale.getDefault())) {
-//            "LOCAL" -> DatabaseLocal()
-//            "MONGODB" -> DatabaseMongodb()
-//            else -> error("Storage method \"${TrChatFiles.settings.getString("Database.method")}\" not supported.")
-//        }
-    }
-
     /**
      * 根据玩家的权限，过滤的字符串
      *
@@ -50,10 +43,12 @@ object TrChatAPI {
      * @param execute 是否真的过滤
      * @return 过滤后的
      */
+    @JvmStatic
     fun filterString(player: Player, string: String, execute: Boolean = true): FilteredObject {
         return if (execute) Filter.doFilter(string, !player.hasPermission("trchat.bypass.filter")) else FilteredObject(string, 0)
     }
 
+    @JvmStatic
     fun filterItemStack(itemStack: ItemStack) {
         if (itemStack.isAir()) {
             return
@@ -100,20 +95,11 @@ object TrChatAPI {
         }
     }
 
-    @Awake(LifeCycle.DISABLE)
-    internal fun e() {
-        onlinePlayers().forEach { database.push(it.cast()) }
-    }
-
-    @SubscribeEvent
-    internal fun e(e: PlayerQuitEvent) {
-        submit(async = true) {
-            database.push(e.player)
-            database.release(e.player)
-        }
-    }
-
     val classCraftItemStack by lazy {
         obcClass("inventory.CraftItemStack")
+    }
+
+    val classChatSerializer by lazy {
+        nmsClass("IChatBaseComponent\$ChatSerializer")
     }
 }

@@ -11,7 +11,8 @@ import org.bukkit.entity.Player
  * @author wlys
  * @since 2021/8/29 15:16
  */
-inline class Condition(private val script: String?) {
+@JvmInline
+value class Condition(private val script: String?) {
 
     fun eval(player: Player): EvalResult {
         return if (script.isNullOrEmpty() || script.equals("null", ignoreCase = true)) EvalResult.TRUE

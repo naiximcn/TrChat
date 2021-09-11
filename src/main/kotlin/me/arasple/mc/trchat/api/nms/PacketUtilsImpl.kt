@@ -7,10 +7,10 @@ import net.md_5.bungee.chat.ComponentSerializer
 import net.minecraft.server.v1_16_R3.IChatBaseComponent
 import net.minecraft.server.v1_16_R3.NonNullList
 import org.bukkit.inventory.ItemStack
+import taboolib.common.platform.function.info
 import taboolib.common.reflect.Reflex.Companion.invokeMethod
 import taboolib.module.nms.MinecraftVersion.majorLegacy
 import taboolib.module.nms.Packet
-import taboolib.module.nms.obcClass
 
 /**
  * @author Arasple
@@ -21,9 +21,9 @@ class PacketUtilsImpl : PacketUtils() {
     override fun filterIChatComponent(component: Any?): Any? {
         component ?: return component
         return try {
-            val raw = IChatBaseComponent.ChatSerializer.a(component as IChatBaseComponent)
+            val raw = TrChatAPI.classChatSerializer.invokeMethod<String>("a", component, fixed = true)!!
             val filtered = filter(raw).filtered
-            IChatBaseComponent.ChatSerializer.a(filtered)!!
+            TrChatAPI.classChatSerializer.invokeMethod<Any>("a", filtered, fixed = true)
         } catch (e: Throwable) {
             component
         }
@@ -32,7 +32,7 @@ class PacketUtilsImpl : PacketUtils() {
     override fun filterItem(item: Any?) {
         item ?: return
         kotlin.runCatching {
-            val itemStack = TrChatAPI.classCraftItemStack.invokeMethod<ItemStack>("asCraftMirror", item as net.minecraft.server.v1_16_R3.ItemStack, fixed = true)!!
+            val itemStack = TrChatAPI.classCraftItemStack.invokeMethod<ItemStack>("asCraftMirror", item, fixed = true)!!
             TrChatAPI.filterItemStack(itemStack)
         }
     }

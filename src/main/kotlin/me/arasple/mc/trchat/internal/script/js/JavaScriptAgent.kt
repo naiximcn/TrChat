@@ -36,12 +36,6 @@ object JavaScriptAgent {
 
     private val compiledScripts = Maps.newConcurrentMap<String, CompiledScript>()
 
-    fun preCompile(script: String): CompiledScript {
-        return compiledScripts.computeIfAbsent(script) {
-            script.compileJS()
-        }
-    }
-
     fun serialize(script: String): Pair<Boolean, String?> {
         prefixes.firstOrNull { script.startsWith(it) }?.let {
             return true to script.removePrefix(it)
@@ -49,7 +43,13 @@ object JavaScriptAgent {
         return false to null
     }
 
-    fun eval(player: Player, script: String): EvalResult {
+    fun preCompile(script: String): CompiledScript {
+        return compiledScripts.computeIfAbsent(script) {
+            script.compileJS()
+        }
+    }
+
+    fun eval(player: Player, script: String, cacheScript: Boolean = true): EvalResult {
         return try {
             val context = SimpleScriptContext()
 
@@ -57,7 +57,11 @@ object JavaScriptAgent {
                 it["player"] = player
             }, ScriptContext.ENGINE_SCOPE)
 
-            EvalResult(preCompile(script).eval(context))
+            val compiledScript =
+                if (cacheScript) preCompile(script)
+                else script.compileJS()
+
+            EvalResult(compiledScript?.eval(context))
         } catch (e: Throwable) {
             println("§c[TrChat] §8Unexpected exception while parsing javascript:")
             e.localizedMessage.split("\n").forEach {

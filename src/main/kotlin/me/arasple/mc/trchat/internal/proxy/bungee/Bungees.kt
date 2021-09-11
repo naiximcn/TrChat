@@ -25,7 +25,7 @@ class Bungees : PluginMessageListener {
         try {
             val subChannel = data.readUTF()
             if (subChannel == "PlayerList") {
-                val server = data.readUTF()
+                data.readUTF()
                 setPlayers(data.readUTF().split(", "))
             }
         } catch (ignored: IOException) {

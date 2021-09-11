@@ -7,6 +7,8 @@ import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.internal.proxy.Proxy
 import me.arasple.mc.trchat.internal.service.Metrics
 import org.bukkit.entity.Player
+import org.bukkit.event.player.PlayerQuitEvent
+import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.adaptPlayer
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.onlinePlayers
@@ -25,35 +27,36 @@ class ChannelCustom(
     val name: String,
     override val format: String,
     val permission: String,
+    val target: Target,
+    val alwaysReceive: Boolean,
     val private: Boolean,
-    val isAlwaysReceive: Boolean,
-    val isForwardToDynmap: Boolean,
-    val isHint: Boolean,
-    val isSendToConsole: Boolean,
-    val target: Target
+    val forwardToDynmap: Boolean,
+    val hint: Boolean,
+    val sendToConsole: Boolean,
+    val autoQuit: Boolean
     ): IChannel {
 
     constructor(name: String, obj: MemorySection) : this(
         name,
         obj.getString("FORMAT"),
         obj.getString("PERMISSION"),
+        obj.getString("RANGE", "ALL").split(";").let {
+            Target(Range.valueOf(it[0].uppercase()), it.getOrNull(1)?.toIntOrNull())
+        },
         obj.getBoolean("PRIVATE", false),
         obj.getBoolean("ALWAYS-RECEIVE", false),
         obj.getBoolean("FORWARD-TO-DYNMAP", false),
         obj.getBoolean("HINT", true),
         obj.getBoolean("SEND-TO-CONSOLE", true),
-        obj.getString("RANGE", "ALL").split(";").let {
-            Target(Range.valueOf(it[0].uppercase()), it.getOrNull(1)?.toIntOrNull())
-        }
-
-    )
+        obj.getBoolean("AUTO-QUIT", false)
+        )
 
     override val chatType: ChatType
         get() = ChatType.CUSTOM
 
     override fun execute(sender: Player, vararg msg: String) {
-        val formatted = ChatFormats.getFormat(this, sender)!!.apply(sender, msg[0], forwardToDynmap = isForwardToDynmap, privateChat = private)
-        if (isAlwaysReceive) {
+        val formatted = ChatFormats.getFormat(this, sender)!!.apply(sender, msg[0], forwardToDynmap = forwardToDynmap, privateChat = private)
+        if (alwaysReceive) {
             if (Proxy.isEnabled) {
                 Proxy.sendProxyData(sender, "SendRawPerm", formatted.toRawMessage(), permission)
             } else {
@@ -85,7 +88,7 @@ class ChannelCustom(
                 }
             }
         }
-        if (isSendToConsole) {
+        if (sendToConsole) {
             formatted.sendTo(console())
         }
         Metrics.increase(0)
@@ -110,7 +113,7 @@ class ChannelCustom(
         fun join(player: Player, cc: ChannelCustom) {
             Users.removeCustomChannel(player)
             Users.setCustomChannel(player, cc)
-            if (cc.isHint) {
+            if (cc.hint) {
                 player.sendLang("Custom-Channel-Join", cc.name)
             }
         }
@@ -121,5 +124,15 @@ class ChannelCustom(
         }
 
         class Target(val range: Range, val distance: Int?)
+
+        @SubscribeEvent
+        private fun e(e: PlayerQuitEvent) {
+            val player = e.player
+            val channel = Users.getCustomChannel(player) ?: return
+
+            if (channel.autoQuit) {
+                Users.setCustomChannel(player, null)
+            }
+        }
     }
 }

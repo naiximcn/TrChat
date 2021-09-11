@@ -26,3 +26,5 @@ CUSTOM:
     FORWARD-TO-DYNMAP: false
     # If hint when join or quit
     HINT: true
+    # If auto quit when player quit game
+    AUTO-QUIT: false

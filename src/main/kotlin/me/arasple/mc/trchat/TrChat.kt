@@ -4,6 +4,8 @@ import me.arasple.mc.trchat.common.channel.ChatChannels
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.filter.ChatFilter
 import me.arasple.mc.trchat.common.function.ChatFunctions
+import me.arasple.mc.trchat.internal.data.Database
+import me.arasple.mc.trchat.internal.hook.HookPlugin
 import me.arasple.mc.trchat.internal.proxy.Proxy
 import me.arasple.mc.trchat.internal.service.Updater
 import org.bukkit.Bukkit
@@ -25,9 +27,7 @@ import java.net.URL
 @PlatformSide([Platform.BUKKIT])
 object TrChat : Plugin() {
 
-    val plugin by lazy {
-        BukkitPlugin.getInstance()
-    }
+    val plugin by lazy { BukkitPlugin.getInstance() }
 
     val motd = arrayOf(
         "",
@@ -59,7 +59,9 @@ object TrChat : Plugin() {
     }
 
     override fun onEnable() {
+        Database.database
         console().sendLang("Plugin-Enabled", pluginVersion)
+        HookPlugin.printInfo()
     }
 
     override fun onDisable() {

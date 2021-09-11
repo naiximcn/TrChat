@@ -1,9 +1,9 @@
 package me.arasple.mc.trchat.internal.data
 
-import me.arasple.mc.trchat.api.TrChatAPI.database
 import me.arasple.mc.trchat.common.channel.impl.ChannelCustom
 import me.arasple.mc.trchat.internal.data.Cooldowns.Cooldown
 import me.arasple.mc.trchat.internal.data.Cooldowns.CooldownType
+import me.arasple.mc.trchat.internal.data.Database.database
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.module.chat.TellrawJson
@@ -100,7 +100,7 @@ object Users {
 
     fun removeCustomChannel(user: Player) {
         val channel = getCustomChannel(user) ?: return
-        if (channel.isHint){
+        if (channel.hint){
             user.sendLang("Custom-Channel-Quit", channel.name)
         }
         setCustomChannel(user, null)
