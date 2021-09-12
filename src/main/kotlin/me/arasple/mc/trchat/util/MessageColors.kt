@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.util
 
-import org.bukkit.ChatColor
+import net.md_5.bungee.api.ChatColor
 import org.bukkit.entity.Player
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
@@ -13,7 +13,7 @@ import taboolib.module.chat.colored
 @PlatformSide([Platform.BUKKIT])
 object MessageColors {
 
-    private val COLOR_CODES = ChatColor.values().map { it.char }
+    private val COLOR_CODES = ChatColor.ALL_CODES.map { it }
 
     private const val COLOR_CHAR = ChatColor.COLOR_CHAR.toString()
     private const val COLOR_PERMISSION_NODE = "trchat.color."

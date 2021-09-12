@@ -10,12 +10,11 @@ import me.arasple.mc.trchat.internal.proxy.bukkit.Players
 import me.arasple.mc.trchat.internal.script.Condition
 import me.arasple.mc.trchat.util.MessageColors
 import me.arasple.mc.trchat.util.replacePattern
-import org.bukkit.ChatColor
+import net.md_5.bungee.api.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.common.util.VariableReader
 import taboolib.common.util.replaceWithOrder
-import taboolib.library.xseries.XMaterial
 import taboolib.module.chat.TellrawJson
 import taboolib.module.chat.colored
 import taboolib.module.nms.getI18nName
@@ -36,7 +35,9 @@ class MsgComponent : JsonComponent {
     constructor(text: String?, hover: List<String?>?, suggest: String?, command: String?, url: String?, copy: String?) : super(text, hover, suggest, command, url, copy)
 
     constructor(partSection: LinkedHashMap<*, *>) : super(partSection) {
-        defaultColor = ChatColor.getByChar(partSection["default-color"].toString())
+        defaultColor = partSection["default-color"].toString().let {
+            if (it.startsWith('#')) ChatColor.of(it) else ChatColor.getByChar(it[0])
+        }
     }
 
     fun toMsgTellraw(player: Player, msg: String, isPrivateChat: Boolean): TellrawJson {
