@@ -6,6 +6,7 @@ import me.arasple.mc.trchat.common.channel.impl.ChannelGlobal
 import me.arasple.mc.trchat.common.channel.impl.ChannelNormal
 import me.arasple.mc.trchat.internal.data.Cooldowns
 import me.arasple.mc.trchat.internal.data.Users
+import me.arasple.mc.trchat.util.checkMute
 import org.bukkit.event.player.AsyncPlayerChatEvent
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
@@ -15,7 +16,6 @@ import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.adaptPlayer
 import taboolib.common.util.Strings
 import taboolib.module.lang.sendLang
-import taboolib.platform.util.sendLang
 
 /**
  * @author Arasple, wlys
@@ -23,8 +23,6 @@ import taboolib.platform.util.sendLang
  */
 @PlatformSide([Platform.BUKKIT])
 object ListenerChatEvent {
-
-    var isGlobalMuting = false
 
     @SubscribeEvent(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onChat(e: AsyncPlayerChatEvent) {
@@ -34,16 +32,8 @@ object ListenerChatEvent {
             e.isCancelled = true
             return
         }
-        // Global mute
-        if (isGlobalMuting && !player.hasPermission("trchat.bypass.globalmute")) {
+        if (!player.checkMute()) {
             e.isCancelled = true
-            player.sendLang("General-Global-Muting")
-            return
-        }
-        // Mute
-        if (Users.isMuted(player)) {
-            e.isCancelled = true
-            player.sendLang("General-Muted")
             return
         }
         // Limit
@@ -68,6 +58,7 @@ object ListenerChatEvent {
         }
         // Normal
         e.isCancelled = true
+        ChannelNormal.targets[player.uniqueId] = e.recipients.map { adaptPlayer(it) }
         TrChatEvent(ChannelNormal, player, e.message).call()
     }
 
@@ -118,7 +109,7 @@ object ListenerChatEvent {
             }
         }
         if (message.contains("<.+?:.+?>".toRegex())) {
-            p.sendMessage("§7What's up, 你是故意找茬是吧")
+            p.sendMessage("§7Invalid message.")
             return false
         }
         return true

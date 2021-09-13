@@ -1,11 +1,13 @@
 package me.arasple.mc.trchat.internal.command
 
+import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.internal.data.Users
-import me.arasple.mc.trchat.internal.listener.ListenerChatEvent
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import taboolib.common.LifeCycle
-import taboolib.common.platform.*
+import taboolib.common.platform.Awake
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.command.command
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.common5.Coerce
@@ -66,8 +68,8 @@ object CommandMute {
         }
         command("muteall", listOf("globalmute"), "全员禁言", "trchat.mute") {
             execute<CommandSender> { sender, _, _ ->
-                ListenerChatEvent.isGlobalMuting = !ListenerChatEvent.isGlobalMuting
-                if (ListenerChatEvent.isGlobalMuting) {
+                TrChat.isGlobalMuting = !TrChat.isGlobalMuting
+                if (TrChat.isGlobalMuting) {
                     sender.sendLang("Mute-Muted-All")
                 } else {
                     sender.sendLang("Mute-Cancel-Muted-All")

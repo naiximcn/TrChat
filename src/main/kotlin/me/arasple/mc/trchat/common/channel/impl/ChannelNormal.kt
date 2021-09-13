@@ -7,8 +7,9 @@ import me.arasple.mc.trchat.common.chat.obj.ChatType
 import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.internal.service.Metrics
 import org.bukkit.entity.Player
+import taboolib.common.platform.ProxyPlayer
 import taboolib.common.platform.function.console
-import taboolib.common.platform.function.onlinePlayers
+import java.util.*
 
 /**
  * ChannelNormal
@@ -19,6 +20,8 @@ import taboolib.common.platform.function.onlinePlayers
  */
 object ChannelNormal : IChannel {
 
+    val targets = mutableMapOf<UUID, List<ProxyPlayer>>()
+
     override val chatType: ChatType
         get() = ChatType.NORMAL
 
@@ -27,7 +30,7 @@ object ChannelNormal : IChannel {
 
     override fun execute(sender: Player, vararg msg: String) {
         val formatted = ChatFormats.getFormat(this, sender)?.apply(sender, msg[0]) ?: return
-        onlinePlayers().filterNot { Users.getIgnoredList(it.cast()).contains(sender.name) }.forEach {
+        targets[sender.uniqueId]!!.forEach {
             formatted.sendTo(it)
         }
         formatted.sendTo(console())

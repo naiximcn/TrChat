@@ -1,12 +1,13 @@
 package me.arasple.mc.trchat.internal.command
 
 import me.arasple.mc.trchat.common.channel.ChannelPrivate
-import me.arasple.mc.trchat.internal.data.Users
-import me.arasple.mc.trchat.internal.listener.ListenerChatEvent
 import me.arasple.mc.trchat.internal.proxy.bukkit.Players
+import me.arasple.mc.trchat.util.checkMute
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
-import taboolib.common.platform.*
+import taboolib.common.platform.Awake
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.command.command
 import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
@@ -36,17 +37,11 @@ object CommandPrivateMessage {
                         }
                     }
                     execute<Player> { sender, context, argument ->
-                        if (ListenerChatEvent.isGlobalMuting && !sender.hasPermission("trchat.bypass.globalmute")) {
-                            sender.sendLang("General-Global-Muting")
-                            return@execute
+                        if (sender.checkMute()) {
+                            Players.getPlayerFullName(context.argument(-1)!!)?.let {
+                                ChannelPrivate.execute(sender, it, argument)
+                            } ?: sender.sendLang("Command-Player-Not-Exist")
                         }
-                        if (Users.isMuted(sender)) {
-                            sender.sendLang("General-Muted")
-                            return@execute
-                        }
-                        Players.getPlayerFullName(context.argument(-1)!!)?.let {
-                            ChannelPrivate.execute(sender, it, argument)
-                        } ?: sender.sendLang("Command-Player-Not-Exist")
                     }
                 }
             }

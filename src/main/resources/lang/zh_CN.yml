@@ -16,7 +16,7 @@
 
 Plugin-Loaded-Chat-Formats: '&8[&3Tr&bChat&8] &bCHAT &8| &3成功载入聊天格式... &8[{0} Ms]'
 Plugin-Loaded-Functions: '&8[&3Tr&bChat&8] &bCHAT &8| &3成功载入自定义聊天功能... &8[{0} Ms]'
-Plugin-Loaded-Channels: '&8[&3Tr&bChat&8] &bCHAT &8| &3成功载入 &7{0} &3个聊天频道... &8[{1} Ms]'
+Plugin-Loaded-Channels: '&8[&3Tr&bChat&8] &bCHAT &8| &3成功载入 &b{0} &3个聊天频道... &8[{1} Ms]'
 Plugin-Loaded-Filter-Local: '&8[&3Tr&bChat&8] &aFILTER &8| &3已载入本地敏感词库总计 &b{0} &3个.'
 Plugin-Loaded-Filter-Cloud: '&8[&3Tr&bChat&8] &aFILTER &8| &3成功从云端更新敏感词汇总计 &a{0} &3个. &8[{1} - {2}]'
 Plugin-Reloaded: '&8[&3Tr&bChat&8] &7监听到配置文件改动, 已自动载入相关配置等...'
@@ -182,20 +182,6 @@ Custom-Channel-Quit:
     sound: 'BLOCK_ANVIL_LAND'
     volume: 1
     pitch: 0
-
-Ignore-No-Player:
-  - type: actionbar
-    text: '&3&l请提供你要屏蔽的玩家'
-  - type: sound
-    sound: 'ENTITY_ITEM_BREAK'
-    volume: 1
-    pitch: 0
-Ignore-Add:
-  - type: actionbar
-    text: '&c&l你已屏蔽{0}的聊天'
-Ignore-Remove:
-  - type: actionbar
-    text: '&3&l你已取消屏蔽{0}的聊天'
 
 Mute-No-Player:
   - type: actionbar

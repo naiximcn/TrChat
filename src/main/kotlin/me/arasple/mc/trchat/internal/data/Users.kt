@@ -9,8 +9,6 @@ import org.bukkit.inventory.ItemStack
 import taboolib.module.chat.TellrawJson
 import taboolib.platform.util.sendLang
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * @author Arasple, wlys
@@ -49,21 +47,6 @@ object Users {
 
     fun setFilter(user: Player, value: Boolean) {
         database.pull(user).set("FILTER", value)
-    }
-
-    fun getIgnoredList(user: Player): List<String> {
-        if (!database.pull(user).contains("IGNORED")) {
-            database.pull(user).set("IGNORED", ArrayList<String>())
-        }
-        return database.pull(user).getStringList("IGNORED")
-    }
-
-    fun addIgnored(user: Player, ignored: String) {
-        database.pull(user).set("IGNORED", getIgnoredList(user) + ignored)
-    }
-
-    fun removeIgnored(user: Player, ignored: String) {
-        database.pull(user).set("IGNORED", getIgnoredList(user).toMutableList().remove(ignored))
     }
 
     fun getLastMessage(uuid: UUID): String {

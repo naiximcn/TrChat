@@ -1,6 +1,6 @@
 Plugin-Loaded-Chat-Formats: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded chat formats... &8[{0} Ms]'
 Plugin-Loaded-Functions: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded chat functions... &8[{0} Ms]'
-Plugin-Loaded-Channels: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded &7{0} &3chat channels... &8[{1} Ms]'
+Plugin-Loaded-Channels: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded &b{0} &3chat channels... &8[{1} Ms]'
 Plugin-Loaded-Filter-Local: '&8[&3Tr&bChat&8] &aFILTER &8| &3Loaded local filter words &b{0} &3.'
 Plugin-Loaded-Filter-Cloud: '&8[&3Tr&bChat&8] &aFILTER &8| &3Loaded cloud filter words &a{0} &3. &8[{1} - {2}]'
 Plugin-Reloaded: '&8[&3Tr&bChat&8] &7Settings changed, reloaded...'
@@ -163,20 +163,6 @@ Custom-Channel-Quit:
     sound: 'BLOCK_ANVIL_LAND'
     volume: 1
     pitch: 0
-
-Ignore-No-Player:
-  - type: actionbar
-    text: '&3&lPlayer name required'
-  - type: sound
-    sound: 'ENTITY_ITEM_BREAK'
-    volume: 1
-    pitch: 0
-Ignore-Add:
-  - type: actionbar
-    text: '&c&lYou have ignored {0}'
-Ignore-Remove:
-  - type: actionbar
-    text: '&3&lYou are no longer ignored {0}'
 
 Mute-No-Player:
   - type: actionbar

@@ -5,6 +5,7 @@ import com.velocitypowered.api.proxy.ConsoleCommandSource
 import com.velocitypowered.api.proxy.Player
 import com.velocitypowered.api.proxy.ProxyServer
 import me.arasple.mc.trchat.TrChatVelocity
+import net.kyori.adventure.audience.MessageType
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
@@ -15,6 +16,7 @@ import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.platform.function.server
 import taboolib.module.lang.sendLang
 import java.io.IOException
+import java.util.*
 
 /**
  * ListenerVelocityTransfer
@@ -46,9 +48,18 @@ object ListenerVelocityTransfer {
                 }
             }
             if (type == "BroadcastRaw") {
+                val uuid = data.readUTF()
                 val raw = data.readUTF()
                 val message = GsonComponentSerializer.gson().deserialize(raw)
-                server<ProxyServer>().sendMessage(message)
+                server<ProxyServer>().allServers.forEach { server ->
+                    server.playersConnected.forEach { player ->
+                        getProxyPlayer(UUID.fromString(uuid))?.cast<Player>()?.let {
+                            player.sendMessage(it, message, MessageType.CHAT)
+                        } ?: kotlin.run {
+                            player.sendMessage(message, MessageType.CHAT)
+                        }
+                    }
+                }
                 console().cast<ConsoleCommandSource>().sendMessage(message)
             }
             if (type == "SendRawPerm") {

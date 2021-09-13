@@ -7,7 +7,6 @@ import me.arasple.mc.trchat.common.function.ChatFunctions
 import me.arasple.mc.trchat.internal.data.Database
 import me.arasple.mc.trchat.internal.hook.HookPlugin
 import me.arasple.mc.trchat.internal.proxy.Proxy
-import me.arasple.mc.trchat.internal.service.Updater
 import org.bukkit.Bukkit
 import taboolib.common.env.Repository.downloadToFile
 import taboolib.common.platform.Platform
@@ -38,6 +37,8 @@ object TrChat : Plugin() {
         "§3   | | |   | §b|____ | | | || (_| || |_ ",
         "§3    |_| |_|    §b\\_____||_| |_| \\__,_| \\__|",
     )
+
+    var isGlobalMuting = false
 
     override fun onLoad() {
         motd.forEach { l -> console().sendMessage(l) }

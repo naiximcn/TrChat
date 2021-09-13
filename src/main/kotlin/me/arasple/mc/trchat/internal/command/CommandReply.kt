@@ -1,9 +1,8 @@
 package me.arasple.mc.trchat.internal.command
 
 import me.arasple.mc.trchat.common.channel.ChannelPrivate.execute
-import me.arasple.mc.trchat.internal.data.Users
-import me.arasple.mc.trchat.internal.listener.ListenerChatEvent
 import me.arasple.mc.trchat.internal.proxy.bukkit.Players
+import me.arasple.mc.trchat.util.checkMute
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -31,18 +30,12 @@ object CommandReply {
         command("reply", listOf("r"), "回复私聊", permission = "trchat.private") {
             dynamic("message") {
                 execute<Player> { sender, _, argument ->
-                    if (ListenerChatEvent.isGlobalMuting && !sender.hasPermission("trchat.bypass.globalmute")) {
-                        sender.sendLang("General-Global-Muting")
-                        return@execute
-                    }
-                    if (Users.isMuted(sender)) {
-                        sender.sendLang("General-Muted")
-                        return@execute
-                    }
-                    if (lastMessageFrom.containsKey(sender.uniqueId)) {
-                        Players.getPlayerFullName(lastMessageFrom[sender.uniqueId]!!)?.let {
-                            execute(sender, it, argument)
-                        } ?: sender.sendLang("Command-Player-Not-Exist")
+                    if (sender.checkMute()) {
+                        if (lastMessageFrom.containsKey(sender.uniqueId)) {
+                            Players.getPlayerFullName(lastMessageFrom[sender.uniqueId]!!)?.let {
+                                execute(sender, it, argument)
+                            } ?: sender.sendLang("Command-Player-Not-Exist")
+                        }
                     }
                 }
             }

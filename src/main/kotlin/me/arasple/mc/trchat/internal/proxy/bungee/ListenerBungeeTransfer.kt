@@ -4,9 +4,11 @@ import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.event.PluginMessageEvent
 import net.md_5.bungee.chat.ComponentSerializer
+import net.md_5.bungee.command.ConsoleCommandSender
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.console
 import taboolib.common.platform.function.getProxyPlayer
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.platform.function.server
@@ -14,6 +16,7 @@ import taboolib.module.lang.sendLang
 import java.io.ByteArrayInputStream
 import java.io.DataInputStream
 import java.io.IOException
+import java.util.*
 
 /**
  * ListenerBungeeTransfer
@@ -45,8 +48,15 @@ object ListenerBungeeTransfer {
                     }
                 }
                 if (type == "BroadcastRaw") {
+                    val uuid = data.readUTF()
                     val raw = data.readUTF()
-                    server<ProxyServer>().broadcast(*ComponentSerializer.parse(raw))
+                    val message = ComponentSerializer.parse(raw)
+                    server<ProxyServer>().servers.forEach { (_, v) ->
+                        v.players.forEach {
+                            it.sendMessage(UUID.fromString(uuid), *message)
+                        }
+                    }
+                    console().cast<ConsoleCommandSender>().sendMessage(*message)
                 }
                 if (type == "SendRawPerm") {
                     val raw = data.readUTF()
