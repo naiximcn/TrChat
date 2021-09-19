@@ -2,7 +2,7 @@ package me.arasple.mc.trchat.internal.listener
 
 import com.mojang.brigadier.suggestion.Suggestions
 import me.arasple.mc.trchat.api.TrChatFiles
-import me.arasple.mc.trchat.api.nms.PacketUtils
+import me.arasple.mc.trchat.api.nms.NMS
 import me.arasple.mc.trchat.common.filter.ChatFilter.filter
 import me.arasple.mc.trchat.internal.data.Users.isFilterEnabled
 import net.md_5.bungee.api.chat.BaseComponent
@@ -40,17 +40,17 @@ object ListenerPackets {
                 }
                 "PacketPlayOutWindowItems" -> {
                     if (majorLegacy >= 11700) {
-                        PacketUtils.INSTANCE.filterItemList(e.packet.read<Any>("items"))
+                        NMS.INSTANCE.filterItemList(e.packet.read<Any>("items"))
                     } else {
-                        PacketUtils.INSTANCE.filterItemList(e.packet.read<Any>("b"))
+                        NMS.INSTANCE.filterItemList(e.packet.read<Any>("b"))
                     }
                     return
                 }
                 "PacketPlayOutSetSlot" -> {
                     if (majorLegacy >= 11700) {
-                        PacketUtils.INSTANCE.filterItem(e.packet.read<Any>("itemStack"))
+                        NMS.INSTANCE.filterItem(e.packet.read<Any>("itemStack"))
                     } else {
-                        PacketUtils.INSTANCE.filterItem(e.packet.read<Any>("c"))
+                        NMS.INSTANCE.filterItem(e.packet.read<Any>("c"))
                     }
                     return
                 }

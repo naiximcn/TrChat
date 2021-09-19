@@ -3,12 +3,8 @@ package me.arasple.mc.trchat.common.channel
 import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.common.channel.impl.ChannelPrivateReceive
 import me.arasple.mc.trchat.common.channel.impl.ChannelPrivateSend
-import me.arasple.mc.trchat.internal.service.Metrics
-import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.ChatLogs
-import me.arasple.mc.trchat.common.chat.obj.ChatType
 import me.arasple.mc.trchat.internal.command.CommandReply
-import me.arasple.mc.trchat.internal.proxy.Proxy
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
@@ -16,9 +12,7 @@ import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.command.command
-import taboolib.common.platform.function.adaptPlayer
 import taboolib.common.platform.function.console
-import taboolib.common.platform.function.getProxyPlayer
 import taboolib.module.lang.asLangText
 import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
@@ -60,7 +54,6 @@ object ChannelPrivate {
         console().sendLang("Private-Message-Spy-Format", from.name, to, message)
         ChatLogs.logPrivate(from.name, to, message)
         CommandReply.lastMessageFrom[from.uniqueId] = to
-        Metrics.increase(0)
     }
 
     fun switchSpy(player: Player): Boolean {

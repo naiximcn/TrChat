@@ -10,7 +10,6 @@ import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.function.adaptCommandSender
-import taboolib.common.platform.function.adaptPlayer
 import taboolib.common.platform.function.console
 import taboolib.common5.FileWatcher
 import taboolib.module.configuration.Config
@@ -23,7 +22,7 @@ import taboolib.module.configuration.SecuredFile
 @PlatformSide([Platform.BUKKIT])
 object TrChatFiles {
 
-    @Config("settings.yml", migrate = true)
+    @Config("settings.yml", migrate = true, autoReload = true)
     lateinit var settings: SecuredFile
         private set
 
@@ -64,6 +63,7 @@ object TrChatFiles {
     }
 
     fun reloadAll(notify: CommandSender) {
+        settings.reload()
         formats.reload()
         ChatFormats.loadFormats(adaptCommandSender(notify))
         filter.reload()

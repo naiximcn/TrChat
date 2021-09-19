@@ -5,7 +5,6 @@ import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.obj.ChatType
 import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.internal.proxy.Proxy
-import me.arasple.mc.trchat.internal.service.Metrics
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerQuitEvent
 import taboolib.common.platform.event.SubscribeEvent
@@ -91,12 +90,18 @@ class ChannelCustom(
         if (sendToConsole) {
             formatted.sendTo(console())
         }
-        Metrics.increase(0)
     }
 
     override fun toString(): String {
         return name
     }
+
+    enum class Range {
+
+        ALL, SINGLE_WORLD, DISTANCE, SELF
+    }
+
+    class Target(val range: Range, val distance: Int?)
 
     companion object {
 
@@ -117,13 +122,6 @@ class ChannelCustom(
                 player.sendLang("Custom-Channel-Join", cc.name)
             }
         }
-
-        enum class Range {
-
-            ALL, SINGLE_WORLD, DISTANCE, SELF
-        }
-
-        class Target(val range: Range, val distance: Int?)
 
         @SubscribeEvent
         private fun e(e: PlayerQuitEvent) {

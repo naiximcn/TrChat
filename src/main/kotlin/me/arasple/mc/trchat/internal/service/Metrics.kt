@@ -7,7 +7,6 @@ import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.function.pluginVersion
 import taboolib.module.metrics.Metrics
 import taboolib.module.metrics.charts.SingleLineChart
-import java.text.DecimalFormat
 
 /**
  * @author Arasple
@@ -15,7 +14,9 @@ import java.text.DecimalFormat
 @PlatformSide([Platform.BUKKIT])
 object Metrics {
 
-    private val doubleFormat = DecimalFormat("#.#")
+    lateinit var metrics: Metrics
+        private set
+
     private val counts = intArrayOf(0, 0)
 
     @JvmStatic
@@ -25,20 +26,21 @@ object Metrics {
         }
     }
 
-    @Awake(LifeCycle.ENABLE)
+    @Awake(LifeCycle.ACTIVE)
     fun init() {
-        Metrics(5802, pluginVersion, Platform.BUKKIT).apply {
+        metrics = Metrics(5802, pluginVersion, Platform.BUKKIT)
+        metrics.apply {
             // 聊天次数统计
             addCustomChart(SingleLineChart("chat_counts") {
                 val i = counts[0]
                 counts[0] = 0
-                return@SingleLineChart i
+                i
             })
             // 敏感词过滤器启用统计
             addCustomChart(SingleLineChart("filter_counts") {
                 val i = counts[1]
                 counts[1] = 0
-                return@SingleLineChart i
+                i
             })
         }
     }

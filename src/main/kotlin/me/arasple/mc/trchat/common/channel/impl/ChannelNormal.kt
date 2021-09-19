@@ -5,7 +5,6 @@ import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.ChatLogs
 import me.arasple.mc.trchat.common.chat.obj.ChatType
 import me.arasple.mc.trchat.internal.data.Users
-import me.arasple.mc.trchat.internal.service.Metrics
 import org.bukkit.entity.Player
 import taboolib.common.platform.ProxyPlayer
 import taboolib.common.platform.function.console
@@ -36,6 +35,5 @@ object ChannelNormal : IChannel {
         formatted.sendTo(console())
         ChatLogs.log(sender, msg[0])
         Users.putFormattedMessage(sender, formatted.toRawMessage())
-        Metrics.increase(0)
     }
 }

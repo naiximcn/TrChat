@@ -4,6 +4,7 @@ import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.common.channel.impl.*
 import me.arasple.mc.trchat.internal.data.Users
+import me.arasple.mc.trchat.internal.service.Metrics
 import me.arasple.mc.trchat.util.notify
 import org.bukkit.event.player.PlayerJoinEvent
 import taboolib.common.platform.Platform
@@ -48,24 +49,30 @@ object ChatChannels {
         notify(notify, "Plugin-Loaded-Channels", channels.size, System.currentTimeMillis() - start)
     }
 
-    @SubscribeEvent(EventPriority.HIGHEST, ignoreCancelled = true)
-    private fun callChannel(e: TrChatEvent) {
-        if (!e.isCancelled) {
-            mirrorNow("Common:Channel:${e.channel.format}") {
-                e.channel.execute(e.sender, *e.message)
+    internal object ChannelListener {
+
+        @SubscribeEvent(EventPriority.HIGHEST, ignoreCancelled = true)
+        fun callChannel(e: TrChatEvent) {
+            if (!e.isCancelled) {
+                mirrorNow("Common:Channel:${e.channel.format}") {
+                    e.channel.execute(e.sender, *e.message)
+                }
+                if (e.channel != ChannelPrivateSend) {
+                    Metrics.increase(0)
+                }
             }
         }
-    }
 
-    @SubscribeEvent
-    private fun e(e: PlayerJoinEvent) {
-        val player = e.player
-        if (default != null
-            && Users.getCustomChannel(player) == null
-            && !player.hasPermission("trchat.bypass.defaultchannel")
-            && player.hasPermission(default!!.permission)
-        ) {
-            ChannelCustom.join(player, default!!)
+        @SubscribeEvent
+        fun autoJoinChannel(e: PlayerJoinEvent) {
+            val player = e.player
+            if (default != null
+                && Users.getCustomChannel(player) == null
+                && !player.hasPermission("trchat.bypass.defaultchannel")
+                && player.hasPermission(default!!.permission)
+            ) {
+                ChannelCustom.join(player, default!!)
+            }
         }
     }
 }

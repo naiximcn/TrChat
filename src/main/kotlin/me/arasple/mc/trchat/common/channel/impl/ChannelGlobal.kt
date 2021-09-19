@@ -4,7 +4,6 @@ import me.arasple.mc.trchat.common.channel.IChannel
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.obj.ChatType
 import me.arasple.mc.trchat.internal.proxy.Proxy
-import me.arasple.mc.trchat.internal.service.Metrics
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.console
 import taboolib.platform.util.sendLang
@@ -30,6 +29,5 @@ object ChannelGlobal : IChannel {
         val raw = format.toRawMessage()
         Proxy.sendProxyData(sender, "BroadcastRaw", sender.uniqueId.toString(), raw)
         format.sendTo(console())
-        Metrics.increase(0)
     }
 }
