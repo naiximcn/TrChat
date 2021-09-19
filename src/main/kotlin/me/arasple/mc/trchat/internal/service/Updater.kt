@@ -88,8 +88,8 @@ object Updater {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     fun onJoin(e: PlayerJoinEvent) {
         val player = e.player
-        if (player.hasPermission("trmenu.admin") && latest_Version > current_version && !notified.contains(player.uniqueId)) {
-            player.sendLang("Plugin-Updater-Old", latest_Version)
+        if (player.hasPermission("trmenu.admin") && latest_Version - current_version >= 0.2 && !notified.contains(player.uniqueId)) {
+            player.sendLang("Plugin-Updater-Too-Old")
             notified.add(player.uniqueId)
         }
     }

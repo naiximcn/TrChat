@@ -5,10 +5,13 @@ import me.arasple.mc.trchat.api.TrChatFiles.filter
 import me.arasple.mc.trchat.common.filter.processer.Filter
 import me.arasple.mc.trchat.common.filter.processer.FilteredObject
 import me.arasple.mc.trchat.util.notify
-import taboolib.common.LifeCycle
 import taboolib.common.env.DependencyDownloader.readFully
-import taboolib.common.platform.*
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
+import taboolib.common.platform.ProxyCommandSender
+import taboolib.common.platform.Schedule
 import taboolib.common.platform.function.submit
+import taboolib.common5.mirrorNow
 import java.io.BufferedInputStream
 import java.net.URL
 import java.nio.charset.StandardCharsets
@@ -21,10 +24,7 @@ import java.nio.charset.StandardCharsets
 object ChatFilter {
 
     private var CHATFILTER_CLOUD_LAST_UPDATE: String? = null
-    private val CHATFILTER_CLOUD_URL = arrayOf(
-        "https://arasple.oss-cn-beijing.aliyuncs.com/plugins/TrChat/database.json",
-        "https://raw.githubusercontent.com/Arasple/TrChat-Cloud/master/database.json"
-    )
+    private val CHATFILTER_CLOUD_URL = mutableListOf<String>()
 
     @Schedule(delay = 20 * 120, period = 30 * 60 * 20)
     fun asyncRefreshCloud() {
@@ -44,7 +44,9 @@ object ChatFilter {
         Filter.setReplacement(filter.getString("REPLACEMENT")[0])
 
         // 更新云端词库
-        if (updateCloud && filter.getBoolean("CLOUD-THESAURUS.ENABLE", true)) {
+        if (updateCloud && filter.getBoolean("CLOUD-THESAURUS.ENABLE", false)) {
+            CHATFILTER_CLOUD_URL.clear()
+            CHATFILTER_CLOUD_URL += filter.getStringList("CLOUD-THESAURUS.URL")
             loadCloudFilter(0, *notify)
         } else {
             notify(notify, "Plugin-Loaded-Filter-Local", filter.getStringList("LOCAL").size)
@@ -60,41 +62,47 @@ object ChatFilter {
     private fun loadCloudFilter(url: Int, vararg notify: ProxyCommandSender) {
         submit(async = true) {
             val whitelist = filter.getStringList("CLOUD-THESAURUS.WHITELIST")
-            val collected: MutableList<String> = ArrayList()
-            val lastUpdateDate: String
+            val collected = mutableListOf<String>()
+            lateinit var lastUpdateDate: String
 
-            try {
-                val inputStream = URL(CHATFILTER_CLOUD_URL[url]).openStream()
-                val bufferedInputStream = BufferedInputStream(inputStream)
-                val database = JsonParser().parse(readFully(bufferedInputStream, StandardCharsets.UTF_8)).asJsonObject
-                if (!database.has("lastUpdateDate") || !database.has("words")) {
-                    throw NullPointerException("Wrong database json object")
-                }
+            kotlin.runCatching {
+                URL(CHATFILTER_CLOUD_URL[url]).openStream().use { inputStream ->
+                    BufferedInputStream(inputStream).use { bufferedInputStream ->
+                        val database = JsonParser().parse(readFully(bufferedInputStream, StandardCharsets.UTF_8)).asJsonObject
+                        if (!database.has("lastUpdateDate") || !database.has("words")) {
+                            throw NullPointerException("Wrong database json object")
+                        }
 
-                lastUpdateDate = database.get("lastUpdateDate").asString
-                CHATFILTER_CLOUD_LAST_UPDATE = when (CHATFILTER_CLOUD_LAST_UPDATE) {
-                    null -> lastUpdateDate
-                    lastUpdateDate -> return@submit
-                    else -> lastUpdateDate
-                }
-                database.get("words").asJsonArray.iterator().forEachRemaining { i ->
-                    val word: String = i.asString
-                    if (whitelist.stream().noneMatch { w -> w.equals(word, ignoreCase = true) }) {
-                        collected.add(word)
+                        lastUpdateDate = database.get("lastUpdateDate").asString
+                        CHATFILTER_CLOUD_LAST_UPDATE = when (CHATFILTER_CLOUD_LAST_UPDATE) {
+                            null -> lastUpdateDate
+                            lastUpdateDate -> return@submit
+                            else -> lastUpdateDate
+                        }
+                        database.get("words").asJsonArray.iterator().forEachRemaining { i ->
+                            val word = i.asString
+                            if (whitelist.none { w -> w.equals(word, ignoreCase = true) }) {
+                                collected.add(word)
+                            }
+                        }
                     }
                 }
-            } catch (e: Throwable) {
-                if (url == 0) {
+            }.run {
+                if ((url + 1) <= CHATFILTER_CLOUD_URL.size) {
+                    Filter.addSensitiveWord(collected)
                     loadCloudFilter(url + 1, *notify)
                 } else {
-                    notify(notify, "Plugin-Loaded-Filter-Local", filter.getStringList("LOCAL").size)
-                    notify(notify, "Plugin-Failed-Load-Filter-Cloud")
+                    if (collected.isNotEmpty()) {
+                        notify(notify, "Plugin-Loaded-Filter-Local", filter.getStringList("LOCAL").size)
+                        notify(notify, "Plugin-Loaded-Filter-Cloud", collected.size, url, lastUpdateDate)
+                    } else {
+                        notify(notify, "Plugin-Loaded-Filter-Local", filter.getStringList("LOCAL").size)
+                        notify(notify, "Plugin-Failed-Load-Filter-Cloud")
+                    }
+
                 }
                 return@submit
             }
-            notify(notify, "Plugin-Loaded-Filter-Local", filter.getStringList("LOCAL").size)
-            notify(notify, "Plugin-Loaded-Filter-Cloud", collected.size, url, lastUpdateDate)
-            Filter.addSensitiveWord(collected)
         }
     }
 
@@ -106,6 +114,8 @@ object ChatFilter {
      * @return 过滤后的字符串
      */
     fun filter(string: String, execute: Boolean = true): FilteredObject {
-        return Filter.doFilter(string, execute)
+        return mirrorNow("Common:Filter:doFilter") {
+            Filter.doFilter(string, execute)
+        }
     }
 }

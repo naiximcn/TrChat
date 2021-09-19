@@ -1,10 +1,10 @@
 package me.arasple.mc.trchat.common.chat.format.objects
 
 import me.arasple.mc.trchat.internal.script.Condition
+import me.arasple.mc.trchat.util.coloredAll
 import org.bukkit.entity.Player
 import taboolib.common.util.replaceWithOrder
 import taboolib.module.chat.TellrawJson
-import taboolib.module.chat.colored
 import taboolib.platform.compat.replacePlaceholder
 
 /**
@@ -22,7 +22,7 @@ open class JsonComponent {
     var copy: String? = null
 
     constructor(text: String?, hover: List<String?>?, suggest: String?, command: String?, url: String?, copy: String?) {
-        this.text = text?.colored()
+        this.text = text?.coloredAll()
         this.hover = convertHoverText(hover)
         this.suggest = suggest
         this.command = command
@@ -74,9 +74,9 @@ open class JsonComponent {
                 text = text!!.replace("%toplayer_name%", vars[1])
             }
         }
-        tellraw.append(text?.replaceWithOrder(*vars)?.replacePlaceholder(player)?.colored() ?: "&8[&fNull&8]".colored())
+        tellraw.append(text?.replaceWithOrder(*vars)?.replacePlaceholder(player)?.coloredAll() ?: "§8[§fNull§8]")
         if (hover != null) {
-            tellraw.hoverText(hover!!.replaceWithOrder(*vars).replacePlaceholder(player).colored())
+            tellraw.hoverText(hover!!.replaceWithOrder(*vars).replacePlaceholder(player).coloredAll())
         }
         if (suggest != null) {
             tellraw.suggestCommand(suggest!!.replaceWithOrder(*vars).replacePlaceholder(player))

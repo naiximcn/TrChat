@@ -4,7 +4,6 @@ import net.md_5.bungee.api.ChatColor
 import org.bukkit.entity.Player
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
-import taboolib.module.chat.colored
 
 /**
  * @author Arasple
@@ -30,7 +29,7 @@ object MessageColors {
         }
 
         if (player.hasPermission("$COLOR_PERMISSION_NODE*")) {
-            string = string.colored()
+            string = string.coloredAll()
         } else {
             for (code in COLOR_CODES) {
                 if (player.hasPermission(COLOR_PERMISSION_NODE + code)) {
@@ -42,14 +41,14 @@ object MessageColors {
         return string
     }
 
-    fun catchDefaultMessageColor(player: Player, defaultColor: ChatColor?): ChatColor? {
+    fun catchDefaultMessageColor(player: Player, defaultColor: String?): String? {
         if (player.hasPermission("$FORCE_CHAT_COLOR_PERMISSION_NODE*")) {
             return defaultColor
         }
 
         for (code in COLOR_CODES) {
             if (player.hasPermission(FORCE_CHAT_COLOR_PERMISSION_NODE + code)) {
-                return ChatColor.getByChar(code)
+                return ChatColor.getByChar(code).toString()
             }
         }
 

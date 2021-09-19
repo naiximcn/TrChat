@@ -1,6 +1,6 @@
 plugins {
     java
-    id("io.izzel.taboolib") version "1.26"
+    id("io.izzel.taboolib") version "1.27"
     id("org.jetbrains.kotlin.jvm") version "1.5.30"
 }
 

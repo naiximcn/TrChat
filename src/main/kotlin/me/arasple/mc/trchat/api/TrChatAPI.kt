@@ -1,25 +1,15 @@
 package me.arasple.mc.trchat.api
 
-import me.arasple.mc.trchat.internal.database.DatabaseLocal
 import me.arasple.mc.trchat.common.filter.ChatFilter.filter
-import me.arasple.mc.trchat.common.filter.processer.Filter
 import me.arasple.mc.trchat.common.filter.processer.FilteredObject
 import me.arasple.mc.trchat.internal.script.EvalResult
 import org.bukkit.entity.Player
-import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
-import taboolib.common.LifeCycle
-import taboolib.common.platform.Awake
-import taboolib.common.platform.Schedule
-import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.adaptPlayer
-import taboolib.common.platform.function.onlinePlayers
-import taboolib.common.platform.function.submit
 import taboolib.common5.mirrorNow
 import taboolib.library.kether.LocalizedException
 import taboolib.module.kether.KetherShell
-import taboolib.module.kether.printKetherErrorMessage
 import taboolib.module.nms.nmsClass
 import taboolib.module.nms.obcClass
 import taboolib.platform.util.isAir
@@ -45,7 +35,7 @@ object TrChatAPI {
      */
     @JvmStatic
     fun filterString(player: Player, string: String, execute: Boolean = true): FilteredObject {
-        return if (execute) Filter.doFilter(string, !player.hasPermission("trchat.bypass.filter")) else FilteredObject(string, 0)
+        return if (execute) filter(string, !player.hasPermission("trchat.bypass.filter")) else FilteredObject(string, 0)
     }
 
     @JvmStatic

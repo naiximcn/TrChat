@@ -3,6 +3,7 @@ package me.arasple.mc.trchat.util
 import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.internal.data.Users
 import org.bukkit.entity.Player
+import taboolib.module.chat.colored
 import taboolib.platform.util.sendLang
 
 /**
@@ -25,3 +26,9 @@ fun Player.checkMute(): Boolean {
     }
     return true
 }
+
+internal fun String.filterUUID(): String =
+    replace("cmd=[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}".toRegex(), "")
+        .replace("chat=[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}".toRegex(), "")
+
+fun String.coloredAll(): String = HexUtils.colorify(colored())
