@@ -22,7 +22,7 @@ open class JsonComponent {
     var copy: String? = null
 
     constructor(text: String?, hover: List<String?>?, suggest: String?, command: String?, url: String?, copy: String?) {
-        this.text = text?.coloredAll()
+        this.text = text
         this.hover = convertHoverText(hover)
         this.suggest = suggest
         this.command = command

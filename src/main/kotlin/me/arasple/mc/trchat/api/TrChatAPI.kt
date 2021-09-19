@@ -49,9 +49,7 @@ object TrChatAPI {
             }
             modifyLore {
                 if (isNotEmpty()) {
-                    for (i in indices) {
-                        set(i, filter(get(i)).filtered)
-                    }
+                    replaceAll { filter(it).filtered }
                 }
             }
         }

@@ -3,12 +3,12 @@ package me.arasple.mc.trchat.internal.listener
 import me.arasple.mc.trchat.api.TrChatFiles.function
 import org.bukkit.Bukkit
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
-import taboolib.common.platform.*
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.adaptPlayer
 import taboolib.module.lang.sendLang
-import java.util.*
 
 /**
  * @author Arasple, wlys
@@ -22,7 +22,7 @@ object ListenerCommand {
         val player = e.player
         val command = e.message.removePrefix("/")
         val mCmd = Bukkit.getCommandAliases().entries.firstOrNull { (_, value) ->
-            value.any { m -> m.equals(command.split(" ").toTypedArray()[0], ignoreCase = true) }
+            value.any { it.equals(command.split(" ")[0], ignoreCase = true) }
         }
 
         if (function.getBoolean("GENERAL.COMMAND-CONTROLLER.ENABLE", true) && command.isNotEmpty()

@@ -77,7 +77,7 @@ public final class HexUtils {
         String parsed = message;
         parsed = parseRainbow(parsed);
         parsed = parseGradients(parsed);
-//        parsed = parseHex(parsed);
+        parsed = parseHex(parsed);
 //        parsed = parseLegacy(parsed);
         return parsed;
     }

@@ -86,7 +86,7 @@ class MsgComponent : JsonComponent {
                     }
                     tellraw.append(Users.itemCache.computeIfAbsent(item!!) {
                         TellrawJson()
-                            .append(itemFormat.replaceWithOrder(item.getName(player), item.amount.toString() + (defaultColor?.coloredAll() ?: "")))
+                            .append(itemFormat.replaceWithOrder(item.getName(player), item.amount.toString()))
                             .hoverItem(item.run {
                                 if (function.getBoolean("GENERAL.ITEM-SHOW.COMPATIBLE", false)) {
                                     buildItem(item)
@@ -100,7 +100,7 @@ class MsgComponent : JsonComponent {
                 // At
                 if (atEnabled && args[0] == "AT" && !isPrivateChat) {
                     val atPlayer = args[1]
-                    tellraw.append(atFormat.replaceWithOrder(atPlayer) + (defaultColor?.coloredAll() ?: ""))
+                    tellraw.append(atFormat.replaceWithOrder(atPlayer))
                     if (function.getBoolean("GENERAL.MENTION.NOTIFY")) {
                         Proxy.sendProxyLang(player, atPlayer, "Mentions-Notify", player.name)
                     }
@@ -122,11 +122,11 @@ class MsgComponent : JsonComponent {
         return tellraw
     }
 
-    private fun toTellrawPart(player: Player, text: String?, message: String?): TellrawJson {
+    private fun toTellrawPart(player: Player, text: String?, message: String): TellrawJson {
         val tellraw = TellrawJson()
-        tellraw.append((text ?: "§8[§fNull§8]").replace("\$message", message!!))
+        tellraw.append((text ?: "§8[§fNull§8]").replace("\$message", message))
         if (hover != null) {
-            tellraw.hoverText(hover!!.replacePlaceholder(player).replace("\$message", message))
+            tellraw.hoverText(hover!!.replacePlaceholder(player).coloredAll().replace("\$message", message))
         }
         if (suggest != null) {
             tellraw.suggestCommand(suggest!!.replacePlaceholder(player).replace("\$message", message))
