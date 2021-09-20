@@ -24,7 +24,7 @@ import java.util.*
  * @date 2019/11/29 21:04
  */
 @PlatformSide([Platform.BUKKIT])
-@SkipTo(LifeCycle.INIT)
+@SkipTo(LifeCycle.LOAD)
 object Updater {
 
     private var api_url = "https://api.github.com/repos/FlickerProjects/$pluginId/releases/latest"
@@ -33,7 +33,7 @@ object Updater {
     private var current_version = pluginVersion.split("-")[0].toDoubleOrNull() ?: -1.0
     private var latest_Version = -1.0
 
-    @Awake(LifeCycle.INIT)
+    @Awake(LifeCycle.LOAD)
     fun init() {
         if (current_version < 0) {
             console().sendLang("Error-Version")
