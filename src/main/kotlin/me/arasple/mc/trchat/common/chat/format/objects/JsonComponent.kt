@@ -75,21 +75,11 @@ open class JsonComponent {
             }
         }
         tellraw.append(text?.replaceWithOrder(*vars)?.replacePlaceholder(player)?.coloredAll() ?: "§8[§fNull§8]")
-        if (hover != null) {
-            tellraw.hoverText(hover!!.replaceWithOrder(*vars).replacePlaceholder(player).coloredAll())
-        }
-        if (suggest != null) {
-            tellraw.suggestCommand(suggest!!.replaceWithOrder(*vars).replacePlaceholder(player))
-        }
-        if (command != null) {
-            tellraw.runCommand(command!!.replaceWithOrder(*vars).replacePlaceholder(player))
-        }
-        if (url != null) {
-            tellraw.openURL(url!!.replaceWithOrder(*vars).replacePlaceholder(player))
-        }
-        if (copy != null) {
-            tellraw.copyToClipboard(copy!!.replaceWithOrder(*vars).replacePlaceholder(player))
-        }
+        hover?.let { tellraw.hoverText(it.replaceWithOrder(*vars).replacePlaceholder(player).coloredAll()) }
+        suggest?.let { tellraw.suggestCommand(it.replaceWithOrder(*vars).replacePlaceholder(player)) }
+        command?.let { tellraw.runCommand(it.replaceWithOrder(*vars).replacePlaceholder(player)) }
+        url?.let { tellraw.openURL(it.replaceWithOrder(*vars).replacePlaceholder(player)) }
+        copy?.let { tellraw.copyToClipboard(it.replaceWithOrder(*vars).replacePlaceholder(player)) }
         return tellraw
     }
 

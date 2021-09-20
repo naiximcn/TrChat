@@ -1,7 +1,6 @@
 package me.arasple.mc.trchat.common.chat
 
 import me.arasple.mc.trchat.api.TrChatFiles.settings
-import me.arasple.mc.trchat.util.coloredAll
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.io.newFile
@@ -40,7 +39,7 @@ object ChatLogs {
 
     fun log(player: Player, originalMessage: String) {
         waveList.add(
-            settings.getString("GENERAL.LOG-NORMAL", "[{0}] {1}: {2}").coloredAll().replaceWithOrder(
+            settings.getString("GENERAL.LOG-NORMAL", "[{0}] {1}: {2}").replaceWithOrder(
                 dateFormat1.format(System.currentTimeMillis()),
                 player.name,
                 originalMessage
@@ -50,7 +49,7 @@ object ChatLogs {
 
     fun logPrivate(from: String, to: String, originalMessage: String) {
         waveList.add(
-            settings.getString("GENERAL.LOG-PRIVATE", "[{0}] {1} -> {2}: {3}").coloredAll().replaceWithOrder(
+            settings.getString("GENERAL.LOG-PRIVATE", "[{0}] {1} -> {2}: {3}").replaceWithOrder(
                 dateFormat1.format(System.currentTimeMillis()),
                 from,
                 to,

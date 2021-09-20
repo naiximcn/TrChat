@@ -125,21 +125,11 @@ class MsgComponent : JsonComponent {
     private fun toTellrawPart(player: Player, text: String?, message: String): TellrawJson {
         val tellraw = TellrawJson()
         tellraw.append((text ?: "§8[§fNull§8]").replace("\$message", message))
-        if (hover != null) {
-            tellraw.hoverText(hover!!.replacePlaceholder(player).coloredAll().replace("\$message", message))
-        }
-        if (suggest != null) {
-            tellraw.suggestCommand(suggest!!.replacePlaceholder(player).replace("\$message", message))
-        }
-        if (command != null) {
-            tellraw.runCommand(command!!.replacePlaceholder(player).replace("\$message", message))
-        }
-        if (url != null) {
-            tellraw.openURL(url!!.replacePlaceholder(player).replace("\$message", message))
-        }
-        if (copy != null) {
-            tellraw.copyToClipboard(copy!!.replacePlaceholder(player).replace("\$message", message))
-        }
+        hover?.let { tellraw.hoverText(hover!!.replacePlaceholder(player).replace("\$message", message).coloredAll()) }
+        suggest?.let { tellraw.suggestCommand(suggest!!.replacePlaceholder(player).replace("\$message", message)) }
+        command?.let { tellraw.runCommand(command!!.replacePlaceholder(player).replace("\$message", message)) }
+        url?.let { tellraw.openURL(url!!.replacePlaceholder(player).replace("\$message", message)) }
+        copy?.let { tellraw.copyToClipboard(copy!!.replacePlaceholder(player).replace("\$message", message)) }
         return tellraw
     }
 
