@@ -1,7 +1,6 @@
 package me.arasple.mc.trchat.internal.listener
 
 import me.arasple.mc.trchat.api.TrChatFiles
-import org.apache.logging.log4j.util.Strings
 import org.bukkit.entity.Player
 import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
@@ -37,7 +36,7 @@ object ListenerTrChatInfo {
     }
 
     private fun react(p: Player, message: String?): Boolean {
-        if (!Strings.isBlank(message) && ("trchat".equals(message, ignoreCase = true) || "trixeychat".equals(message, ignoreCase = true))) {
+        if (!message.isNullOrBlank() && ("trchat".equals(message, ignoreCase = true) || "trixeychat".equals(message, ignoreCase = true))) {
             adaptPlayer(p).sendTitle("§3§lTr§b§lChat", "§7Designed by §6Arasple", 10, 35, 10)
             adaptPlayer(p).sendActionBar("§2Running version §av{0}§7".replaceWithOrder(pluginVersion))
             XSound.BLOCK_NOTE_BLOCK_PLING.play(p, 1f, 2f)
