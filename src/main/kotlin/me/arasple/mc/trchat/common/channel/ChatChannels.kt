@@ -40,7 +40,7 @@ object ChatChannels {
             ChannelPrivateSend,
             ChannelPrivateReceive
         )
-        TrChatFiles.channels.getConfigurationSection("CUSTOM").getValues(false).forEach { (name, obj) ->
+        TrChatFiles.channels.getConfigurationSection("CUSTOM")?.getValues(false)?.forEach { (name, obj) ->
             ChannelCustom.list.add(ChannelCustom(name, obj as MemorySection))
         }
         channels.addAll(ChannelCustom.list)
