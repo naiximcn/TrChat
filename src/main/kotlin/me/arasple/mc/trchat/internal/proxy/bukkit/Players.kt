@@ -24,7 +24,9 @@ object Players {
         submit(delay = 20) {
             if (Proxy.platform == Platform.BUNGEE && Proxy.isEnabled) {
                 submit(period = 60, async = true) {
-                    Bungees.sendBungeeData("PlayerList", "ALL")
+                    if (Bukkit.getOnlinePlayers().isNotEmpty()) {
+                        Bungees.sendBungeeData(Bukkit.getOnlinePlayers().iterator().next(), "PlayerList", "ALL")
+                    }
                 }
             }
         }

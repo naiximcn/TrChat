@@ -47,14 +47,14 @@ object TrChatVelocity : Plugin() {
         Metrics(12541, pluginVersion, Platform.VELOCITY)
 
         submit(period = 60, async = true) {
+            val out = ByteStreams.newDataOutput()
+            try {
+                out.writeUTF("PlayerList")
+                out.writeUTF(onlinePlayers().joinToString(", ") { it.name })
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
             plugin.server.allServers.forEach { server ->
-                val out = ByteStreams.newDataOutput()
-                try {
-                    out.writeUTF("PlayerList")
-                    out.writeUTF(onlinePlayers().joinToString(", ") { it.name })
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
                 server.sendPluginMessage(outgoing, out.toByteArray())
             }
         }

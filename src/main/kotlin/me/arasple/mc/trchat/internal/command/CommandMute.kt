@@ -66,7 +66,7 @@ object CommandMute {
                 }
             }
         }
-        command("muteall", listOf("globalmute"), "全员禁言", "trchat.mute") {
+        command("muteall", listOf("globalmute"), "全员禁言", permission = "trchat.mute") {
             execute<CommandSender> { sender, _, _ ->
                 TrChat.isGlobalMuting = !TrChat.isGlobalMuting
                 if (TrChat.isGlobalMuting) {

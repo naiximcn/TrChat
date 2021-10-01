@@ -14,7 +14,9 @@ import taboolib.common.platform.function.console
 import taboolib.common.platform.function.getProxyPlayer
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.platform.function.server
+import taboolib.common.util.subList
 import taboolib.module.lang.sendLang
+import taboolib.module.porticus.common.MessageReader
 import java.io.IOException
 import java.util.*
 
@@ -30,26 +32,32 @@ object ListenerVelocityTransfer {
 
     @SubscribeEvent
     fun onTransfer(e: PluginMessageEvent) {
-        if (e.identifier != TrChatVelocity.incoming) {
-            return
+        if (e.identifier == TrChatVelocity.incoming) {
+            try {
+                val message = MessageReader.read(e.data)
+                if (message.isCompleted) {
+                    val data = message.build()
+                    execute(data)
+                }
+            } catch (ignored: IOException) {
+            }
         }
-        try {
-            val data = e.dataAsDataStream()
+    }
 
-            val type = data.readUTF()
-
-            if (type == "SendRaw") {
-                val to = data.readUTF()
+    private fun execute(data: Array<String>) {
+        when (data[0]) {
+            "SendRaw" -> {
+                val to = data[1]
                 val player = getProxyPlayer(to)
 
                 if (player != null && player.cast<Player>().currentServer.isPresent) {
-                    val raw = data.readUTF()
+                    val raw = data[2]
                     player.sendRawMessage(raw)
                 }
             }
-            if (type == "BroadcastRaw") {
-                val uuid = data.readUTF()
-                val raw = data.readUTF()
+            "BroadcastRaw" -> {
+                val uuid = data[1]
+                val raw = data[2]
                 val message = GsonComponentSerializer.gson().deserialize(raw)
                 server<ProxyServer>().allServers.forEach { server ->
                     server.playersConnected.forEach { player ->
@@ -62,22 +70,21 @@ object ListenerVelocityTransfer {
                 }
                 console().cast<ConsoleCommandSource>().sendMessage(message)
             }
-            if (type == "SendRawPerm") {
-                val raw = data.readUTF()
-                val perm = data.readUTF()
+            "SendRawPerm" -> {
+                val raw = data[1]
+                val perm = data[2]
 
                 onlinePlayers().filter { p -> p.hasPermission(perm) }.forEach { p ->
                     p.sendRawMessage(raw)
                 }
             }
-            if (type == "SendLang") {
-                val to = data.readUTF()
-                val node = data.readUTF()
-                val arg = data.readUTF()
+            "SendLang" -> {
+                val to = data[1]
+                val node = data[2]
+                val args = subList(data.toList(), 3).toTypedArray()
 
-                getProxyPlayer(to)?.sendLang(node, arg)
+                getProxyPlayer(to)?.sendLang(node, *args)
             }
-        } catch (ignored: IOException) {
         }
     }
 }

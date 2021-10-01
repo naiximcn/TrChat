@@ -1,7 +1,7 @@
 plugins {
     java
     id("io.izzel.taboolib") version "1.27"
-    id("org.jetbrains.kotlin.jvm") version "1.5.30"
+    id("org.jetbrains.kotlin.jvm") version "1.5.31"
 }
 
 taboolib {
@@ -24,11 +24,12 @@ taboolib {
     install("module-lang")
     install("module-metrics")
     install("module-nms", "module-nms-util")
+    install("module-porticus")
     install("module-ui")
     install("platform-bukkit", "platform-bungee", "platform-velocity")
     install("expansion-command-helper")
     classifier = null
-    version = "6.0.3-2"
+    version = "6.0.3-7"
 }
 
 repositories {

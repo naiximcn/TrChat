@@ -5,11 +5,12 @@ import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.internal.proxy.Proxy
 import me.arasple.mc.trchat.internal.proxy.bukkit.Players.setPlayers
 import org.bukkit.Bukkit
-import org.bukkit.Server
 import org.bukkit.entity.Player
 import org.bukkit.plugin.messaging.PluginMessageListener
-import taboolib.common.platform.function.server
+import taboolib.common.platform.function.submit
+import taboolib.module.porticus.common.MessageBuilder
 import java.io.IOException
+import java.util.*
 
 /**
  * @author Arasple
@@ -18,17 +19,28 @@ import java.io.IOException
 class Bungees : PluginMessageListener {
 
     override fun onPluginMessageReceived(channel: String, player: Player, message: ByteArray) {
-        if (channel != "BungeeCord") {
-            return
-        }
         val data = ByteStreams.newDataInput(message)
-        try {
-            val subChannel = data.readUTF()
-            if (subChannel == "PlayerList") {
-                data.readUTF() // server
-                setPlayers(data.readUTF().split(", "))
+        if (channel == "BungeeCord") {
+            try {
+                val subChannel = data.readUTF()
+                if (subChannel == "PlayerList") {
+                    data.readUTF() // server
+                    setPlayers(data.readUTF().split(", "))
+                }
+            } catch (ignored: IOException) {
             }
-        } catch (ignored: IOException) {
+        }
+        if (channel == "trchat:main") {
+            try {
+                val subChannel = data.readUTF()
+                if (subChannel == "GlobalMute") {
+                    when (data.readUTF()) {
+                        "on" -> TrChat.isGlobalMuting = true
+                        "off" -> TrChat.isGlobalMuting = false
+                    }
+                }
+            } catch (ignored: IOException) {
+            }
         }
     }
 
@@ -38,19 +50,29 @@ class Bungees : PluginMessageListener {
             if (!Bukkit.getMessenger().isOutgoingChannelRegistered(TrChat.plugin, "BungeeCord")) {
                 Bukkit.getMessenger().registerOutgoingPluginChannel(TrChat.plugin, "BungeeCord")
                 Bukkit.getMessenger().registerIncomingPluginChannel(TrChat.plugin, "BungeeCord", Bungees())
-                Proxy.isEnabled = Bukkit.getServer().spigot().config.getBoolean("settings.bungeecord", false)
             }
+            if (!Bukkit.getMessenger().isOutgoingChannelRegistered(TrChat.plugin, "trchat:main")) {
+                Bukkit.getMessenger().registerOutgoingPluginChannel(TrChat.plugin, "trchat:main")
+                Bukkit.getMessenger().registerIncomingPluginChannel(TrChat.plugin, "trchat:main", Bungees())
+            }
+            Proxy.isEnabled = Bukkit.getServer().spigot().config.getBoolean("settings.bungeecord", false)
         }
 
-        fun sendBungeeData(player: Player, vararg args: String, trChannel: Boolean = true) {
-            val out = ByteStreams.newDataOutput()
-            if (trChannel) {
+        fun sendBukkitMessage(player: Player, vararg args: String) {
+            submit(async = true) {
                 try {
-                    out.writeUTF("TrChat")
+                    for (bytes in MessageBuilder.create(arrayOf(UUID.randomUUID().toString(), *args))) {
+                        player.sendPluginMessage(TrChat.plugin, "trchat:main", bytes)
+                    }
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
             }
+        }
+
+        fun sendBungeeData(player: Player, vararg args: String) {
+            val out = ByteStreams.newDataOutput()
+
             for (arg in args) {
                 try {
                     out.writeUTF(arg)
@@ -59,18 +81,6 @@ class Bungees : PluginMessageListener {
                 }
             }
             player.sendPluginMessage(TrChat.plugin, "BungeeCord", out.toByteArray())
-        }
-
-        fun sendBungeeData(vararg args: String) {
-            val out = ByteStreams.newDataOutput()
-            for (arg in args) {
-                try {
-                    out.writeUTF(arg)
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-            server<Server>().sendPluginMessage(TrChat.plugin, "BungeeCord", out.toByteArray())
         }
     }
 }

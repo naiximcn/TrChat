@@ -3,7 +3,7 @@ package me.arasple.mc.trchat.common.channel.impl
 import me.arasple.mc.trchat.common.channel.IChannel
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.obj.ChatType
-import me.arasple.mc.trchat.internal.proxy.Proxy
+import me.arasple.mc.trchat.internal.proxy.sendProxyMessage
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.getProxyPlayer
@@ -30,7 +30,7 @@ object ChannelPrivateReceive : IChannel {
         val toPlayer = Bukkit.getPlayerExact(msg[1])
         if (toPlayer == null || !toPlayer.isOnline) {
             val raw = formatted.toRawMessage()
-            Proxy.sendProxyData(sender, "SendRaw", msg[1], raw)
+            sender.sendProxyMessage("SendRaw", msg[1], raw)
         } else {
             formatted.sendTo(getProxyPlayer(msg[1])!!)
             getProxyPlayer(msg[1])!!.sendLang("Private-Message-Receive", sender.name)

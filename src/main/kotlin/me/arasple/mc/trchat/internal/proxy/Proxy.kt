@@ -52,22 +52,30 @@ object Proxy {
         }
     }
 
-    fun sendProxyData(player: Player, vararg args: String) {
+    fun sendProxyMessage(player: Player, vararg args: String) {
         when (platform) {
-            Platform.BUNGEE -> Bungees.sendBungeeData(player, *args)
-            Platform.VELOCITY -> Velocity.sendVelocityData(player, *args)
+            Platform.BUNGEE -> Bungees.sendBukkitMessage(player, *args)
+            Platform.VELOCITY -> Velocity.sendBukkitMessage(player, *args)
             else -> return
         }
     }
 
-    fun sendProxyLang(player: Player, target: String, node: String, arg: String) {
+    fun sendProxyLang(player: Player, target: String, node: String, vararg args: String) {
         if (!isEnabled || Bukkit.getPlayerExact(target) != null) {
-            getProxyPlayer(target)?.sendLang(node, arg)
+            getProxyPlayer(target)?.sendLang(node, *args)
         } else {
-            when (platform) {
-                Platform.VELOCITY -> sendProxyData(player, "SendLang", target, node, arg)
-                else -> return
+            try {
+                when (platform) {
+                    Platform.BUNGEE -> sendProxyMessage(player, "SendLang", target, node, *args)
+                    Platform.VELOCITY -> sendProxyMessage(player, "SendLang", target, node, *args)
+                    else -> return
+                }
+            } catch (ignored: IllegalStateException) {
             }
         }
     }
+}
+
+fun Player.sendProxyMessage(vararg args: String) {
+    Proxy.sendProxyMessage(this, *args)
 }
