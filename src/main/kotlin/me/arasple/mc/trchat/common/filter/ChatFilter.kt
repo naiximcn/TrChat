@@ -23,8 +23,9 @@ import java.nio.charset.StandardCharsets
 @PlatformSide([Platform.BUKKIT])
 object ChatFilter {
 
-    private var CHATFILTER_CLOUD_LAST_UPDATE: String? = null
-    private val CHATFILTER_CLOUD_URL = mutableListOf<String>()
+    private var CLOUD_LAST_UPDATE: String? = null
+    private val CLOUD_URL = mutableListOf<String>()
+    private var CLOUD_LAST_WORDS = listOf<String>()
 
     @Schedule(delay = 20 * 120, period = 30 * 60 * 20, async = true)
     fun asyncRefreshCloud() {
@@ -45,10 +46,17 @@ object ChatFilter {
 
         // 更新云端词库
         if (updateCloud && filter.getBoolean("CLOUD-THESAURUS.ENABLE", false)) {
-            CHATFILTER_CLOUD_URL.clear()
-            CHATFILTER_CLOUD_URL += filter.getStringList("CLOUD-THESAURUS.URL")
+            CLOUD_URL.clear()
+            CLOUD_URL += filter.getStringList("CLOUD-THESAURUS.URL")
             submit(async = true) {
-                Filter.addSensitiveWord(loadCloudFilter(0, *notify))
+                Filter.addSensitiveWord(loadCloudFilter(0, *notify).let {
+                    if (it.isEmpty()) {
+                        CLOUD_LAST_WORDS
+                    } else {
+                        CLOUD_LAST_WORDS = it
+                        it
+                    }
+                })
             }
         } else {
             notify(notify, "Plugin-Loaded-Filter-Local", filter.getStringList("LOCAL").size)
@@ -62,14 +70,14 @@ object ChatFilter {
      * @param notify 接受通知反馈
      */
     private fun loadCloudFilter(url: Int, vararg notify: ProxyCommandSender): List<String> {
-        if (CHATFILTER_CLOUD_URL.isEmpty()) {
+        if (CLOUD_URL.isEmpty()) {
             return emptyList()
         }
         val whitelist = filter.getStringList("CLOUD-THESAURUS.WHITELIST")
-        val collected = mutableListOf<String>()
+        val collected = mutableSetOf<String>()
 
         return kotlin.runCatching {
-            URL(CHATFILTER_CLOUD_URL[url]).openStream().use { inputStream ->
+            URL(CLOUD_URL[url]).openStream().use { inputStream ->
                 BufferedInputStream(inputStream).use { bufferedInputStream ->
                     val database = JsonParser().parse(readFully(bufferedInputStream, StandardCharsets.UTF_8)).asJsonObject
                     if (!database.has("lastUpdateDate") || !database.has("words")) {
@@ -77,7 +85,7 @@ object ChatFilter {
                     }
 
                     val lastUpdateDate = database.get("lastUpdateDate").asString
-                    CHATFILTER_CLOUD_LAST_UPDATE = when (CHATFILTER_CLOUD_LAST_UPDATE) {
+                    CLOUD_LAST_UPDATE = when (CLOUD_LAST_UPDATE) {
                         null -> lastUpdateDate
                         lastUpdateDate -> return emptyList()
                         else -> lastUpdateDate
@@ -90,7 +98,7 @@ object ChatFilter {
                     }
                 }
             }
-            if ((url + 1) < CHATFILTER_CLOUD_URL.size) {
+            if ((url + 1) < CLOUD_URL.size) {
                 collected += loadCloudFilter(url + 1)
             }
             collected.toList()
@@ -100,7 +108,7 @@ object ChatFilter {
         }.also {
             if (it.isNotEmpty()) {
                 notify(notify, "Plugin-Loaded-Filter-Local", filter.getStringList("LOCAL").size)
-                notify(notify, "Plugin-Loaded-Filter-Cloud", collected.size, CHATFILTER_CLOUD_URL.size, CHATFILTER_CLOUD_LAST_UPDATE!!)
+                notify(notify, "Plugin-Loaded-Filter-Cloud", collected.size, CLOUD_URL.size, CLOUD_LAST_UPDATE!!)
             } else {
                 notify(notify, "Plugin-Loaded-Filter-Local", filter.getStringList("LOCAL").size)
                 notify(notify, "Plugin-Failed-Load-Filter-Cloud")
