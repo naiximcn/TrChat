@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.internal.hook
 
-import me.arasple.mc.trchat.internal.hook.impl.*
+import me.arasple.mc.trchat.internal.hook.impl.HookDiscordSRV
+import me.arasple.mc.trchat.internal.hook.impl.HookDynmap
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.function.console
@@ -20,11 +21,16 @@ object HookPlugin {
     }
 
     private val registry: Array<HookAbstract> = arrayOf(
-        HookDynmap()
+        HookDynmap(),
+        HookDiscordSRV()
     )
 
     fun getDynmap(): HookDynmap {
         return registry[0] as HookDynmap
+    }
+
+    fun getDiscordSRV(): HookDiscordSRV {
+        return registry[1] as HookDiscordSRV
     }
 
 }

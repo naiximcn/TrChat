@@ -76,6 +76,6 @@ object Proxy {
     }
 }
 
-fun Player.sendProxyMessage(vararg args: String) {
+fun Player.sendBukkitMessage(vararg args: String) {
     Proxy.sendProxyMessage(this, *args)
 }

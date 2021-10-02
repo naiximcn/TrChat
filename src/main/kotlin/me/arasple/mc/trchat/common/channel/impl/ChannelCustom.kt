@@ -5,7 +5,7 @@ import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.obj.ChatType
 import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.internal.proxy.Proxy
-import me.arasple.mc.trchat.internal.proxy.sendProxyMessage
+import me.arasple.mc.trchat.internal.proxy.sendBukkitMessage
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerQuitEvent
 import taboolib.common.platform.event.SubscribeEvent
@@ -58,7 +58,7 @@ class ChannelCustom(
         val formatted = ChatFormats.getFormat(this, sender)!!.apply(sender, msg[0], forwardToDynmap = forwardToDynmap, privateChat = private)
         if (alwaysReceive) {
             if (Proxy.isEnabled) {
-                sender.sendProxyMessage("SendRawPerm", formatted.toRawMessage(), permission)
+                sender.sendBukkitMessage("SendRawPerm", formatted.toRawMessage(), permission)
             } else {
                 onlinePlayers().filter { it.hasPermission(permission) }.forEach {
                     formatted.sendTo(it)

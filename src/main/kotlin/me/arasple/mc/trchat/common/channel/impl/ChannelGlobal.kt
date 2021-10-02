@@ -4,7 +4,7 @@ import me.arasple.mc.trchat.common.channel.IChannel
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.obj.ChatType
 import me.arasple.mc.trchat.internal.proxy.Proxy
-import me.arasple.mc.trchat.internal.proxy.sendProxyMessage
+import me.arasple.mc.trchat.internal.proxy.sendBukkitMessage
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.console
 import taboolib.platform.util.sendLang
@@ -28,7 +28,7 @@ object ChannelGlobal : IChannel {
         }
         val format = ChatFormats.getFormat(this, sender)?.apply(sender, msg[0]) ?: return
         val raw = format.toRawMessage()
-        sender.sendProxyMessage("BroadcastRaw", sender.uniqueId.toString(), raw)
+        sender.sendBukkitMessage("BroadcastRaw", sender.uniqueId.toString(), raw)
         format.sendTo(console())
     }
 }

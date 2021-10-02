@@ -6,6 +6,7 @@ import me.arasple.mc.trchat.common.channel.impl.ChannelGlobal
 import me.arasple.mc.trchat.common.channel.impl.ChannelNormal
 import me.arasple.mc.trchat.internal.data.Cooldowns
 import me.arasple.mc.trchat.internal.data.Users
+import me.arasple.mc.trchat.internal.hook.HookPlugin
 import me.arasple.mc.trchat.util.checkMute
 import org.bukkit.event.player.AsyncPlayerChatEvent
 import taboolib.common.platform.Platform
@@ -48,6 +49,8 @@ object ListenerChatEvent {
             TrChatEvent(channel, player, e.message).call()
             return
         }
+        // DiscordSRV
+        HookPlugin.getDiscordSRV().forwardChat(e)
         // Global
         val globalPrefix = TrChatFiles.channels.getString("FORCE-GLOBAL-PREFIX", "!all")
         if (TrChatFiles.channels.getBoolean("FORCE-GLOBAL", false)
