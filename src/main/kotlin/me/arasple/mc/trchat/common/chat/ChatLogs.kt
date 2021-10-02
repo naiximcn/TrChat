@@ -12,6 +12,7 @@ import taboolib.common.platform.function.getDataFolder
 import taboolib.common.util.replaceWithOrder
 import java.io.File
 import java.text.SimpleDateFormat
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Arasple
@@ -35,6 +36,21 @@ object ChatLogs {
             }
         }
         waveList.clear()
+    }
+
+    @Schedule(delay = 20 * 15, period = 20 * 60 * 5, async = true)
+    fun autoDelete() {
+        val days = settings.getLong("GENERAL.LOG-DELETE-TIME", 0L)
+        if (days > 0) {
+            val millis = TimeUnit.DAYS.toMillis(days)
+            kotlin.runCatching {
+                File(getDataFolder(), "logs").walk().forEach {
+                    if (it.lastModified() < (System.currentTimeMillis() - millis)) {
+                        it.delete()
+                    }
+                }
+            }
+        }
     }
 
     fun log(player: Player, originalMessage: String) {

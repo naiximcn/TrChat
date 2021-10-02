@@ -7,7 +7,7 @@
 #  |    |  \_  __ /    \  \/|  |  \\__  \\   __\
 #  |    |   |  | \\     \___|   Y  \/ __ \|  |
 #  |____|   |__|   \______  |___|  (____  |__|
-#  \/     \/     \/  TrChat 1.8
+#  \/     \/     \/  TrChat 1.9
 #                                ------ Author by Arasple, Maintainer by ItsFlicker
 #
 ######################################################################
@@ -17,8 +17,11 @@ GENERAL:
   CHECK-UPDATE: true
   DEBUG: false
   DISABLED-WORLDS: [PUT_YOUR_WORLD_NAME_HERE, ANOTHER_WORLD]
+  # Log formats
   LOG-NORMAL: '[{0}] {1}: {2}'
   LOG-PRIVATE: '[{0}] {1} -> {2}: {3}'
+  # The time when logs are automatically deleted (in days) 0 = disabled
+  LOG-DELETE-TIME: 0
   DEPEND-EXPANSIONS:
     - 'player'
     - 'server'

@@ -70,4 +70,5 @@ object ChatMessage {
     }
 
     class ChatMessage(val packet: Any, val message: String?)
+
 }

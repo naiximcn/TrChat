@@ -1,5 +1,15 @@
 # TrChat Update Logs #
 
+#### VERSION 1.9
+- #### 1.90-R1
+  - Since 2021.9.13
+  - Updates:
+    - 默认颜色支持HEX颜色
+    - 配置文件支持渐变色
+    - 支持原版社交系统
+    - 优化Bungee和Velocity的消息转发
+    - 修复1.17延迟异常问题
+
 #### VERSION 1.8
   ```
   - 这是一个由ItsFlicker维护的版本
