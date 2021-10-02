@@ -26,7 +26,7 @@ object ChatFilter {
     private var CHATFILTER_CLOUD_LAST_UPDATE: String? = null
     private val CHATFILTER_CLOUD_URL = mutableListOf<String>()
 
-    @Schedule(delay = 20 * 120, period = 30 * 60 * 20)
+    @Schedule(delay = 20 * 120, period = 30 * 60 * 20, async = true)
     fun asyncRefreshCloud() {
         loadCloudFilter(0)
     }
@@ -47,7 +47,9 @@ object ChatFilter {
         if (updateCloud && filter.getBoolean("CLOUD-THESAURUS.ENABLE", false)) {
             CHATFILTER_CLOUD_URL.clear()
             CHATFILTER_CLOUD_URL += filter.getStringList("CLOUD-THESAURUS.URL")
-            loadCloudFilter(0, *notify)
+            submit(async = true) {
+                Filter.addSensitiveWord(loadCloudFilter(0, *notify))
+            }
         } else {
             notify(notify, "Plugin-Loaded-Filter-Local", filter.getStringList("LOCAL").size)
         }
@@ -59,49 +61,49 @@ object ChatFilter {
      * @param url    尝试 URL 序号
      * @param notify 接受通知反馈
      */
-    private fun loadCloudFilter(url: Int, vararg notify: ProxyCommandSender) {
-        submit(async = true) {
-            val whitelist = filter.getStringList("CLOUD-THESAURUS.WHITELIST")
-            val collected = mutableListOf<String>()
-            lateinit var lastUpdateDate: String
+    private fun loadCloudFilter(url: Int, vararg notify: ProxyCommandSender): List<String> {
+        if (CHATFILTER_CLOUD_URL.isEmpty()) {
+            return emptyList()
+        }
+        val whitelist = filter.getStringList("CLOUD-THESAURUS.WHITELIST")
+        val collected = mutableListOf<String>()
 
-            kotlin.runCatching {
-                URL(CHATFILTER_CLOUD_URL[url]).openStream().use { inputStream ->
-                    BufferedInputStream(inputStream).use { bufferedInputStream ->
-                        val database = JsonParser().parse(readFully(bufferedInputStream, StandardCharsets.UTF_8)).asJsonObject
-                        if (!database.has("lastUpdateDate") || !database.has("words")) {
-                            throw NullPointerException("Wrong database json object")
-                        }
+        return kotlin.runCatching {
+            URL(CHATFILTER_CLOUD_URL[url]).openStream().use { inputStream ->
+                BufferedInputStream(inputStream).use { bufferedInputStream ->
+                    val database = JsonParser().parse(readFully(bufferedInputStream, StandardCharsets.UTF_8)).asJsonObject
+                    if (!database.has("lastUpdateDate") || !database.has("words")) {
+                        error("Wrong database json object")
+                    }
 
-                        lastUpdateDate = database.get("lastUpdateDate").asString
-                        CHATFILTER_CLOUD_LAST_UPDATE = when (CHATFILTER_CLOUD_LAST_UPDATE) {
-                            null -> lastUpdateDate
-                            lastUpdateDate -> return@submit
-                            else -> lastUpdateDate
-                        }
-                        database.get("words").asJsonArray.iterator().forEachRemaining { i ->
-                            val word = i.asString
-                            if (whitelist.none { w -> w.equals(word, ignoreCase = true) }) {
-                                collected.add(word)
-                            }
+                    val lastUpdateDate = database.get("lastUpdateDate").asString
+                    CHATFILTER_CLOUD_LAST_UPDATE = when (CHATFILTER_CLOUD_LAST_UPDATE) {
+                        null -> lastUpdateDate
+                        lastUpdateDate -> return emptyList()
+                        else -> lastUpdateDate
+                    }
+                    database.get("words").asJsonArray.forEach {
+                        val word = it.asString
+                        if (whitelist.none { w -> w.equals(word, ignoreCase = true) }) {
+                            collected.add(word)
                         }
                     }
                 }
-            }.run {
-                if ((url + 1) <= CHATFILTER_CLOUD_URL.size) {
-                    Filter.addSensitiveWord(collected)
-                    loadCloudFilter(url + 1, *notify)
-                } else {
-                    if (collected.isNotEmpty()) {
-                        notify(notify, "Plugin-Loaded-Filter-Local", filter.getStringList("LOCAL").size)
-                        notify(notify, "Plugin-Loaded-Filter-Cloud", collected.size, url, lastUpdateDate)
-                    } else {
-                        notify(notify, "Plugin-Loaded-Filter-Local", filter.getStringList("LOCAL").size)
-                        notify(notify, "Plugin-Failed-Load-Filter-Cloud")
-                    }
-
-                }
-                return@submit
+            }
+            if ((url + 1) < CHATFILTER_CLOUD_URL.size) {
+                collected += loadCloudFilter(url + 1)
+            }
+            collected.toList()
+        }.getOrElse {
+            it.printStackTrace()
+            emptyList()
+        }.also {
+            if (it.isNotEmpty()) {
+                notify(notify, "Plugin-Loaded-Filter-Local", filter.getStringList("LOCAL").size)
+                notify(notify, "Plugin-Loaded-Filter-Cloud", collected.size, CHATFILTER_CLOUD_URL.size, CHATFILTER_CLOUD_LAST_UPDATE!!)
+            } else {
+                notify(notify, "Plugin-Loaded-Filter-Local", filter.getStringList("LOCAL").size)
+                notify(notify, "Plugin-Failed-Load-Filter-Cloud")
             }
         }
     }

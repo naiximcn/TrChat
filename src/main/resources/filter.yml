@@ -5,8 +5,8 @@ CLOUD-THESAURUS:
   WHITELIST: []
   # 云端词库地址
   URL:
-    - 'https://arasple.oss-cn-beijing.aliyuncs.com/plugins/TrChat/database.json'
-    - 'https://raw.githubusercontent.com/Arasple/TrChat-Cloud/master/database.json'
+    - 'https://gitee.com/yurinann/Filter-Thesaurus-Cloud/raw/main/database.json' # 感谢南城提供的词库
+    - 'https://raw.githubusercontent.com/Yurinann/Filter-Thesaurus-Cloud/main/database.json'
 
 LOCAL:
   - 'NMSL'
