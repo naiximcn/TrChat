@@ -41,13 +41,11 @@ repositories {
         isAllowInsecureProtocol = true
         url = uri("http://repo.mikeprimm.com/")
     }
-    maven { url = uri("https://nexus.scarsz.me/content/groups/public/") }
     mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    compileOnly("com.discordsrv:discordsrv:1.22.0")
     compileOnly("us.dynmap:dynmap-api:2.5")
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("net.md-5:bungeecord-bootstrap:1.17-R0.1-SNAPSHOT")

@@ -1,9 +1,9 @@
 package me.arasple.mc.trchat.internal.hook.impl
 
-import github.scarsz.discordsrv.DiscordSRV
 import me.arasple.mc.trchat.internal.hook.HookAbstract
 import org.bukkit.event.player.AsyncPlayerChatEvent
 import taboolib.common.platform.function.submit
+import taboolib.common.reflect.Reflex.Companion.invokeMethod
 
 /**
  * HookDynmap
@@ -17,10 +17,11 @@ class HookDiscordSRV : HookAbstract() {
     fun forwardChat(e: AsyncPlayerChatEvent) {
         if (isHooked) {
             submit(async = true) {
-                DiscordSRV.getPlugin().processChatMessage(
+                plugin!!.invokeMethod<Any>(
+                    "processChatMessage",
                     e.player,
                     e.message,
-                    DiscordSRV.getPlugin().getOptionalChannel("global"),
+                    plugin!!.invokeMethod<Any>("getOptionalChannel", "global"),
                     e.isCancelled
                 )
             }
