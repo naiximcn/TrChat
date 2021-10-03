@@ -1,8 +1,9 @@
 package me.arasple.mc.trchat.internal.hook.impl
 
+import github.scarsz.discordsrv.DiscordSRV
 import me.arasple.mc.trchat.internal.hook.HookAbstract
 import org.bukkit.event.player.AsyncPlayerChatEvent
-import taboolib.common.reflect.Reflex.Companion.invokeMethod
+import taboolib.common.platform.function.submit
 
 /**
  * HookDynmap
@@ -13,16 +14,15 @@ import taboolib.common.reflect.Reflex.Companion.invokeMethod
  */
 class HookDiscordSRV : HookAbstract() {
 
-    private val classPlayerChatListener: Class<*>? = try {
-        Class.forName("github.scarsz.discordsrv.listeners.PlayerChatListener")
-    } catch (e: ClassNotFoundException) {
-        null
-    }
-
     fun forwardChat(e: AsyncPlayerChatEvent) {
         if (isHooked) {
-            kotlin.runCatching {
-                classPlayerChatListener?.invokeMethod<Any>("onAsyncPlayerChat", e)
+            submit(async = true) {
+                DiscordSRV.getPlugin().processChatMessage(
+                    e.player,
+                    e.message,
+                    DiscordSRV.getPlugin().getOptionalChannel("global"),
+                    e.isCancelled
+                )
             }
         }
     }

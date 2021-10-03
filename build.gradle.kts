@@ -13,6 +13,7 @@ taboolib {
         dependencies {
             name("PlaceholderAPI").optional(true).with("bukkit")
             name("Dynmap").optional(true).with("bukkit")
+            name("DiscordSRV").optional(true).with("bukkit")
         }
         desc("Advanced Minecraft Chat Control")
     }
@@ -40,15 +41,17 @@ repositories {
         isAllowInsecureProtocol = true
         url = uri("http://repo.mikeprimm.com/")
     }
+    maven { url = uri("https://nexus.scarsz.me/content/groups/public/") }
     mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    compileOnly("net.md-5:bungeecord-bootstrap:1.17-R0.1-SNAPSHOT")
-    compileOnly("com.velocitypowered:velocity-api:3.0.0")
+    compileOnly("com.discordsrv:discordsrv:1.22.0")
     compileOnly("us.dynmap:dynmap-api:2.5")
     compileOnly("me.clip:placeholderapi:2.10.9")
+    compileOnly("net.md-5:bungeecord-bootstrap:1.17-R0.1-SNAPSHOT")
+    compileOnly("com.velocitypowered:velocity-api:3.0.0")
     compileOnly("ink.ptms.core:v11701:11701:mapped")
     compileOnly("ink.ptms.core:v11701:11701:universal")
     compileOnly("ink.ptms.core:v11604:11604:all")
