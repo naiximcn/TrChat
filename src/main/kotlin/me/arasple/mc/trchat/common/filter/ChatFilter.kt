@@ -64,8 +64,8 @@ object ChatFilter {
             return
         }
         val collected = mutableListOf<String>()
-        for (i in CLOUD_URL.indices) {
-            collected += catchCloudThesaurus(i, *notify)
+        CLOUD_URL.forEach {
+            collected += catchCloudThesaurus(it, *notify)
         }
         CLOUD_WORDS += collected
         if (CLOUD_WORDS.isEmpty()) {
@@ -81,13 +81,12 @@ object ChatFilter {
      * @param url    尝试 URL 序号
      * @param notify 接受通知反馈
      */
-    private fun catchCloudThesaurus(url: Int, vararg notify: ProxyCommandSender): List<String> {
-        val address = CLOUD_URL[url]
+    private fun catchCloudThesaurus(url: String, vararg notify: ProxyCommandSender): List<String> {
         val whitelist = filter.getStringList("CLOUD-THESAURUS.WHITELIST")
         val collected = mutableListOf<String>()
 
         return kotlin.runCatching {
-            URL(address).openStream().use { inputStream ->
+            URL(url).openStream().use { inputStream ->
                 BufferedInputStream(inputStream).use { bufferedInputStream ->
                     val database = JsonParser().parse(readFully(bufferedInputStream, StandardCharsets.UTF_8)).asJsonObject
                     if (!database.has("lastUpdateDate") || !database.has("words")) {
@@ -95,7 +94,7 @@ object ChatFilter {
                     }
 
                     val lastUpdateDate = database["lastUpdateDate"].asString
-                    CLOUD_LAST_UPDATE[address] = when (CLOUD_LAST_UPDATE[address]) {
+                    CLOUD_LAST_UPDATE[url] = when (CLOUD_LAST_UPDATE[url]) {
                         null -> lastUpdateDate
                         lastUpdateDate -> return emptyList()
                         else -> lastUpdateDate
@@ -108,7 +107,7 @@ object ChatFilter {
                     }
                 }
             }
-            notify(notify, "Plugin-Loaded-Filter-Cloud", collected.size, url, CLOUD_LAST_UPDATE[address]!!)
+            notify(notify, "Plugin-Loaded-Filter-Cloud", collected.size, url, CLOUD_LAST_UPDATE[url]!!)
             collected
         }.getOrElse {
             it.printStackTrace()

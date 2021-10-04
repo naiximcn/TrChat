@@ -25,7 +25,7 @@ import taboolib.library.configuration.MemorySection
 @PlatformSide([Platform.BUKKIT])
 object ChatChannels {
 
-    private val channels = mutableListOf<IChannel>()
+    private val channels = mutableListOf<ChannelAbstract>()
 
     private var default: ChannelCustom? = null
 

@@ -1,7 +1,7 @@
 package me.arasple.mc.trchat.common.chat
 
 import me.arasple.mc.trchat.api.TrChatFiles
-import me.arasple.mc.trchat.common.channel.IChannel
+import me.arasple.mc.trchat.common.channel.ChannelAbstract
 import me.arasple.mc.trchat.common.chat.format.Format
 import me.arasple.mc.trchat.internal.script.Condition
 import me.arasple.mc.trchat.util.notify
@@ -16,7 +16,7 @@ object ChatFormats {
 
     val formats = HashMap<String, List<Format>>()
 
-    fun getFormat(channel: IChannel, player: Player): Format? {
+    fun getFormat(channel: ChannelAbstract, player: Player): Format? {
         return formats.computeIfAbsent(channel.format) { ArrayList() }.firstOrNull { format ->
             Condition.eval(player, format.requirement).asBoolean()
         }

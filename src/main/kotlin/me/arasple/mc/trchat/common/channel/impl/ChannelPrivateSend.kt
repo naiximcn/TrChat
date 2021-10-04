@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.common.channel.impl
 
-import me.arasple.mc.trchat.common.channel.IChannel
+import me.arasple.mc.trchat.common.channel.ChannelAbstract
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.obj.ChatType
 import org.bukkit.entity.Player
@@ -13,7 +13,7 @@ import taboolib.common.platform.function.adaptPlayer
  * @author wlys
  * @since 2021/8/28 21:16
  */
-object ChannelPrivateSend : IChannel {
+object ChannelPrivateSend : ChannelAbstract() {
 
     override val chatType: ChatType
         get() = ChatType.PRIVATE_SEND

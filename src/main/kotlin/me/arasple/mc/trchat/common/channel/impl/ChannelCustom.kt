@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.common.channel.impl
 
-import me.arasple.mc.trchat.common.channel.IChannel
+import me.arasple.mc.trchat.common.channel.ChannelAbstract
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.obj.ChatType
 import me.arasple.mc.trchat.internal.data.Users
@@ -34,7 +34,7 @@ class ChannelCustom(
     val hint: Boolean,
     val sendToConsole: Boolean,
     val autoQuit: Boolean
-    ): IChannel {
+    ): ChannelAbstract() {
 
     constructor(name: String, obj: MemorySection) : this(
         name,

@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.common.channel.impl
 
-import me.arasple.mc.trchat.common.channel.IChannel
+import me.arasple.mc.trchat.common.channel.ChannelAbstract
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.obj.ChatType
 import me.arasple.mc.trchat.internal.proxy.Proxy
@@ -13,7 +13,7 @@ import taboolib.platform.util.sendLang
  * @author Arasple
  * @date 2019/8/17 23:06
  */
-object ChannelGlobal : IChannel {
+object ChannelGlobal : ChannelAbstract() {
 
     override val chatType: ChatType
         get() = ChatType.GLOBAL

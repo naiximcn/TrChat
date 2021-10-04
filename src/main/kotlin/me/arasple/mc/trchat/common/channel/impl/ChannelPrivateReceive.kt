@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.common.channel.impl
 
-import me.arasple.mc.trchat.common.channel.IChannel
+import me.arasple.mc.trchat.common.channel.ChannelAbstract
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.obj.ChatType
 import me.arasple.mc.trchat.internal.proxy.sendBukkitMessage
@@ -16,7 +16,7 @@ import taboolib.module.lang.sendLang
  * @author wlys
  * @since 2021/8/28 21:17
  */
-object ChannelPrivateReceive : IChannel {
+object ChannelPrivateReceive : ChannelAbstract() {
 
     override val chatType: ChatType
         get() = ChatType.PRIVATE_RECEIVE

@@ -19,7 +19,6 @@ object Users {
     val itemCache = HashMap<ItemStack, TellrawJson>()
     private val cooldowns = HashMap<UUID, Cooldowns>()
     private val originMessage = HashMap<UUID, String>()
-    private val formattedMessages = HashMap<UUID, MutableList<String>>()
 
     fun getCooldownLeft(uuid: UUID, type: CooldownType): Long {
         cooldowns.putIfAbsent(uuid, Cooldowns())
@@ -55,14 +54,6 @@ object Users {
 
     fun setLastMessage(uuid: UUID, msg: String) {
         originMessage[uuid] = msg
-    }
-
-    fun putFormattedMessage(player: Player, message: String) {
-        val messages = formattedMessages.computeIfAbsent(player.uniqueId) { ArrayList() }
-        messages += message
-        if (messages.size > 100) {
-            messages.removeAt(0)
-        }
     }
 
     fun updateMuteTime(user: Player, time: Long) {

@@ -1,10 +1,9 @@
 package me.arasple.mc.trchat.common.channel.impl
 
-import me.arasple.mc.trchat.common.channel.IChannel
+import me.arasple.mc.trchat.common.channel.ChannelAbstract
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.ChatLogs
 import me.arasple.mc.trchat.common.chat.obj.ChatType
-import me.arasple.mc.trchat.internal.data.Users
 import org.bukkit.entity.Player
 import taboolib.common.platform.ProxyPlayer
 import taboolib.common.platform.function.console
@@ -17,7 +16,7 @@ import java.util.*
  * @author wlys
  * @since 2021/8/28 21:03
  */
-object ChannelNormal : IChannel {
+object ChannelNormal : ChannelAbstract() {
 
     val targets = mutableMapOf<UUID, List<ProxyPlayer>>()
 
@@ -34,6 +33,5 @@ object ChannelNormal : IChannel {
         }
         formatted.sendTo(console())
         ChatLogs.log(sender, msg[0])
-        Users.putFormattedMessage(sender, formatted.toRawMessage())
     }
 }
