@@ -1,0 +1,30 @@
+# 启用时, 每个聊天都会转发到全局
+FORCE-GLOBAL: false
+
+# 以这个开头的消息将会转发到全局
+FORCE-GLOBAL-PREFIX: '!all'
+
+# 如果不为null, 不在自定义频道的玩家将会自动加入这个频道 (需要权限)
+DEFAULT-CUSTOM-CHANNEL: null
+
+# 自定义聊天频道
+CUSTOM:
+  STAFF:
+    # 使用formats.yml里的哪个格式
+    FORMAT: STAFF
+    # 加入权限
+    PERMISSION: 'trchat.channel.staff'
+    # 发送范围 (ALL, SINGLE_WORLD, DISTANCE, SELF) 注意: 当ALWAYS-RECEIVE为true时无效
+    RANGE: ALL;0
+    # 只要有权限, 即使离开也会接收到消息 (支持跨服)
+    ALWAYS-RECEIVE: true
+    # 是否发送消息到控制台
+    SEND-TO-CONSOLE: false
+    # 是否能使用AT功能
+    PRIVATE: false
+    # 是否转发到Dynmap
+    FORWARD-TO-DYNMAP: false
+    # 加入或退出时是否提示(发送lang)
+    HINT: true
+    # 玩家退出时是否自动退出频道
+    AUTO-QUIT: false

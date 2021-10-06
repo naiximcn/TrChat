@@ -1,0 +1,55 @@
+######################################################################
+#
+#         Powered by TabooLib 6.0
+#
+#  ___________      _________ .__            __
+#  \__    __________\_   ___ \|  |__ _____ _/  |_
+#  |    |  \_  __ /    \  \/|  |  \\__  \\   __\
+#  |    |   |  | \\     \___|   Y  \/ __ \|  |
+#  |____|   |__|   \______  |___|  (____  |__|
+#  \/     \/     \/  TrChat 1.9
+#                                ------ Author by Arasple, Maintainer by ItsFlicker
+#
+######################################################################
+
+# 基础设置
+GENERAL:
+  # 是否检测更新
+  CHECK-UPDATE: true
+  DEBUG: false
+  # 禁用聊天的世界
+  DISABLED-WORLDS: [PUT_YOUR_WORLD_NAME_HERE, ANOTHER_WORLD]
+  # 日志格式
+  LOG-NORMAL: '[{0}] {1}: {2}'
+  LOG-PRIVATE: '[{0}] {1} -> {2}: {3}'
+  # 几天后自动删除日志 0 = 禁用
+  LOG-DELETE-TIME: 0
+  # 自动下载的PlaceholderAPI拓展
+  DEPEND-EXPANSIONS:
+    - 'player'
+    - 'server'
+    - 'vault'
+  # 阻止TAB补全 (绕过: trchat.bypass.tabcomplete)
+  PREVENT-TAB-COMPLETE: false
+  # NONE, BUNGEE, VELOCITY
+  PROXY: NONE
+
+# 聊天颜色
+# 权限节点: trchat.color.<CODE>
+# 十六进制颜色和渐变色需要 trchat.color.*
+#
+# 在哪些地方启用颜色
+CHAT-COLOR:
+  CHAT: true
+  SIGN: true
+  ANVIL: true
+  BOOK: true
+
+# 聊天控制
+CHAT-CONTROL:
+  # 反相似刷屏 (相似度 0-1)
+  ANTI-REPEAT: 0.85
+  # 聊天冷却
+  COOLDOWN: 2.0
+  # 聊天长度限制
+  LENGTH-LIMIT: 100

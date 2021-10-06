@@ -1,0 +1,20 @@
+# 云端词库
+CLOUD-THESAURUS:
+  # 启用
+  ENABLE: false
+  # 敏感词白名单
+  WHITELIST: []
+  # 云端词库地址
+  URL:
+    - 'https://gitee.com/yurinann/Filter-Thesaurus-Cloud/raw/main/database.json' # 感谢南城提供的词库
+    - 'https://raw.githubusercontent.com/Yurinann/Filter-Thesaurus-Cloud/main/database.json'
+
+# 本地屏蔽词
+LOCAL:
+  - 'NMSL'
+  - 'fuck'
+  - 'shit'
+
+# 忽略的符号
+IGNORED-PUNCTUATIONS: ['!','.',',','#','$','%','&','*','(',')','|','?','/','@','"','\',';','[',']','{','}','+','~','-','_','=','^','<','>',' ','　','！','。','，','￥','（','）','？','、','“','‘','；','【','】','——','……','《','》','\\', '`']
+REPLACEMENT: '*'

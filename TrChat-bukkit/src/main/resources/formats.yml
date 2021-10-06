@@ -1,0 +1,144 @@
+######################################################################
+#
+#  ___________      _________ .__            __
+#  \__    __________\_   ___ \|  |__ _____ _/  |_
+#  |    |  \_  __ /    \  \/|  |  \\__  \\   __\
+#  |    |   |  | \\     \___|   Y  \/ __ \|  |
+#  |____|   |__|   \______  |___|  (____  |__|
+#  \/     \/     \/  TrChat Formats
+#
+# Advanced Json format chat
+#
+# FORMAT-EXAMPLE:
+#   example-part: # id
+#     text: 'ABC' # display text
+#     hover: '%player_name%' # hover display
+#     command: '/tpa %player_name%' # click execute command
+#     suggest: '/msg %player_name%' # click suggest command
+#
+######################################################################
+
+NORMAL:
+    # 使用这个格式的条件
+    # 当以'js:'或'$ '开头时, 使用 javascript
+    # player = 发送者
+    # bukkitServer = 服务器实例
+    # utils = assist utils
+    # 否则使用 kether
+  - requirement: null
+    # (可选) 格式优先级 (默认: 2147483647)
+    priority: 2147483647
+    # 聊天消息部分
+    msg:
+      # 默认聊天颜色
+      # (当玩家没有任何 trchat.color.force-defaultcolor.<CODE> 的权限)
+      default-color: '7'
+      hover: '&7Date: %server_time_h:mm:ss a%'
+
+    # 自定义Json格式部分 (在聊天消息前)
+    parts:
+      world:
+        text: '&8[&3%player_world%&8]'
+        hover: |-
+          &r
+          &8▪ &7位置: &3%player_world%&7, &2%player_x%/%player_y%/%player_z%
+          &r
+          &6▶ &e点击发送传送请求
+          &r
+        command: '/tpa %player_name%'
+        # (可选) 为玩家显示这个Json格式的条件
+        requirement: null
+      part-before-player:
+        text: ' '
+      player:
+        text: '&7%player_name%'
+        hover: |-
+          &r
+          &8▪ &7Ping: &3%player_ping% Ms
+          &8▪ &7生命值: &c%player_health_rounded% ❤
+          &r
+          &6▶ &e点击发送私聊
+          &r
+        suggest: '/msg %player_name% '
+      part-before-msg:
+        text: '&7: '
+
+    # (可选) 聊天消息后缀
+    suffix:
+      example:
+        text: ''
+
+######################################################################
+#
+# 私聊发送
+#
+######################################################################
+PRIVATE_SEND:
+  - requirement: null
+    parts:
+      sender:
+        text: '&8[&a%player_name% &7➦ %toplayer_name%&3&8] '
+    msg:
+      default-color: 'f'
+      hover: '&7日期: %server_time_HH:mm:ss%'
+
+######################################################################
+#
+# 私聊接受
+#
+######################################################################
+PRIVATE_RECEIVE:
+  - requirement: null
+    parts:
+      receive:
+        text: '&8[&6%player_name% &7➥ &2%toplayer_name%&8] '
+    msg:
+      default-color: 'f'
+      hover: '&7日期: %server_time_HH:mm:ss%'
+
+######################################################################
+#
+# 全局
+#
+######################################################################
+GLOBAL:
+  - requirement: null
+    parts:
+      server:
+        text: '&8[&3%server_name%&8] '
+        hover: |-
+          &7服务器 &3%server_name%
+          &r
+          &7版本: &6%server_version%
+          &7在线人数: &a%server_online%&7/&2%server_max_players%
+          &7TPS: &b%server_tps%
+      player:
+        text: '&e%player_name%&8: '
+    msg:
+      default-color: 'f'
+      hover: '&7日期: %server_time_HH:mm:ss%'
+
+######################################################################
+#
+# 管理员频道
+#
+######################################################################
+STAFF:
+  - requirement: null
+    parts:
+      staff:
+        text: '&8[&cSTAFF&8] '
+        hover: |-
+          &7服务器 &3%server_name%
+          &r
+          &7版本: &6%server_version%
+          &7在线人数: &a%server_online%&7/&2%server_max_players%
+          &7TPS: &b%server_tps%
+          &7
+          &a▶ &2点击进入这个服务器
+        command: '/server %server_name%'
+      player:
+        text: '&e%player_name%&8: '
+    msg:
+      default-color: 'a'
+      hover: '&7日期: %server_time_HH:mm:ss%'
