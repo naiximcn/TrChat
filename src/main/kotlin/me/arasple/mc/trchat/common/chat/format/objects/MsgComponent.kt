@@ -12,6 +12,7 @@ import me.arasple.mc.trchat.util.MessageColors
 import me.arasple.mc.trchat.util.coloredAll
 import me.arasple.mc.trchat.util.replacePattern
 import net.md_5.bungee.api.ChatColor
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.common.util.VariableReader
@@ -20,7 +21,6 @@ import taboolib.module.chat.TellrawJson
 import taboolib.module.nms.getI18nName
 import taboolib.platform.compat.replacePlaceholder
 import taboolib.platform.util.buildItem
-import taboolib.platform.util.hoverItem
 import taboolib.platform.util.isAir
 import taboolib.platform.util.sendLang
 
@@ -79,17 +79,13 @@ class MsgComponent : JsonComponent {
                 // Item Show
                 if (itemDisplayEnabled && args[0] == "ITEM") {
                     val slot = args[1].toIntOrNull() ?: player.inventory.heldItemSlot
-                    val item = player.inventory.getItem(slot)
-                    if (item.isAir()) {
-                        player.sendLang("General-Cant-Show-Air")
-                        continue
-                    }
-                    tellraw.append(Users.itemCache.computeIfAbsent(item!!) {
+                    val item = player.inventory.getItem(slot) ?: ItemStack(Material.AIR)
+                    tellraw.append(Users.itemCache.computeIfAbsent(item) {
                         TellrawJson()
                             .append(itemFormat.replaceWithOrder(item.getName(player), item.amount.toString()))
-                            .hoverItem(item.run {
+                            .hoverItemFixed(item.run {
                                 if (function.getBoolean("GENERAL.ITEM-SHOW.COMPATIBLE", false)) {
-                                    buildItem(item)
+                                    buildItem(item) { material = Material.STONE }
                                 } else {
                                     this
                                 }
@@ -111,9 +107,7 @@ class MsgComponent : JsonComponent {
                 val function = ChatFunctions.matchFunction(args[0])
                 if (function != null) {
                     tellraw.append(function.displayJson.toTellrawJson(player, true, args[1]))
-                    function.run?.let {
-                        TrChatAPI.instantKether(player, it)
-                    }
+                    function.run?.let { TrChatAPI.instantKether(player, it) }
                     continue
                 }
             }
@@ -129,7 +123,7 @@ class MsgComponent : JsonComponent {
         suggest?.let { tellraw.suggestCommand(suggest!!.replacePlaceholder(player).replace("\$message", message)) }
         command?.let { tellraw.runCommand(command!!.replacePlaceholder(player).replace("\$message", message)) }
         url?.let { tellraw.openURL(url!!.replacePlaceholder(player).replace("\$message", message)) }
-        copy?.let { tellraw.copyToClipboard(copy!!.replacePlaceholder(player).replace("\$message", message)) }
+        copy?.let { tellraw.copyOrSuggest(copy!!.replacePlaceholder(player).replace("\$message", message)) }
         return tellraw
     }
 

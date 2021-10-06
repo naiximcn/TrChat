@@ -1,6 +1,13 @@
 # TrChat Update Logs #
 
 #### VERSION 1.9
+- #### 1.90-R2
+  - Updates:
+    - 添加撤回消息功能
+    - 支持DiscordSRV
+    - 支持转发更长的插件消息
+    - 添加自动删除日志功能
+    - 升级云端词库功能
 - #### 1.90-R1
   - Since 2021.9.13
   - Updates:

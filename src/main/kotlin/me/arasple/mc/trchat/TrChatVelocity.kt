@@ -32,7 +32,7 @@ object TrChatVelocity : Plugin() {
     override fun onLoad() {
         TrChat.motd.forEach { l -> console().sendMessage(l) }
         console().sendLang("Plugin-Loaded")
-        console().sendLang("Plugin-Proxy-Velocity")
+        console().sendLang("Plugin-Proxy-Supported", "Velocity")
 
         incoming = MinecraftChannelIdentifier.create("trchat", "proxy").also {
             plugin.server.channelRegistrar.register(it)

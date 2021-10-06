@@ -3,6 +3,7 @@ package me.arasple.mc.trchat.common.channel.impl
 import me.arasple.mc.trchat.common.channel.ChannelAbstract
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.obj.ChatType
+import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.internal.proxy.Proxy
 import me.arasple.mc.trchat.internal.proxy.sendBukkitMessage
 import org.bukkit.entity.Player
@@ -26,9 +27,10 @@ object ChannelGlobal : ChannelAbstract() {
             sender.sendLang("Global-Message-Not-Enable")
             return
         }
-        val format = ChatFormats.getFormat(this, sender)?.apply(sender, msg[0]) ?: return
-        val raw = format.toRawMessage()
+        val formatted = ChatFormats.getFormat(this, sender)?.apply(sender, msg[0]) ?: return
+        val raw = formatted.toRawMessage()
         sender.sendBukkitMessage("BroadcastRaw", sender.uniqueId.toString(), raw)
-        format.sendTo(console())
+        formatted.sendTo(console())
+        Users.putFormattedMessage(sender, formatted.toPlainText())
     }
 }

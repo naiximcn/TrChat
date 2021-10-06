@@ -52,7 +52,7 @@ object Proxy {
         }
     }
 
-    fun sendProxyMessage(player: Player, vararg args: String) {
+    fun sendBukkitMessage(player: Player, vararg args: String) {
         when (platform) {
             Platform.BUNGEE -> Bungees.sendBukkitMessage(player, *args)
             Platform.VELOCITY -> Velocity.sendBukkitMessage(player, *args)
@@ -66,8 +66,8 @@ object Proxy {
         } else {
             try {
                 when (platform) {
-                    Platform.BUNGEE -> sendProxyMessage(player, "SendLang", target, node, *args)
-                    Platform.VELOCITY -> sendProxyMessage(player, "SendLang", target, node, *args)
+                    Platform.BUNGEE -> sendBukkitMessage(player, "SendLang", target, node, *args)
+                    Platform.VELOCITY -> sendBukkitMessage(player, "SendLang", target, node, *args)
                     else -> return
                 }
             } catch (ignored: IllegalStateException) {
@@ -77,5 +77,5 @@ object Proxy {
 }
 
 fun Player.sendBukkitMessage(vararg args: String) {
-    Proxy.sendProxyMessage(this, *args)
+    Proxy.sendBukkitMessage(this, *args)
 }

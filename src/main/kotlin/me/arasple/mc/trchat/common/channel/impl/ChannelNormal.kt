@@ -4,6 +4,7 @@ import me.arasple.mc.trchat.common.channel.ChannelAbstract
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.ChatLogs
 import me.arasple.mc.trchat.common.chat.obj.ChatType
+import me.arasple.mc.trchat.internal.data.Users
 import org.bukkit.entity.Player
 import taboolib.common.platform.ProxyPlayer
 import taboolib.common.platform.function.console
@@ -33,5 +34,6 @@ object ChannelNormal : ChannelAbstract() {
         }
         formatted.sendTo(console())
         ChatLogs.log(sender, msg[0])
+        Users.putFormattedMessage(sender, formatted.toPlainText())
     }
 }

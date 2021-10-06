@@ -25,7 +25,7 @@ object TrChatBungee : Plugin() {
         TrChat.motd.forEach { l -> console().sendMessage(l) }
         ProxyServer.getInstance().registerChannel("trchat:main")
         console().sendLang("Plugin-Loaded")
-        console().sendLang("Plugin-Proxy-Bungee")
+        console().sendLang("Plugin-Proxy-Supported", "Bungee")
     }
 
     override fun onEnable() {

@@ -27,31 +27,31 @@ import taboolib.platform.util.sendLang
  * @since 2021/8/21 12:23
  */
 @PlatformSide([Platform.BUKKIT])
-@CommandHeader("trchat", ["trc"], "TrChat主命令", permission = "trchat.command.access")
+@CommandHeader("trchat", ["trc"], "TrChat主命令", permission = "trchat.access")
 object CommandHandler {
 
-    @CommandBody(permission = "trchat.admin", optional = true)
+    @CommandBody(permission = "trchat.command.reload", optional = true)
     val reload = subCommand {
         execute<CommandSender> { sender, _, _ ->
             TrChatFiles.reloadAll(sender)
         }
     }
 
-    @CommandBody(permission = "trchat.admin", optional = true)
+    @CommandBody(permission = "trchat.command.controlpanel", optional = true)
     val controlPanel = subCommand {
         execute<Player> { sender, _, _ ->
             MenuControlPanel.displayFor(sender)
         }
     }
 
-    @CommandBody(permission = "trchat.chatfilter", optional = true)
+    @CommandBody(permission = "trchat.command.chatfilter", optional = true)
     val chatFilter = subCommand {
         execute<Player> { sender, _, _ ->
             MenuFilterControl.displayFor(sender)
         }
     }
 
-    @CommandBody(permission = "trchat.admin", optional = true)
+    @CommandBody(permission = "trchat.command.mirror", optional = true)
     val mirror = subCommand {
         execute<ProxyCommandSender> { sender, _, _ ->
             submit(async = true) {

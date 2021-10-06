@@ -91,6 +91,7 @@ class ChannelCustom(
         if (sendToConsole) {
             formatted.sendTo(console())
         }
+        Users.putFormattedMessage(sender, formatted.toPlainText())
     }
 
     override fun toString(): String {

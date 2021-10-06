@@ -1,6 +1,6 @@
 plugins {
     java
-    id("io.izzel.taboolib") version "1.27"
+    id("io.izzel.taboolib") version "1.30"
     id("org.jetbrains.kotlin.jvm") version "1.5.31"
 }
 
@@ -30,7 +30,7 @@ taboolib {
     install("platform-bukkit", "platform-bungee", "platform-velocity")
     install("expansion-command-helper")
     classifier = null
-    version = "6.0.3-7"
+    version = "6.0.3-9"
 }
 
 repositories {

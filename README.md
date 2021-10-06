@@ -6,7 +6,7 @@
 
 API usage: 
 ```java
-class Demo {
+class Demo interface Listner{
     
     @EventHandler
     private void e(TrChatEvent e) {
