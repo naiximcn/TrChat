@@ -21,7 +21,7 @@ class HookDiscordSRV : HookAbstract() {
                     e.player,
                     e.message,
                     DiscordSRV.getPlugin().getOptionalChannel("global"),
-                    e.isCancelled
+                    false
                 )
             }
         }
