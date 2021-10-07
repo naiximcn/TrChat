@@ -26,40 +26,28 @@ object TrChatFiles {
     lateinit var settings: SecuredFile
         private set
 
-    @Config("formats.yml", migrate = true)
+    @Config("formats.yml", migrate = true, autoReload = true)
     lateinit var formats: SecuredFile
         private set
 
-    @Config("filter.yml", migrate = true)
+    @Config("filter.yml", migrate = true, autoReload = true)
     lateinit var filter: SecuredFile
         private set
 
-    @Config("function.yml", migrate = true)
+    @Config("function.yml", migrate = true, autoReload = true)
     lateinit var function: SecuredFile
         private set
 
-    @Config("channels.yml", migrate = true)
+    @Config("channels.yml", migrate = true, autoReload = true)
     lateinit var channels: SecuredFile
         private set
 
     @Awake(LifeCycle.ENABLE)
     fun init() {
-        FileWatcher.INSTANCE.addSimpleListener(filter.file) {
-            filter.reload()
-            ChatFilter.loadFilter(false, console())
-        }
-        FileWatcher.INSTANCE.addSimpleListener(formats.file) {
-            formats.reload()
-            ChatFormats.loadFormats(console())
-        }
-        FileWatcher.INSTANCE.addSimpleListener(function.file) {
-            function.reload()
-            ChatFunctions.loadFunctions(console())
-        }
-        FileWatcher.INSTANCE.addSimpleListener(channels.file) {
-            channels.reload()
-            ChatChannels.loadChannels(console())
-        }
+        formats.onReload { ChatFormats.loadFormats(console()) }
+        filter.onReload { ChatFilter.loadFilter(false, console()) }
+        function.onReload { ChatFunctions.loadFunctions(console()) }
+        channels.onReload { ChatChannels.loadChannels(console()) }
     }
 
     fun reloadAll(notify: CommandSender) {
