@@ -82,7 +82,7 @@ public final class HexUtils {
         return parsed;
     }
 
-    private static String parseRainbow(String message) {
+    public static String parseRainbow(String message) {
         String parsed = message;
 
         Matcher matcher = RAINBOW_PATTERN.matcher(parsed);
@@ -157,7 +157,7 @@ public final class HexUtils {
         return parsed;
     }
 
-    private static String parseGradients(String message) {
+    public static String parseGradients(String message) {
         String parsed = message;
 
         Matcher matcher = GRADIENT_PATTERN.matcher(parsed);
@@ -219,7 +219,7 @@ public final class HexUtils {
         return parsed;
     }
 
-    private static String parseHex(String message) {
+    public static String parseHex(String message) {
         String parsed = message;
 
         for (Pattern pattern : HEX_PATTERNS) {

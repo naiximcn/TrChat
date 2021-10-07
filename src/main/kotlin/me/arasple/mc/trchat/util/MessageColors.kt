@@ -24,9 +24,8 @@ object MessageColors {
 
     fun replaceWithPermission(player: Player?, s: String): String {
         var string = s
-        if (player == null) {
-            return string
-        }
+
+        player ?: return string
 
         if (player.hasPermission("$COLOR_PERMISSION_NODE*")) {
             string = string.coloredAll()
@@ -35,6 +34,15 @@ object MessageColors {
                 if (player.hasPermission(COLOR_PERMISSION_NODE + code)) {
                     string = string.replace("&$code", COLOR_CHAR + code)
                 }
+            }
+            if (player.hasPermission(COLOR_PERMISSION_NODE + "hex")) {
+                string = HexUtils.parseHex(string)
+            }
+            if (player.hasPermission(COLOR_PERMISSION_NODE + "rainbow")) {
+                string = HexUtils.parseRainbow(string)
+            }
+            if (player.hasPermission(COLOR_PERMISSION_NODE + "gradients")) {
+                string = HexUtils.parseGradients(string)
             }
         }
 
@@ -48,7 +56,7 @@ object MessageColors {
 
         for (code in COLOR_CODES) {
             if (player.hasPermission(FORCE_CHAT_COLOR_PERMISSION_NODE + code)) {
-                return ChatColor.getByChar(code).toString()
+                return COLOR_CHAR + code
             }
         }
 
