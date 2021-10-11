@@ -5,8 +5,7 @@ CLOUD-THESAURUS:
   WHITELIST: []
   # 云端词库地址
   URL:
-    - 'https://gitee.com/yurinann/Filter-Thesaurus-Cloud/raw/main/database.json' # 感谢南城提供的词库
-    - 'https://raw.githubusercontent.com/Yurinann/Filter-Thesaurus-Cloud/main/database.json'
+    - 'https://raw.githubusercontent.com/Yurinann/Filter-Thesaurus-Cloud/main/database.json' # 感谢南城提供的词库
 
 LOCAL:
   - 'NMSL'
