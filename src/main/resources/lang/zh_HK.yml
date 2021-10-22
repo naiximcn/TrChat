@@ -1,0 +1,201 @@
+######################################################################
+#
+#  ___________      _________ .__            __
+#  \__    __________\_   ___ \|  |__ _____ _/  |_
+#  |    |  \_  __ /    \  \/|  |  \\__  \\   __\
+#  |    |   |  | \\     \___|   Y  \/ __ \|  |
+#  |____|   |__|   \______  |___|  (____  |__|
+#  \/     \/     \/
+#
+# TrChat 的語言文件, 基於 TLocale
+#
+# 如何自定義更強的消息？查閲文檔：https://wiki.ptms.ink/index.php?title=TLocale_%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3 (已完全過時，僅供參考)
+# 所有消息均支持 TEXT / SOUND / TITLE / ACTIONBAR / COMMAND / JSON 等
+#
+######################################################################
+
+Plugin-Loaded-Chat-Formats: '&8[&3Tr&bChat&8] &b聊天 &8| &3成功載入聊天格式... &8[{0} Ms]'
+Plugin-Loaded-Functions: '&8[&3Tr&bChat&8] &b聊天 &8| &3成功載入自定義聊天功能... &8[{0} Ms]'
+Plugin-Loaded-Channels: '&8[&3Tr&bChat&8] &b聊天 &8| &3成功載入 &b{0} &3個聊天頻道... &8[{1} Ms]'
+Plugin-Loaded-Filter-Local: '&8[&3Tr&bChat&8] &a過濾器 &8| &3已載入本地敏感詞庫總計 &b{0} &3個.'
+Plugin-Loaded-Filter-Cloud: '&8[&3Tr&bChat&8] &a過濾器 &8| &3成功從雲端更新敏感詞彙總計 &a{0} &3個. &8[{1} - {2}]'
+Plugin-Reloaded: '&8[&3Tr&bChat&8] &7監聽到配置文件改動, 已自動載入相關配置等...'
+Plugin-Failed-Load-Filter-Cloud: '&8[&3Tr&bChat&8] &8無法從雲端更新敏感詞庫......'
+Plugin-Proxy-Supported: '&8[&3Tr&bChat&8] &6已支持 &e{0} &6通訊.'
+Plugin-Proxy-None: '&8[&3Tr&bChat&8] &7當前無跨服支持.'
+Plugin-Depend-Download: '&8[&3Tr&bChat&8] &e掛鈎 &8| &7正在下載前置插件 &f{0} &7...'
+Plugin-Depend-Installed: '&8[&3Tr&bChat&8] &e掛鈎 &8| &7已成功下載前置 &3{0} &7, 即將重啟服務端完成安裝...'
+Plugin-Depend-Install-Failed: '&8[&3Tr&bChat&8] &e掛鈎 &8| &7自動下載前置 &c{0} &7過程出錯, 請手動安裝, 服務器即將停止...'
+Plugin-Dependency-Hooked: '&8[&3Tr&bChat&8] &6掛鈎 &8| &7軟依賴 &f{0} &7已兼容.'
+Plugin-Loaded:
+  - ''
+  - '&3Tr&bChat &7正在載入中...'
+  - ''
+Plugin-Enabled: '&8[&3Tr&bChat&8] &b信息 &8| &3加載完畢. TrChat &av{0} &3現已啟用, 敬請使用.'
+Plugin-Disabled: '&8[&3Tr&bChat&8] &b信息 &8| &7感謝使用本插件, 您在論壇為本插件評分即是對作者最大的鼓勵!'
+Plugin-Command-Title: '&3「&8&m--------------------------------------------------&3」'
+Plugin-Updater-Latest: '&8[&3Tr&bChat&8] &8你正在運行最新版的 TrChat.'
+Plugin-Updater-Dev: '&8[&3Tr&bChat&8] &7你正在運行開發版本的 TrChat, 請及時反饋漏洞!'
+Plugin-Updater-Too-Old:
+  - "&8--------------------------------------------------"
+  - "&r"
+  - "&8# &4您所運行的 &cTrChat &4版本過舊, 可能潛在很多漏洞"
+  - "&8# &4請及時更新到最新版本以便獲得更好的插件體驗!"
+  - "&8# &r"
+  - "&8# &4Mcbbs: &chttps://www.mcbbs.net/thread-1245113-1-1.html"
+  - "&8# &r"
+  - "&r"
+  - "&8--------------------------------------------------"
+Plugin-Updater-Header:
+  - ''
+  - '&3--------------------------------------------------'
+  - '&7▪ &3TrChat &a更新通知 &8{0} &7➦ &8{1}'
+  - ''
+  - '&7▪ &e內容: '
+Plugin-Updater-Footer:
+  - ''
+  - '&7▪ &2前往 Github 下載: &a&nhttps://github.com/FlickerProjects/TrChat/releases'
+  - '&3--------------------------------------------------'
+Plugin-Debug-On:
+  - type: title
+    title: '&7&l調試模式'
+    subtitle: '&3&l當前已 &a&l開啟&3&l.'
+  - type: sound
+    sound: 'BLOCK_ANVIL_LAND'
+    volume: 1
+    pitch: 2
+Plugin-Debug-Off:
+  - type: title
+    title: '&7&l調試模式'
+    subtitle: '&3&l當前已 &c&l關閉&3&l.'
+  - type: sound
+    sound: 'BLOCK_ANVIL_LAND'
+    volume: 1
+    pitch: 0
+Plugin-Done: '&8[&3Tr&bChat&8] &f操作成功.'
+Plugin-Failed: '&8[&3Tr&bChat&8] &c操作失敗.'
+
+Error-Version: '&8[&3Tr&bChat&8] &c錯誤 &8| &7檢測版本號時發生異常... 請重新下載插件!'
+
+General-Too-Long: '&8[&3Tr&bChat&8] &7你的聊天內容過長. &8[&6{0}&8/&2{1}&8]'
+General-Too-Similar: '&8[&3Tr&bChat&8] &7你的兩次聊天內容過於相似, 請勿復讀.'
+General-No-Permission: '&8[&3Tr&bChat&8] &7你沒有足夠的權限執行此操作.'
+General-Muted: '&8[&3Tr&bChat&8] &c你被禁言了!'
+General-Global-Muting: '&8[&3Tr&bChat&8] &c全員禁言中.'
+
+Cooldowns-Chat:
+  - type: actionbar
+    text: '&7&l您需要等待聊天冷卻 &6{0}s &7&l後才能聊天, 請勿頻繁刷屏.'
+  - type: sound
+    sound: 'ENTITY_ITEM_BREAK'
+    volume: 1
+    pitch: 2
+Cooldowns-Item-Show:
+  - type: actionbar
+    text: '&3&l您需要等待冷卻 &a{0}s &3&l後才能再次展示物品.'
+  - type: sound
+    sound: 'ENTITY_ITEM_BREAK'
+    volume: 1
+    pitch: 0
+
+Command-Controller-Deny: '&c&l你不能使用該命令...'
+Command-Not-Player: '&8[&3Tr&bChat&8] &c你必須是一個玩家才能執行此操作.'
+Command-Player-Not-Exist: '&8[&3Tr&bChat&8] &7目標玩家未在線或不存在.'
+
+Mentions-Notify:
+  - type: actionbar
+    text: '&d&l&k|&r &3&l玩家 &a&l{0} &3&l在聊天中At了你 &d&l&k|'
+  - type: sound
+    sound: 'BLOCK_ANVIL_LAND'
+    volume: 1
+    pitch: 2
+
+Private-Message-Spy-Format: '&8[&3監聽&8] &6{0} &2-> &3{1}&f: &7{2}'
+Private-Message-Spy-On:
+  - type: actionbar
+    text: '&c&l&k|&r &a&l開啟監聽私聊模式 &c&l&k|'
+  - type: sound
+    sound: 'BLOCK_ANVIL_LAND'
+    volume: 1
+    pitch: 2
+Private-Message-Spy-Off:
+  - type: actionbar
+    text: '&c&l&k|&r &c&l關閉監聽私聊模式 &c&l&k|'
+  - type: sound
+    sound: 'BLOCK_ANVIL_LAND'
+    volume: 1
+    pitch: 0
+Private-Message-No-Player:
+  - type: actionbar
+    text: '&3&l請提供一名私聊的對象'
+  - type: sound
+    sound: 'ENTITY_ITEM_BREAK'
+    volume: 1
+    pitch: 0
+Private-Message-No-Message:
+  - type: actionbar
+    text: '&7&l請提供私聊內容'
+  - type: sound
+    sound: 'ENTITY_ITEM_BREAK'
+    volume: 1
+    pitch: 0
+Private-Message-Receive:
+  - type: actionbar
+    text: '&8[ &a! &8] &3你收到來自 &a{0} &3的一條私聊消息'
+  - type: sound
+    sound: 'BLOCK_ANVIL_LAND'
+    volume: 1
+    pitch: 2
+
+Global-Message-Not-Enable: '&8[&3Tr&bChat&8] &7未啟用跨服支持, 暫不支持喊話.'
+Global-Message-No-Message:
+  - type: actionbar
+    text: '&7&l你必須提供喊話內容'
+  - type: sound
+    sound: 'ENTITY_ITEM_BREAK'
+    volume: 1
+    pitch: 0
+
+Custom-Channel-No-Message:
+  - type: actionbar
+    text: '&7&l你必須提供聊天內容'
+  - type: sound
+    sound: 'ENTITY_ITEM_BREAK'
+    volume: 1
+    pitch: 0
+Custom-Channel-Join:
+  - type: actionbar
+    text: '&a&l已加入到{0}頻道聊天'
+  - type: text
+    text: '&8[&3Tr&bChat&8] &3你已經加入到{0}頻道, 輸入 /channel 即可退出.'
+  - type: sound
+    sound: 'BLOCK_ANVIL_LAND'
+    volume: 1
+    pitch: 2
+Custom-Channel-Quit:
+  - type: actionbar
+    text: '&3&l離開{0}聊天頻道'
+  - type: text
+    text: '&8[&3Tr&bChat&8] &7你已離開{0}頻道'
+  - type: sound
+    sound: 'BLOCK_ANVIL_LAND'
+    volume: 1
+    pitch: 0
+
+Mute-No-Player:
+  - type: actionbar
+    text: '&3&l請提供你要禁言的玩家'
+  - type: sound
+    sound: 'ENTITY_ITEM_BREAK'
+    volume: 1
+    pitch: 0
+Mute-Time-Not-Specified:
+  - type: actionbar
+    text: '&7&l你必須提供禁言時間 (分鐘)'
+  - type: sound
+    sound: 'ENTITY_ITEM_BREAK'
+    volume: 1
+    pitch: 0
+Mute-Muted-Player: '&8[&3Tr&bChat&8] &7你已禁言 {0} {1} 分鐘.'
+Mute-Muted-All: '&8[&3Tr&bChat&8] &7全員禁言已開啟.'
+Mute-Cancel-Muted-All: '&8[&3Tr&bChat&8] &7全員禁言已關閉.'

@@ -1,3 +1,18 @@
+######################################################################
+#
+#  ___________      _________ .__            __
+#  \__    __________\_   ___ \|  |__ _____ _/  |_
+#  |    |  \_  __ /    \  \/|  |  \\__  \\   __\
+#  |    |   |  | \\     \___|   Y  \/ __ \|  |
+#  |____|   |__|   \______  |___|  (____  |__|
+#  \/     \/     \/
+#
+# TrChat's language file, based on TLocale
+#
+# All messages support TEXT / SOUND / TITLE / ACTIONBAR / COMMAND / JSON etc.
+#
+######################################################################
+
 Plugin-Loaded-Chat-Formats: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded chat formats... &8[{0} Ms]'
 Plugin-Loaded-Functions: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded chat functions... &8[{0} Ms]'
 Plugin-Loaded-Channels: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded &b{0} &3chat channels... &8[{1} Ms]'
@@ -8,7 +23,7 @@ Plugin-Failed-Load-Filter-Cloud: '&8[&3Tr&bChat&8] &8Unable to update filter the
 Plugin-Proxy-Supported: '&8[&3Tr&bChat&8] &6Hooked &e{0} &6chat support.'
 Plugin-Proxy-None: '&8[&3Tr&bChat&8] &7No proxy support currently'
 Plugin-Depend-Download: '&8[&3Tr&bChat&8] &eDEPEND &8| &7Downloading depend plugin &f{0} &7...'
-Plugin-Depend-Installed: '&8[&3Tr&bChat&8] &eDEPEND &8| &7Successfullly downloaded &3{0} &7, restarting the server...'
+Plugin-Depend-Installed: '&8[&3Tr&bChat&8] &eDEPEND &8| &7Successfully downloaded &3{0} &7, restarting the server...'
 Plugin-Depend-Install-Failed: '&8[&3Tr&bChat&8] &eDEPEND &8| &7Failed to install depend plugin &c{0} &7...'
 Plugin-Dependency-Hooked: '&8[&3Tr&bChat&8] &6HOOK &8| &7Soft-Dependency &f{0} &7is hooked.'
 Plugin-Loaded:
@@ -80,7 +95,7 @@ Cooldowns-Item-Show:
     pitch: 0
 
 Command-Controller-Deny: '&c&lYou can not use this command.'
-Command-Not-Player: '&8[&3Tr&bChat&8] &cYou must be a player to do this'
+Command-Not-Player: '&8[&3Tr&bChat&8] &cYou must be a player to do this.'
 Command-Player-Not-Exist: '&8[&3Tr&bChat&8] &7The target player is not online or does not exist.'
 
 Mentions-Notify:
@@ -128,7 +143,7 @@ Private-Message-Receive:
     volume: 1
     pitch: 2
 
-Global-Message-Not-Enable: '&8[&3Tr&bChat&8] &7Unabled to connect &eBungeeCord &7.'
+Global-Message-Not-Enable: '&8[&3Tr&bChat&8] &7Unable to connect &eBungeeCord &7.'
 Global-Message-No-Message:
   - type: actionbar
     text: '&7&lMessage required'
