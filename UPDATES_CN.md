@@ -4,9 +4,9 @@
 - #### 1.90-R2
   - Updates:
     - 支持渐变色和彩虹色
-    - 修复Bungee报错无法进入问题
+    - 修复 Bungee 报错无法进入问题
     - 添加撤回消息功能
-    - 支持DiscordSRV
+    - 支持 DiscordSRV
     - 支持转发更长的插件消息
     - 添加自动删除日志功能
     - 升级云端词库功能
@@ -18,8 +18,8 @@
     - 默认颜色支持HEX颜色
     - 配置文件支持渐变色
     - 支持原版社交系统
-    - 优化Bungee和Velocity的消息转发
-    - 修复1.17延迟异常问题
+    - 优化 Bungee 和 Velocity 的消息转发
+    - 修复 1.17 延迟异常问题
 
 #### VERSION 1.8
   ```
@@ -30,55 +30,55 @@
 - #### 1.84
   - Since 2021.9.11
   - Updates:
-    - 重制频道功能(支持自定义频道)
+    - 重制频道功能 (支持自定义频道)
     - 重制聊天内部事件
     - 修复私聊的严重bug
-    - 优化有关NMS和OBC的代码
+    - 优化有关 NMS 和 OBC 的代码
     - 升级脚本模块
     - 修复一些兼容性bug
 - #### 1.83
   - Since 2021.8.27
   - Updates:
-    - 升级TabooLib至正式版6.0.0
-    - 添加mirror功能(/trchat mirror)
-    - 增强requirement功能
+    - 升级 TabooLib 至正式版 6.0.0
+    - 添加 mirror 功能 (/trchat mirror)
+    - 增强 requirement 功能
     - 修复一堆bug
     - 优化性能
 - #### 1.82
   - Since 2021.8.22
   - Updates:
-    - 支持Velocity跨服端
-    - 修复上个版本中ORIGIN-NAME不生效
+    - 支持 Velocity 跨服端
+    - 修复上个版本中 ORIGIN-NAME 不生效
 - #### 1.81
   - Since 2021.8.19
   - Updates:
     - 修复强制聊天颜色权限不生效
-    - 支持formats和function替换优先级(priority)
+    - 支持 formats 和 function 替换优先级 (priority)
     - 修复展示空气时报错
-    - 可选择展示物品是否展示经过铁砧改动的名字(ORIGIN-NAME: false)
-    - 非私聊支持消息后缀(suffix)
-    - 修改语言文件中的BLOCK_NOTE_BLOCK_PLING(低版本不存在)
-    - 优化启动时的motd(感谢@Tontto )
-    - 修复上个版本中AT无效
-    - 支持所有JSON的HEX颜色
-    - 支持JSON复制到剪贴板动作(copy)
-    - 支持Dynmap聊天
+    - 可选择展示物品是否展示经过铁砧改动的名字 (ORIGIN-NAME: false)
+    - 非私聊支持消息后缀 (suffix)
+    - 修改语言文件中的 BLOCK_NOTE_BLOCK_PLING (低版本不存在)
+    - 优化启动时的 motd (感谢 @Tontto )
+    - 修复上个版本中 AT 无效
+    - 支持所有 JSON 的 HEX 颜色
+    - 支持 JSON 复制到剪贴板动作 (copy)
+    - 支持 Dynmap 聊天
 - #### 1.80
   - Since 2021.8.15
   - Updates:
     - 升级 TabooLib 至 6.0.0-pre45
-    - 主要代码用kotlin重写
+    - 主要代码用 kotlin 重写
     - 扁平化语言文件,优化一些节点
-    - 支持1.17
-    - 支持1.16HEX颜色代码(perm: trchat.color.*) ```eg: &{#FFFFFF}```
-    - 增加屏蔽功能(/ignore)
-    - 修复Java16的js执行
+    - 支持 1.17
+    - 支持 1.16 HEX颜色代码 (perm: trchat.color.*) ```eg: &{#FFFFFF}```
+    - 增加屏蔽功能 (/ignore)
+    - 修复 Java16 的 js 执行
     - 修复敏感词过滤器
     - 修复日志系统
     - 优化配置文件
-    - 修复在1.17中的发包监听器
-    - 修复无法展示带有PublicBukkitValues标签的物品
-    - 添加GlobalShoutEvent
+    - 修复在 1.17 中的发包监听器
+    - 修复无法展示带有 PublicBukkitValues 标签的物品
+    - 添加 GlobalShoutEvent
 
 #### VERSION 1.7
   - #### 1.70
