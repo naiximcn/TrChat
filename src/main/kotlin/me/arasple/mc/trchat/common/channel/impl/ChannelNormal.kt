@@ -27,13 +27,13 @@ object ChannelNormal : ChannelAbstract() {
     override val format: String
         get() = "NORMAL"
 
-    override fun execute(sender: Player, vararg msg: String) {
-        val formatted = ChatFormats.getFormat(this, sender)?.apply(sender, msg[0]) ?: return
+    override fun execute(sender: Player, msg: String, args: Array<String>) {
+        val formatted = ChatFormats.getFormat(this, sender)?.apply(sender, msg) ?: return
         targets[sender.uniqueId]!!.forEach {
             formatted.sendTo(it)
         }
         formatted.sendTo(console())
-        ChatLogs.log(sender, msg[0])
+        ChatLogs.log(sender, msg)
         Users.putFormattedMessage(sender, formatted.toPlainText())
     }
 }

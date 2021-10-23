@@ -41,8 +41,8 @@ object ChannelPrivate {
     }
 
     fun execute(from: Player, to: String, message: String) {
-        TrChatEvent(ChannelPrivateSend, from, message, to).call()
-        TrChatEvent(ChannelPrivateReceive, from, message, to).call()
+        TrChatEvent(ChannelPrivateSend, from, message, arrayOf(to)).call()
+        TrChatEvent(ChannelPrivateReceive, from, message, arrayOf(to)).call()
 
         // Spy
         spying.forEach { spy ->

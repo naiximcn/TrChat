@@ -54,8 +54,8 @@ class ChannelCustom(
     override val chatType: ChatType
         get() = ChatType.CUSTOM
 
-    override fun execute(sender: Player, vararg msg: String) {
-        val formatted = ChatFormats.getFormat(this, sender)!!.apply(sender, msg[0], forwardToDynmap = forwardToDynmap, privateChat = private)
+    override fun execute(sender: Player, msg: String, args: Array<String>) {
+        val formatted = ChatFormats.getFormat(this, sender)!!.apply(sender, msg, forwardToDynmap = forwardToDynmap, privateChat = private)
         if (alwaysReceive) {
             if (Proxy.isEnabled) {
                 sender.sendBukkitMessage("SendRawPerm", formatted.toRawMessage(), permission)

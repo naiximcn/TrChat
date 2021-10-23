@@ -21,8 +21,8 @@ object ChannelPrivateSend : ChannelAbstract() {
     override val format: String
         get() = "PRIVATE_SEND"
 
-    override fun execute(sender: Player, vararg msg: String) {
-        val formatted = ChatFormats.getFormat(this, sender)?.apply(sender, msg[0], "true", msg[1], privateChat = true) ?: return
+    override fun execute(sender: Player, msg: String, args: Array<String>) {
+        val formatted = ChatFormats.getFormat(this, sender)?.apply(sender, msg, "true", args[0], privateChat = true) ?: return
         formatted.sendTo(adaptPlayer(sender))
     }
 }

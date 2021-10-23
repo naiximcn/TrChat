@@ -24,7 +24,7 @@ object Users {
     fun getCooldownLeft(uuid: UUID, type: CooldownType): Long {
         cooldowns.putIfAbsent(uuid, Cooldowns())
         for (COOLDOWN in cooldowns[uuid]!!.cooldowns) {
-            if (COOLDOWN.id.equals(type.alias, ignoreCase = true)) {
+            if (COOLDOWN.id == type.alias) {
                 return COOLDOWN.time - System.currentTimeMillis()
             }
         }
@@ -37,7 +37,7 @@ object Users {
 
     fun updateCooldown(uuid: UUID, type: CooldownType, lasts: Long) {
         cooldowns.putIfAbsent(uuid, Cooldowns())
-        cooldowns[uuid]!!.cooldowns.removeIf { c -> c.id.equals(type.alias, ignoreCase = true) }
+        cooldowns[uuid]!!.cooldowns.removeIf { it.id == type.alias }
         cooldowns[uuid]!!.cooldowns.add(Cooldown(type.alias, System.currentTimeMillis() + lasts))
     }
 

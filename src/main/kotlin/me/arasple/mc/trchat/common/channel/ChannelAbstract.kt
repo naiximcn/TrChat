@@ -16,6 +16,6 @@ abstract class ChannelAbstract {
 
     abstract val format: String
 
-    internal abstract fun execute(sender: Player, vararg msg: String)
+    internal abstract fun execute(sender: Player, msg: String, args: Array<String>)
 
 }

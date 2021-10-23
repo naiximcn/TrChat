@@ -26,7 +26,7 @@ import java.util.concurrent.TimeoutException
 object TrChatAPI {
 
     /**
-     * 根据玩家的权限，过滤的字符串
+     * 根据玩家的权限 (trchat.bypass.filter)，过滤字符串
      *
      * @param player 玩家
      * @param string 字符串
@@ -38,6 +38,11 @@ object TrChatAPI {
         return if (execute) filter(string, !player.hasPermission("trchat.bypass.filter")) else FilteredObject(string, 0)
     }
 
+    /**
+     * 过滤物品的名字和Lore
+     *
+     * @param itemStack 物品
+     */
     @JvmStatic
     fun filterItemStack(itemStack: ItemStack) {
         if (itemStack.isAir()) {
@@ -72,6 +77,14 @@ object TrChatAPI {
         }
     }
 
+    /**
+     * 执行 Kether 脚本
+     *
+     * @param player 玩家 (sender)
+     * @param script kether 脚本
+     * @param timeout 超时时间 (ms)
+     * @return 执行结果
+     */
     @JvmStatic
     fun instantKether(player: Player, script: String, timeout: Long = 100): EvalResult {
         return try {

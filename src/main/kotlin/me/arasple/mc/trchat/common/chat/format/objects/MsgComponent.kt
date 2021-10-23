@@ -35,9 +35,7 @@ class MsgComponent : JsonComponent {
     constructor(text: String?, hover: List<String?>?, suggest: String?, command: String?, url: String?, copy: String?) : super(text, hover, suggest, command, url, copy)
 
     constructor(partSection: LinkedHashMap<*, *>) : super(partSection) {
-        defaultColor = partSection["default-color"].toString().let {
-            it.ifEmpty { null }
-        }
+        defaultColor = partSection["default-color"].toString().ifEmpty { null }
     }
 
     fun toMsgTellraw(player: Player, msg: String, isPrivateChat: Boolean): TellrawJson {
@@ -106,7 +104,7 @@ class MsgComponent : JsonComponent {
                 // Custom Functions
                 val function = ChatFunctions.matchFunction(args[0])
                 if (function != null) {
-                    tellraw.append(function.displayJson.toTellrawJson(player, true, args[1]))
+                    tellraw.append(function.displayJson.toTellrawJson(player, args[1], function = true))
                     function.run?.let { TrChatAPI.instantKether(player, it) }
                     continue
                 }

@@ -12,11 +12,9 @@ import taboolib.platform.type.BukkitProxyEvent
  * @author wlys
  * @since 2021/8/20 20:53
  */
-class TrChatEvent(val channel: ChannelAbstract, val sender: Player, vararg var message: String) : BukkitProxyEvent() {
+class TrChatEvent(val channel: ChannelAbstract, val sender: Player, var message: String, val args: Array<String> = emptyArray()) : BukkitProxyEvent() {
 
     init {
-        message = message.toMutableList().also {
-            it[0] = it[0].filterUUID()
-        }.toTypedArray()
+        message = message.filterUUID().replace("<", "\\<")
     }
 }

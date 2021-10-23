@@ -63,11 +63,7 @@ open class JsonComponent {
         }
     }
 
-    fun toTellrawJson(player: Player, vararg vars: String): TellrawJson {
-        return toTellrawJson(player, false, *vars)
-    }
-
-    fun toTellrawJson(player: Player, function: Boolean, vararg vars: String): TellrawJson {
+    fun toTellrawJson(player: Player, vararg vars: String, function: Boolean = false): TellrawJson {
         val tellraw = TellrawJson()
         if (!Condition.eval(player, requirement).asBoolean()) {
             return tellraw

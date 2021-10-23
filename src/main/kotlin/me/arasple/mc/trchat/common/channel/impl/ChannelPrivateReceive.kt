@@ -8,6 +8,7 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.getProxyPlayer
 import taboolib.module.lang.sendLang
+import taboolib.platform.util.sendLang
 
 /**
  * ChannelPrivateReceive
@@ -24,16 +25,18 @@ object ChannelPrivateReceive : ChannelAbstract() {
     override val format: String
         get() = "PRIVATE_RECEIVE"
 
-    override fun execute(sender: Player, vararg msg: String) {
-        val formatted = ChatFormats.getFormat(this, sender)?.apply(sender, msg[0], "true", msg[1], privateChat = true) ?: return
+    override fun execute(sender: Player, msg: String, args: Array<String>) {
+        val formatted = ChatFormats.getFormat(this, sender)?.apply(sender, msg, "true", args[0], privateChat = true) ?: return
 
-        val toPlayer = Bukkit.getPlayerExact(msg[1])
+        val toPlayer = Bukkit.getPlayerExact(args[0])
         if (toPlayer == null || !toPlayer.isOnline) {
             val raw = formatted.toRawMessage()
-            sender.sendBukkitMessage("SendRaw", msg[1], raw)
+            sender.sendBukkitMessage("SendRaw", args[0], raw)
         } else {
-            formatted.sendTo(getProxyPlayer(msg[1])!!)
-            getProxyPlayer(msg[1])!!.sendLang("Private-Message-Receive", sender.name)
+            getProxyPlayer(args[0])?.let {
+                formatted.sendTo(it)
+                it.sendLang("Private-Message-Receive", sender.name)
+            }
         }
     }
 }

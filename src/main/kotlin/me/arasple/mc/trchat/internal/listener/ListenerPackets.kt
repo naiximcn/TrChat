@@ -57,20 +57,20 @@ object ListenerPackets {
             }
         }
         // Tab Complete
-        if (TrChatFiles.settings.getBoolean("GENERAL.PREVENT-TAB-COMPLETE", false)
-            && e.packet.name == "PacketPlayOutTabComplete"
-            && !e.player.hasPermission("trchat.bypass.tabcomplete")) {
-            if (majorLegacy >= 11700) {
-                e.isCancelled = (e.packet.read<Suggestions>("suggestions") ?: Suggestions.empty().get())
-                    .list.none { Bukkit.getPlayerExact(it.text) != null }
-            } else if (majorLegacy >= 11300) {
-                e.isCancelled = (e.packet.read<Suggestions>("b") ?: Suggestions.empty().get())
-                    .list.none { Bukkit.getPlayerExact(it.text) != null }
-            } else {
-                e.isCancelled = listOf(*e.packet.read<Array<String>>("a") ?: emptyArray())
-                    .none { Bukkit.getPlayerExact(it) != null }
-            }
-        }
+//        if (TrChatFiles.settings.getBoolean("GENERAL.PREVENT-TAB-COMPLETE", false)
+//            && e.packet.name == "PacketPlayOutTabComplete"
+//            && !e.player.hasPermission("trchat.bypass.tabcomplete")) {
+//            if (majorLegacy >= 11700) {
+//                e.isCancelled = (e.packet.read<Suggestions>("suggestions") ?: Suggestions.empty().get())
+//                    .list.none { Bukkit.getPlayerExact(it.text) != null }
+//            } else if (majorLegacy >= 11300) {
+//                e.isCancelled = (e.packet.read<Suggestions>("b") ?: Suggestions.empty().get())
+//                    .list.none { Bukkit.getPlayerExact(it.text) != null }
+//            } else {
+//                e.isCancelled = listOf(*e.packet.read<Array<String>>("a") ?: emptyArray())
+//                    .none { Bukkit.getPlayerExact(it) != null }
+//            }
+//        }
     }
 
     private fun filterComponent(component: BaseComponent): BaseComponent {

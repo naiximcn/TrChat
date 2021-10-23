@@ -27,15 +27,15 @@ class Format(
         if (formatMap.containsKey("suffix")) JsonComponent.loadList(formatMap["suffix"]!!) else emptyList()
     )
 
-    fun apply(player: Player, vararg message: String, forwardToDynmap: Boolean = true, privateChat: Boolean = false): TellrawJson {
+    fun apply(player: Player, message: String, vararg args: String, forwardToDynmap: Boolean = true, privateChat: Boolean = false): TellrawJson {
         val format = TellrawJson()
-        prefix.forEach { x -> format.append(x.toTellrawJson(player, *message.drop(1).toTypedArray())) }
-        format.append(msg.toMsgTellraw(player, message[0], privateChat).also {
+        prefix.forEach { x -> format.append(x.toTellrawJson(player, *args)) }
+        format.append(msg.toMsgTellraw(player, message, privateChat).also {
             if (forwardToDynmap) {
                 HookPlugin.getDynmap().forwardChat(player, it)
             }
         })
-        suffix.forEach { x -> format.append(x.toTellrawJson(player, *message.drop(1).toTypedArray())) }
+        suffix.forEach { x -> format.append(x.toTellrawJson(player, *args)) }
         return format
     }
 

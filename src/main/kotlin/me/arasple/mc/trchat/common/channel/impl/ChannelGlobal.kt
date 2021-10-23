@@ -2,6 +2,7 @@ package me.arasple.mc.trchat.common.channel.impl
 
 import me.arasple.mc.trchat.common.channel.ChannelAbstract
 import me.arasple.mc.trchat.common.chat.ChatFormats
+import me.arasple.mc.trchat.common.chat.ChatLogs
 import me.arasple.mc.trchat.common.chat.obj.ChatType
 import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.internal.proxy.Proxy
@@ -22,15 +23,16 @@ object ChannelGlobal : ChannelAbstract() {
     override val format: String
         get() = "GLOBAL"
 
-    override fun execute(sender: Player, vararg msg: String) {
+    override fun execute(sender: Player, msg: String, args: Array<String>) {
         if (!Proxy.isEnabled) {
             sender.sendLang("Global-Message-Not-Enable")
             return
         }
-        val formatted = ChatFormats.getFormat(this, sender)?.apply(sender, msg[0]) ?: return
+        val formatted = ChatFormats.getFormat(this, sender)?.apply(sender, msg) ?: return
         val raw = formatted.toRawMessage()
         sender.sendBukkitMessage("BroadcastRaw", sender.uniqueId.toString(), raw)
         formatted.sendTo(console())
+        ChatLogs.log(sender, msg)
         Users.putFormattedMessage(sender, formatted.toPlainText())
     }
 }
