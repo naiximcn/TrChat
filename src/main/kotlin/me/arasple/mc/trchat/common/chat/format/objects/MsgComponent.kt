@@ -46,9 +46,9 @@ class MsgComponent : JsonComponent {
         val tellraw = TellrawJson()
         // Custom Functions
         ChatFunctions.functions.filter { f -> Condition.eval(player, f.requirement).asBoolean() }.forEach { function ->
-            message = replacePattern(message, function.pattern, function.filterTextPattern, "<" + function.name + ":{0}>")
+            message = replacePattern(message, function.pattern, function.filterTextPattern, "<<" + function.name + ":{0}>>")
         }
-        // At & Item Show
+        // At
         val atEnabled = function.getBoolean("GENERAL.MENTION.ENABLE", true) && !Users.isInCooldown(player.uniqueId, Cooldowns.CooldownType.MENTION)
         val atFormat = function.getString("GENERAL.MENTION.FORMAT").coloredAll()
         if (atEnabled) {
@@ -56,22 +56,23 @@ class MsgComponent : JsonComponent {
                 if (!function.getBoolean("GENERAL.MENTION.SELF-MENTION", false) && p.equals(player.name, ignoreCase = true)) {
                     continue
                 }
-                message = message.replace("(?i)(@)?$p".toRegex(), "<AT:$p>")
+                message = message.replace("(?i)(@)?$p".toRegex(), "<<AT:$p>>")
             }
         }
+        // Item Show
         val itemDisplayEnabled = function.getBoolean("GENERAL.ITEM-SHOW.ENABLE", true)
         val itemKeys = function.getStringList("GENERAL.ITEM-SHOW.KEYS")
         val itemFormat = function.getString("GENERAL.ITEM-SHOW.FORMAT", "&8[&3{0} &bx{1}&8]").coloredAll()
         if (itemDisplayEnabled) {
             for (key in itemKeys) {
                 for (i in 0..8) {
-                    message = message.replace("$key-$i", "<ITEM:$i>", ignoreCase = true)
+                    message = message.replace("$key-$i", "<<ITEM:$i>>", ignoreCase = true)
                 }
-                message = message.replace(key, "<ITEM:" + player.inventory.heldItemSlot + ">", ignoreCase = true)
+                message = message.replace(key, "<<ITEM:" + player.inventory.heldItemSlot + ">>", ignoreCase = true)
             }
         }
 
-        for (v in VariableReader(message, '<', '>').parts) {
+        for (v in VariableReader(message, '<', '>', repeat = 2).parts) {
             if (v.isVariable) {
                 val args = v.text.split(':', limit = 2)
                 // Item Show
@@ -83,7 +84,7 @@ class MsgComponent : JsonComponent {
                             .append(itemFormat.replaceWithOrder(item.getName(player), item.amount.toString()))
                             .hoverItemFixed(item.run {
                                 if (function.getBoolean("GENERAL.ITEM-SHOW.COMPATIBLE", false)) {
-                                    buildItem(item) { material = Material.STONE }
+                                    buildItem(this) { material = Material.STONE }
                                 } else {
                                     this
                                 }
@@ -117,11 +118,11 @@ class MsgComponent : JsonComponent {
     private fun toTellrawPart(player: Player, text: String?, message: String): TellrawJson {
         val tellraw = TellrawJson()
         tellraw.append((text ?: "§8[§fNull§8]").replace("\$message", message))
-        hover?.let { tellraw.hoverText(hover!!.replacePlaceholder(player).replace("\$message", message).coloredAll()) }
-        suggest?.let { tellraw.suggestCommand(suggest!!.replacePlaceholder(player).replace("\$message", message)) }
-        command?.let { tellraw.runCommand(command!!.replacePlaceholder(player).replace("\$message", message)) }
-        url?.let { tellraw.openURL(url!!.replacePlaceholder(player).replace("\$message", message)) }
-        copy?.let { tellraw.copyOrSuggest(copy!!.replacePlaceholder(player).replace("\$message", message)) }
+        hover?.let { tellraw.hoverText(it.replacePlaceholder(player).replace("\$message", message).coloredAll()) }
+        suggest?.let { tellraw.suggestCommand(it.replacePlaceholder(player).replace("\$message", message)) }
+        command?.let { tellraw.runCommand(it.replacePlaceholder(player).replace("\$message", message)) }
+        url?.let { tellraw.openURL(it.replacePlaceholder(player).replace("\$message", message)) }
+        copy?.let { tellraw.copyOrSuggest(it.replacePlaceholder(player).replace("\$message", message)) }
         return tellraw
     }
 

@@ -111,10 +111,6 @@ object ListenerChatEvent {
                 Users.setLastMessage(p.uniqueId, message)
             }
         }
-        if (message.contains("<.+?:.+?>".toRegex())) {
-            p.sendMessage("§7Invalid message.")
-            return false
-        }
         return true
     }
 }

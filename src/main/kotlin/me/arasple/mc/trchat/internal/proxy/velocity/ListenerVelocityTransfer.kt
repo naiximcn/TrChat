@@ -83,7 +83,10 @@ object ListenerVelocityTransfer {
                 val node = data[2]
                 val args = subList(data.toList(), 3).toTypedArray()
 
-                getProxyPlayer(to)?.sendLang(node, *args)
+                try {
+                    getProxyPlayer(to)?.sendLang(node, *args)
+                } catch (ignored: IllegalStateException) {
+                }
             }
         }
     }

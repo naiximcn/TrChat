@@ -88,11 +88,11 @@ open class JsonComponent {
         return tellraw
     }
 
-    private fun convertHoverText(any: Any?): String {
+    private fun convertHoverText(any: Any?): String? {
         return if (any is List<*>) {
             any.joinToString("\n") { it.toString() }
         } else {
-            any.toString()
+            any?.toString()
         }
     }
 

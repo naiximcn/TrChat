@@ -53,13 +53,11 @@ object ChatChannels {
 
         @SubscribeEvent(EventPriority.HIGHEST, ignoreCancelled = true)
         fun callChannel(e: TrChatEvent) {
-            if (!e.isCancelled) {
-                mirrorNow("Common:Channel:${e.channel.format}") {
-                    e.channel.execute(e.sender, e.message, e.args)
-                }
-                if (e.channel != ChannelPrivateSend) {
-                    Metrics.increase(0)
-                }
+            mirrorNow("Common:Channel:${e.channel.format}") {
+                e.channel.execute(e.sender, e.message, e.args)
+            }
+            if (e.channel != ChannelPrivateSend) {
+                Metrics.increase(0)
             }
         }
 

@@ -7,7 +7,7 @@
 #  |____|   |__|   \______  |___|  (____  |__|
 #  \/     \/     \/
 #
-# TrChat 的语言文件, 基于 TLocale
+# TrChat 的语言文件
 #
 # 如何自定义更强的消息？查阅文档：https://wiki.ptms.ink/index.php?title=TLocale_%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3 (已完全过时，仅供参考)
 # 所有消息均支持 TEXT / SOUND / TITLE / ACTIONBAR / COMMAND / JSON 等

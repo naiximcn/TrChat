@@ -38,5 +38,4 @@ class Format(
         suffix.forEach { x -> format.append(x.toTellrawJson(player, *args)) }
         return format
     }
-
 }

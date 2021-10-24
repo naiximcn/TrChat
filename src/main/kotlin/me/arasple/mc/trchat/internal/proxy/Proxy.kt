@@ -64,13 +64,10 @@ object Proxy {
         if (!isEnabled || Bukkit.getPlayerExact(target) != null) {
             getProxyPlayer(target)?.sendLang(node, *args)
         } else {
-            try {
-                when (platform) {
-                    Platform.BUNGEE -> sendBukkitMessage(player, "SendLang", target, node, *args)
-                    Platform.VELOCITY -> sendBukkitMessage(player, "SendLang", target, node, *args)
-                    else -> return
-                }
-            } catch (ignored: IllegalStateException) {
+            when (platform) {
+                Platform.BUNGEE -> sendBukkitMessage(player, "SendLang", target, node, *args)
+                Platform.VELOCITY -> sendBukkitMessage(player, "SendLang", target, node, *args)
+                else -> return
             }
         }
     }
