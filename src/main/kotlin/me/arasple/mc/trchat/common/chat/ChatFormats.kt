@@ -7,6 +7,7 @@ import me.arasple.mc.trchat.internal.script.Condition
 import me.arasple.mc.trchat.util.notify
 import org.bukkit.entity.Player
 import taboolib.common.platform.ProxyCommandSender
+import kotlin.system.measureTimeMillis
 
 /**
  * @author Arasple, wlys
@@ -23,18 +24,17 @@ object ChatFormats {
     }
 
     fun loadFormats(vararg notify: ProxyCommandSender) {
-        val start = System.currentTimeMillis()
-        formats.entries.clear()
+        measureTimeMillis {
+            formats.entries.clear()
 
-        for (format in TrChatFiles.formats.getKeys(false)) {
-            val formats = mutableListOf<Format>()
-            TrChatFiles.formats.getMapList(format).forEach { formatMap ->
-                formats.add(Format(formatMap))
+            for (format in TrChatFiles.formats.getKeys(false)) {
+                val formats = mutableListOf<Format>()
+                TrChatFiles.formats.getMapList(format).forEach { formatMap ->
+                    formats.add(Format(formatMap))
+                }
+                formats.sortBy { it.priority }
+                ChatFormats.formats[format] = formats
             }
-            formats.sortBy { it.priority }
-            ChatFormats.formats[format] = formats
-        }
-
-        notify(notify, "Plugin-Loaded-Chat-Formats", System.currentTimeMillis() - start)
+        }.also { notify(notify, "Plugin-Loaded-Chat-Formats", it) }
     }
 }

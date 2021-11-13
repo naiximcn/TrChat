@@ -5,6 +5,7 @@ import me.arasple.mc.trchat.common.function.imp.Function
 import me.arasple.mc.trchat.util.notify
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.library.configuration.MemorySection
+import kotlin.system.measureTimeMillis
 
 /**
  * @author Arasple
@@ -15,16 +16,15 @@ object ChatFunctions {
     val functions = mutableListOf<Function>()
 
     fun loadFunctions(vararg notify: ProxyCommandSender) {
-        val start = System.currentTimeMillis()
-        functions.clear()
+        measureTimeMillis {
+            functions.clear()
 
-        TrChatFiles.function.getConfigurationSection("CUSTOM").getValues(false).forEach { (name, funObj) ->
-            functions.add(Function(name, funObj as MemorySection))
-        }
+            TrChatFiles.function.getConfigurationSection("CUSTOM").getValues(false).forEach { (name, funObj) ->
+                functions.add(Function(name, funObj as MemorySection))
+            }
 
-        functions.sortBy { it.priority }
-
-        notify(notify, "Plugin-Loaded-Functions", System.currentTimeMillis() - start)
+            functions.sortBy { it.priority }
+        }.also { notify(notify, "Plugin-Loaded-Functions", it) }
     }
 
     fun matchFunction(key: String): Function? {

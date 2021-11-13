@@ -11,6 +11,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.common.reflect.Reflex.Companion.invokeConstructor
 import taboolib.common.reflect.Reflex.Companion.invokeMethod
+import taboolib.common.util.asList
 import taboolib.common.util.replaceWithOrder
 import taboolib.module.chat.TellrawJson
 import taboolib.module.nms.nmsClass
@@ -32,7 +33,7 @@ open class JsonComponent {
 
     constructor(text: String?, hover: List<String?>?, suggest: String?, command: String?, url: String?, copy: String?) {
         this.text = text
-        this.hover = convertHoverText(hover)
+        this.hover = hover?.joinToString("\n")
         this.suggest = suggest
         this.command = command
         this.url = url
@@ -40,27 +41,13 @@ open class JsonComponent {
     }
 
     constructor(partSection: LinkedHashMap<*, *>) {
-        if (partSection.containsKey("text")) {
-            text = partSection["text"].toString()
-        }
-        if (partSection.containsKey("hover")) {
-            hover = convertHoverText(partSection["hover"])
-        }
-        if (partSection.containsKey("suggest")) {
-            suggest = partSection["suggest"].toString()
-        }
-        if (partSection.containsKey("command")) {
-            command = partSection["command"].toString()
-        }
-        if (partSection.containsKey("url")) {
-            url = partSection["url"].toString()
-        }
-        if (partSection.containsKey("requirement")) {
-            requirement = partSection["requirement"].toString()
-        }
-        if (partSection.containsKey("copy")) {
-            copy = partSection["copy"].toString()
-        }
+        text = partSection["text"]?.toString()
+        hover = partSection["hover"]?.asList()?.joinToString("\n")
+        suggest = partSection["suggest"]?.toString()
+        command = partSection["command"]?.toString()
+        url = partSection["url"]?.toString()
+        requirement = partSection["requirement"]?.toString()
+        copy = partSection["copy"]?.toString()
     }
 
     fun toTellrawJson(player: Player, vararg vars: String, function: Boolean = false): TellrawJson {
@@ -86,14 +73,6 @@ open class JsonComponent {
         url?.let { tellraw.openURL(it.replaceWithOrder(*vars).replacePlaceholder(player)) }
         copy?.let { tellraw.copyOrSuggest(it.replaceWithOrder(*vars).replacePlaceholder(player)) }
         return tellraw
-    }
-
-    private fun convertHoverText(any: Any?): String? {
-        return if (any is List<*>) {
-            any.joinToString("\n") { it.toString() }
-        } else {
-            any?.toString()
-        }
     }
 
     companion object {
