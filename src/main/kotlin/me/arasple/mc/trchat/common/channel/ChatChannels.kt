@@ -14,6 +14,7 @@ import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common5.mirrorNow
 import taboolib.library.configuration.MemorySection
+import kotlin.system.measureTimeMillis
 
 /**
  * ChatChannels
@@ -30,23 +31,22 @@ object ChatChannels {
     private var default: ChannelCustom? = null
 
     fun loadChannels(vararg notify: ProxyCommandSender) {
-        val start = System.currentTimeMillis()
-        channels.clear()
-        ChannelCustom.list.clear()
+        measureTimeMillis {
+            channels.clear()
+            ChannelCustom.list.clear()
 
-        channels += listOf(
-            ChannelNormal,
-            ChannelGlobal,
-            ChannelPrivateSend,
-            ChannelPrivateReceive
-        )
-        TrChatFiles.channels.getConfigurationSection("CUSTOM")?.getValues(false)?.forEach { (name, obj) ->
-            ChannelCustom.list.add(ChannelCustom(name, obj as MemorySection))
-        }
-        channels.addAll(ChannelCustom.list)
-        default = ChannelCustom.of(TrChatFiles.channels.getString("DEFAULT-CUSTOM-CHANNEL", null))
-
-        notify(notify, "Plugin-Loaded-Channels", channels.size, System.currentTimeMillis() - start)
+            channels += listOf(
+                ChannelNormal,
+                ChannelGlobal,
+                ChannelPrivateSend,
+                ChannelPrivateReceive
+            )
+            TrChatFiles.channels.getConfigurationSection("CUSTOM")?.getValues(false)?.forEach { (name, obj) ->
+                ChannelCustom.list.add(ChannelCustom(name, obj as MemorySection))
+            }
+            channels.addAll(ChannelCustom.list)
+            default = ChannelCustom.of(TrChatFiles.channels.getString("DEFAULT-CUSTOM-CHANNEL", null))
+        }.also { notify(notify, "Plugin-Loaded-Channels", channels.size, it) }
     }
 
     internal object ChannelListener {
