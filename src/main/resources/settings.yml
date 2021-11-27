@@ -29,6 +29,14 @@ GENERAL:
   PREVENT-TAB-COMPLETE: false
   # NONE, BUNGEE, VELOCITY
   PROXY: NONE
+  DATABASE:
+    enable: false
+    host: localhost
+    port: 3306
+    user: root
+    password: root
+    database: root
+    table: trchat
 
 # Chat Color
 # Perm Node: trchat.color.<CODE>

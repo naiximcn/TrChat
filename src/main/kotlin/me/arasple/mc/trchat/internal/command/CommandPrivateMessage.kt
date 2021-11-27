@@ -33,12 +33,12 @@ object CommandPrivateMessage {
                 dynamic("message") {
                     suggestion<Player>(uncheck = true) { _, context ->
                         Players.getPlayers().filter {
-                            it.lowercase(Locale.getDefault()).startsWith(context.argument(-1)!!)
+                            it.lowercase(Locale.getDefault()).startsWith(context.argument(-1))
                         }
                     }
                     execute<Player> { sender, context, argument ->
                         if (sender.checkMute()) {
-                            Players.getPlayerFullName(context.argument(-1)!!)?.let {
+                            Players.getPlayerFullName(context.argument(-1))?.let {
                                 ChannelPrivate.execute(sender, it, argument)
                             } ?: sender.sendLang("Command-Player-Not-Exist")
                         }

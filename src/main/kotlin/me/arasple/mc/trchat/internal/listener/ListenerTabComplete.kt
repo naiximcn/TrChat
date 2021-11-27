@@ -2,7 +2,6 @@ package me.arasple.mc.trchat.internal.listener
 
 import me.arasple.mc.trchat.api.TrChatFiles
 import org.bukkit.event.player.PlayerCommandSendEvent
-import org.bukkit.event.server.TabCompleteEvent
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.event.SubscribeEvent

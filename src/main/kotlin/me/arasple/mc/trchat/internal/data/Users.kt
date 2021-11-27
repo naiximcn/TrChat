@@ -3,9 +3,9 @@ package me.arasple.mc.trchat.internal.data
 import me.arasple.mc.trchat.common.channel.impl.ChannelCustom
 import me.arasple.mc.trchat.internal.data.Cooldowns.Cooldown
 import me.arasple.mc.trchat.internal.data.Cooldowns.CooldownType
-import me.arasple.mc.trchat.internal.data.Database.database
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import taboolib.expansion.getDataContainer
 import taboolib.module.chat.TellrawJson
 import taboolib.platform.util.sendLang
 import java.util.*
@@ -42,11 +42,11 @@ object Users {
     }
 
     fun isFilterEnabled(user: Player): Boolean {
-        return database.pull(user).getBoolean("FILTER", true)
+        return user.getDataContainer()["filter"].toBoolean()
     }
 
     fun setFilter(user: Player, value: Boolean) {
-        database.pull(user).set("FILTER", value)
+        user.getDataContainer()["filter"] = value
     }
 
     fun getLastMessage(uuid: UUID): String {
@@ -66,19 +66,20 @@ object Users {
     }
 
     fun updateMuteTime(user: Player, time: Long) {
-        database.pull(user).set("MUTE_TIME", System.currentTimeMillis() + time * 1000)
+        user.getDataContainer()["mute_time"] = System.currentTimeMillis() + time * 1000
     }
 
     fun isMuted(user: Player): Boolean {
-       return database.pull(user).getLong("MUTE_TIME", 0) > System.currentTimeMillis()
+        return (user.getDataContainer()["mute_time"]?.toIntOrNull() ?: 0) > System.currentTimeMillis()
     }
 
     fun setCustomChannel(user: Player, channel: ChannelCustom?) {
-        database.pull(user).set("CUSTOM-CHANNEL", channel?.name)
+        user.getDataContainer()["custom_channel"] = channel?.name ?: ""
     }
 
     fun getCustomChannel(user: Player): ChannelCustom? {
-        return ChannelCustom.list.firstOrNull { it.name == database.pull(user).getString("CUSTOM-CHANNEL", "") }
+        val current = user.getDataContainer()["custom_channel"]?.ifEmpty { return null } ?: return null
+        return ChannelCustom.list.firstOrNull { it.name == current }
     }
 
     fun removeCustomChannel(user: Player) {

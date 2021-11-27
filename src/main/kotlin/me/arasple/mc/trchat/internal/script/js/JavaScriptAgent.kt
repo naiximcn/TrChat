@@ -4,11 +4,7 @@ import com.google.common.collect.Maps
 import me.arasple.mc.trchat.internal.script.EvalResult
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import taboolib.common.platform.function.console
 import taboolib.common5.compileJS
-import taboolib.module.lang.sendLang
-import taboolib.platform.util.sendLang
-import java.util.*
 import javax.script.CompiledScript
 import javax.script.ScriptContext
 import javax.script.SimpleBindings

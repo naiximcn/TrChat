@@ -32,8 +32,8 @@ object CommandHandler {
 
     @CommandBody(permission = "trchat.command.reload", optional = true)
     val reload = subCommand {
-        execute<CommandSender> { sender, _, _ ->
-            TrChatFiles.reloadAll(sender)
+        execute<CommandSender> { _, _, _ ->
+            TrChatFiles.reloadAll()
         }
     }
 

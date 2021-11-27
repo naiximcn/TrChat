@@ -52,7 +52,7 @@ object ListenerChatEvent {
         // DiscordSRV
         HookPlugin.getDiscordSRV().forwardChat(e)
         // Global
-        val globalPrefix = TrChatFiles.channels.getString("FORCE-GLOBAL-PREFIX", "!all")
+        val globalPrefix = TrChatFiles.channels.getString("FORCE-GLOBAL-PREFIX", "!all")!!
         if (TrChatFiles.channels.getBoolean("FORCE-GLOBAL", false)
             || e.message.startsWith(globalPrefix)) {
             e.isCancelled = true

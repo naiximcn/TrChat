@@ -25,7 +25,7 @@ object ListenerTrChatInfo {
         e.isCancelled = react(e.player, if (e.message.startsWith("#")) e.message.substring(1) else null)
 
         if (e.message == "#TRCHAT-RELOAD" && e.player.hasPermission("trchat.admin")) {
-            TrChatFiles.reloadAll(e.player)
+            TrChatFiles.reloadAll()
             e.isCancelled = true
         }
     }

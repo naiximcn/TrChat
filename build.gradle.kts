@@ -1,7 +1,7 @@
 plugins {
     java
     id("io.izzel.taboolib") version "1.31"
-    id("org.jetbrains.kotlin.jvm") version "1.5.31"
+    id("org.jetbrains.kotlin.jvm") version "1.6.0"
 }
 
 taboolib {
@@ -28,9 +28,9 @@ taboolib {
     install("module-porticus")
     install("module-ui")
     install("platform-bukkit", "platform-bungee", "platform-velocity")
-    install("expansion-command-helper")
+    install("expansion-command-helper", "expansion-player-database")
     classifier = null
-    version = "6.0.4-1"
+    version = "6.0.5-9"
 }
 
 repositories {

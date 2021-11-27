@@ -13,7 +13,8 @@ import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common5.mirrorNow
-import taboolib.library.configuration.MemorySection
+import taboolib.module.configuration.ConfigSection
+import taboolib.module.configuration.util.getMap
 import kotlin.system.measureTimeMillis
 
 /**
@@ -41,8 +42,8 @@ object ChatChannels {
                 ChannelPrivateSend,
                 ChannelPrivateReceive
             )
-            TrChatFiles.channels.getConfigurationSection("CUSTOM")?.getValues(false)?.forEach { (name, obj) ->
-                ChannelCustom.list.add(ChannelCustom(name, obj as MemorySection))
+            TrChatFiles.channels.getMap<String, ConfigSection>("CUSTOM").forEach { (name, obj) ->
+                ChannelCustom.list.add(ChannelCustom(name, obj))
             }
             channels.addAll(ChannelCustom.list)
             default = ChannelCustom.of(TrChatFiles.channels.getString("DEFAULT-CUSTOM-CHANNEL", null))

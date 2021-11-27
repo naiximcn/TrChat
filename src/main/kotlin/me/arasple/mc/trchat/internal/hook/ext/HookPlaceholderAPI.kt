@@ -20,8 +20,8 @@ object HookPlaceholderAPI : PlaceholderExpansion {
     override val identifier: String
         get() = "trchat"
 
-    override fun onPlaceholderRequest(player: Player, args: String): String {
-        if (player.isOnline) {
+    override fun onPlaceholderRequest(player: Player?, args: String): String {
+        if (player != null && player.isOnline) {
             val params = args.split("_")
 
             return when(params[0].lowercase()) {

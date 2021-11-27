@@ -25,7 +25,7 @@ object ChatLogs {
     private val dateFormat0 = SimpleDateFormat("yyyy-MM-dd")
     private val dateFormat1 = SimpleDateFormat("HH:mm:ss")
 
-    @Schedule(delay = 20 * 15, period = 20 * 60 * 5, async = true)
+    @Schedule(delay = (20 * 15).toLong(), period = (20 * 60 * 5).toLong(), async = true)
     @Awake(LifeCycle.DISABLE)
     fun writeToFile() {
         val logFile = newFile(File(getDataFolder(), "logs"), "${dateFormat0.format(System.currentTimeMillis())}.txt", create = true)
@@ -38,7 +38,7 @@ object ChatLogs {
         waveList.clear()
     }
 
-    @Schedule(delay = 20 * 15, period = 20 * 60 * 5, async = true)
+    @Schedule(delay = (20 * 15).toLong(), period = (20 * 60 * 5).toLong(), async = true)
     fun autoDelete() {
         val days = settings.getLong("GENERAL.LOG-DELETE-TIME", 0L)
         if (days > 0) {
@@ -55,7 +55,7 @@ object ChatLogs {
 
     fun log(player: Player, originalMessage: String) {
         waveList.add(
-            settings.getString("GENERAL.LOG-NORMAL", "[{0}] {1}: {2}").replaceWithOrder(
+            settings.getString("GENERAL.LOG-NORMAL", "[{0}] {1}: {2}")!!.replaceWithOrder(
                 dateFormat1.format(System.currentTimeMillis()),
                 player.name,
                 originalMessage
@@ -65,7 +65,7 @@ object ChatLogs {
 
     fun logPrivate(from: String, to: String, originalMessage: String) {
         waveList.add(
-            settings.getString("GENERAL.LOG-PRIVATE", "[{0}] {1} -> {2}: {3}").replaceWithOrder(
+            settings.getString("GENERAL.LOG-PRIVATE", "[{0}] {1} -> {2}: {3}")!!.replaceWithOrder(
                 dateFormat1.format(System.currentTimeMillis()),
                 from,
                 to,

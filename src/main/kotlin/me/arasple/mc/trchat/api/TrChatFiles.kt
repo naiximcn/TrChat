@@ -9,11 +9,9 @@ import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
-import taboolib.common.platform.function.adaptCommandSender
 import taboolib.common.platform.function.console
-import taboolib.common5.FileWatcher
 import taboolib.module.configuration.Config
-import taboolib.module.configuration.SecuredFile
+import taboolib.module.configuration.ConfigFile
 
 /**
  * @author Arasple, wlys
@@ -22,24 +20,24 @@ import taboolib.module.configuration.SecuredFile
 @PlatformSide([Platform.BUKKIT])
 object TrChatFiles {
 
-    @Config("settings.yml", migrate = true, autoReload = true)
-    lateinit var settings: SecuredFile
+    @Config("settings.yml", autoReload = true)
+    lateinit var settings: ConfigFile
         private set
 
-    @Config("formats.yml", migrate = true, autoReload = true)
-    lateinit var formats: SecuredFile
+    @Config("formats.yml", autoReload = true)
+    lateinit var formats: ConfigFile
         private set
 
-    @Config("filter.yml", migrate = true, autoReload = true)
-    lateinit var filter: SecuredFile
+    @Config("filter.yml", autoReload = true)
+    lateinit var filter: ConfigFile
         private set
 
-    @Config("function.yml", migrate = true, autoReload = true)
-    lateinit var function: SecuredFile
+    @Config("function.yml", autoReload = true)
+    lateinit var function: ConfigFile
         private set
 
-    @Config("channels.yml", migrate = true, autoReload = true)
-    lateinit var channels: SecuredFile
+    @Config("channels.yml", autoReload = true)
+    lateinit var channels: ConfigFile
         private set
 
     @Awake(LifeCycle.ENABLE)
@@ -50,15 +48,11 @@ object TrChatFiles {
         channels.onReload { ChatChannels.loadChannels(console()) }
     }
 
-    fun reloadAll(notify: CommandSender) {
+    fun reloadAll() {
         settings.reload()
         formats.reload()
-        ChatFormats.loadFormats(adaptCommandSender(notify))
         filter.reload()
-        ChatFilter.loadFilter(true, adaptCommandSender(notify))
         function.reload()
-        ChatFunctions.loadFunctions(adaptCommandSender(notify))
         channels.reload()
-        ChatChannels.loadChannels(adaptCommandSender(notify))
     }
 }

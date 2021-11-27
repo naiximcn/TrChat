@@ -60,7 +60,7 @@ object TrChat : Plugin() {
     }
 
     override fun onEnable() {
-        Database.database
+        Database.init()
         console().sendLang("Plugin-Enabled", pluginVersion)
         HookPlugin.printInfo()
     }

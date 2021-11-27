@@ -39,7 +39,7 @@ object CommandMute {
                         Coerce.asInteger(argument).isPresent
                     }
                     execute<CommandSender> { sender, context, argument ->
-                        Bukkit.getPlayer(context.argument(-1)!!)?.let {
+                        Bukkit.getPlayer(context.argument(-1))?.let {
                             Users.updateMuteTime(it, Coerce.toLong(argument) * 60)
                             sender.sendLang("Mute-Muted-Player", it.name, argument)
                         } ?: sender.sendLang("Command-Player-Not-Exist")

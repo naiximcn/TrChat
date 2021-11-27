@@ -21,8 +21,6 @@ import taboolib.module.chat.TellrawJson
 import taboolib.module.nms.getI18nName
 import taboolib.platform.compat.replacePlaceholder
 import taboolib.platform.util.buildItem
-import taboolib.platform.util.isAir
-import taboolib.platform.util.sendLang
 
 /**
  * @author Arasple
@@ -50,7 +48,7 @@ class MsgComponent : JsonComponent {
         }
         // At
         val atEnabled = function.getBoolean("GENERAL.MENTION.ENABLE", true) && !Users.isInCooldown(player.uniqueId, Cooldowns.CooldownType.MENTION)
-        val atFormat = function.getString("GENERAL.MENTION.FORMAT").coloredAll()
+        val atFormat = function.getString("GENERAL.MENTION.FORMAT")!!.coloredAll()
         if (atEnabled) {
             for (p in Players.getPlayers()) {
                 if (!function.getBoolean("GENERAL.MENTION.SELF-MENTION", false) && p.equals(player.name, ignoreCase = true)) {
@@ -62,7 +60,7 @@ class MsgComponent : JsonComponent {
         // Item Show
         val itemDisplayEnabled = function.getBoolean("GENERAL.ITEM-SHOW.ENABLE", true)
         val itemKeys = function.getStringList("GENERAL.ITEM-SHOW.KEYS")
-        val itemFormat = function.getString("GENERAL.ITEM-SHOW.FORMAT", "&8[&3{0} &bx{1}&8]").coloredAll()
+        val itemFormat = function.getString("GENERAL.ITEM-SHOW.FORMAT", "&8[&3{0} &bx{1}&8]")!!.coloredAll()
         if (itemDisplayEnabled) {
             for (key in itemKeys) {
                 for (i in 0..8) {

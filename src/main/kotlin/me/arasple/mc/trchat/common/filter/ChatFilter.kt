@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets
 object ChatFilter {
 
     private val CLOUD_LAST_UPDATE = mutableMapOf<String, String>()
-    private var CLOUD_URL = mutableListOf<String>()
+    private var CLOUD_URL = listOf<String>()
     private val CLOUD_WORDS = mutableSetOf<String>()
 
     @Schedule(delay = (20 * 120).toLong(), period = (30 * 60 * 20).toLong(), async = true)
@@ -42,7 +42,7 @@ object ChatFilter {
         // 初始化本地配置
         Filter.setSensitiveWord(filter.getStringList("LOCAL"))
         Filter.setPunctuations(filter.getStringList("IGNORED-PUNCTUATIONS"))
-        Filter.setReplacement(filter.getString("REPLACEMENT")[0])
+        Filter.setReplacement(filter.getString("REPLACEMENT")!![0])
 
         // 更新云端词库
         if (updateCloud && filter.getBoolean("CLOUD-THESAURUS.ENABLE", false)) {

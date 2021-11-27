@@ -25,9 +25,9 @@ object Proxy {
 
     val platform by lazy {
         if (Bukkit.getServer().spigot().config.getBoolean("settings.bungeecord", false)) {
-            TrChatFiles.settings.set("GENERAL.PROXY", "BUNGEE")
+            TrChatFiles.settings["GENERAL.PROXY"] = "BUNGEE"
         }
-        when (val p = TrChatFiles.settings.getString("GENERAL.PROXY", "NONE").uppercase()) {
+        when (val p = TrChatFiles.settings.getString("GENERAL.PROXY", "NONE")!!.uppercase()) {
             "NONE" -> {
                 console().sendLang("Plugin-Proxy-None")
                 Platform.UNKNOWN

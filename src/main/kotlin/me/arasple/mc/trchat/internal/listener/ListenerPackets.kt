@@ -1,13 +1,10 @@
 package me.arasple.mc.trchat.internal.listener
 
-import com.mojang.brigadier.suggestion.Suggestions
-import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.api.nms.NMS
 import me.arasple.mc.trchat.common.filter.ChatFilter.filter
 import me.arasple.mc.trchat.internal.data.Users.isFilterEnabled
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.TextComponent
-import org.bukkit.Bukkit
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.event.SubscribeEvent

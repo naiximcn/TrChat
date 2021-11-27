@@ -26,7 +26,7 @@ object ListenerCommand {
         }
 
         if (function.getBoolean("GENERAL.COMMAND-CONTROLLER.ENABLE", true) && command.isNotEmpty()
-            && !player.hasPermission(function.getString("GENERAL.COMMAND-CONTROLLER.BYPASS", "trchat.admin"))) {
+            && !player.hasPermission(function.getString("GENERAL.COMMAND-CONTROLLER.BYPASS", "trchat.admin")!!)) {
             val whitelist = function.getString("GENERAL.COMMAND-CONTROLLER.TYPE", "BLACKLIST").equals("WHITELIST", ignoreCase = true)
             val matches = function.getStringList("GENERAL.COMMAND-CONTROLLER.LIST")
             val matched = matches.any { m ->

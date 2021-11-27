@@ -8,7 +8,6 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.getProxyPlayer
 import taboolib.module.lang.sendLang
-import taboolib.platform.util.sendLang
 
 /**
  * ChannelPrivateReceive

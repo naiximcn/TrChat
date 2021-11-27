@@ -12,7 +12,7 @@ import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.adaptPlayer
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.onlinePlayers
-import taboolib.library.configuration.MemorySection
+import taboolib.module.configuration.ConfigSection
 import taboolib.platform.util.sendLang
 import taboolib.platform.util.toProxyLocation
 
@@ -36,11 +36,11 @@ class ChannelCustom(
     val autoQuit: Boolean
     ): ChannelAbstract() {
 
-    constructor(name: String, obj: MemorySection) : this(
+    constructor(name: String, obj: ConfigSection) : this(
         name,
-        obj.getString("FORMAT"),
-        obj.getString("PERMISSION"),
-        obj.getString("RANGE", "ALL").split(";").let {
+        obj.getString("FORMAT")!!,
+        obj.getString("PERMISSION")!!,
+        obj.getString("RANGE", "ALL")!!.split(";").let {
             Target(Range.valueOf(it[0].uppercase()), it.getOrNull(1)?.toIntOrNull())
         },
         obj.getBoolean("PRIVATE", false),
