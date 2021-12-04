@@ -35,15 +35,15 @@ object MessageColors {
                     string = string.replace("&$code", COLOR_CHAR + code)
                 }
             }
-            if (player.hasPermission(COLOR_PERMISSION_NODE + "hex")) {
-                string = HexUtils.parseHex(string)
-            }
-            if (player.hasPermission(COLOR_PERMISSION_NODE + "rainbow")) {
-                string = HexUtils.parseRainbow(string)
-            }
-            if (player.hasPermission(COLOR_PERMISSION_NODE + "gradients")) {
-                string = HexUtils.parseGradients(string)
-            }
+        }
+        if (player.hasPermission(COLOR_PERMISSION_NODE + "hex")) {
+            string = HexUtils.parseHex(string)
+        }
+        if (player.hasPermission(COLOR_PERMISSION_NODE + "rainbow")) {
+            string = HexUtils.parseRainbow(string)
+        }
+        if (player.hasPermission(COLOR_PERMISSION_NODE + "gradients")) {
+            string = HexUtils.parseGradients(string)
         }
 
         return string
