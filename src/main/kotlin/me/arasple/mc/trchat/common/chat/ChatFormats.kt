@@ -27,13 +27,8 @@ object ChatFormats {
         measureTimeMillis {
             formats.entries.clear()
 
-            for (format in TrChatFiles.formats.getKeys(false)) {
-                val formats = mutableListOf<Format>()
-                TrChatFiles.formats.getMapList(format).forEach { formatMap ->
-                    formats.add(Format(formatMap))
-                }
-                formats.sortBy { it.priority }
-                ChatFormats.formats[format] = formats
+            TrChatFiles.formats.getKeys(false).forEach { format ->
+                formats[format] = TrChatFiles.formats.getMapList(format).map { Format(it) }.sortedBy { it.priority }
             }
         }.also { notify(notify, "Plugin-Loaded-Chat-Formats", it) }
     }

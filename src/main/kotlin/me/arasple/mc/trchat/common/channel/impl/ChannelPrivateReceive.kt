@@ -2,12 +2,16 @@ package me.arasple.mc.trchat.common.channel.impl
 
 import me.arasple.mc.trchat.common.channel.ChannelAbstract
 import me.arasple.mc.trchat.common.chat.ChatFormats
+import me.arasple.mc.trchat.common.chat.ChatLogs
 import me.arasple.mc.trchat.common.chat.obj.ChatType
+import me.arasple.mc.trchat.internal.command.CommandReply
 import me.arasple.mc.trchat.internal.proxy.sendBukkitMessage
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import taboolib.common.platform.function.console
 import taboolib.common.platform.function.getProxyPlayer
 import taboolib.module.lang.sendLang
+import java.util.*
 
 /**
  * ChannelPrivateReceive
@@ -17,6 +21,8 @@ import taboolib.module.lang.sendLang
  * @since 2021/8/28 21:17
  */
 object ChannelPrivateReceive : ChannelAbstract() {
+
+    private val spying = mutableListOf<UUID>()
 
     override val chatType: ChatType
         get() = ChatType.PRIVATE_RECEIVE
@@ -37,5 +43,30 @@ object ChannelPrivateReceive : ChannelAbstract() {
                 it.sendLang("Private-Message-Receive", sender.name)
             }
         }
+
+        // Spy
+        spying.forEach {
+            val spyPlayer = getProxyPlayer(it)
+            if (spyPlayer != null && spyPlayer.isOnline()) {
+                spyPlayer.sendLang("Private-Message-Spy-Format", sender.name, args[0], msg)
+            }
+        }
+        console().sendLang("Private-Message-Spy-Format", sender.name, args[0], msg)
+
+        ChatLogs.logPrivate(sender.name, args[0], msg)
+        CommandReply.lastMessageFrom[args[0]] = sender.name
+    }
+
+    fun switchSpy(player: Player): Boolean {
+        if (!spying.contains(player.uniqueId)) {
+            spying.add(player.uniqueId)
+        } else {
+            spying.remove(player.uniqueId)
+        }
+        return spying.contains(player.uniqueId)
+    }
+
+    fun isSpying(player: Player): Boolean {
+        return spying.contains(player.uniqueId)
     }
 }

@@ -2,7 +2,8 @@ package me.arasple.mc.trchat.common.channel
 
 import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.api.event.TrChatEvent
-import me.arasple.mc.trchat.common.channel.impl.*
+import me.arasple.mc.trchat.common.channel.impl.ChannelCustom
+import me.arasple.mc.trchat.common.channel.impl.ChannelPrivateSend
 import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.internal.service.Metrics
 import me.arasple.mc.trchat.util.notify
@@ -13,7 +14,7 @@ import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common5.mirrorNow
-import taboolib.module.configuration.ConfigSection
+import taboolib.library.configuration.ConfigurationSection
 import taboolib.module.configuration.util.getMap
 import kotlin.system.measureTimeMillis
 
@@ -27,27 +28,17 @@ import kotlin.system.measureTimeMillis
 @PlatformSide([Platform.BUKKIT])
 object ChatChannels {
 
-    private val channels = mutableListOf<ChannelAbstract>()
-
     private var default: ChannelCustom? = null
 
     fun loadChannels(vararg notify: ProxyCommandSender) {
         measureTimeMillis {
-            channels.clear()
             ChannelCustom.list.clear()
 
-            channels += listOf(
-                ChannelNormal,
-                ChannelGlobal,
-                ChannelPrivateSend,
-                ChannelPrivateReceive
-            )
-            TrChatFiles.channels.getMap<String, ConfigSection>("CUSTOM").forEach { (name, obj) ->
+            TrChatFiles.channels.getMap<String, ConfigurationSection>("CUSTOM").forEach { (name, obj) ->
                 ChannelCustom.list.add(ChannelCustom(name, obj))
             }
-            channels.addAll(ChannelCustom.list)
             default = ChannelCustom.of(TrChatFiles.channels.getString("DEFAULT-CUSTOM-CHANNEL", null))
-        }.also { notify(notify, "Plugin-Loaded-Channels", channels.size, it) }
+        }.also { notify(notify, "Plugin-Loaded-Channels", ChannelCustom.list.size + 4, it) }
     }
 
     internal object ChannelListener {

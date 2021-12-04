@@ -1,6 +1,8 @@
 package me.arasple.mc.trchat.internal.command
 
-import me.arasple.mc.trchat.common.channel.ChannelPrivate
+import me.arasple.mc.trchat.api.event.TrChatEvent
+import me.arasple.mc.trchat.common.channel.impl.ChannelPrivateReceive
+import me.arasple.mc.trchat.common.channel.impl.ChannelPrivateSend
 import me.arasple.mc.trchat.internal.proxy.bukkit.Players
 import me.arasple.mc.trchat.util.checkMute
 import org.bukkit.entity.Player
@@ -11,7 +13,6 @@ import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.command.command
 import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
-import java.util.*
 
 /**
  * CommandPrivateMessage
@@ -33,13 +34,14 @@ object CommandPrivateMessage {
                 dynamic("message") {
                     suggestion<Player>(uncheck = true) { _, context ->
                         Players.getPlayers().filter {
-                            it.lowercase(Locale.getDefault()).startsWith(context.argument(-1))
+                            it.lowercase().startsWith(context.argument(-1))
                         }
                     }
                     execute<Player> { sender, context, argument ->
                         if (sender.checkMute()) {
                             Players.getPlayerFullName(context.argument(-1))?.let {
-                                ChannelPrivate.execute(sender, it, argument)
+                                TrChatEvent(ChannelPrivateSend, sender, argument, arrayOf(it)).call()
+                                TrChatEvent(ChannelPrivateReceive, sender, argument, arrayOf(it)).call()
                             } ?: sender.sendLang("Command-Player-Not-Exist")
                         }
                     }

@@ -1,7 +1,7 @@
 package me.arasple.mc.trchat.internal.command
 
 import me.arasple.mc.trchat.api.TrChatFiles
-import me.arasple.mc.trchat.common.channel.ChannelPrivate
+import me.arasple.mc.trchat.common.channel.impl.ChannelPrivateReceive
 import me.arasple.mc.trchat.internal.menu.MenuControlPanel
 import me.arasple.mc.trchat.internal.menu.MenuFilterControl
 import org.bukkit.command.CommandSender
@@ -67,7 +67,7 @@ object CommandHandler {
     @CommandBody(permission = "trchat.admin", optional = true)
     val spy = subCommand {
         execute<Player> { sender, _, _ ->
-            val state = ChannelPrivate.switchSpy(sender)
+            val state = ChannelPrivateReceive.switchSpy(sender)
             sender.sendLang(if (state) "Private-Message-Spy-On" else "Private-Message-Spy-Off")
         }
     }

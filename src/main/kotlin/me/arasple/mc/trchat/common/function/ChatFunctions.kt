@@ -4,7 +4,7 @@ import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.common.function.imp.Function
 import me.arasple.mc.trchat.util.notify
 import taboolib.common.platform.ProxyCommandSender
-import taboolib.module.configuration.ConfigSection
+import taboolib.library.configuration.ConfigurationSection
 import taboolib.module.configuration.util.getMap
 import kotlin.system.measureTimeMillis
 
@@ -20,7 +20,7 @@ object ChatFunctions {
         measureTimeMillis {
             functions.clear()
 
-            TrChatFiles.function.getMap<String, ConfigSection>("CUSTOM").forEach { (name, funObj) ->
+            TrChatFiles.function.getMap<String, ConfigurationSection>("CUSTOM").forEach { (name, funObj) ->
                 functions.add(Function(name, funObj))
             }
 
