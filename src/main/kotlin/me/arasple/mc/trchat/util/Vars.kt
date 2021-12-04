@@ -17,7 +17,7 @@ object Vars {
 
     @Awake(LifeCycle.ENABLE)
     fun downloadExpansions() {
-        submit(delay = 20 * 15) {
+        submit(delay = (20 * 15).toLong()) {
             downloadExpansions(settings.getStringList("GENERAL.DEPEND-EXPANSIONS"))
         }
     }

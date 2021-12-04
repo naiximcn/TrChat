@@ -42,7 +42,7 @@ object Updater {
         }
 
         if (TrChatFiles.settings.getBoolean("GENERAL.CHECK-UPDATE", true)) {
-            submit(delay = 20, period = 10 * 60 * 20, async = true) {
+            submit(delay = 20, period = (15 * 60 * 20).toLong(), async = true) {
                 grabInfo()
             }
         }

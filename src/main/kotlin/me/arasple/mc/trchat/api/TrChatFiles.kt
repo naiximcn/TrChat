@@ -19,24 +19,6 @@ import taboolib.module.configuration.ConfigFile
 @PlatformSide([Platform.BUKKIT])
 object TrChatFiles {
 
-    private val migrations = mapOf(
-        settings to Pair("GENERAL.DATABASE", mapOf(
-            "enable" to false,
-            "host" to "localhost",
-            "port" to 3306,
-            "user" to "root",
-            "password" to "root",
-            "database" to "root",
-            "table" to "trchat"
-        )),
-        filter to Pair("FILTER", mapOf(
-            "CHAT" to true,
-            "SIGN" to true,
-            "ANVIL" to true,
-            "ITEM" to false
-        ))
-    )
-
     @Config("settings.yml", autoReload = true)
     lateinit var settings: ConfigFile
         private set
@@ -59,6 +41,23 @@ object TrChatFiles {
 
     @Awake(LifeCycle.LOAD)
     fun migrate() {
+        val migrations = mapOf(
+            settings to Pair("GENERAL.DATABASE", mapOf(
+                "enable" to false,
+                "host" to "localhost",
+                "port" to 3306,
+                "user" to "root",
+                "password" to "root",
+                "database" to "root",
+                "table" to "trchat"
+            )),
+            filter to Pair("FILTER", mapOf(
+                "CHAT" to true,
+                "SIGN" to true,
+                "ANVIL" to true,
+                "ITEM" to false
+            ))
+        )
         migrations.entries.forEach { (config, value) ->
             if (!config.contains(value.first)) {
                 config[value.first] = value.second
