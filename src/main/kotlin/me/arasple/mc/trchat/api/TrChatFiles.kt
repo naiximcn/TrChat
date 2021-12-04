@@ -63,6 +63,8 @@ object TrChatFiles {
                 config[value.first] = value.second
             }
         }
+        saveAll()
+        reloadAll()
     }
 
     @Awake(LifeCycle.ENABLE)
@@ -79,5 +81,13 @@ object TrChatFiles {
         filter.reload()
         function.reload()
         channels.reload()
+    }
+
+    fun saveAll() {
+        settings.saveToFile()
+        formats.saveToFile()
+        filter.saveToFile()
+        function.saveToFile()
+        channels.saveToFile()
     }
 }
