@@ -37,8 +37,7 @@ NORMAL:
 
     # Custom Json Format Parts (Before Message Part)
     parts:
-      world:
-        text: '&8[&3%player_world%&8]'
+      - text: '&8[&3%player_world%&8]'
         hover: |-
           &r
           &8▪ &7位置: &3%player_world%&7, &2%player_x%/%player_y%/%player_z%
@@ -48,10 +47,8 @@ NORMAL:
         command: '/tpa %player_name%'
         # (Optional) Requirement to display this JSON part for the player
         requirement: null
-      part-before-player:
-        text: ' '
-      player:
-        text: '&7%player_name%'
+      - text: ' '
+      - text: '&7%player_name%'
         hover: |-
           &r
           &8▪ &7Ping: &3%player_ping% Ms
@@ -60,13 +57,11 @@ NORMAL:
           &6▶ &e点击发送私聊
           &r
         suggest: '/msg %player_name% '
-      part-before-msg:
-        text: '&7: '
+      - text: '&7: '
 
     # (Optional) Json Format Parts after msg
     suffix:
-      example:
-        text: ''
+      - text: ''
 
 ######################################################################
 #
@@ -76,8 +71,7 @@ NORMAL:
 PRIVATE_SEND:
   - requirement: null
     parts:
-      sender:
-        text: '&8[&a%player_name% &7➦ %toplayer_name%&3&8] '
+      - text: '&8[&a%player_name% &7➦ %toplayer_name%&3&8] '
     msg:
       default-color: 'f'
       hover: '&7日期: %server_time_HH:mm:ss%'
@@ -90,8 +84,7 @@ PRIVATE_SEND:
 PRIVATE_RECEIVE:
   - requirement: null
     parts:
-      receive:
-        text: '&8[&6%player_name% &7➥ &2%toplayer_name%&8] '
+      - text: '&8[&6%player_name% &7➥ &2%toplayer_name%&8] '
     msg:
       default-color: 'f'
       hover: '&7日期: %server_time_HH:mm:ss%'
@@ -104,16 +97,14 @@ PRIVATE_RECEIVE:
 GLOBAL:
   - requirement: null
     parts:
-      server:
-        text: '&8[&3%server_name%&8] '
+      - text: '&8[&3%server_name%&8] '
         hover: |-
           &7服务器 &3%server_name%
           &r
           &7版本: &6%server_version%
           &7在线人数: &a%server_online%&7/&2%server_max_players%
           &7TPS: &b%server_tps%
-      player:
-        text: '&e%player_name%&8: '
+      - text: '&e%player_name%&8: '
     msg:
       default-color: 'f'
       hover: '&7日期: %server_time_HH:mm:ss%'
@@ -126,8 +117,7 @@ GLOBAL:
 STAFF:
   - requirement: null
     parts:
-      staff:
-        text: '&8[&cSTAFF&8] '
+      - text: '&8[&cSTAFF&8] '
         hover: |-
           &7服务器 &3%server_name%
           &r
@@ -137,8 +127,7 @@ STAFF:
           &7
           &a▶ &2点击进入这个服务器
         command: '/server %server_name%'
-      player:
-        text: '&e%player_name%&8: '
+      - text: '&e%player_name%&8: '
     msg:
       default-color: 'a'
       hover: '&7日期: %server_time_HH:mm:ss%'

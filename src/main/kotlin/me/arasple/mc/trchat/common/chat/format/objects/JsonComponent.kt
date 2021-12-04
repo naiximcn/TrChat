@@ -82,7 +82,7 @@ open class JsonComponent {
         }
 
         fun loadList(parts: Any): List<JsonComponent> {
-            return (parts as LinkedHashMap<*, *>).values.map { part -> JsonComponent(part as LinkedHashMap<*, *>) }
+            return (parts as List<*>).map { part -> JsonComponent((part as Map<*, *>).toMap(LinkedHashMap())) }
         }
 
         fun TellrawJson.copyOrSuggest(text: String) {
