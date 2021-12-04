@@ -4,7 +4,6 @@ import me.arasple.mc.trchat.common.channel.ChatChannels
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.filter.ChatFilter
 import me.arasple.mc.trchat.common.function.ChatFunctions
-import org.bukkit.command.CommandSender
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
@@ -19,6 +18,24 @@ import taboolib.module.configuration.ConfigFile
  */
 @PlatformSide([Platform.BUKKIT])
 object TrChatFiles {
+
+    private val migrations = mapOf(
+        settings to Pair("GENERAL.DATABASE", mapOf(
+            "enable" to false,
+            "host" to "localhost",
+            "port" to 3306,
+            "user" to "root",
+            "password" to "root",
+            "database" to "root",
+            "table" to "trchat"
+        )),
+        filter to Pair("FILTER", mapOf(
+            "CHAT" to true,
+            "SIGN" to true,
+            "ANVIL" to true,
+            "ITEM" to false
+        ))
+    )
 
     @Config("settings.yml", autoReload = true)
     lateinit var settings: ConfigFile
@@ -39,6 +56,15 @@ object TrChatFiles {
     @Config("channels.yml", autoReload = true)
     lateinit var channels: ConfigFile
         private set
+
+    @Awake(LifeCycle.LOAD)
+    fun migrate() {
+        migrations.entries.forEach { (config, value) ->
+            if (!config.contains(value.first)) {
+                config[value.first] = value.second
+            }
+        }
+    }
 
     @Awake(LifeCycle.ENABLE)
     fun init() {

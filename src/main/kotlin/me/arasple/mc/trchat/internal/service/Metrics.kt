@@ -1,11 +1,13 @@
 package me.arasple.mc.trchat.internal.service
 
+import me.arasple.mc.trchat.common.channel.impl.ChannelCustom
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.function.pluginVersion
 import taboolib.module.metrics.Metrics
+import taboolib.module.metrics.charts.SimplePie
 import taboolib.module.metrics.charts.SingleLineChart
 
 /**
@@ -41,6 +43,9 @@ object Metrics {
                 val i = counts[1]
                 counts[1] = 0
                 i
+            })
+            addCustomChart(SimplePie("custom_channel_counts") {
+                ChannelCustom.list.size.toString()
             })
         }
     }

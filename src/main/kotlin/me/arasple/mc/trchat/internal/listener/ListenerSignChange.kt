@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.internal.listener
 
 import me.arasple.mc.trchat.api.TrChatAPI
+import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.api.TrChatFiles.settings
 import me.arasple.mc.trchat.util.MessageColors
 import org.bukkit.event.block.SignChangeEvent
@@ -26,7 +27,11 @@ object ListenerSignChange {
                 if (settings.getBoolean("CHAT-COLOR.SIGN")) {
                     line = MessageColors.replaceWithPermission(p, line ?: "")
                 }
-                TrChatAPI.filterString(p, line).filtered
+                if (TrChatFiles.filter.getBoolean("FILTER.SIGN")) {
+                    TrChatAPI.filterString(p, line).filtered
+                } else {
+                    line
+                }
             })
         }
     }

@@ -12,7 +12,7 @@ import taboolib.common.reflect.Reflex.Companion.invokeMethod
 class NMSImpl : NMS() {
 
     override fun filterIChatComponent(component: Any?): Any? {
-        component ?: return component
+        component ?: return null
         return try {
             val raw = TrChatAPI.classChatSerializer.invokeMethod<String>("a", component, fixed = true)!!
             val filtered = filter(raw).filtered

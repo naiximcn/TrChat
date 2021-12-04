@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.internal.listener
 
+import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.api.nms.NMS
 import me.arasple.mc.trchat.common.filter.ChatFilter.filter
 import me.arasple.mc.trchat.internal.data.Users.isFilterEnabled
@@ -24,6 +25,9 @@ object ListenerPackets {
         if (isFilterEnabled(e.player)) {
             when (e.packet.name) {
                 "PacketPlayOutChat" -> {
+                    if (!TrChatFiles.filter.getBoolean("FILTER.CHAT")) {
+                        return
+                    }
 //                    if (majorLegacy >= 11700) {
 //                        e.packet.write("message", PacketUtils.INSTANCE.filterIChatComponent(e.packet.read<Any>("message")))
 //                    } else {
@@ -36,6 +40,9 @@ object ListenerPackets {
                     return
                 }
                 "PacketPlayOutWindowItems" -> {
+                    if (!TrChatFiles.filter.getBoolean("FILTER.ITEM")) {
+                        return
+                    }
                     if (majorLegacy >= 11700) {
                         NMS.INSTANCE.filterItemList(e.packet.read<Any>("items"))
                     } else {
@@ -44,6 +51,9 @@ object ListenerPackets {
                     return
                 }
                 "PacketPlayOutSetSlot" -> {
+                    if (!TrChatFiles.filter.getBoolean("FILTER.ITEM")) {
+                        return
+                    }
                     if (majorLegacy >= 11700) {
                         NMS.INSTANCE.filterItem(e.packet.read<Any>("itemStack"))
                     } else {

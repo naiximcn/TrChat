@@ -28,17 +28,6 @@ object Database {
     var old_database: DatabaseLocal? = null
 
     fun init() {
-        if (!settings.contains("GENERAL.DATABASE")) {
-            settings["GENERAL.DATABASE"] = mapOf(
-                "enable" to false,
-                "host" to "localhost",
-                "port" to 3306,
-                "user" to "root",
-                "password" to "root",
-                "database" to "root",
-                "table" to "trchat"
-            )
-        }
         if (settings.getBoolean("database.enable")) {
             setupPlayerDatabase(settings.getConfigurationSection("database")!!)
         } else {

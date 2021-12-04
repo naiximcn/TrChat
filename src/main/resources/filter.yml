@@ -1,3 +1,9 @@
+FILTER:
+  CHAT: true
+  SIGN: true
+  ANVIL: true
+  ITEM: false
+
 CLOUD-THESAURUS:
   # 启用
   ENABLE: false
