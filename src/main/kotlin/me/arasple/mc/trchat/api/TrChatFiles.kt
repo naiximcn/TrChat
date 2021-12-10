@@ -63,7 +63,9 @@ object TrChatFiles {
                 config[value.first] = value.second
             }
         }
-        saveAll()
+//        saveAll()
+        settings.saveToFile()
+        filter.saveToFile()
         reloadAll()
     }
 
@@ -83,7 +85,7 @@ object TrChatFiles {
         channels.reload()
     }
 
-    fun saveAll() {
+    private fun saveAll() {
         settings.saveToFile()
         formats.saveToFile()
         filter.saveToFile()

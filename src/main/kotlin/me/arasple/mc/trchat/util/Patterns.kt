@@ -13,7 +13,7 @@ fun replacePattern(s: String, pattern: String, textPattern: String?, replacement
         val str = matcher.group()
         val m = textPattern?.toPattern()?.matcher(str)
         val rep = replacement.replaceWithOrder(if (textPattern == null) str else if (m != null && m.find()) m.group() else str)
-        string = string.replace(str.toRegex(), rep)
+        string = string.replace(str, rep)
     }
     return string
 }
