@@ -18,50 +18,7 @@
 #
 ######################################################################
 
-NORMAL:
-    # Requirement to use this format
-    # When starts with 'js:' or '$ ', use javascript
-    # player = sender
-    # bukkitServer = server instance
-    # utils = assist utils
-    # Otherwise use kether
-  - requirement: null
-    # (Optional) Priority to format (Default: 2147483647)
-    priority: 2147483647
-    # Message part
-    msg:
-      # Default chat color
-      # (when the player doesn't have any permission of trchat.color.force-defaultcolor.<CODE>)
-      default-color: '7'
-      hover: '&7Date: %server_time_h:mm:ss a%'
 
-    # Custom Json Format Parts (Before Message Part)
-    parts:
-      - text: '&8[&3%player_world%&8]'
-        hover: |-
-          &r
-          &8▪ &7位置: &3%player_world%&7, &2%player_x%/%player_y%/%player_z%
-          &r
-          &6▶ &e点击发送传送请求
-          &r
-        command: '/tpa %player_name%'
-        # (Optional) Requirement to display this JSON part for the player
-        requirement: null
-      - text: ' '
-      - text: '&7%player_name%'
-        hover: |-
-          &r
-          &8▪ &7Ping: &3%player_ping% Ms
-          &8▪ &7生命值: &c%player_health_rounded% ❤
-          &r
-          &6▶ &e点击发送私聊
-          &r
-        suggest: '/msg %player_name% '
-      - text: '&7: '
-
-    # (Optional) Json Format Parts after msg
-    suffix:
-      - text: ''
 
 ######################################################################
 #
@@ -87,47 +44,4 @@ PRIVATE_RECEIVE:
       - text: '&8[&6%player_name% &7➥ &2%toplayer_name%&8] '
     msg:
       default-color: 'f'
-      hover: '&7日期: %server_time_HH:mm:ss%'
-
-######################################################################
-#
-# GLOBAL CHAT FORMAT
-#
-######################################################################
-GLOBAL:
-  - requirement: null
-    parts:
-      - text: '&8[&3%server_name%&8] '
-        hover: |-
-          &7服务器 &3%server_name%
-          &r
-          &7版本: &6%server_version%
-          &7在线人数: &a%server_online%&7/&2%server_max_players%
-          &7TPS: &b%server_tps%
-      - text: '&e%player_name%&8: '
-    msg:
-      default-color: 'f'
-      hover: '&7日期: %server_time_HH:mm:ss%'
-
-######################################################################
-#
-# STAFF CHANNEL CHAT
-#
-######################################################################
-STAFF:
-  - requirement: null
-    parts:
-      - text: '&8[&cSTAFF&8] '
-        hover: |-
-          &7服务器 &3%server_name%
-          &r
-          &7版本: &6%server_version%
-          &7在线人数: &a%server_online%&7/&2%server_max_players%
-          &7TPS: &b%server_tps%
-          &7
-          &a▶ &2点击进入这个服务器
-        command: '/server %server_name%'
-      - text: '&e%player_name%&8: '
-    msg:
-      default-color: 'a'
       hover: '&7日期: %server_time_HH:mm:ss%'

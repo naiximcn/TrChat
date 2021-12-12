@@ -1,9 +1,13 @@
 package me.arasple.mc.trchat.util
 
+import me.arasple.mc.trmenu.util.parseGradients
+import me.arasple.mc.trmenu.util.parseHex
+import me.arasple.mc.trmenu.util.parseRainbow
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.entity.Player
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
+import taboolib.module.chat.colored
 
 /**
  * @author Arasple
@@ -28,7 +32,7 @@ object MessageColors {
         player ?: return string
 
         if (player.hasPermission("$COLOR_PERMISSION_NODE*")) {
-            string = string.coloredAll()
+            string = string.colored()
         } else {
             for (code in COLOR_CODES) {
                 if (player.hasPermission(COLOR_PERMISSION_NODE + code)) {
@@ -37,13 +41,13 @@ object MessageColors {
             }
         }
         if (player.hasPermission(COLOR_PERMISSION_NODE + "hex")) {
-            string = HexUtils.parseHex(string)
+            string = string.parseHex()
         }
         if (player.hasPermission(COLOR_PERMISSION_NODE + "rainbow")) {
-            string = HexUtils.parseRainbow(string)
+            string = string.parseRainbow()
         }
         if (player.hasPermission(COLOR_PERMISSION_NODE + "gradients")) {
-            string = HexUtils.parseGradients(string)
+            string = string.parseGradients()
         }
 
         return string

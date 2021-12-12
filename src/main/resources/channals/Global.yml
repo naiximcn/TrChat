@@ -1,0 +1,22 @@
+Options:
+  Condition: ~
+  Range: ALL
+  Proxy: true
+
+Bindings:
+  Prefix: '!all'
+
+Formats:
+  - requirement: null
+    prefix:
+      - text: '&8[&3%server_name%&8] '
+        hover: |-
+          &7Server &3%server_name%
+          &r
+          &7Version: &6%server_version%
+          &7Online: &a%server_online%&7/&2%server_max_players%
+          &7TPS: &b%server_tps%
+      - text: '&e%player_name%&8: '
+    msg:
+      default-color: 'f'
+      hover: '&7Date: %server_time_HH:mm:ss%'

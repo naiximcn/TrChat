@@ -22,7 +22,6 @@ import java.io.IOException
 object TrChatBungee : Plugin() {
 
     override fun onLoad() {
-        TrChat.motd.forEach { l -> console().sendMessage(l) }
         ProxyServer.getInstance().registerChannel("trchat:main")
         console().sendLang("Plugin-Loaded")
         console().sendLang("Plugin-Proxy-Supported", "Bungee")

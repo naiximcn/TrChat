@@ -2,7 +2,7 @@ package me.arasple.mc.trchat.common.channel.impl
 
 import me.arasple.mc.trchat.common.channel.ChannelAbstract
 import me.arasple.mc.trchat.common.chat.ChatFormats
-import me.arasple.mc.trchat.common.chat.ChatLogs
+import me.arasple.mc.trchat.module.data.ChatLogs
 import me.arasple.mc.trchat.common.chat.obj.ChatType
 import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.internal.proxy.Proxy

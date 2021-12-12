@@ -1,16 +1,3 @@
-######################################################################
-#
-#  ___________      _________ .__            __
-#  \__    __________\_   ___ \|  |__ _____ _/  |_
-#  |    |  \_  __ /    \  \/|  |  \\__  \\   __\
-#  |    |   |  | \\     \___|   Y  \/ __ \|  |
-#  |____|   |__|   \______  |___|  (____  |__|
-#  \/     \/     \/  TrChat Function
-#
-#
-######################################################################
-
-# General (Plugin's internal functions)
 GENERAL:
   # Command Controller
   COMMAND-CONTROLLER:
@@ -62,15 +49,8 @@ GENERAL:
 CUSTOM:
   # 示例 —— QQ 分享
   shareQQ:
-    # 满足条件表达式才能使用这个功能
-    # When starts with 'js:' or '$ ', use javascript
-    # player = sender
-    # bukkitServer = server instance
-    # utils = assist utils
-    # Otherwise use kether
     requirement: null
-    # (Optional) Priority to replace (Default: 2147483647)
-    priority: 2147483647
+    priority: 100
     # 匹配表达式
     # 示例模块的表达式部分来自互联网
     pattern: 'QQ( )?[1-9]([0-9]{5,11})'

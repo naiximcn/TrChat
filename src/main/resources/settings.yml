@@ -1,59 +1,32 @@
-######################################################################
-#
-#         Powered by TabooLib 6.0
-#
-#  ___________      _________ .__            __
-#  \__    __________\_   ___ \|  |__ _____ _/  |_
-#  |    |  \_  __ /    \  \/|  |  \\__  \\   __\
-#  |    |   |  | \\     \___|   Y  \/ __ \|  |
-#  |____|   |__|   \______  |___|  (____  |__|
-#  \/     \/     \/  TrChat 1.9
-#                                ------ Author by Arasple, Maintainer by ItsFlicker
-#
-######################################################################
+Options:
+  Log-Normal: '[{0}] {1}: {2}'
+  Log-Private: '[{0}] {1} -> {2}: {3}'
+  Depend-Expansions: ['player', 'server', 'vault']
 
-# General options
-GENERAL:
-  CHECK-UPDATE: true
-  DEBUG: false
-  DISABLED-WORLDS: [PUT_YOUR_WORLD_NAME_HERE, ANOTHER_WORLD]
-  # Log formats
-  LOG-NORMAL: '[{0}] {1}: {2}'
-  LOG-PRIVATE: '[{0}] {1} -> {2}: {3}'
-  # The time when logs are automatically deleted (in days) 0 = disabled
-  LOG-DELETE-TIME: 0
-  DEPEND-EXPANSIONS:
-    - 'player'
-    - 'server'
-    - 'vault'
-  PREVENT-TAB-COMPLETE: false
-  # NONE, BUNGEE, VELOCITY
-  PROXY: NONE
-  DATABASE:
-    enable: false
+Database:
+  Method: LOCAL
+  Sqlite:
     host: localhost
     port: 3306
     user: root
     password: root
     database: root
     table: trchat
+  Mongodb:
+    Client: 'mongodb://localhost:3307'
+    Database: trixey
+    Collection: chat
 
-# Chat Color
-# Perm Node: trchat.color.<CODE>
-# HEX Color require trchat.color.*
-#
-# Enable options
-CHAT-COLOR:
-  CHAT: true
-  SIGN: true
-  ANVIL: true
-  BOOK: true
+Chat:
+  Anti-Repeat: 0.85
+  Cooldown: 10.0;5
+  Length-Limit: 100
 
-# Chat Control
-CHAT-CONTROL:
-  # Anti similar text repeat (Maximum similarity 0-1)
-  ANTI-REPEAT: 0.85
-  # Chat cooldown
-  COOLDOWN: 2.0
-  # Chat text length limit
-  LENGTH-LIMIT: 100
+Color:
+  Chat: true
+  Sign: true
+  Anvil: true
+  Book: true
+
+Channel:
+  Default: 'Normal'

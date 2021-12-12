@@ -2,7 +2,6 @@ package me.arasple.mc.trchat.api
 
 import me.arasple.mc.trchat.common.filter.ChatFilter.filter
 import me.arasple.mc.trchat.common.filter.processer.FilteredObject
-import me.arasple.mc.trchat.internal.script.EvalResult
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
@@ -16,8 +15,6 @@ import taboolib.platform.util.isAir
 import taboolib.platform.util.modifyLore
 import taboolib.platform.util.modifyMeta
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 
 /**
  * @author Arasple, wlys
@@ -74,25 +71,6 @@ object TrChatAPI {
                 }
                 CompletableFuture.completedFuture(false)
             }
-        }
-    }
-
-    /**
-     * 执行 Kether 脚本
-     *
-     * @param player 玩家 (sender)
-     * @param script kether 脚本
-     * @param timeout 超时时间 (ms)
-     * @return 执行结果
-     */
-    @JvmStatic
-    fun instantKether(player: Player, script: String, timeout: Long = 100): EvalResult {
-        return try {
-            EvalResult(eval(player, script).get(timeout, TimeUnit.MILLISECONDS))
-        } catch (e: TimeoutException) {
-            println("§c[TrChat] §8Timeout while parsing kether shell:")
-            e.localizedMessage?.split("\n")?.forEach { println("         §8$it") }
-            EvalResult.FALSE
         }
     }
 

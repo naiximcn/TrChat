@@ -1,12 +1,18 @@
 package me.arasple.mc.trchat.util
 
-import me.arasple.mc.trchat.api.TrChatFiles.settings
+import me.arasple.mc.trchat.api.Settings
 import me.clip.placeholderapi.PlaceholderAPIPlugin
-import taboolib.common.LifeCycle
-import taboolib.common.platform.Awake
+import org.bukkit.Bukkit
+import taboolib.common.env.Repository
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
+import taboolib.common.platform.Schedule
+import taboolib.common.platform.function.console
 import taboolib.common.platform.function.submit
+import taboolib.module.lang.sendLang
+import java.io.File
+import java.io.IOException
+import java.net.URL
 
 /**
  * @author Arasple
@@ -15,11 +21,34 @@ import taboolib.common.platform.function.submit
 @PlatformSide([Platform.BUKKIT])
 object Vars {
 
-    @Awake(LifeCycle.ENABLE)
-    fun downloadExpansions() {
-        submit(delay = (20 * 15).toLong()) {
-            downloadExpansions(settings.getStringList("GENERAL.DEPEND-EXPANSIONS"))
+    /**
+     * 检测前置 PlaceholderAPI
+     * 并自动下载、重启服务器
+     */
+    internal fun hookPlaceholderAPI(): Boolean {
+        val plugin = Bukkit.getPluginManager().getPlugin("PlaceholderAPI")
+        val jarFile = File("plugins/PlaceholderAPI.jar")
+        val url = URL("https://api.spiget.org/v2/resources/6245/download")
+
+        if (plugin == null) {
+            jarFile.delete()
+            console().sendLang("Plugin-Depend-Download", "PlaceholderAPI")
+            try {
+                Repository.downloadToFile(url, jarFile)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                console().sendLang("Plugin-Depend-Install-Failed", "PlaceholderAPI")
+                return false
+            }
+            console().sendLang("Plugin-Depend-Installed", "PlaceholderAPI")
+            return false
         }
+        return true
+    }
+
+    @Schedule(async = true)
+    fun downloadExpansions() {
+        downloadExpansions(Settings.CONF.getStringList("Options.Depend-Expansions"))
     }
 
     /**
@@ -50,6 +79,8 @@ object Vars {
                     }
                 }
             }
+        }.onFailure {
+            it.printStackTrace()
         }
     }
 }

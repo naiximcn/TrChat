@@ -1,7 +1,7 @@
 package me.arasple.mc.trchat.internal.hook.ext
 
-import me.arasple.mc.trchat.internal.data.Users
-import me.arasple.mc.trchat.internal.script.js.JavaScriptAgent
+import me.arasple.mc.trchat.module.script.js.JavaScriptAgent
+import me.arasple.mc.trchat.util.getSession
 import org.bukkit.entity.Player
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
@@ -23,11 +23,12 @@ object HookPlaceholderAPI : PlaceholderExpansion {
     override fun onPlaceholderRequest(player: Player?, args: String): String {
         if (player != null && player.isOnline) {
             val params = args.split("_")
+            val session = player.getSession()
 
             return when(params[0].lowercase()) {
-                "filter" -> Users.isFilterEnabled(player).toString()
-                "channel" -> Users.getCustomChannel(player)?.name ?: "null"
-                "js" -> if (params.size > 1) JavaScriptAgent.eval(player, params[1]).asString() else ""
+                "filter" -> session.isFilterEnabled
+                "channel" -> session.channel?.id
+                "js" -> if (params.size > 1) JavaScriptAgent.eval(player, params[1]).get() else ""
                 else -> ""
             }.toString()
         }

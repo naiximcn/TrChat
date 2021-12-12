@@ -12,8 +12,6 @@ taboolib {
         }
         dependencies {
             name("PlaceholderAPI").optional(true).with("bukkit")
-            name("Dynmap").optional(true).with("bukkit")
-            name("DiscordSRV").optional(true).with("bukkit")
         }
         desc("Advanced Minecraft Chat Control")
     }
@@ -37,16 +35,11 @@ repositories {
     maven { url = uri("https://nexus.velocitypowered.com/repository/maven-public/") }
     maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
     maven { url = uri("https://repo.codemc.io/repository/maven-public/") }
-    maven {
-        isAllowInsecureProtocol = true
-        url = uri("http://repo.mikeprimm.com/")
-    }
     mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    compileOnly("us.dynmap:dynmap-api:2.5")
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("net.md-5:bungeecord-bootstrap:1.17-R0.1-SNAPSHOT")
     compileOnly("com.velocitypowered:velocity-api:3.0.0")

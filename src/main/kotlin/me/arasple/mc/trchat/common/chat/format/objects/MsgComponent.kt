@@ -7,7 +7,8 @@ import me.arasple.mc.trchat.internal.data.Cooldowns
 import me.arasple.mc.trchat.internal.data.Users
 import me.arasple.mc.trchat.internal.proxy.Proxy
 import me.arasple.mc.trchat.internal.proxy.bukkit.Players
-import me.arasple.mc.trchat.internal.script.Condition
+import me.arasple.mc.trchat.module.display.format.JsonComponent
+import me.arasple.mc.trchat.module.script.Condition
 import me.arasple.mc.trchat.util.MessageColors
 import me.arasple.mc.trchat.util.coloredAll
 import me.arasple.mc.trchat.util.replacePattern
