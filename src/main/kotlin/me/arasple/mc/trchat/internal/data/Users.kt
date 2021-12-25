@@ -14,7 +14,7 @@ import java.util.*
  */
 object Users {
 
-    val itemCache = HashMap<ItemStack, TellrawJson>()
+
     val formattedMessages = HashMap<UUID, MutableList<String>>()
 
     fun setCustomChannel(user: Player, channel: ChannelCustom?) {
