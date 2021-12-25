@@ -11,6 +11,7 @@ import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.function.console
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.ConfigFile
+import taboolib.module.configuration.SecuredFile
 
 /**
  * @author Arasple, wlys
@@ -60,12 +61,9 @@ object TrChatFiles {
         )
         migrations.entries.forEach { (config, value) ->
             if (!config.contains(value.first)) {
-                config[value.first] = value.second
+                config.file?.appendText("\n${SecuredFile.dumpAll(value.first, value.second)}\n")
             }
         }
-//        saveAll()
-        settings.saveToFile()
-        filter.saveToFile()
         reloadAll()
     }
 

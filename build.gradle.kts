@@ -28,9 +28,9 @@ taboolib {
     install("module-porticus")
     install("module-ui")
     install("platform-bukkit", "platform-bungee", "platform-velocity")
-    install("expansion-command-helper", "expansion-player-database")
+    install("expansion-command-helper", "expansion-player-database", "expansion-javascript")
     classifier = null
-    version = "6.0.6-24"
+    version = "6.0.7-2"
 }
 
 repositories {
