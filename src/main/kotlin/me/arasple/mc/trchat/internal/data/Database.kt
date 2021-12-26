@@ -34,10 +34,7 @@ object Database {
 
     @SubscribeEvent
     fun e(e: PlayerJoinEvent) {
-        submit(async = true) {
-            e.player.setupDataContainer()
-        }
-
+        e.player.setupDataContainer()
     }
 
     @SubscribeEvent
