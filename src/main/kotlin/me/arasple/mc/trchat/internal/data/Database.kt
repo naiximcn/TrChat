@@ -6,6 +6,7 @@ import org.bukkit.event.player.PlayerQuitEvent
 import taboolib.common.io.newFile
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
+import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.getDataFolder
 import taboolib.common.platform.function.submit
@@ -37,7 +38,7 @@ object Database {
         e.player.setupDataContainer()
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(EventPriority.HIGH)
     fun e(e: PlayerQuitEvent) {
         e.player.releaseDataContainer()
     }

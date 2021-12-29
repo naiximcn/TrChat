@@ -34,6 +34,7 @@ taboolib {
 }
 
 repositories {
+    maven("https://repo.tabooproject.org/storages/public/releases")
     maven("https://maven.izzel.io/releases")
     maven("https://nexus.velocitypowered.com/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
@@ -46,7 +47,7 @@ repositories {
 dependencies {
     compileOnly("us.dynmap:dynmap-api:2.5")
     compileOnly("me.clip:placeholderapi:2.10.9")
-    compileOnly("net.md_5.bungee:BungeeCord:1")
+    compileOnly("net.md-5:bungeecord-bootstrap:1.17-R0.1-SNAPSHOT")
     compileOnly("com.velocitypowered:velocity-api:3.0.0")
     compileOnly("ink.ptms.core:v11800:11800-minimize:api")
     compileOnly("ink.ptms.core:v11800:11800-minimize:universal")
