@@ -80,7 +80,7 @@ object TrChat : Plugin() {
                 return
             }
             warning("*************************************************************")
-            warning(" 你好，感谢使用 TrChat (v1.90-R4)!")
+            warning(" 你好，感谢使用 TrChat (v1.90-R4+)!")
             warning(" 本次更新修改了formats.yml中的parts和suffix格式(JSON)")
             warning(" 请参照新的配置文件手动迁移旧的配置文件(formats_old.yml)")
             warning(" 若无需迁移可直接删除插件目录并重新启动服务器")
