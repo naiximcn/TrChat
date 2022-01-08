@@ -42,7 +42,7 @@ object Users {
     }
 
     fun isFilterEnabled(user: Player): Boolean {
-        return user.getDataContainer()["filter"].toBoolean()
+        return user.getDataContainer()["filter"]?.toBoolean() ?: true
     }
 
     fun setFilter(user: Player, value: Boolean) {
