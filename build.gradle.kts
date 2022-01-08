@@ -1,6 +1,6 @@
 plugins {
     java
-    id("io.izzel.taboolib") version "1.33"
+    id("io.izzel.taboolib") version "1.34"
     id("org.jetbrains.kotlin.jvm") version "1.5.31"
 }
 
@@ -30,11 +30,10 @@ taboolib {
     install("platform-bukkit", "platform-bungee", "platform-velocity")
     install("expansion-command-helper", "expansion-player-database", "expansion-javascript")
     classifier = null
-    version = "6.0.8"
+    version = "6.0.7-17"
 }
 
 repositories {
-    maven("https://repo.tabooproject.org/storages/public/releases")
     maven("https://maven.izzel.io/releases")
     maven("https://nexus.velocitypowered.com/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")

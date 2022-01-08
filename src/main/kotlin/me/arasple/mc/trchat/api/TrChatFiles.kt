@@ -40,32 +40,32 @@ object TrChatFiles {
     lateinit var channels: ConfigFile
         private set
 
-    @Awake(LifeCycle.LOAD)
-    fun migrate() {
-        val migrations = mapOf(
-            settings to Pair("GENERAL.DATABASE", mapOf(
-                "enable" to false,
-                "host" to "localhost",
-                "port" to 3306,
-                "user" to "root",
-                "password" to "root",
-                "database" to "root",
-                "table" to "trchat"
-            )),
-            filter to Pair("FILTER", mapOf(
-                "CHAT" to true,
-                "SIGN" to true,
-                "ANVIL" to true,
-                "ITEM" to false
-            ))
-        )
-        migrations.entries.forEach { (config, value) ->
-            if (!config.contains(value.first)) {
-                config.file?.appendText("\n${SecuredFile.dumpAll(value.first, value.second)}\n")
-            }
-        }
-        reloadAll()
-    }
+//    @Awake(LifeCycle.LOAD)
+//    fun migrate() {
+//        val migrations = mapOf(
+//            settings to Pair("GENERAL.DATABASE", mapOf(
+//                "enable" to false,
+//                "host" to "localhost",
+//                "port" to 3306,
+//                "user" to "root",
+//                "password" to "root",
+//                "database" to "root",
+//                "table" to "trchat"
+//            )),
+//            filter to Pair("FILTER", mapOf(
+//                "CHAT" to true,
+//                "SIGN" to true,
+//                "ANVIL" to true,
+//                "ITEM" to false
+//            ))
+//        )
+//        migrations.entries.forEach { (config, value) ->
+//            if (!config.contains(value.first)) {
+//                config.file?.appendText("\n${SecuredFile.dumpAll(value.first, value.second)}\n")
+//            }
+//        }
+//        reloadAll()
+//    }
 
     @Awake(LifeCycle.ENABLE)
     fun init() {

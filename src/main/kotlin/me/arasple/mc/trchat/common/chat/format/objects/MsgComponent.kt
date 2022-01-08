@@ -70,7 +70,7 @@ class MsgComponent : JsonComponent {
             }
         }
 
-        for (v in VariableReader(message, '<', '>', repeat = 2).parts) {
+        for (v in parser.readToFlatten(message)) {
             if (v.isVariable) {
                 val args = v.text.split(':', limit = 2)
                 // Item Show
@@ -142,5 +142,10 @@ class MsgComponent : JsonComponent {
                 else -> (it + this).coloredAll()
             }
         } ?: this
+    }
+
+    companion object {
+
+        private val parser = VariableReader("<<", ">>")
     }
 }
