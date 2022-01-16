@@ -150,7 +150,7 @@ CUSTOM:
 
   # 示例 —— 网站分享
   shareUrl:
-    pattern: '^((https|http|ftp|rtsp|mms)?:\/\/)[^\s]+'
+    pattern: '((https|http|ftp|rtsp|mms)?:\/\/)[^\s]+'
     display:
       text: '&8[&f&l网站&8]'
       hover:
