@@ -1,8 +1,12 @@
 # TrChat
 
-[![Version](https://img.shields.io/badge/dynamic/json?label=Version&query=%24.tag_name&url=https%3A%2F%2Fapi.github.com%2Frepos%2FFlickerProjects%2FTrChat%2Freleases%2Flatest)](https://github.com/FlickerProjects/TrChat/releases) [![CodeFactor](https://www.codefactor.io/repository/github/flickerprojects/trchat/badge)](https://www.codefactor.io/repository/github/flickerprojects/trchat)
+![Version](https://img.shields.io/badge/dynamic/json?label=Version&query=%24.tag_name&url=https%3A%2F%2Fapi.github.com%2Frepos%2FFlickerProjects%2FTrChat%2Freleases%2Flatest)
 
 **Advanced chat control for Minecraft servers**
+
+已知问题: [#3](https://github.com/FlickerProjects/TrChat/issues/3)
+        [#20](https://github.com/FlickerProjects/TrChat/issues/20)
+        [#51](https://github.com/FlickerProjects/TrChat/issues/51)
 
 API usage: 
 ```java
