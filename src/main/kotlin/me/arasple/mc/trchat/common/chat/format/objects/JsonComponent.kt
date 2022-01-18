@@ -13,6 +13,7 @@ import taboolib.common.reflect.Reflex.Companion.invokeConstructor
 import taboolib.common.reflect.Reflex.Companion.invokeMethod
 import taboolib.common.util.asList
 import taboolib.common.util.replaceWithOrder
+import taboolib.common.util.sync
 import taboolib.module.chat.TellrawJson
 import taboolib.module.nms.nmsClass
 import taboolib.platform.compat.replacePlaceholder
@@ -66,12 +67,12 @@ open class JsonComponent {
                 text = text!!.replace("%toplayer_name%", vars[1])
             }
         }
-        tellraw.append(text?.replaceWithOrder(*vars)?.replacePlaceholder(player)?.coloredAll() ?: "§8[§fNull§8]")
-        hover?.let { tellraw.hoverText(it.replaceWithOrder(*vars).replacePlaceholder(player).coloredAll()) }
-        suggest?.let { tellraw.suggestCommand(it.replaceWithOrder(*vars).replacePlaceholder(player)) }
-        command?.let { tellraw.runCommand(it.replaceWithOrder(*vars).replacePlaceholder(player)) }
-        url?.let { tellraw.openURL(it.replaceWithOrder(*vars).replacePlaceholder(player)) }
-        copy?.let { tellraw.copyOrSuggest(it.replaceWithOrder(*vars).replacePlaceholder(player)) }
+        tellraw.append(text?.replaceWithOrder(*vars)?.replacePlaceholderFixed(player)?.coloredAll() ?: "§8[§fNull§8]")
+        hover?.let { tellraw.hoverText(it.replaceWithOrder(*vars).replacePlaceholderFixed(player).coloredAll()) }
+        suggest?.let { tellraw.suggestCommand(it.replaceWithOrder(*vars).replacePlaceholderFixed(player)) }
+        command?.let { tellraw.runCommand(it.replaceWithOrder(*vars).replacePlaceholderFixed(player)) }
+        url?.let { tellraw.openURL(it.replaceWithOrder(*vars).replacePlaceholderFixed(player)) }
+        copy?.let { tellraw.copyOrSuggest(it.replaceWithOrder(*vars).replacePlaceholderFixed(player)) }
         return tellraw
     }
 
@@ -88,7 +89,7 @@ open class JsonComponent {
         fun TellrawJson.copyOrSuggest(text: String) {
             try {
                 copyToClipboard(text)
-            } catch (e: NoSuchFieldError) {
+            } catch (_: NoSuchFieldError) {
                 suggestCommand(text)
             }
         }
@@ -102,11 +103,19 @@ open class JsonComponent {
             componentsLatest.forEach {
                 try {
                     it.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_ITEM, Item(id, item.amount, ItemTag.ofNbt(tag)))
-                } catch (ex: NoClassDefFoundError) {
+                } catch (_: NoClassDefFoundError) {
                     it.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_ITEM, ComponentBuilder(itemJson.toString()).create())
                 }
             }
             return this
+        }
+
+        fun String.replacePlaceholderFixed(player: Player): String {
+            return try {
+                replacePlaceholder(player)
+            } catch (_: Throwable) {
+                kotlin.runCatching { sync { replacePlaceholder(player) } }.getOrNull() ?: this
+            }
         }
     }
 }

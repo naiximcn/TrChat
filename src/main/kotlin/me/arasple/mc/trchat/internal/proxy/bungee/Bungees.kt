@@ -27,7 +27,7 @@ class Bungees : PluginMessageListener {
                     data.readUTF() // server
                     setPlayers(data.readUTF().split(", "))
                 }
-            } catch (ignored: IOException) {
+            } catch (_: IOException) {
             }
         }
         if (channel == "trchat:main") {
@@ -39,7 +39,7 @@ class Bungees : PluginMessageListener {
                         "off" -> TrChat.isGlobalMuting = false
                     }
                 }
-            } catch (ignored: IOException) {
+            } catch (_: IOException) {
             }
         }
     }

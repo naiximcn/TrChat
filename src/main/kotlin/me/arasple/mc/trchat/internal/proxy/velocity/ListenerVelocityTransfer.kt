@@ -39,7 +39,7 @@ object ListenerVelocityTransfer {
                     val data = message.build()
                     execute(data)
                 }
-            } catch (ignored: IOException) {
+            } catch (_: IOException) {
             }
         }
     }
@@ -85,7 +85,7 @@ object ListenerVelocityTransfer {
 
                 try {
                     getProxyPlayer(to)?.sendLang(node, *args)
-                } catch (ignored: IllegalStateException) {
+                } catch (_: IllegalStateException) {
                 }
             }
         }

@@ -11,7 +11,6 @@ import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.function.console
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.ConfigFile
-import taboolib.module.configuration.SecuredFile
 
 /**
  * @author Arasple, wlys

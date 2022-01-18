@@ -19,7 +19,6 @@ import taboolib.common.util.VariableReader
 import taboolib.common.util.replaceWithOrder
 import taboolib.module.chat.TellrawJson
 import taboolib.module.nms.getI18nName
-import taboolib.platform.compat.replacePlaceholder
 import taboolib.platform.util.buildItem
 
 /**
@@ -116,11 +115,11 @@ class MsgComponent : JsonComponent {
     private fun toTellrawPart(player: Player, text: String?, message: String): TellrawJson {
         val tellraw = TellrawJson()
         tellraw.append((text ?: "§8[§fNull§8]").replace("\$message", message))
-        hover?.let { tellraw.hoverText(it.replacePlaceholder(player).replace("\$message", message).coloredAll()) }
-        suggest?.let { tellraw.suggestCommand(it.replacePlaceholder(player).replace("\$message", message)) }
-        command?.let { tellraw.runCommand(it.replacePlaceholder(player).replace("\$message", message)) }
-        url?.let { tellraw.openURL(it.replacePlaceholder(player).replace("\$message", message)) }
-        copy?.let { tellraw.copyOrSuggest(it.replacePlaceholder(player).replace("\$message", message)) }
+        hover?.let { tellraw.hoverText(it.replacePlaceholderFixed(player).replace("\$message", message).coloredAll()) }
+        suggest?.let { tellraw.suggestCommand(it.replacePlaceholderFixed(player).replace("\$message", message)) }
+        command?.let { tellraw.runCommand(it.replacePlaceholderFixed(player).replace("\$message", message)) }
+        url?.let { tellraw.openURL(it.replacePlaceholderFixed(player).replace("\$message", message)) }
+        copy?.let { tellraw.copyOrSuggest(it.replacePlaceholderFixed(player).replace("\$message", message)) }
         return tellraw
     }
 

@@ -31,7 +31,7 @@ class Velocity : PluginMessageListener {
             if (subChannel == "PlayerList") {
                 Players.setPlayers(data.readUTF().split(", "))
             }
-        } catch (ignored: IOException) {
+        } catch (_: IOException) {
         }
     }
 

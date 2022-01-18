@@ -17,7 +17,7 @@ class NMSImpl : NMS() {
             val raw = TrChatAPI.classChatSerializer.invokeMethod<String>("a", component, fixed = true)!!
             val filtered = filter(raw).filtered
             TrChatAPI.classChatSerializer.invokeMethod<Any>("a", filtered, fixed = true)
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             component
         }
     }
