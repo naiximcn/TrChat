@@ -9,6 +9,7 @@ import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.Schedule
 import taboolib.common.platform.function.getDataFolder
+import taboolib.common.platform.function.severe
 import taboolib.common.util.replaceWithOrder
 import java.io.File
 import java.text.SimpleDateFormat
@@ -29,11 +30,14 @@ object ChatLogs {
     @Awake(LifeCycle.DISABLE)
     fun writeToFile() {
         val logFile = newFile(File(getDataFolder(), "logs"), "${dateFormat0.format(System.currentTimeMillis())}.txt", create = true)
-        logFile.writer().use {
+        try {
             waveList.forEach { line ->
-                it.write(line)
-                it.appendLine()
+                logFile.appendText(line + "\n")
             }
+        } catch (t: Throwable) {
+            severe("保存聊天日志失败!")
+            t.printStackTrace()
+            return
         }
         waveList.clear()
     }
