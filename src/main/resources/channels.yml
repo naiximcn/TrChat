@@ -4,6 +4,9 @@ FORCE-GLOBAL: false
 # Messages starting with this will be forwarded to Bungee or Velocity servers
 FORCE-GLOBAL-PREFIX: '!all'
 
+# 接受全局聊天的子服务器的端口 (格式:端口1;端口2;端口3) (设为~则全部服务器都接受全局聊天)
+GLOBAL-RECEIVE-PORTS: ~
+
 # If not null, players that not in custom channel will auto join this channel (require permission)
 DEFAULT-CUSTOM-CHANNEL: null
 

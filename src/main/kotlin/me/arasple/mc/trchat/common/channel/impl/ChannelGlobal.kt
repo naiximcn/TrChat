@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.common.channel.impl
 
+import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.common.channel.ChannelAbstract
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.common.chat.ChatLogs
@@ -30,7 +31,11 @@ object ChannelGlobal : ChannelAbstract() {
         }
         val formatted = ChatFormats.getFormat(this, sender)?.apply(sender, msg) ?: return
         val raw = formatted.toRawMessage()
-        sender.sendBukkitMessage("BroadcastRaw", sender.uniqueId.toString(), raw)
+        TrChatFiles.channels.getString("GLOBAL-RECEIVE-PORTS")?.let {
+            sender.sendBukkitMessage("ForwardRaw", sender.uniqueId.toString(), raw, it)
+        } ?: kotlin.run {
+            sender.sendBukkitMessage("BroadcastRaw", sender.uniqueId.toString(), raw)
+        }
         formatted.sendTo(console())
         ChatLogs.log(sender, msg)
         Users.putFormattedMessage(sender, formatted.toPlainText())

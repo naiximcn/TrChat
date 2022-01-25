@@ -70,6 +70,24 @@ object ListenerVelocityTransfer {
                 }
                 console().cast<ConsoleCommandSource>().sendMessage(message)
             }
+            "ForwardRaw" -> {
+                val uuid = data[1]
+                val raw = data[2]
+                val ports = data[3].split(";").map { it.toInt() }
+                val message = GsonComponentSerializer.gson().deserialize(raw)
+                server<ProxyServer>().allServers.forEach { server ->
+                    if (ports.contains(server.serverInfo.address.port)) {
+                        server.playersConnected.forEach { player ->
+                            getProxyPlayer(UUID.fromString(uuid))?.cast<Player>()?.let {
+                                player.sendMessage(it, message, MessageType.CHAT)
+                            } ?: kotlin.run {
+                                player.sendMessage(message, MessageType.CHAT)
+                            }
+                        }
+                    }
+                }
+                console().cast<ConsoleCommandSource>().sendMessage(message)
+            }
             "SendRawPerm" -> {
                 val raw = data[1]
                 val perm = data[2]

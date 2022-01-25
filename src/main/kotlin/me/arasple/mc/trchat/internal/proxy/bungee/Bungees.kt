@@ -7,7 +7,9 @@ import me.arasple.mc.trchat.internal.proxy.bukkit.Players.setPlayers
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.messaging.PluginMessageListener
+import taboolib.common.platform.function.console
 import taboolib.common.platform.function.submit
+import taboolib.module.lang.sendLang
 import taboolib.module.porticus.common.MessageBuilder
 import java.io.IOException
 import java.util.*
@@ -55,7 +57,13 @@ class Bungees : PluginMessageListener {
                 Bukkit.getMessenger().registerOutgoingPluginChannel(TrChat.plugin, "trchat:main")
                 Bukkit.getMessenger().registerIncomingPluginChannel(TrChat.plugin, "trchat:main", Bungees())
             }
-            Proxy.isEnabled = Bukkit.getServer().spigot().config.getBoolean("settings.bungeecord", false)
+            Proxy.isEnabled = Bukkit.getServer().spigot().config.getBoolean("settings.bungeecord", false).also {
+                if (it) {
+                    console().sendLang("Plugin-Proxy-Supported", "Bungee")
+                } else {
+                    console().sendLang("Plugin-Proxy-None")
+                }
+            }
         }
 
         fun sendBukkitMessage(player: Player, vararg args: String) {

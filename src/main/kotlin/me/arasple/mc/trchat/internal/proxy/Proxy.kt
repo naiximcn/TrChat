@@ -33,11 +33,9 @@ object Proxy {
                 Platform.UNKNOWN
             }
             "BUNGEE" -> {
-                console().sendLang("Plugin-Proxy-Supported", "Bungee")
                 Platform.BUNGEE
             }
             "VELOCITY" -> {
-                console().sendLang("Plugin-Proxy-Supported", "Velocity")
                 Platform.VELOCITY
             }
             else -> error("Unsupported proxy $p.")

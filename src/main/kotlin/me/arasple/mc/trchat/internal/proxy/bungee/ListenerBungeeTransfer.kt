@@ -67,6 +67,20 @@ object ListenerBungeeTransfer {
                 }
                 console().cast<ConsoleCommandSender>().sendMessage(*message)
             }
+            "ForwardRaw" -> {
+                val uuid = data[1]
+                val raw = data[2]
+                val ports = data[3].split(";").map { it.toInt() }
+                val message = ComponentSerializer.parse(raw)
+                server<ProxyServer>().servers.forEach { (_, v) ->
+                    if (ports.contains(v.address.port)) {
+                        v.players.forEach {
+                            it.sendMessage(UUID.fromString(uuid), *message)
+                        }
+                    }
+                }
+                console().cast<ConsoleCommandSender>().sendMessage(*message)
+            }
             "SendRawPerm" -> {
                 val raw = data[1]
                 val perm = data[2]
