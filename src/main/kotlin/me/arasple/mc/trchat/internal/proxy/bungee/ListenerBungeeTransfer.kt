@@ -60,6 +60,7 @@ object ListenerBungeeTransfer {
                 val uuid = data[1]
                 val raw = data[2]
                 val message = ComponentSerializer.parse(raw)
+
                 server<ProxyServer>().servers.forEach { (_, v) ->
                     v.players.forEach {
                         it.sendMessage(UUID.fromString(uuid), *message)
@@ -72,6 +73,7 @@ object ListenerBungeeTransfer {
                 val raw = data[2]
                 val ports = data[3].split(";").map { it.toInt() }
                 val message = ComponentSerializer.parse(raw)
+
                 server<ProxyServer>().servers.forEach { (_, v) ->
                     if (ports.contains(v.address.port)) {
                         v.players.forEach {
@@ -84,9 +86,12 @@ object ListenerBungeeTransfer {
             "SendRawPerm" -> {
                 val raw = data[1]
                 val perm = data[2]
+                val message = ComponentSerializer.parse(raw)
 
-                onlinePlayers().filter { p -> p.hasPermission(perm) }.forEach { p ->
-                    p.sendRawMessage(raw)
+                server<ProxyServer>().servers.forEach { (_, v) ->
+                    v.players.filter { it.hasPermission(perm) }.forEach {
+                        it.sendMessage(*message)
+                    }
                 }
             }
             "SendLang" -> {
