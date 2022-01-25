@@ -1,7 +1,7 @@
 plugins {
     java
-    id("io.izzel.taboolib") version "1.32"
-    id("org.jetbrains.kotlin.jvm") version "1.5.31"
+    id("io.izzel.taboolib") version "1.34"
+    id("org.jetbrains.kotlin.jvm") version "1.5.10"
 }
 
 taboolib {
@@ -28,13 +28,14 @@ taboolib {
     install("platform-bukkit", "platform-bungee", "platform-velocity")
     install("expansion-command-helper", "expansion-player-database")
     classifier = null
-    version = "6.0.6-24"
+    version = "6.0.7-24"
 }
 
 repositories {
-    maven { url = uri("https://nexus.velocitypowered.com/repository/maven-public/") }
-    maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
-    maven { url = uri("https://repo.codemc.io/repository/maven-public/") }
+    maven("https://nexus.velocitypowered.com/repository/maven-public/")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    maven("https://repo.codemc.io/repository/maven-public/")
+    maven("https://papermc.io/repo/repository/maven-public/")
     mavenLocal()
     mavenCentral()
 }
@@ -43,6 +44,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("net.md-5:bungeecord-bootstrap:1.17-R0.1-SNAPSHOT")
     compileOnly("com.velocitypowered:velocity-api:3.0.0")
+    compileOnly("io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT")
     compileOnly("ink.ptms.core:v11800:11800-minimize:api")
     compileOnly("ink.ptms.core:v11800:11800-minimize:universal")
     compileOnly("ink.ptms.core:v11800:11800-minimize:mapped")

@@ -24,7 +24,6 @@ GENERAL:
     ENABLE: true
     COOLDOWNS: 30
     FORMAT: '&8[&3{0} &bx{1}&8]'
-    # 展示物品关键词 key-0..8 = 展示特定物品
     KEYS:
       - '%i'
       - '%item'
@@ -32,11 +31,8 @@ GENERAL:
       - '%item%'
       - '[i]'
       - '[item]'
-    # 展示物品原本的名字（无视改名）
     ORIGIN-NAME: false
-    # Set to true if occur bug
     COMPATIBLE: false
-  # Mention (@At) someone in chat
   MENTION:
     ENABLE: true
     SELF-MENTION: false

@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.display.format
 
 import me.arasple.mc.trchat.api.Functions
+import me.arasple.mc.trchat.module.display.format.part.*
 import me.arasple.mc.trchat.util.DefaultColor
 import me.arasple.mc.trchat.util.Variables
 import me.arasple.mc.trmenu.util.colorify
@@ -18,10 +19,13 @@ import java.util.function.Function
  * @author wlys
  * @since 2021/12/12 13:46
  */
-class MsgComponent(var defaultColor: DefaultColor?, hover: String?, suggest: String?, command: String?, url: String?, copy: String?) :
-    JsonComponent(null, "", hover, suggest, command, url, copy) {
-
-    val functions = mutableListOf<Player.(String) -> TellrawJson>()
+class MsgComponent(
+    var defaultColor: DefaultColor?,
+    hover: List<Hover>?,
+    suggest: List<Suggest>?,
+    command: List<Command>?,
+    url: List<Url>?,
+    insertion: List<Insertion>) : JsonComponent(null, null, hover, suggest, command, url, insertion) {
 
     fun itemShow() {
         functions.add { msg ->
@@ -54,9 +58,13 @@ class MsgComponent(var defaultColor: DefaultColor?, hover: String?, suggest: Str
         }
 }
 
-    fun serialize(player: Player, message: String): TellrawJson {
+    fun serialize(player: Player, msg: String): TellrawJson {
+        val tellraw = TellrawJson()
 
+        var message = msg
+        message = message.itemShow().mention()
 
+        return tellraw
     }
 
     companion object {
@@ -71,6 +79,25 @@ class MsgComponent(var defaultColor: DefaultColor?, hover: String?, suggest: Str
             } else {
                 itemMeta!!.displayName
             }
+        }
+
+        private fun String.itemShow(): String {
+            var result = this
+            if (Functions.itemShow.getBoolean("Enable")) {
+                for (key in Functions.itemShow.getStringList("Keys")) {
+                    val regex = Regex("(?i)$key(-[1-9])?")
+                    regex.findAll(result).forEach {
+
+                    }
+                    result = result.replace(.toRegex(), "{{ITEM:$-1}}")
+                }
+            }
+            return result
+        }
+
+        private fun String.mention(): String {
+            var result = this
+            return result
         }
     }
 }

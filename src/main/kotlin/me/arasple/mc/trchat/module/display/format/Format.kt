@@ -9,5 +9,6 @@ import me.arasple.mc.trchat.module.script.Condition
 class Format(
     val condition: Condition,
     val prefix: List<JsonComponent>,
+    val message: MsgComponent,
     val suffix: List<JsonComponent>
 )

@@ -1,9 +1,8 @@
 package me.arasple.mc.trchat.module.display.format
 
 import me.arasple.mc.trchat.api.TrChatAPI
+import me.arasple.mc.trchat.module.display.format.part.*
 import me.arasple.mc.trchat.module.script.Condition
-import me.arasple.mc.trchat.util.coloredAll
-import me.arasple.mc.trmenu.util.colorify
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
 import net.md_5.bungee.api.chat.ItemTag
@@ -12,11 +11,8 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.common.reflect.Reflex.Companion.invokeConstructor
 import taboolib.common.reflect.Reflex.Companion.invokeMethod
-import taboolib.common.util.asList
-import taboolib.common.util.replaceWithOrder
 import taboolib.module.chat.TellrawJson
 import taboolib.module.nms.nmsClass
-import taboolib.platform.compat.replacePlaceholder
 
 /**
  * @author Arasple
@@ -24,12 +20,12 @@ import taboolib.platform.compat.replacePlaceholder
  */
 open class JsonComponent(
     val condition: Condition?,
-    val text: String,
-    val hover: String?,
-    val suggest: String?,
-    val command: String?,
-    val url: String?,
-    val copy: String?
+    val text: List<Text>?,
+    val hover: List<Hover>?,
+    val suggest: List<Suggest>?,
+    val command: List<Command>?,
+    val url: List<Url>?,
+    val insertion: List<Insertion>?
 ) {
 
     open fun toTellrawJson(player: Player, vararg vars: String): TellrawJson {
@@ -38,12 +34,13 @@ open class JsonComponent(
             return tellraw
         }
 
-        tellraw.append(text.replaceWithOrder(*vars).replacePlaceholder(player).colorify())
-        hover?.let { tellraw.hoverText(it.replaceWithOrder(*vars).replacePlaceholder(player).colorify()) }
-        suggest?.let { tellraw.suggestCommand(it.replaceWithOrder(*vars).replacePlaceholder(player)) }
-        command?.let { tellraw.runCommand(it.replaceWithOrder(*vars).replacePlaceholder(player)) }
-        url?.let { tellraw.openURL(it.replaceWithOrder(*vars).replacePlaceholder(player)) }
-        copy?.let { tellraw.copyOrSuggest(it.replaceWithOrder(*vars).replacePlaceholder(player)) }
+        text!!.firstOrNull { it.condition?.eval(player) ?: true }?.process(tellraw, player)
+        hover?.firstOrNull { it.condition?.eval(player) ?: true }?.process(tellraw, player)
+        suggest?.firstOrNull { it.condition?.eval(player) ?: true }?.process(tellraw, player)
+        command?.firstOrNull { it.condition?.eval(player) ?: true }?.process(tellraw, player)
+        url?.firstOrNull { it.condition?.eval(player) ?: true }?.process(tellraw, player)
+        insertion?.firstOrNull { it.condition?.eval(player) ?: true }?.process(tellraw, player)
+
         return tellraw
     }
 
@@ -53,15 +50,7 @@ open class JsonComponent(
             nmsClass("NBTTagCompound")
         }
 
-        fun TellrawJson.copyOrSuggest(text: String) {
-            try {
-                copyToClipboard(text)
-            } catch (e: NoSuchFieldError) {
-                suggestCommand(text)
-            }
-        }
-
-        fun TellrawJson.hoverItemFixed(item: ItemStack): TellrawJson {
+        internal fun TellrawJson.hoverItemFixed(item: ItemStack): TellrawJson {
             val nmsItemStack = TrChatAPI.classCraftItemStack.invokeMethod<Any>("asNMSCopy", item, fixed = true)!!
             val nmsNBTTabCompound = classNBTTagCompound.invokeConstructor()
             val itemJson = nmsItemStack.invokeMethod<Any>("save", nmsNBTTabCompound)!!
