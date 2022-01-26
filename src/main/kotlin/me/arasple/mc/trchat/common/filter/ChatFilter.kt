@@ -4,6 +4,7 @@ import com.google.gson.JsonParser
 import me.arasple.mc.trchat.api.TrChatFiles.filter
 import me.arasple.mc.trchat.common.filter.processer.Filter
 import me.arasple.mc.trchat.common.filter.processer.FilteredObject
+import me.arasple.mc.trchat.internal.service.Metrics
 import me.arasple.mc.trchat.util.notify
 import taboolib.common.env.DependencyDownloader.readFully
 import taboolib.common.platform.Platform
@@ -124,7 +125,9 @@ object ChatFilter {
      */
     fun filter(string: String, execute: Boolean = true): FilteredObject {
         return mirrorNow("Common:Filter:doFilter") {
-            Filter.doFilter(string, execute)
+            Filter.doFilter(string, execute).also {
+                Metrics.increase(1, it.sensitiveWords)
+            }
         }
     }
 }

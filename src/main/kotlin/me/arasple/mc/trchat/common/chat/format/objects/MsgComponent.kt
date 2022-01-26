@@ -20,6 +20,7 @@ import taboolib.common.util.replaceWithOrder
 import taboolib.module.chat.TellrawJson
 import taboolib.module.nms.getI18nName
 import taboolib.platform.util.buildItem
+import taboolib.platform.util.isAir
 
 /**
  * @author Arasple
@@ -43,7 +44,7 @@ class MsgComponent : JsonComponent {
         val tellraw = TellrawJson()
         // Custom Functions
         ChatFunctions.functions.filter { f -> Condition.eval(player, f.requirement).asBoolean() }.forEach { function ->
-            message = replacePattern(message, function.pattern, function.filterTextPattern, "<<" + function.name + ":{0}>>")
+            message = replacePattern(message, function.pattern, function.filterTextPattern, "{{" + function.name + ":{0}}}")
         }
         // At
         val atEnabled = function.getBoolean("GENERAL.MENTION.ENABLE", true) && !Users.isInCooldown(player.uniqueId, Cooldowns.CooldownType.MENTION)
@@ -53,7 +54,7 @@ class MsgComponent : JsonComponent {
                 if (!function.getBoolean("GENERAL.MENTION.SELF-MENTION", false) && p.equals(player.name, ignoreCase = true)) {
                     continue
                 }
-                message = message.replace("(?i)(@)?$p".toRegex(), "<<AT:$p>>")
+                message = message.replace("(?i)(@)?$p".toRegex(), "{{AT:$p}}")
             }
         }
         // Item Show
@@ -63,9 +64,9 @@ class MsgComponent : JsonComponent {
         if (itemDisplayEnabled) {
             for (key in itemKeys) {
                 for (i in 0..8) {
-                    message = message.replace("$key-$i", "<<ITEM:$i>>", ignoreCase = true)
+                    message = message.replace("$key-$i", "{{ITEM:$i}}", ignoreCase = true)
                 }
-                message = message.replace(key, "<<ITEM:" + player.inventory.heldItemSlot + ">>", ignoreCase = true)
+                message = message.replace(key, "{{ITEM:" + player.inventory.heldItemSlot + "}}", ignoreCase = true)
             }
         }
 
@@ -124,8 +125,11 @@ class MsgComponent : JsonComponent {
     }
 
     private fun ItemStack.getName(player: Player): String {
-        return if ((function.getBoolean("GENERAL.ITEM-SHOW.ORIGIN-NAME", false)
-                || itemMeta == null) || !itemMeta!!.hasDisplayName()
+        if (isAir) {
+            return "空气"
+        }
+        return if (function.getBoolean("GENERAL.ITEM-SHOW.ORIGIN-NAME", false)
+            || itemMeta?.hasDisplayName() != true
         ) {
             getI18nName(player)
         } else {
@@ -145,6 +149,6 @@ class MsgComponent : JsonComponent {
 
     companion object {
 
-        private val parser = VariableReader("<<", ">>")
+        private val parser = VariableReader()
     }
 }
