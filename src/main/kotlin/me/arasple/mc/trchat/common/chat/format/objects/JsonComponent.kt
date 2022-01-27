@@ -96,7 +96,7 @@ open class JsonComponent {
         }
 
         fun TellrawJson.hoverItemFixed(item: ItemStack): TellrawJson {
-            val newItem = NMS.INSTANCE.optimizeNBT(item)
+            val newItem = NMS.INSTANCE.optimizeNBT(NMS.INSTANCE.optimizeShulkerBox(item))
             val nmsItemStack = TrChatAPI.classCraftItemStack.invokeMethod<Any>("asNMSCopy", newItem, fixed = true)!!
             val nmsNBTTabCompound = classNBTTagCompound.invokeConstructor()
             val itemJson = nmsItemStack.invokeMethod<Any>("save", nmsNBTTabCompound)!!

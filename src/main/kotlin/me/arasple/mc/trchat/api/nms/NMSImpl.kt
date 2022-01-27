@@ -4,11 +4,17 @@ import me.arasple.mc.trchat.api.TrChatAPI
 import me.arasple.mc.trchat.common.filter.ChatFilter.filter
 import net.minecraft.server.v1_16_R3.NBTBase
 import net.minecraft.server.v1_16_R3.NBTTagCompound
+import org.bukkit.Material
+import org.bukkit.block.ShulkerBox
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.BlockStateMeta
+import org.bukkit.inventory.meta.ItemMeta
 import taboolib.common.reflect.Reflex.Companion.getProperty
 import taboolib.common.reflect.Reflex.Companion.invokeMethod
 import taboolib.module.nms.MinecraftVersion.isUniversal
+import taboolib.module.nms.getI18nName
 import taboolib.platform.util.isNotAir
+import taboolib.platform.util.modifyMeta
 
 /**
  * @author Arasple
@@ -65,5 +71,36 @@ class NMSImpl : NMS() {
         } catch (_: Throwable) {
         }
         return itemStack
+    }
+
+    override fun optimizeShulkerBox(item: ItemStack): ItemStack {
+        try {
+            if (!item.type.name.endsWith("SHULKER_BOX")) {
+                return item
+            }
+            val itemClone = item.clone()
+            val blockStateMeta = itemClone.itemMeta!! as BlockStateMeta
+            val shulkerBox = blockStateMeta.blockState as ShulkerBox
+            val contents = shulkerBox.inventory.contents
+            val contentsClone = contents.mapNotNull {
+                if (it.isNotAir()) {
+                    ItemStack(Material.STONE, it.amount, it.durability).modifyMeta<ItemMeta> {
+                        if (it.itemMeta?.hasDisplayName() == true) {
+                            setDisplayName(it.itemMeta!!.displayName)
+                        } else {
+                            setDisplayName(it.getI18nName())
+                        }
+                    }
+                } else {
+                    null
+                }
+            }.toTypedArray()
+            shulkerBox.inventory.contents = contentsClone
+            blockStateMeta.blockState = shulkerBox
+            itemClone.itemMeta = blockStateMeta
+            return itemClone
+        } catch (_: Throwable) {
+        }
+        return item
     }
 }

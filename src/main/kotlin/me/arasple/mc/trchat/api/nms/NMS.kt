@@ -24,6 +24,8 @@ abstract class NMS {
 
     abstract fun optimizeNBT(itemStack: ItemStack, nbtWhitelist: Array<String> = TellrawJson.whitelistTags): ItemStack
 
+    abstract fun optimizeShulkerBox(item: ItemStack): ItemStack
+
     companion object {
 
         val INSTANCE by lazy {
