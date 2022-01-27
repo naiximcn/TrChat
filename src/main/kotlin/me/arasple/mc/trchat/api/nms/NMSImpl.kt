@@ -2,8 +2,13 @@ package me.arasple.mc.trchat.api.nms
 
 import me.arasple.mc.trchat.api.TrChatAPI
 import me.arasple.mc.trchat.common.filter.ChatFilter.filter
+import net.minecraft.server.v1_16_R3.NBTBase
+import net.minecraft.server.v1_16_R3.NBTTagCompound
 import org.bukkit.inventory.ItemStack
+import taboolib.common.reflect.Reflex.Companion.getProperty
 import taboolib.common.reflect.Reflex.Companion.invokeMethod
+import taboolib.module.nms.MinecraftVersion.isUniversal
+import taboolib.platform.util.isNotAir
 
 /**
  * @author Arasple
@@ -39,5 +44,26 @@ class NMSImpl : NMS() {
                 (items as Array<*>).forEach { item -> filterItem(item) }
             }
         }
+    }
+
+    override fun optimizeNBT(itemStack: ItemStack, nbtWhitelist: Array<String>): ItemStack {
+        try {
+            val nmsItem = TrChatAPI.classCraftItemStack
+                .invokeMethod<net.minecraft.server.v1_16_R3.ItemStack>("asNMSCopy", itemStack, fixed = true)!!
+            if (itemStack.isNotAir() && nmsItem.hasTag()) {
+                val nbtTag = NBTTagCompound()
+                val mapNew = nbtTag.getProperty<HashMap<String, NBTBase>>(if (isUniversal) "tags" else "map")!!
+                val mapOrigin = nmsItem.tag?.getProperty<Map<String, NBTBase>>(if (isUniversal) "tags" else "map") ?: return itemStack
+                mapOrigin.entries.forEach {
+                    if (nbtWhitelist.contains(it.key)) {
+                        mapNew[it.key] = it.value
+                    }
+                }
+                nmsItem.tag = nbtTag
+                return TrChatAPI.classCraftItemStack.invokeMethod<ItemStack>("asBukkitCopy", nmsItem, fixed = true)!!
+            }
+        } catch (_: Throwable) {
+        }
+        return itemStack
     }
 }

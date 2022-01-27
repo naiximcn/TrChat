@@ -125,7 +125,7 @@ class MsgComponent : JsonComponent {
     }
 
     private fun ItemStack.getName(player: Player): String {
-        if (isAir) {
+        if (isAir()) {
             return "空气"
         }
         return if (function.getBoolean("GENERAL.ITEM-SHOW.ORIGIN-NAME", false)
