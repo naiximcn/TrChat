@@ -3,7 +3,7 @@ package me.arasple.mc.trchat.internal.listener
 import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.api.nms.NMS
 import me.arasple.mc.trchat.common.filter.ChatFilter.filter
-import me.arasple.mc.trchat.internal.data.Users.isFilterEnabled
+import me.arasple.mc.trchat.internal.data.Users
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.TextComponent
 import taboolib.common.platform.Platform
@@ -22,7 +22,7 @@ object ListenerPackets {
     @SubscribeEvent
     fun e(e: PacketSendEvent) {
         // Chat Filter
-        if (isFilterEnabled(e.player)) {
+        if (Users.isFilterEnabled(e.player)) {
             when (e.packet.name) {
                 "PacketPlayOutChat" -> {
                     if (!TrChatFiles.filter.getBoolean("FILTER.CHAT")) {

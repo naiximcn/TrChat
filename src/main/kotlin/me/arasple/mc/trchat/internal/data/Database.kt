@@ -13,6 +13,7 @@ import taboolib.common.platform.function.submit
 import taboolib.expansion.releaseDataContainer
 import taboolib.expansion.setupDataContainer
 import taboolib.expansion.setupPlayerDatabase
+import taboolib.module.nms.PacketReceiveEvent
 import java.io.File
 
 /**
@@ -33,12 +34,14 @@ object Database {
         }
     }
 
-    @SubscribeEvent
-    fun e(e: PlayerJoinEvent) {
-        e.player.setupDataContainer()
+    @SubscribeEvent(EventPriority.LOWEST)
+    fun e(e: PacketReceiveEvent) {
+        if (e.packet.name == "PacketPlayInKeepAlive") {
+            e.player.setupDataContainer()
+        }
     }
 
-    @SubscribeEvent(EventPriority.HIGH)
+    @SubscribeEvent(EventPriority.HIGHEST)
     fun e(e: PlayerQuitEvent) {
         e.player.releaseDataContainer()
     }
