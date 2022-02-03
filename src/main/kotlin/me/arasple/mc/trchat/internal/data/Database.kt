@@ -9,11 +9,9 @@ import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.getDataFolder
-import taboolib.common.platform.function.submit
 import taboolib.expansion.releaseDataContainer
 import taboolib.expansion.setupDataContainer
 import taboolib.expansion.setupPlayerDatabase
-import taboolib.module.nms.PacketReceiveEvent
 import java.io.File
 
 /**
@@ -35,10 +33,8 @@ object Database {
     }
 
     @SubscribeEvent(EventPriority.LOWEST)
-    fun e(e: PacketReceiveEvent) {
-        if (e.packet.name == "PacketPlayInKeepAlive") {
-            e.player.setupDataContainer()
-        }
+    fun e(e: PlayerJoinEvent) {
+        e.player.setupDataContainer()
     }
 
     @SubscribeEvent(EventPriority.HIGHEST)

@@ -22,45 +22,43 @@ object ListenerPackets {
     @SubscribeEvent
     fun e(e: PacketSendEvent) {
         // Chat Filter
-        if (Users.isFilterEnabled(e.player)) {
-            when (e.packet.name) {
-                "PacketPlayOutChat" -> {
-                    if (!TrChatFiles.filter.getBoolean("FILTER.CHAT")) {
-                        return
-                    }
+        when (e.packet.name) {
+            "PacketPlayOutChat" -> {
+                if (!TrChatFiles.filter.getBoolean("FILTER.CHAT") || !Users.isFilterEnabled(e.player)) {
+                    return
+                }
 //                    if (majorLegacy >= 11700) {
 //                        e.packet.write("message", PacketUtils.INSTANCE.filterIChatComponent(e.packet.read<Any>("message")))
 //                    } else {
 //                        e.packet.write("a", PacketUtils.INSTANCE.filterIChatComponent(e.packet.read<Any>("a")))
 //                    }
-                    kotlin.runCatching {
-                        val components = e.packet.read<Array<BaseComponent>>("components") ?: return
-                        e.packet.write("components", components.map { filterComponent(it) }.toTypedArray())
-                    }
+                kotlin.runCatching {
+                    val components = e.packet.read<Array<BaseComponent>>("components") ?: return
+                    e.packet.write("components", components.map { filterComponent(it) }.toTypedArray())
+                }
+                return
+            }
+            "PacketPlayOutWindowItems" -> {
+                if (!TrChatFiles.filter.getBoolean("FILTER.ITEM") || !Users.isFilterEnabled(e.player)) {
                     return
                 }
-                "PacketPlayOutWindowItems" -> {
-                    if (!TrChatFiles.filter.getBoolean("FILTER.ITEM")) {
-                        return
-                    }
-                    if (majorLegacy >= 11700) {
-                        NMS.INSTANCE.filterItemList(e.packet.read<Any>("items"))
-                    } else {
-                        NMS.INSTANCE.filterItemList(e.packet.read<Any>("b"))
-                    }
+                if (majorLegacy >= 11700) {
+                    NMS.INSTANCE.filterItemList(e.packet.read<Any>("items"))
+                } else {
+                    NMS.INSTANCE.filterItemList(e.packet.read<Any>("b"))
+                }
+                return
+            }
+            "PacketPlayOutSetSlot" -> {
+                if (!TrChatFiles.filter.getBoolean("FILTER.ITEM") || !Users.isFilterEnabled(e.player)) {
                     return
                 }
-                "PacketPlayOutSetSlot" -> {
-                    if (!TrChatFiles.filter.getBoolean("FILTER.ITEM")) {
-                        return
-                    }
-                    if (majorLegacy >= 11700) {
-                        NMS.INSTANCE.filterItem(e.packet.read<Any>("itemStack"))
-                    } else {
-                        NMS.INSTANCE.filterItem(e.packet.read<Any>("c"))
-                    }
-                    return
+                if (majorLegacy >= 11700) {
+                    NMS.INSTANCE.filterItem(e.packet.read<Any>("itemStack"))
+                } else {
+                    NMS.INSTANCE.filterItem(e.packet.read<Any>("c"))
                 }
+                return
             }
         }
         // Tab Complete
