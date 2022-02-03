@@ -21,31 +21,6 @@ import java.net.URL
 @PlatformSide([Platform.BUKKIT])
 object Vars {
 
-    /**
-     * 检测前置 PlaceholderAPI
-     * 并自动下载、重启服务器
-     */
-    internal fun hookPlaceholderAPI(): Boolean {
-        val plugin = Bukkit.getPluginManager().getPlugin("PlaceholderAPI")
-        val jarFile = File("plugins/PlaceholderAPI.jar")
-        val url = URL("https://api.spiget.org/v2/resources/6245/download")
-
-        if (plugin == null) {
-            jarFile.delete()
-            console().sendLang("Plugin-Depend-Download", "PlaceholderAPI")
-            try {
-                Repository.downloadToFile(url, jarFile)
-            } catch (e: IOException) {
-                e.printStackTrace()
-                console().sendLang("Plugin-Depend-Install-Failed", "PlaceholderAPI")
-                return false
-            }
-            console().sendLang("Plugin-Depend-Installed", "PlaceholderAPI")
-            return false
-        }
-        return true
-    }
-
     @Schedule(async = true)
     fun downloadExpansions() {
         downloadExpansions(Settings.CONF.getStringList("Options.Depend-Expansions"))

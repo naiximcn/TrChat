@@ -31,6 +31,7 @@ object TrChatAPI {
      * @return 过滤后的
      */
     @JvmStatic
+    @JvmOverloads
     fun filterString(player: Player, string: String, execute: Boolean = true): FilteredObject {
         return if (execute) filter(string, !player.hasPermission("trchat.bypass.filter")) else FilteredObject(string, 0)
     }
@@ -61,7 +62,7 @@ object TrChatAPI {
     fun eval(player: Player, script: String): CompletableFuture<Any?> {
         return mirrorNow("API:Script:Evaluation") {
             return@mirrorNow try {
-                KetherShell.eval(script, namespace = listOf("trmenu", "trhologram", "trchat")) {
+                KetherShell.eval(script, namespace = listOf("trchat", "trmenu", "trhologram")) {
                     sender = adaptPlayer(player)
                 }
             } catch (e: LocalizedException) {

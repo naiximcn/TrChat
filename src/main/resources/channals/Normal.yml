@@ -19,9 +19,11 @@ Formats:
           &6▶ &eClick here to send a teleport request
           &r
         command: '/tpa %player_name%'
-      - text:
-          - ' &7%player_name%'
-          - ' &4%player_name% {condition: player op}'
+      part-before-player:
+        text: ' '
+      player:
+        text:
+          - '&7%player_name%'
         hover: |-
           &r
           &8▪ &7Ping: &3%player_ping% Ms
@@ -30,7 +32,8 @@ Formats:
           &6▶ &eClick to chat with me
           &r
         suggest: '/msg %player_name% '
-      - text: '&7: '
+      part-before-msg:
+        text: '&7: '
     msg:
-      default-color: '7'
-        hover: '&7Date: %server_time_h:mm:ss a%'
+      default-color: '&7'
+      hover: '&7Date: %server_time_h:mm:ss a%'

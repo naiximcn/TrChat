@@ -2,6 +2,7 @@ plugins {
     java
     id("io.izzel.taboolib") version "1.34"
     id("org.jetbrains.kotlin.jvm") version "1.5.10"
+    id("org.tabooproject.shrinkingkt") version "1.0.0"
 }
 
 taboolib {
@@ -11,7 +12,7 @@ taboolib {
             name("ItsFlicker")
         }
         dependencies {
-            name("PlaceholderAPI").optional(true).with("bukkit")
+            name("PlaceholderAPI").with("bukkit")
         }
         desc("Advanced Minecraft Chat Control")
     }
