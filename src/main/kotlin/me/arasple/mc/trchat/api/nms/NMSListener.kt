@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.api.nms
 
-import me.arasple.mc.trchat.api.TrChatFiles
+import me.arasple.mc.trchat.api.config.Filter
 import me.arasple.mc.trchat.common.filter.ChatFilter.filter
 import me.arasple.mc.trchat.util.getSession
 import net.md_5.bungee.api.chat.BaseComponent
@@ -25,40 +25,38 @@ object NMSListener {
             e.player.getSession().addMessage(e.packet)
         }
         // Chat Filter
-        if (e.player.getSession().isFilterEnabled) {
-            when (e.packet.name) {
-                "PacketPlayOutChat" -> {
-                    if (!TrChatFiles.filter.getBoolean("FILTER.CHAT")) {
-                        return
-                    }
-                    kotlin.runCatching {
-                        val components = e.packet.read<Array<BaseComponent>>("components") ?: return
-                        e.packet.write("components", components.map { filterComponent(it) }.toTypedArray())
-                    }
+        when (e.packet.name) {
+            "PacketPlayOutChat" -> {
+                if (!Filter.CONF.getBoolean("Filter.Chat") || !e.player.getSession().isFilterEnabled) {
                     return
                 }
-                "PacketPlayOutWindowItems" -> {
-                    if (!TrChatFiles.filter.getBoolean("FILTER.ITEM")) {
-                        return
-                    }
-                    if (majorLegacy >= 11700) {
-                        NMS.INSTANCE.filterItemList(e.packet.read<Any>("items"))
-                    } else {
-                        NMS.INSTANCE.filterItemList(e.packet.read<Any>("b"))
-                    }
+                kotlin.runCatching {
+                    val components = e.packet.read<Array<BaseComponent>>("components") ?: return
+                    e.packet.write("components", components.map { filterComponent(it) }.toTypedArray())
+                }
+                return
+            }
+            "PacketPlayOutWindowItems" -> {
+                if (!Filter.CONF.getBoolean("Filter.Item") || !e.player.getSession().isFilterEnabled) {
                     return
                 }
-                "PacketPlayOutSetSlot" -> {
-                    if (!TrChatFiles.filter.getBoolean("FILTER.ITEM")) {
-                        return
-                    }
-                    if (majorLegacy >= 11700) {
-                        NMS.INSTANCE.filterItem(e.packet.read<Any>("itemStack"))
-                    } else {
-                        NMS.INSTANCE.filterItem(e.packet.read<Any>("c"))
-                    }
+                if (majorLegacy >= 11700) {
+                    NMS.INSTANCE.filterItemList(e.packet.read<Any>("items"))
+                } else {
+                    NMS.INSTANCE.filterItemList(e.packet.read<Any>("b"))
+                }
+                return
+            }
+            "PacketPlayOutSetSlot" -> {
+                if (!Filter.CONF.getBoolean("Filter.Item") || !e.player.getSession().isFilterEnabled) {
                     return
                 }
+                if (majorLegacy >= 11700) {
+                    NMS.INSTANCE.filterItem(e.packet.read<Any>("itemStack"))
+                } else {
+                    NMS.INSTANCE.filterItem(e.packet.read<Any>("c"))
+                }
+                return
             }
         }
         // Tab Complete

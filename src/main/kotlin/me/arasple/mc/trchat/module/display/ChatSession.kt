@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.module.display
 
-import me.arasple.mc.trchat.api.Settings
+import me.arasple.mc.trchat.api.config.Settings
 import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.onlinePlayers

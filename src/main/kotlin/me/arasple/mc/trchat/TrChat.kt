@@ -25,12 +25,6 @@ object TrChat : Plugin() {
 
     override fun onLoad() {
         console().sendLang("Plugin-Loaded")
-
-        if (!Vars.hookPlaceholderAPI()) {
-            disablePlugin()
-            Bukkit.shutdown()
-            return
-        }
     }
 
     override fun onEnable() {

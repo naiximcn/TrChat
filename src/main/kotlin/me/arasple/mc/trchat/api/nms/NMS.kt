@@ -1,5 +1,7 @@
 package me.arasple.mc.trchat.api.nms
 
+import org.bukkit.inventory.ItemStack
+import taboolib.module.chat.TellrawJson
 import taboolib.module.nms.nmsProxy
 
 /**
@@ -19,6 +21,8 @@ abstract class NMS {
     abstract fun filterItem(item: Any?)
 
     abstract fun filterItemList(items: Any?)
+
+    abstract fun optimizeNBT(itemStack: ItemStack, nbtWhitelist: Array<String> = TellrawJson.whitelistTags): ItemStack
 
     companion object {
 

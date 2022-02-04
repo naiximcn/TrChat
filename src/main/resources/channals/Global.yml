@@ -2,9 +2,11 @@ Options:
   Condition: ~
   Range: ALL
   Proxy: true
+  Always-Listening: true
 
 Bindings:
-  Prefix: '!all'
+  Prefix: ['!all']
+  Command: ['global']
 
 Formats:
   - condition: null

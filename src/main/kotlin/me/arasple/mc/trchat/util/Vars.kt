@@ -1,18 +1,11 @@
 package me.arasple.mc.trchat.util
 
-import me.arasple.mc.trchat.api.Settings
+import me.arasple.mc.trchat.api.config.Settings
 import me.clip.placeholderapi.PlaceholderAPIPlugin
-import org.bukkit.Bukkit
-import taboolib.common.env.Repository
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.Schedule
-import taboolib.common.platform.function.console
 import taboolib.common.platform.function.submit
-import taboolib.module.lang.sendLang
-import java.io.File
-import java.io.IOException
-import java.net.URL
 
 /**
  * @author Arasple

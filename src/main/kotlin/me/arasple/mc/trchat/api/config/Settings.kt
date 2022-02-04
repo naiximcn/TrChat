@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.api
+package me.arasple.mc.trchat.api.config
 
 import me.arasple.mc.trchat.module.display.Channel
 import taboolib.common5.Baffle

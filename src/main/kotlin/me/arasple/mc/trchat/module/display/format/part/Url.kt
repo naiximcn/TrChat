@@ -14,11 +14,11 @@ class Url(override val content: String, override val condition: Condition?) : Pa
 
     override val dynamic by lazy { Regexs.containsPlaceholder(content) }
 
-    override fun process(tellraw: TellrawJson, player: Player) {
+    override fun process(tellraw: TellrawJson, player: Player, message: String) {
         if (dynamic) {
-            tellraw.openURL(content.replacePlaceholder(player))
+            tellraw.openURL(content.replacePlaceholder(player).replace("\$message", message))
         } else {
-            tellraw.openURL(content)
+            tellraw.openURL(content.replace("\$message", message))
         }
     }
 }

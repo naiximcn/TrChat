@@ -2,6 +2,7 @@ Options:
   Condition: ~
   Range: ALL
   Proxy: false
+  ALWAYS-LISTENING: true
 
 Bindings:
   Prefix: ~
@@ -9,6 +10,9 @@ Bindings:
 Formats:
   - condition: ~
     priority: 100
+    msg:
+      default-color: '&7'
+      hover: '&7Date: %server_time_h:mm:ss a%'
     prefix:
       world:
         text: '&8[&3%player_world%&8]'
@@ -23,6 +27,7 @@ Formats:
         text: ' '
       player:
         text:
+          - '&4%player_name%{condition: player op}'
           - '&7%player_name%'
         hover: |-
           &r
@@ -34,6 +39,3 @@ Formats:
         suggest: '/msg %player_name% '
       part-before-msg:
         text: '&7: '
-    msg:
-      default-color: '&7'
-      hover: '&7Date: %server_time_h:mm:ss a%'

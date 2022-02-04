@@ -5,6 +5,8 @@ Options:
 
 Database:
   Method: LOCAL
+  Local:
+    File: '{data_folder}/data.db'
   Sqlite:
     host: localhost
     port: 3306
@@ -19,7 +21,7 @@ Database:
 
 Chat:
   Anti-Repeat: 0.85
-  Cooldown: 10.0;5
+  Cooldown: 2.0
   Length-Limit: 100
 
 Color:

@@ -16,5 +16,5 @@ abstract class Part {
 
     abstract val dynamic: Boolean
 
-    abstract fun process(tellraw: TellrawJson, player: Player)
+    abstract fun process(tellraw: TellrawJson, player: Player, message: String = "")
 }

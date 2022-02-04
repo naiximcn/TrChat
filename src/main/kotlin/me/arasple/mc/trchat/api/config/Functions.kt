@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.api
+package me.arasple.mc.trchat.api.config
 
 import taboolib.common5.Baffle
 import taboolib.module.configuration.Config
@@ -20,14 +20,15 @@ object Functions {
     @ConfigNode("General.Item-Show.Cooldowns", "function.yml")
     val itemShowDelay = ConfigNodeTransfer<Double, Baffle> { Baffle.of((this * 1000).toLong(), TimeUnit.MILLISECONDS) }
 
+    @ConfigNode("General.Item-Show.Keys", "function.yml")
+    val itemShowKeys = ConfigNodeTransfer<List<String>, List<Regex>> { map { Regex("$it(-[1-9])?") } }
+
     @ConfigNode("General.Mention.Cooldowns", "function.yml")
     val mentionDelay = ConfigNodeTransfer<Double, Baffle> { Baffle.of((this * 1000).toLong(), TimeUnit.MILLISECONDS) }
 
-    val itemShow by lazy {
-        CONF.getConfigurationSection("General.Item-Show")!!
-    }
+    val itemShow = CONF.getConfigurationSection("General.Item-Show")!!
 
-    val mention by lazy {
-        CONF.getConfigurationSection("General.Mention")!!
-    }
+    val mention = CONF.getConfigurationSection("General.Mention")!!
+
+    val inventoryShow = CONF.getConfigurationSection("General.Inventory-Show")!!
 }

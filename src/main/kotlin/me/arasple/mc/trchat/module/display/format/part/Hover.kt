@@ -16,11 +16,11 @@ class Hover(text: List<String>, override val condition: Condition?) : Part() {
 
     override val dynamic by lazy { Regexs.containsPlaceholder(content) }
 
-    override fun process(tellraw: TellrawJson, player: Player) {
+    override fun process(tellraw: TellrawJson, player: Player, message: String) {
         if (dynamic) {
-            tellraw.hoverText(content.replacePlaceholder(player))
+            tellraw.hoverText(content.replacePlaceholder(player).replace("\$message", message))
         } else {
-            tellraw.hoverText(content)
+            tellraw.hoverText(content.replace("\$message", message))
         }
     }
 }

@@ -1,7 +1,7 @@
 package me.arasple.mc.trchat.internal.listener
 
 import me.arasple.mc.trchat.api.TrChatFiles.settings
-import me.arasple.mc.trchat.util.MessageColors
+import me.arasple.mc.trchat.util.color.MessageColors
 import org.bukkit.event.player.PlayerEditBookEvent
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide

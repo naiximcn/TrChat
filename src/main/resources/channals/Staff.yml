@@ -4,8 +4,7 @@ Options:
   Proxy: true
 
 Bindings:
-  Commands:
-    - '(?i)staff(-)?(channel)?'
+  Command: ['staff']
 
 Formats:
   - requirement: null

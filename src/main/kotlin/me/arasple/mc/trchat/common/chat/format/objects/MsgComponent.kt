@@ -9,7 +9,7 @@ import me.arasple.mc.trchat.internal.proxy.Proxy
 import me.arasple.mc.trchat.internal.proxy.bukkit.Players
 import me.arasple.mc.trchat.module.display.format.JsonComponent
 import me.arasple.mc.trchat.module.script.Condition
-import me.arasple.mc.trchat.util.MessageColors
+import me.arasple.mc.trchat.util.color.MessageColors
 import me.arasple.mc.trchat.util.coloredAll
 import me.arasple.mc.trchat.util.replacePattern
 import net.md_5.bungee.api.ChatColor

@@ -1,79 +1,114 @@
 package me.arasple.mc.trchat.module.display.format
 
-import me.arasple.mc.trchat.api.Functions
+import com.google.common.cache.Cache
+import com.google.common.cache.CacheBuilder
+import me.arasple.mc.trchat.api.config.Functions
 import me.arasple.mc.trchat.module.display.format.part.*
-import me.arasple.mc.trchat.util.DefaultColor
-import me.arasple.mc.trchat.util.Variables
-import me.arasple.mc.trmenu.util.colorify
+import me.arasple.mc.trchat.util.color.DefaultColor
+import me.arasple.mc.trchat.util.color.MessageColors
+import me.arasple.mc.trchat.util.color.colorify
+import me.arasple.mc.trchat.util.hoverItemFixed
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import taboolib.common.util.VariableReader
 import taboolib.common.util.replaceWithOrder
 import taboolib.module.chat.TellrawJson
+import taboolib.module.chat.uncolored
 import taboolib.module.nms.getI18nName
+import taboolib.module.ui.Menu
 import taboolib.platform.util.buildItem
-import java.util.HashMap
-import java.util.function.Function
+import java.util.concurrent.TimeUnit
 
 /**
  * @author wlys
  * @since 2021/12/12 13:46
  */
 class MsgComponent(
-    var defaultColor: DefaultColor?,
+    var defaultColor: DefaultColor,
     hover: List<Hover>?,
     suggest: List<Suggest>?,
     command: List<Command>?,
     url: List<Url>?,
-    insertion: List<Insertion>) : JsonComponent(null, null, hover, suggest, command, url, insertion) {
-
-    fun itemShow() {
-        functions.add { msg ->
-            val tellraw = TellrawJson()
-            if (!Functions.itemShow.getBoolean("Enable")) {
-                return@add tellraw
-            }
-            var message = msg
-            for (key in Functions.itemShow.getStringList("Keys")) {
-                message = message.replace(key, "%i", ignoreCase = true)
-            }
-            Variables(message, "%i(-\\d)?".toRegex()) { it.getOrElse(1) { inventory.heldItemSlot.toString() }.removePrefix("-") }
-                .element.map {
-                    if (it.isVariable) {
-                        val item = inventory.getItem(it.value.toInt()) ?: ItemStack(Material.AIR)
-                        tellraw.append(itemCache.computeIfAbsent(item) {
-                            TellrawJson()
-                                .append(Functions.itemShow.getString("Format")!!.colorify().replaceWithOrder(item.getDisplayName(this), item.amount.toString()))
-                                .hoverItemFixed(if (Functions.itemShow.getBoolean("Compatible")) {
-                                    buildItem(item) { material = Material.STONE }
-                                } else {
-                                    item
-                                })
-                        })
-                    } else {
-                        tellraw.append(defaultColor?.colored())
-                    }
-                }
-            tellraw
-        }
-}
+    insertion: List<Insertion>?,
+    copy: List<Copy>?
+) : JsonComponent(null, null, hover, suggest, command, url, insertion, copy) {
 
     fun serialize(player: Player, msg: String): TellrawJson {
         val tellraw = TellrawJson()
 
         var message = msg
-        message = message.itemShow().mention()
+        message = message.itemShow(player).mention().inventoryShow(player)
+
+        val defaultColor = MessageColors.catchDefaultMessageColor(player, defaultColor)
+
+        parser.readToFlatten(message).forEach { part ->
+            if (part.isVariable) {
+                val args = part.text.split(":", limit = 2)
+                when (args[0]) {
+                    "ITEM" -> {
+                        tellraw.append(itemCache.let { cache ->
+                            val item = player.inventory.getItem(args[1].toInt()) ?: ItemStack(Material.AIR)
+                            cache.getIfPresent(item) ?: kotlin.run {
+                                TellrawJson()
+                                    .append(Functions.itemShow.getString("Format")!!.replaceWithOrder(item.getDisplayName(player), item.amount.toString()).colorify())
+                                    .hoverItemFixed(item.run {
+                                        if (Functions.itemShow.getBoolean("Compatible", false)) {
+                                            buildItem(this) { material = Material.STONE }
+                                        } else {
+                                            this
+                                        }
+                                    }).also {
+                                        cache.put(item, it)
+                                    }
+                            }
+                        })
+                    }
+                    "MENTION" -> {
+
+                    }
+                    "INVENTORY" -> {
+
+                    }
+                }
+            } else {
+                tellraw.append(toTellrawJson(player, MessageColors.defaultColored(defaultColor, player, message)))
+            }
+        }
+
+        return tellraw
+    }
+
+    override fun toTellrawJson(player: Player, vararg vars: String): TellrawJson {
+        val tellraw = TellrawJson()
+        val message = vars[0]
+
+        tellraw.append(message)
+        hover?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player, message)
+        suggest?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player, message.uncolored())
+        command?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player, message.uncolored())
+        url?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player, message.uncolored())
+        insertion?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player, message.uncolored())
+        copy?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player, message.uncolored())
 
         return tellraw
     }
 
     companion object {
 
-        val itemCache = HashMap<ItemStack, TellrawJson>()
+        private val parser = VariableReader()
+
+        val itemCache: Cache<ItemStack, TellrawJson> = CacheBuilder.newBuilder()
+            .expireAfterWrite(10L, TimeUnit.MINUTES)
+            .build()
+
+        val inventoryCache: Cache<Long, Menu> = CacheBuilder.newBuilder()
+            .expireAfterWrite(10L, TimeUnit.MINUTES)
+            .build()
 
         fun ItemStack.getDisplayName(player: Player): String {
-            return if ((Functions.itemShow.getBoolean("Origin-Name", false)
-                        || itemMeta == null) || !itemMeta!!.hasDisplayName()
+            return if (Functions.itemShow.getBoolean("Origin-Name", false)
+                        || itemMeta?.hasDisplayName() != true
             ) {
                 getI18nName(player)
             } else {
@@ -81,15 +116,13 @@ class MsgComponent(
             }
         }
 
-        private fun String.itemShow(): String {
+        private fun String.itemShow(player: Player): String {
             var result = this
             if (Functions.itemShow.getBoolean("Enable")) {
-                for (key in Functions.itemShow.getStringList("Keys")) {
-                    val regex = Regex("(?i)$key(-[1-9])?")
-                    regex.findAll(result).forEach {
-
+                Functions.itemShowKeys.get().forEach { regex ->
+                    result = result.replace(regex) {
+                        "{{ITEM:${it.groups[1]?.value?.takeLast(1)?.toInt() ?: player.inventory.heldItemSlot}}}"
                     }
-                    result = result.replace(.toRegex(), "{{ITEM:$-1}}")
                 }
             }
             return result
@@ -97,6 +130,16 @@ class MsgComponent(
 
         private fun String.mention(): String {
             var result = this
+            return result
+        }
+
+        private fun String.inventoryShow(player: Player): String {
+            var result = this
+            if (Functions.inventoryShow.getBoolean("Enable")) {
+                Functions.inventoryShow.getStringList("Keys").forEach {
+                    result = result.replace(it, "{{INVENTORY:SELF}}", ignoreCase = true)
+                }
+            }
             return result
         }
     }

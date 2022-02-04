@@ -1,8 +1,5 @@
-package me.arasple.mc.trchat.util
+package me.arasple.mc.trchat.util.color
 
-import me.arasple.mc.trmenu.util.parseGradients
-import me.arasple.mc.trmenu.util.parseHex
-import me.arasple.mc.trmenu.util.parseRainbow
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.entity.Player
 import taboolib.common.platform.Platform
@@ -16,20 +13,18 @@ import taboolib.module.chat.colored
 @PlatformSide([Platform.BUKKIT])
 object MessageColors {
 
-    private val COLOR_CODES = ChatColor.ALL_CODES.map { it }
+    private val COLOR_CODES = ChatColor.ALL_CODES.map { it.toString() }
 
     private const val COLOR_CHAR = ChatColor.COLOR_CHAR.toString()
     private const val COLOR_PERMISSION_NODE = "trchat.color."
     private const val FORCE_CHAT_COLOR_PERMISSION_NODE = "trchat.color.force-defaultcolor."
 
-    fun replaceWithPermission(player: Player?, strings: List<String>): List<String> {
-        return if (player == null) strings else strings.map { replaceWithPermission(player, it) }
+    fun replaceWithPermission(player: Player, strings: List<String>): List<String> {
+        return strings.map { replaceWithPermission(player, it) }
     }
 
-    fun replaceWithPermission(player: Player?, s: String): String {
+    fun replaceWithPermission(player: Player, s: String): String {
         var string = s
-
-        player ?: return string
 
         if (player.hasPermission("$COLOR_PERMISSION_NODE*")) {
             string = string.colored()
@@ -40,27 +35,49 @@ object MessageColors {
                 }
             }
         }
+
         if (player.hasPermission(COLOR_PERMISSION_NODE + "hex")) {
             string = string.parseHex()
+        } else {
+            Hex.HEX_PATTERNS.forEach { string = string.replace(it.toRegex(), "") }
         }
+
         if (player.hasPermission(COLOR_PERMISSION_NODE + "rainbow")) {
             string = string.parseRainbow()
+        } else {
+            string = string.replace(Hex.RAINBOW_PATTERN.toRegex(), "")
         }
+
         if (player.hasPermission(COLOR_PERMISSION_NODE + "gradients")) {
             string = string.parseGradients()
+        } else {
+            string = string.replace(Hex.GRADIENT_PATTERN.toRegex(), "")
         }
 
         return string
     }
 
-    fun catchDefaultMessageColor(player: Player, defaultColor: String?): String? {
+    fun defaultColored(color: DefaultColor, player: Player, msg: String): String {
+        var message = msg
+
+        message = replaceWithPermission(player, message)
+
+        message = when (color.type) {
+            DefaultColor.ColorType.NORMAL -> color.color + message
+            DefaultColor.ColorType.SPECIAL -> (color.color + message).parseRainbow().parseGradients()
+        }
+
+        return message
+    }
+
+    fun catchDefaultMessageColor(player: Player, defaultColor: DefaultColor): DefaultColor {
         if (player.hasPermission("$FORCE_CHAT_COLOR_PERMISSION_NODE*")) {
             return defaultColor
         }
 
         for (code in COLOR_CODES) {
             if (player.hasPermission(FORCE_CHAT_COLOR_PERMISSION_NODE + code)) {
-                return COLOR_CHAR + code
+                return DefaultColor(code)
             }
         }
 

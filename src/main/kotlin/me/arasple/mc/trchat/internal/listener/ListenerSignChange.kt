@@ -3,7 +3,7 @@ package me.arasple.mc.trchat.internal.listener
 import me.arasple.mc.trchat.api.TrChatAPI
 import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.api.TrChatFiles.settings
-import me.arasple.mc.trchat.util.MessageColors
+import me.arasple.mc.trchat.util.color.MessageColors
 import org.bukkit.event.block.SignChangeEvent
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide

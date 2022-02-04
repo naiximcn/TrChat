@@ -14,11 +14,11 @@ class Insertion(override val content: String, override val condition: Condition?
 
     override val dynamic by lazy { Regexs.containsPlaceholder(content) }
 
-    override fun process(tellraw: TellrawJson, player: Player) {
+    override fun process(tellraw: TellrawJson, player: Player, message: String) {
         if (dynamic) {
-            tellraw.insertion(content.replacePlaceholder(player))
+            tellraw.insertion(content.replacePlaceholder(player).replace("\$message", message))
         } else {
-            tellraw.insertion(content)
+            tellraw.insertion(content.replace("\$message", message))
         }
     }
 }

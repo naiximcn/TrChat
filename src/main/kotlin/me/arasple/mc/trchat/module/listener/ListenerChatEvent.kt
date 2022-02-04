@@ -1,8 +1,7 @@
 package me.arasple.mc.trchat.module.listener
 
-import me.arasple.mc.trchat.api.Functions
-import me.arasple.mc.trchat.api.Settings
-import me.arasple.mc.trchat.api.TrChatFiles
+import me.arasple.mc.trchat.api.config.Functions
+import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.util.checkMute
 import me.arasple.mc.trchat.util.getSession
 import org.bukkit.entity.Player
@@ -21,7 +20,7 @@ import taboolib.platform.util.sendLang
 @PlatformSide([Platform.BUKKIT])
 object ListenerChatEvent {
 
-    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @SubscribeEvent(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onChat(e: AsyncPlayerChatEvent) {
         e.isCancelled = true
         val player = e.player
@@ -29,16 +28,15 @@ object ListenerChatEvent {
         player.getSession().recipients = e.recipients
 
         if (!player.checkMute()) {
-            e.isCancelled = true
             return
         }
+
         if (!checkLimits(player, e.message)) {
-            e.isCancelled = true
             return
         }
 
         e.handlers.registeredListeners.forEach {
-            if (it.plugin.isEnabled && it.plugin.name != "TrChat") {
+            if (it.plugin.isEnabled && it.priority == org.bukkit.event.EventPriority.MONITOR) {
                 try {
                     it.callEvent(AsyncPlayerChatEvent(e.isAsynchronous, e.player, e.message, e.recipients))
                 } catch (e: Throwable) {
@@ -59,8 +57,8 @@ object ListenerChatEvent {
             }
         }
         if (!p.hasPermission("trchat.bypass.repeat")) {
-            val lastSay = p.getSession().lastMessage
-            if (Strings.similarDegree(lastSay, message) > Settings.chatSimilarity) {
+            val lastMessage = p.getSession().lastMessage
+            if (Strings.similarDegree(lastMessage, message) > Settings.chatSimilarity) {
                 p.sendLang("General-Too-Similar")
                 return false
             } else {
@@ -74,7 +72,7 @@ object ListenerChatEvent {
             }
         }
         if (!p.hasPermission("trchat.bypass.itemcd")) {
-            if (TrChatFiles.function.getStringList("GENERAL.ITEM-SHOW.KEYS").any { message.contains(it) }) {
+            if (Functions.itemShow.getStringList("Keys").any { message.contains(it) }) {
                 if (!Functions.itemShowDelay.get().hasNext(p.name)) {
                     p.sendLang("Cooldowns-Item-Show", Functions.itemShow.getDouble("Cooldowns").toString())
                     return false

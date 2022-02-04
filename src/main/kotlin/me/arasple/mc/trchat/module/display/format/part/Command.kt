@@ -14,11 +14,11 @@ class Command(override val content: String, override val condition: Condition?) 
 
     override val dynamic by lazy { Regexs.containsPlaceholder(content) }
 
-    override fun process(tellraw: TellrawJson, player: Player) {
+    override fun process(tellraw: TellrawJson, player: Player, message: String) {
         if (dynamic) {
-            tellraw.runCommand(content.replacePlaceholder(player))
+            tellraw.runCommand(content.replacePlaceholder(player).replace("\$message", message))
         } else {
-            tellraw.runCommand(content)
+            tellraw.runCommand(content.replace("\$message", message))
         }
     }
 }

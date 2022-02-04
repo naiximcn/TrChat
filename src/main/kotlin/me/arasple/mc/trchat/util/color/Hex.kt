@@ -1,4 +1,4 @@
-package me.arasple.mc.trmenu.util
+package me.arasple.mc.trchat.util.color
 
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.command.CommandSender
@@ -25,7 +25,8 @@ object Hex {
         Pattern.compile("<#([A-Fa-f0-9]){6}>"),  // <#FFFFFF>
         Pattern.compile("\\{#([A-Fa-f0-9]){6}}"),  // {#FFFFFF}
         Pattern.compile("&#([A-Fa-f0-9]){6}"),  // &#FFFFFF
-        Pattern.compile("#([A-Fa-f0-9]){6}") // #FFFFFF
+        Pattern.compile("#([A-Fa-f0-9]){6}"), // #FFFFFF
+        Pattern.compile("&\\{#([A-Fa-f0-9]){6}}") // #
     )
     private val STOP = Pattern.compile(
         "<(rainbow|r)(#(\\d+))?(:(\\d*\\.?\\d+))?(:(\\d*\\.?\\d+))?(:(l|L|loop))?>|" +
