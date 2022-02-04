@@ -2,12 +2,14 @@ Options:
   Log-Normal: '[{0}] {1}: {2}'
   Log-Private: '[{0}] {1} -> {2}: {3}'
   Depend-Expansions: ['player', 'server', 'vault']
+  Prevent-Tab-Complete: false
 
 Database:
-  Method: LOCAL
-  Local:
-    File: '{data_folder}/data.db'
-  Sqlite:
+  Method: SQLite
+  SQLite:
+    file: '{plugin_folder}/data/data.db'
+    table: trchat
+  SQL:
     host: localhost
     port: 3306
     user: root
@@ -15,9 +17,9 @@ Database:
     database: root
     table: trchat
   Mongodb:
-    Client: 'mongodb://localhost:3307'
-    Database: trixey
-    Collection: chat
+    client: 'mongodb://localhost:3307'
+    database: trixey
+    collection: chat
 
 Chat:
   Anti-Repeat: 0.85

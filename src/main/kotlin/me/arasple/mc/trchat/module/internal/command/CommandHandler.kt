@@ -2,8 +2,8 @@ package me.arasple.mc.trchat.module.internal.command
 
 import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.common.channel.impl.ChannelPrivateReceive
-import me.arasple.mc.trchat.internal.menu.MenuControlPanel
-import me.arasple.mc.trchat.internal.menu.MenuFilterControl
+import me.arasple.mc.trchat.module.internal.menu.MenuControlPanel
+import me.arasple.mc.trchat.module.internal.menu.MenuFilterControl
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import taboolib.common.platform.Platform

@@ -1,8 +1,8 @@
-package me.arasple.mc.trchat.internal.listener
+package me.arasple.mc.trchat.module.internal.listener
 
 import me.arasple.mc.trchat.api.TrChatAPI
-import me.arasple.mc.trchat.api.TrChatFiles
-import me.arasple.mc.trchat.api.TrChatFiles.settings
+import me.arasple.mc.trchat.api.config.Filter
+import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.util.color.MessageColors
 import org.bukkit.event.block.SignChangeEvent
 import taboolib.common.platform.Platform
@@ -24,10 +24,10 @@ object ListenerSignChange {
         e.lines.forEachIndexed { index, l ->
             e.setLine(index, l.let {
                 var line = it
-                if (settings.getBoolean("CHAT-COLOR.SIGN")) {
+                if (Settings.CONF.getBoolean("CHAT-COLOR.SIGN")) {
                     line = MessageColors.replaceWithPermission(p, line ?: "")
                 }
-                if (TrChatFiles.filter.getBoolean("FILTER.SIGN")) {
+                if (Filter.CONF.getBoolean("FILTER.SIGN")) {
                     TrChatAPI.filterString(p, line).filtered
                 } else {
                     line

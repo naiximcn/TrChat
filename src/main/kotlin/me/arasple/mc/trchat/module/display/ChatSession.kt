@@ -1,14 +1,13 @@
 package me.arasple.mc.trchat.module.display
 
 import me.arasple.mc.trchat.api.config.Settings
+import me.arasple.mc.trchat.util.getDataContainer
 import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.onlinePlayers
-import taboolib.expansion.getDataContainer
 import taboolib.module.nms.Packet
 import taboolib.module.nms.sendPacket
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * @author wlys
@@ -26,9 +25,9 @@ class ChatSession(
 
     private val receivedMessages = mutableListOf<ChatMessage>()
 
-    val isFilterEnabled get() = player.getDataContainer()["filter"].toBoolean()
+    val isFilterEnabled get() = player.getDataContainer().getBoolean("filter")
 
-    val isMuted get() = (player.getDataContainer()["mute_time"]?.toLongOrNull() ?: 0) > System.currentTimeMillis()
+    val isMuted get() = (player.getDataContainer().getLong("mute_time", 0)) > System.currentTimeMillis()
 
     fun setFilter(value: Boolean) {
         player.getDataContainer()["filter"] = value

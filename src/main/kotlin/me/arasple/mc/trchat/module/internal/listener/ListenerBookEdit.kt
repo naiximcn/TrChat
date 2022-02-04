@@ -1,6 +1,6 @@
-package me.arasple.mc.trchat.internal.listener
+package me.arasple.mc.trchat.module.internal.listener
 
-import me.arasple.mc.trchat.api.TrChatFiles.settings
+import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.util.color.MessageColors
 import org.bukkit.event.player.PlayerEditBookEvent
 import taboolib.common.platform.Platform
@@ -18,7 +18,7 @@ object ListenerBookEdit {
     @SubscribeEvent(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onBookEdit(e: PlayerEditBookEvent) {
         val p = e.player
-        if (settings.getBoolean("CHAT-COLOR.BOOK", true)) {
+        if (Settings.CONF.getBoolean("Color.Book", true)) {
             val meta = e.newBookMeta
             meta.pages = MessageColors.replaceWithPermission(p, meta.pages)
             e.newBookMeta = meta

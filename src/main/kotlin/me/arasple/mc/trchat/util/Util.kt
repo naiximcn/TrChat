@@ -2,9 +2,12 @@ package me.arasple.mc.trchat.util
 
 import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.module.display.ChatSession
+import me.arasple.mc.trchat.module.internal.data.Database
 import me.arasple.mc.trchat.module.internal.script.Condition
 import org.bukkit.entity.Player
 import taboolib.common.platform.ProxyCommandSender
+import taboolib.library.configuration.ConfigurationSection
+import taboolib.module.configuration.Configuration
 import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
 
@@ -29,6 +32,10 @@ fun Player.checkMute(): Boolean {
         return false
     }
     return true
+}
+
+fun Player.getDataContainer(): ConfigurationSection {
+    return Database.database.pull(this)
 }
 
 fun notify(notify: Array<out ProxyCommandSender>, node: String, vararg args: Any) {

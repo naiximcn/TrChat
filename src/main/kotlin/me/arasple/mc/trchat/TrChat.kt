@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat
 
-import me.arasple.mc.trchat.internal.data.Database
+import me.arasple.mc.trchat.module.internal.data.Database
 import me.arasple.mc.trchat.module.internal.hook.HookPlugin
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide

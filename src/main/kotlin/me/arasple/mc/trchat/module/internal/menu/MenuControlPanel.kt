@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.internal.menu
+package me.arasple.mc.trchat.module.internal.menu
 
 import me.arasple.mc.trchat.common.chat.ChatMessage
 import me.arasple.mc.trchat.internal.data.Users

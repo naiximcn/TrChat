@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.internal.listener
+package me.arasple.mc.trchat.module.internal.listener
 
 import me.arasple.mc.trchat.api.TrChatFiles.function
 import org.bukkit.Bukkit

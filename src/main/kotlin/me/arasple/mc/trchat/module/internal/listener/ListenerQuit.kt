@@ -2,10 +2,11 @@ package me.arasple.mc.trchat.module.internal.listener
 
 import me.arasple.mc.trchat.api.config.Functions
 import me.arasple.mc.trchat.module.display.ChatSession
+import me.arasple.mc.trchat.module.internal.data.Database
 import org.bukkit.event.player.PlayerQuitEvent
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.expansion.releaseDataContainer
+import taboolib.common.platform.function.submit
 
 /**
  * @author wlys
@@ -18,6 +19,8 @@ object ListenerQuit {
         Functions.itemShowDelay.get().reset(e.player.name)
         Functions.mentionDelay.get().reset(e.player.name)
         ChatSession.removeSession(e.player)
-        e.player.releaseDataContainer()
+        submit(async = true) {
+            Database.database.push(e.player)
+        }
     }
 }

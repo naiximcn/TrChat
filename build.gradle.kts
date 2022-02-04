@@ -2,7 +2,6 @@ plugins {
     java
     id("io.izzel.taboolib") version "1.34"
     id("org.jetbrains.kotlin.jvm") version "1.5.10"
-    id("org.tabooproject.shrinkingkt") version "1.0.0"
 }
 
 taboolib {
@@ -19,7 +18,7 @@ taboolib {
     install("common", "common-5")
     install("module-chat")
     install("module-configuration")
-    install("module-database")
+    install("module-database", "module-database-mongodb")
     install("module-kether")
     install("module-lang")
     install("module-metrics")
@@ -27,7 +26,7 @@ taboolib {
     install("module-porticus")
     install("module-ui")
     install("platform-bukkit", "platform-bungee", "platform-velocity")
-    install("expansion-command-helper", "expansion-player-database")
+    install("expansion-command-helper", "expansion-javascript")
     classifier = null
     version = "6.0.7-24"
 }
