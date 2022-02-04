@@ -5,9 +5,9 @@ Enable:
   Item: false
 
 Cloud-Thesaurus:
-  Enable: true
-  Whitelist: []
-  Url:
+  Enabled: true
+  Ignored: []
+  Urls:
     - 'https://raw.githubusercontent.com/Yurinann/Filter-Thesaurus-Cloud/main/database.json' # 感谢南城提供的词库
 
 Local:
@@ -15,5 +15,6 @@ Local:
   - 'fuck'
   - 'shit'
 
-Ignored-Punctuations: ['!','.',',','#','$','%','&','*','(',')','|','?','/','@','"','\',';','[',']','{','}','+','~','-','_','=','^','<','>',' ','　','！','。','，','￥','（','）','？','、','“','‘','；','【','】','——','……','《','》','\\', '`']
+WhiteList: ['has been']
+Skip: 2
 Replacement: '*'

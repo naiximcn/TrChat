@@ -4,6 +4,8 @@ import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.module.display.ChatSession
 import me.arasple.mc.trchat.module.internal.script.Condition
 import org.bukkit.entity.Player
+import taboolib.common.platform.ProxyCommandSender
+import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
 
 /**
@@ -27,4 +29,10 @@ fun Player.checkMute(): Boolean {
         return false
     }
     return true
+}
+
+fun notify(notify: Array<out ProxyCommandSender>, node: String, vararg args: Any) {
+    notify.forEach {
+        it.sendLang(node, *args)
+    }
 }

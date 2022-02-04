@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.internal.command
+package me.arasple.mc.trchat.module.internal.command
 
 import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.common.channel.impl.ChannelPrivateReceive
@@ -21,7 +21,7 @@ import taboolib.platform.util.sendLang
 
 /**
  * CommandHandler
- * me.arasple.mc.trchat.internal.command
+ * me.arasple.mc.trchat.module.internal.command
  *
  * @author wlys
  * @since 2021/8/21 12:23

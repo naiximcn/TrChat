@@ -1,7 +1,7 @@
 package me.arasple.mc.trchat.api
 
-import me.arasple.mc.trchat.common.filter.ChatFilter.filter
-import me.arasple.mc.trchat.common.filter.processer.FilteredObject
+import me.arasple.mc.trchat.module.display.filter.ChatFilter.filter
+import me.arasple.mc.trchat.module.display.filter.processer.FilteredObject
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta

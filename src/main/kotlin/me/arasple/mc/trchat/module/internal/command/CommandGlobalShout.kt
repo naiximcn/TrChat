@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.internal.command
+package me.arasple.mc.trchat.module.internal.command
 
 import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.common.channel.impl.ChannelGlobal
@@ -13,7 +13,7 @@ import taboolib.module.lang.sendLang
 
 /**
  * CommandGlobalShout
- * me.arasple.mc.trchat.internal.command
+ * me.arasple.mc.trchat.module.internal.command
  *
  * @author wlys
  * @since 2021/7/21 10:34

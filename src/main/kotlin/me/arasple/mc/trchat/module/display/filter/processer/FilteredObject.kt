@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.common.filter.processer
+package me.arasple.mc.trchat.module.display.filter.processer
 
 /**
  * @author Arasple

@@ -1,7 +1,7 @@
 package me.arasple.mc.trchat.api.nms
 
 import me.arasple.mc.trchat.api.TrChatAPI
-import me.arasple.mc.trchat.common.filter.ChatFilter.filter
+import me.arasple.mc.trchat.module.display.filter.ChatFilter.filter
 import net.minecraft.server.v1_16_R3.NBTBase
 import net.minecraft.server.v1_16_R3.NBTTagCompound
 import org.bukkit.inventory.ItemStack

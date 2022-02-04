@@ -4,7 +4,7 @@ import me.arasple.mc.trchat.common.channel.ChannelAbstract
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.module.internal.data.ChatLogs
 import me.arasple.mc.trchat.common.chat.obj.ChatType
-import me.arasple.mc.trchat.internal.command.CommandReply
+import me.arasple.mc.trchat.module.internal.command.CommandReply
 import me.arasple.mc.trchat.util.proxy.sendBukkitMessage
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player

@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.internal.command
+package me.arasple.mc.trchat.module.internal.command
 
 import me.arasple.mc.trchat.common.chat.ChatMessage
 import org.bukkit.entity.Player
@@ -11,7 +11,7 @@ import taboolib.module.lang.sendLang
 
 /**
  * CommandIgnore
- * me.arasple.mc.trchat.internal.command
+ * me.arasple.mc.trchat.module.internal.command
  *
  * @author wlys
  * @since 2021/8/11 12:08

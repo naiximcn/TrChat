@@ -1,7 +1,7 @@
 package me.arasple.mc.trchat.api.nms
 
 import me.arasple.mc.trchat.api.config.Filter
-import me.arasple.mc.trchat.common.filter.ChatFilter.filter
+import me.arasple.mc.trchat.module.display.filter.ChatFilter.filter
 import me.arasple.mc.trchat.util.getSession
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.TextComponent
