@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.module.display.format
 
-import me.arasple.mc.trchat.module.script.Condition
+import me.arasple.mc.trchat.module.internal.script.Condition
 
 /**
  * @author wlys
@@ -10,6 +10,6 @@ class Format(
     val condition: Condition?,
     val priority: Int,
     val prefix: List<JsonComponent>,
-    val message: MsgComponent,
+    val msg: MsgComponent,
     val suffix: List<JsonComponent>
 )

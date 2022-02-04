@@ -2,9 +2,10 @@ Options:
   Condition: 'perm *trchat.admin'
   Range: ALL
   Proxy: true
+  Auto-Join: true
 
 Bindings:
-  Command: ['staff']
+  Command: 'staff'
 
 Formats:
   - requirement: null

@@ -5,7 +5,7 @@ import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.common.channel.impl.ChannelCustom
 import me.arasple.mc.trchat.common.channel.impl.ChannelPrivateSend
 import me.arasple.mc.trchat.internal.data.Users
-import me.arasple.mc.trchat.module.service.Metrics
+import me.arasple.mc.trchat.module.internal.service.Metrics
 import me.arasple.mc.trchat.util.notify
 import org.bukkit.event.player.PlayerJoinEvent
 import taboolib.common.platform.Platform

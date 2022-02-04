@@ -1,6 +1,4 @@
-package me.arasple.mc.trmenu.util
-
-import com.google.gson.JsonParser
+package me.arasple.mc.trchat.util
 
 /**
  * @author Arasple

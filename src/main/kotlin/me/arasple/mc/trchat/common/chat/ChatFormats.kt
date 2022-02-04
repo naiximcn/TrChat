@@ -3,7 +3,7 @@ package me.arasple.mc.trchat.common.chat
 import me.arasple.mc.trchat.api.TrChatFiles
 import me.arasple.mc.trchat.common.channel.ChannelAbstract
 import me.arasple.mc.trchat.common.chat.format.Format
-import me.arasple.mc.trchat.module.script.Condition
+import me.arasple.mc.trchat.module.internal.script.Condition
 import me.arasple.mc.trchat.util.notify
 import org.bukkit.entity.Player
 import taboolib.common.platform.ProxyCommandSender

@@ -3,7 +3,7 @@ package me.arasple.mc.trchat.internal.command
 import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.common.channel.impl.ChannelPrivateReceive
 import me.arasple.mc.trchat.common.channel.impl.ChannelPrivateSend
-import me.arasple.mc.trchat.internal.proxy.bukkit.Players
+import me.arasple.mc.trchat.util.proxy.bukkit.Players
 import me.arasple.mc.trchat.util.checkMute
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle

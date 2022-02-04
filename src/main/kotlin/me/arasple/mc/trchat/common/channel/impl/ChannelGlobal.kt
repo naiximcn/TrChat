@@ -2,11 +2,11 @@ package me.arasple.mc.trchat.common.channel.impl
 
 import me.arasple.mc.trchat.common.channel.ChannelAbstract
 import me.arasple.mc.trchat.common.chat.ChatFormats
-import me.arasple.mc.trchat.module.data.ChatLogs
+import me.arasple.mc.trchat.module.internal.data.ChatLogs
 import me.arasple.mc.trchat.common.chat.obj.ChatType
 import me.arasple.mc.trchat.internal.data.Users
-import me.arasple.mc.trchat.internal.proxy.Proxy
-import me.arasple.mc.trchat.internal.proxy.sendBukkitMessage
+import me.arasple.mc.trchat.util.proxy.Proxy
+import me.arasple.mc.trchat.util.proxy.sendBukkitMessage
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.console
 import taboolib.platform.util.sendLang

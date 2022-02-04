@@ -5,10 +5,10 @@ import me.arasple.mc.trchat.api.TrChatFiles.function
 import me.arasple.mc.trchat.common.function.ChatFunctions
 import me.arasple.mc.trchat.internal.data.Cooldowns
 import me.arasple.mc.trchat.internal.data.Users
-import me.arasple.mc.trchat.internal.proxy.Proxy
-import me.arasple.mc.trchat.internal.proxy.bukkit.Players
+import me.arasple.mc.trchat.util.proxy.Proxy
+import me.arasple.mc.trchat.util.proxy.bukkit.Players
 import me.arasple.mc.trchat.module.display.format.JsonComponent
-import me.arasple.mc.trchat.module.script.Condition
+import me.arasple.mc.trchat.module.internal.script.Condition
 import me.arasple.mc.trchat.util.color.MessageColors
 import me.arasple.mc.trchat.util.coloredAll
 import me.arasple.mc.trchat.util.replacePattern

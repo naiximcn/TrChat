@@ -2,7 +2,7 @@ Options:
   Condition: ~
   Range: ALL
   Proxy: false
-  ALWAYS-LISTENING: true
+  Auto-Join: true
 
 Bindings:
   Prefix: ~

@@ -1,7 +1,7 @@
 package me.arasple.mc.trchat.module.display.format.part
 
-import me.arasple.mc.trchat.module.script.Condition
-import me.arasple.mc.trmenu.util.Regexs
+import me.arasple.mc.trchat.module.internal.script.Condition
+import me.arasple.mc.trchat.util.Regexs
 import org.bukkit.entity.Player
 import taboolib.module.chat.TellrawJson
 import taboolib.platform.compat.replacePlaceholder

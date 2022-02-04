@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.api.config
 
 import taboolib.common5.Baffle
+import taboolib.library.configuration.ConfigurationSection
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.ConfigNode
 import taboolib.module.configuration.ConfigNodeTransfer
@@ -26,9 +27,12 @@ object Functions {
     @ConfigNode("General.Mention.Cooldowns", "function.yml")
     val mentionDelay = ConfigNodeTransfer<Double, Baffle> { Baffle.of((this * 1000).toLong(), TimeUnit.MILLISECONDS) }
 
-    val itemShow = CONF.getConfigurationSection("General.Item-Show")!!
+    @ConfigNode("General.Item-Show", "function.yml")
+    lateinit var itemShow: ConfigurationSection
 
-    val mention = CONF.getConfigurationSection("General.Mention")!!
+    @ConfigNode("General.Mention", "function.yml")
+    lateinit var mention: ConfigurationSection
 
-    val inventoryShow = CONF.getConfigurationSection("General.Inventory-Show")!!
+    @ConfigNode("General.Inventory-Show", "function.yml")
+    lateinit var inventoryShow: ConfigurationSection
 }
