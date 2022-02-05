@@ -1,7 +1,6 @@
-package me.arasple.mc.trchat.module.display
+package me.arasple.mc.trchat.module.display.channel
 
 import me.arasple.mc.trchat.module.display.format.Format
-import me.arasple.mc.trchat.module.internal.script.Condition
 import me.arasple.mc.trchat.util.pass
 import org.bukkit.entity.Player
 import taboolib.module.chat.TellrawJson
@@ -38,13 +37,5 @@ class Channel(
         }
 
         class Target(val range: Range, val distance: Int?)
-
-        class ChannelSettings(
-            val joinCondition: Condition,
-            val speakCondition: Condition,
-            val target: Target,
-            val autoJoin: Boolean,
-            val proxy: Boolean
-            )
     }
 }

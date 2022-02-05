@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.module.internal.listener
 
-import me.arasple.mc.trchat.module.display.Channel
+import me.arasple.mc.trchat.module.display.channel.Channel
 import org.bukkit.event.player.PlayerJoinEvent
 import taboolib.common.platform.event.SubscribeEvent
 

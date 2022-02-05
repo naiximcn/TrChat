@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.display
 
 import me.arasple.mc.trchat.api.config.Settings
+import me.arasple.mc.trchat.module.display.channel.Channel
 import me.arasple.mc.trchat.util.getDataContainer
 import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.entity.Player

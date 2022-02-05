@@ -1,12 +1,12 @@
-GENERAL:
-  COMMAND-CONTROLLER:
-    ENABLE: true
-    TYPE: BLACKLIST
-    BYPASS: 'perm *trchat.admin'
-    LIST:
-      - 'ver(sion)?(s)?'
-      - 'help(s)?'
-      - 'arasple<exact>'
+General:
+  Command-Controller:
+    Enable: true
+    Cooldown-Bypass-Permission: 'trchat.bypass.cmdcooldown'
+    List:
+      - 'arasple{exact: true}{condition: perm *trchat.admin}'
+      - 'ver(sion)?(s)?{condition: perm *trchat.admin}'
+      - 'help(s)?{condition: perm *trchat.admin}'
+      - 'shout{cooldown: 3}'
   ITEM-SHOW:
     ENABLE: true
     COOLDOWN: 30

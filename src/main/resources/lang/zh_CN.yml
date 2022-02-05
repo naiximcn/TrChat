@@ -99,6 +99,7 @@ Cooldowns-Item-Show:
     pitch: 0
 
 Command-Controller-Deny: '&c&l你不能使用该命令...'
+Command-Controller-Cooldown: '&c&l该命令冷却中...'
 Command-Not-Player: '&8[&3Tr&bChat&8] &c你必须是一个玩家才能执行此操作.'
 Command-Player-Not-Exist: '&8[&3Tr&bChat&8] &7目标玩家未在线或不存在.'
 

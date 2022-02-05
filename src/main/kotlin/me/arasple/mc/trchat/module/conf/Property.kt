@@ -6,7 +6,11 @@ package me.arasple.mc.trchat.module.conf
  */
 enum class Property(val regex: Regex, val group: Int) {
 
-    CONDITION("\\{condition[:=] ?(.+)}");
+    CONDITION("\\{condition[:=] ?(.+)}"),
+
+    EXACT("\\{exact[:=] ?(.+)}"),
+
+    COOLDOWN("\\{cooldown[:=] ?(.+)}");
 
     constructor(regex: String, group: Int = 1) : this("(?i)$regex".toRegex(), group)
 

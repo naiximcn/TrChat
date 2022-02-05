@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.conf
 
-import me.arasple.mc.trchat.module.display.Channel
+import me.arasple.mc.trchat.module.display.channel.Channel
+import me.arasple.mc.trchat.module.display.channel.ChannelSettings
 import me.arasple.mc.trchat.module.display.format.Format
 import me.arasple.mc.trchat.module.display.format.JsonComponent
 import me.arasple.mc.trchat.module.display.format.MsgComponent
@@ -53,11 +54,14 @@ object Loader {
             Format(condition, priority, prefix, msg, suffix)
         }.sortedBy { it.priority }
 
-        val settings = conf.getConfigurationSection("Options").let { map ->
+        val settings = conf.getConfigurationSection("Options")!!.let { section ->
 
+            val autoJoin = section.getBoolean("Auto-Join", true)
+            val proxy = section.getBoolean("Proxy", false)
+            ChannelSettings()
         }
 
-        return Channel(id)
+        return Channel(id, settings, formats, mutableListOf())
     }
 
     private fun parseGroups(map: LinkedHashMap<*, *>): Map<String, List<Group>> {

@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.api.config
 
-import me.arasple.mc.trchat.module.display.Channel
+import me.arasple.mc.trchat.module.display.channel.Channel
 import taboolib.common5.Baffle
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.ConfigNode
