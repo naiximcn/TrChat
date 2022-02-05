@@ -1,9 +1,8 @@
 package me.arasple.mc.trchat.module.internal.listener
 
+import me.arasple.mc.trchat.module.display.Channel
 import org.bukkit.event.player.PlayerJoinEvent
-import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.expansion.setupDataContainer
 
 /**
  * @author wlys
@@ -11,8 +10,10 @@ import taboolib.expansion.setupDataContainer
  */
 object ListenerJoin {
 
-    @SubscribeEvent(EventPriority.LOWEST)
+    @SubscribeEvent
     fun e(e: PlayerJoinEvent) {
-        e.player.setupDataContainer()
+        Channel.channels.filter { it.settings.autoJoin }.forEach {
+            it.listeners.add(e.player.name)
+        }
     }
 }

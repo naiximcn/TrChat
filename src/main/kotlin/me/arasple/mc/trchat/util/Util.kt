@@ -38,6 +38,10 @@ fun Player.getDataContainer(): ConfigurationSection {
     return Database.database.pull(this)
 }
 
+fun Condition?.pass(player: Player): Boolean {
+    return this?.eval(player) != false
+}
+
 fun notify(notify: Array<out ProxyCommandSender>, node: String, vararg args: Any) {
     notify.forEach {
         it.sendLang(node, *args)

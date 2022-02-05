@@ -26,16 +26,24 @@ Formats:
       part-before-player:
         text: ' '
       player:
-        text:
-          - '&4%player_name%{condition: player op}'
-          - '&7%player_name%'
-        hover: |-
-          &r
-          &8▪ &7Ping: &3%player_ping% Ms
-          &8▪ &7Health: &c%player_health_rounded% ❤
-          &r
-          &6▶ &eClick to chat with me
-          &r
-        suggest: '/msg %player_name% '
+        - condition: 'player op'
+          text: '&4%player_name%'
+          hover: |-
+            &r
+            &8▪ &7Ping: &3%player_ping% Ms
+            &8▪ &7Health: &c%player_health_rounded% ❤
+            &r
+            &6▶ &eClick to contact with op
+            &r
+          suggest: '/msg %player_name% '
+        - text: '&7%player_name%'
+          hover: |-
+            &r
+            &8▪ &7Ping: &3%player_ping% Ms
+            &8▪ &7Health: &c%player_health_rounded% ❤
+            &r
+            &6▶ &eClick to chat with me
+            &r
+          suggest: '/msg %player_name% '
       part-before-msg:
         text: '&7: '

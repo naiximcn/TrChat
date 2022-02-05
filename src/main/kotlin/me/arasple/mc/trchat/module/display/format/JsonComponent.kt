@@ -1,7 +1,8 @@
 package me.arasple.mc.trchat.module.display.format
 
-import me.arasple.mc.trchat.module.display.format.part.*
+import me.arasple.mc.trchat.module.display.format.part.json.*
 import me.arasple.mc.trchat.module.internal.script.Condition
+import me.arasple.mc.trchat.util.pass
 import org.bukkit.entity.Player
 import taboolib.module.chat.TellrawJson
 
@@ -10,7 +11,6 @@ import taboolib.module.chat.TellrawJson
  * @date 2019/11/30 12:42
  */
 open class JsonComponent(
-    val condition: Condition?,
     val text: List<Text>?,
     val hover: List<Hover>?,
     val suggest: List<Suggest>?,
@@ -22,17 +22,14 @@ open class JsonComponent(
 
     open fun toTellrawJson(player: Player, vararg vars: String): TellrawJson {
         val tellraw = TellrawJson()
-        if (condition?.eval(player) == false) {
-            return tellraw
-        }
 
-        text!!.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player)
-        hover?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player)
-        suggest?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player)
-        command?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player)
-        url?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player)
-        insertion?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player)
-        copy?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player)
+        text!!.firstOrNull { it.condition.pass(player) }?.process(tellraw, player)
+        hover?.filter { it.condition.pass(player) }?.joinToString("\n") { it.process(tellraw, player) }?.let { tellraw.hoverText(it) }
+        suggest?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player)
+        command?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player)
+        url?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player)
+        insertion?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player)
+        copy?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player)
 
         return tellraw
     }

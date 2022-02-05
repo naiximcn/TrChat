@@ -3,11 +3,12 @@ package me.arasple.mc.trchat.module.display.format
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
 import me.arasple.mc.trchat.api.config.Functions
-import me.arasple.mc.trchat.module.display.format.part.*
+import me.arasple.mc.trchat.module.display.format.part.json.*
 import me.arasple.mc.trchat.util.color.DefaultColor
 import me.arasple.mc.trchat.util.color.MessageColors
 import me.arasple.mc.trchat.util.color.colorify
 import me.arasple.mc.trchat.util.hoverItemFixed
+import me.arasple.mc.trchat.util.pass
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -32,7 +33,7 @@ class MsgComponent(
     url: List<Url>?,
     insertion: List<Insertion>?,
     copy: List<Copy>?
-) : JsonComponent(null, null, hover, suggest, command, url, insertion, copy) {
+) : JsonComponent(null, hover, suggest, command, url, insertion, copy) {
 
     fun serialize(player: Player, msg: String): TellrawJson {
         val tellraw = TellrawJson()
@@ -84,12 +85,12 @@ class MsgComponent(
         val message = vars[0]
 
         tellraw.append(message)
-        hover?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player, message)
-        suggest?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player, message.uncolored())
-        command?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player, message.uncolored())
-        url?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player, message.uncolored())
-        insertion?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player, message.uncolored())
-        copy?.firstOrNull { it.condition?.eval(player) != false }?.process(tellraw, player, message.uncolored())
+        hover?.filter { it.condition.pass(player) }?.joinToString("\n") { it.process(tellraw, player, message) }?.let { tellraw.hoverText(it) }
+        suggest?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player, message.uncolored())
+        command?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player, message.uncolored())
+        url?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player, message.uncolored())
+        insertion?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player, message.uncolored())
+        copy?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player, message.uncolored())
 
         return tellraw
     }

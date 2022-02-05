@@ -2,8 +2,8 @@ package me.arasple.mc.trchat.module.display
 
 import me.arasple.mc.trchat.module.display.format.Format
 import me.arasple.mc.trchat.module.internal.script.Condition
+import me.arasple.mc.trchat.util.pass
 import org.bukkit.entity.Player
-import taboolib.common.platform.ProxyPlayer
 import taboolib.module.chat.TellrawJson
 
 /**
@@ -14,15 +14,15 @@ class Channel(
     val id: String,
     val settings: ChannelSettings,
     val formats: List<Format>,
-    val listeners: List<ProxyPlayer>
+    val listeners: MutableList<String>
 ) {
 
     fun execute(player: Player, message: String) {
         val tellraw = TellrawJson()
-        formats.firstOrNull { it.condition?.eval(player) != false }?.let { format ->
-            format.prefix.forEach { tellraw.append(it.toTellrawJson(player)) }
+        formats.firstOrNull { it.condition.pass(player) }?.let { format ->
+            format.prefix.forEach { prefix -> tellraw.append(prefix.value.first { it.condition.pass(player) }.content.toTellrawJson(player)) }
             format.msg.serialize(player, message)
-            format.suffix.forEach { tellraw.append(it.toTellrawJson(player)) }
+            format.suffix.forEach { suffix -> tellraw.append(suffix.value.first { it.condition.pass(player) }.content.toTellrawJson(player)) }
         }
 
 
@@ -43,6 +43,7 @@ class Channel(
             val joinCondition: Condition,
             val speakCondition: Condition,
             val target: Target,
+            val autoJoin: Boolean,
             val proxy: Boolean
             )
     }

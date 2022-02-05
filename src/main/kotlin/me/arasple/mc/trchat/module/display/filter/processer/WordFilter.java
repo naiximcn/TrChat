@@ -42,6 +42,7 @@ public class WordFilter {
                     for (int j : fi.getIndex()) {
                         charset[j] = symbol;
                     }
+                    count++;
                 } else {
                     i += fi.getIndex().size() - 1;
                 }

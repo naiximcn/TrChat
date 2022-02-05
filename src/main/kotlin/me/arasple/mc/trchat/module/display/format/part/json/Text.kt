@@ -1,5 +1,6 @@
-package me.arasple.mc.trchat.module.display.format.part
+package me.arasple.mc.trchat.module.display.format.part.json
 
+import me.arasple.mc.trchat.module.display.format.part.Part
 import me.arasple.mc.trchat.module.internal.script.Condition
 import me.arasple.mc.trchat.util.color.colorify
 import me.arasple.mc.trchat.util.Regexs
@@ -15,11 +16,12 @@ class Text(override val content: String, override val condition: Condition?) : P
 
     override val dynamic by lazy { Regexs.containsPlaceholder(content) }
 
-    override fun process(tellraw: TellrawJson, player: Player, message: String) {
+    override fun process(tellraw: TellrawJson, player: Player, message: String): String? {
         if (dynamic) {
-            tellraw.append(content.replacePlaceholder(player).colorify().replace("\$message", message))
+            tellraw.append(content.replacePlaceholder(player).replace("\$message", message).colorify())
         } else {
-            tellraw.append(content.colorify().replace("\$message", message))
+            tellraw.append(content.replace("\$message", message).colorify())
         }
+        return null
     }
 }

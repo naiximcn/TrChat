@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.internal.listener
 
 import me.arasple.mc.trchat.api.config.Functions
+import me.arasple.mc.trchat.module.display.Channel
 import me.arasple.mc.trchat.module.display.ChatSession
 import me.arasple.mc.trchat.module.internal.data.Database
 import org.bukkit.event.player.PlayerQuitEvent
@@ -16,6 +17,7 @@ object ListenerQuit {
 
     @SubscribeEvent(EventPriority.HIGHEST)
     fun e(e: PlayerQuitEvent) {
+        Channel.channels.forEach { it.listeners.remove(e.player.name) }
         Functions.itemShowDelay.get().reset(e.player.name)
         Functions.mentionDelay.get().reset(e.player.name)
         ChatSession.removeSession(e.player)
