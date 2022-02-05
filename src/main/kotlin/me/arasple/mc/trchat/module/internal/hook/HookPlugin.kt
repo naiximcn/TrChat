@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.module.internal.hook
 
+import me.arasple.mc.trchat.module.internal.hook.impl.HookEcoEnchants
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.function.console
@@ -19,7 +20,11 @@ object HookPlugin {
     }
 
     private val registry: Array<HookAbstract> = arrayOf(
-
+        HookEcoEnchants()
     )
+
+    fun getEcoEnchants(): HookEcoEnchants {
+        return registry[0] as HookEcoEnchants
+    }
 
 }

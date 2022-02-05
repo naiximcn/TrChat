@@ -2,12 +2,14 @@ package me.arasple.mc.trchat.util
 
 import me.arasple.mc.trchat.api.TrChatAPI
 import me.arasple.mc.trchat.api.nms.NMS
+import me.arasple.mc.trchat.module.internal.hook.HookPlugin
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
 import net.md_5.bungee.api.chat.ItemTag
 import net.md_5.bungee.api.chat.hover.content.Item
 import org.bukkit.Material
 import org.bukkit.block.ShulkerBox
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BlockStateMeta
 import org.bukkit.inventory.meta.ItemMeta
@@ -28,8 +30,9 @@ private val classNBTTagCompound by lazy {
     nmsClass("NBTTagCompound")
 }
 
-fun TellrawJson.hoverItemFixed(item: ItemStack): TellrawJson {
+fun TellrawJson.hoverItemFixed(item: ItemStack, player: Player): TellrawJson {
     val newItem = NMS.INSTANCE.optimizeNBT(item.optimizeShulkerBox())
+    HookPlugin.getEcoEnchants().displayItem(newItem, player)
     val nmsItemStack = TrChatAPI.classCraftItemStack.invokeMethod<Any>("asNMSCopy", newItem, fixed = true)!!
     val nmsNBTTabCompound = classNBTTagCompound.invokeConstructor()
     val itemJson = nmsItemStack.invokeMethod<Any>("save", nmsNBTTabCompound)!!

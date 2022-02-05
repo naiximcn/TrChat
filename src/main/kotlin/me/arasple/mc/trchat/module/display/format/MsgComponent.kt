@@ -59,7 +59,7 @@ class MsgComponent(
                                         } else {
                                             this
                                         }
-                                    }).also {
+                                    }, player).also {
                                         cache.put(item, it)
                                     }
                             }
