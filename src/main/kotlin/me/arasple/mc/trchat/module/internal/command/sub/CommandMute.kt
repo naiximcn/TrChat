@@ -1,7 +1,8 @@
-package me.arasple.mc.trchat.module.internal.command
+package me.arasple.mc.trchat.module.internal.command.sub
 
 import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.internal.data.Users
+import me.arasple.mc.trchat.util.proxy.bukkit.Players
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import taboolib.common.LifeCycle
@@ -26,10 +27,10 @@ object CommandMute {
 
     @Awake(LifeCycle.ENABLE)
     fun c() {
-        command("mute", description = "禁言", usage = "/mute 玩家 禁言时间", permission = "trchat.mute") {
+        command("mute", description = "禁言", usage = "/mute [player] [time]", permission = "trchat.mute") {
             dynamic("player") {
                 suggestion<CommandSender> { _, _ ->
-                    onlinePlayers().map { it.name }
+                    Players.getPlayers()
                 }
                 dynamic("minute") {
                     suggestion<CommandSender>(uncheck = true) { _, _ ->

@@ -26,7 +26,7 @@ class ChatSession(
 
     var isSpying = false
 
-    private val receivedMessages = mutableListOf<ChatMessage>()
+    val receivedMessages = mutableListOf<ChatMessage>()
 
     val isFilterEnabled get() = player.getDataContainer().getBoolean("filter", true)
 

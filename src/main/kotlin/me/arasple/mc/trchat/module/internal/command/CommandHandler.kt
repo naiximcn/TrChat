@@ -4,6 +4,7 @@ import me.arasple.mc.trchat.api.config.Filter
 import me.arasple.mc.trchat.api.config.Functions
 import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.module.conf.Loader
+import me.arasple.mc.trchat.module.internal.command.sub.CommandRemoveMessage
 import me.arasple.mc.trchat.module.internal.menu.MenuControlPanel
 import me.arasple.mc.trchat.module.internal.menu.MenuFilterControl
 import me.arasple.mc.trchat.util.getSession
@@ -70,13 +71,16 @@ object CommandHandler {
         }
     }
 
-    @CommandBody(permission = "trchat.admin", optional = true)
+    @CommandBody(permission = "trchat.command.spy", optional = true)
     val spy = subCommand {
         execute<Player> { sender, _, _ ->
             val state = sender.getSession().switchSpy()
             sender.sendLang(if (state) "Private-Message-Spy-On" else "Private-Message-Spy-Off")
         }
     }
+
+    @CommandBody(permission = "trchat.command.removemessage", optional = true)
+    val removeMessage = CommandRemoveMessage.command
 
     @CommandBody
     val help = subCommand {

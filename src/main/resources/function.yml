@@ -11,6 +11,7 @@ General:
     Cooldown: 30
     Format: '&8[&3{0} &bx{1}&8]'
     Origin-Name: false
+    Compatible: false
     Keys:
       - '%i'
       - '%item'
