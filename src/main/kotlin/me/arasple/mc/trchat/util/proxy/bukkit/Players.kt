@@ -19,6 +19,8 @@ object Players {
 
     private var players = listOf<String>()
 
+    val regex get() = Regex("(?i)@? ?(${getPlayers().joinToString("|") { Regex.escapeReplacement(it) }})")
+
     @Awake(LifeCycle.ENABLE)
     fun startTask() {
         submit(delay = 20) {

@@ -5,7 +5,7 @@ Enable:
   Item: false
 
 Cloud-Thesaurus:
-  Enabled: true
+  Enable: true
   Ignored: []
   Urls:
     - 'https://raw.githubusercontent.com/Yurinann/Filter-Thesaurus-Cloud/main/database.json' # 感谢南城提供的词库

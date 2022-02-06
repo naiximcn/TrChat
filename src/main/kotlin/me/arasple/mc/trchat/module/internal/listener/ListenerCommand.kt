@@ -30,15 +30,17 @@ object ListenerCommand {
         }
         command = if (mCmd != null) mCmd.key + command.removePrefix(mCmd.key) else command
 
-        val condition = Functions.commandCondition.get().entries.firstOrNull { it.key.matches(command) }?.value
+        val controller = Functions.commandController.get().entries.firstOrNull { it.key.matches(command) }?.value
+
+        val condition = controller?.first
         if (condition != null && !condition.eval(player)) {
             e.isCancelled =  true
             player.sendLang("Command-Controller-Deny")
             return
         }
 
-        val baffle = Functions.commandDelay.get().entries.firstOrNull { it.key.matches(command.trimIndent()) }?.value
-        if (baffle != null && !baffle.hasNext(player.name) && !player.hasPermission(Functions.CONF.getString("General.Command-Controller.Cooldown-Bypass-Permission")!!)) {
+        val baffle = controller?.second
+        if (baffle != null && !baffle.hasNext(player.name) && !player.hasPermission("trchat.bypass.cmdcooldown")) {
             e.isCancelled =  true
             player.sendLang("Command-Controller-Cooldown")
         }

@@ -24,9 +24,11 @@ class ChatSession(
 
     var lastPrivateFrom: UUID? = null
 
+    var isSpying = false
+
     private val receivedMessages = mutableListOf<ChatMessage>()
 
-    val isFilterEnabled get() = player.getDataContainer().getBoolean("filter")
+    val isFilterEnabled get() = player.getDataContainer().getBoolean("filter", true)
 
     val isMuted get() = (player.getDataContainer().getLong("mute_time", 0)) > System.currentTimeMillis()
 
@@ -36,6 +38,11 @@ class ChatSession(
 
     fun updateMuteTime(time: Long) {
         player.getDataContainer()["mute_time"] = System.currentTimeMillis() + time * 1000
+    }
+
+    fun switchSpy(): Boolean {
+        isSpying = !isSpying
+        return isSpying
     }
 
     internal fun addMessage(packet: Packet) {

@@ -7,9 +7,11 @@ import me.arasple.mc.trchat.module.internal.script.Condition
  * @since 2022/2/5 13:25
  */
 class ChannelSettings(
-    val joinCondition: Condition,
-    val speakCondition: Condition,
-    val target: Channel.Companion.Target,
+    val joinPermission: String?,
+    val speakCondition: Condition?,
+    val target: Target,
     val autoJoin: Boolean,
-    val proxy: Boolean
+    val proxy: Boolean,
+    val ports: List<Int>?,
+    val disabledFunctions: List<String>
 )

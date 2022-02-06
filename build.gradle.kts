@@ -12,6 +12,7 @@ taboolib {
         }
         dependencies {
             name("PlaceholderAPI").with("bukkit")
+            name("EcoEnchants").with("bukkit").loadafter(true)
         }
         desc("Advanced Minecraft Chat Control")
     }

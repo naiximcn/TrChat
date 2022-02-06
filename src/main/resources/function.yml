@@ -1,30 +1,29 @@
 General:
   Command-Controller:
     Enable: true
-    Cooldown-Bypass-Permission: 'trchat.bypass.cmdcooldown'
     List:
       - 'arasple{exact: true}{condition: perm *trchat.admin}'
       - 'ver(sion)?(s)?{condition: perm *trchat.admin}'
       - 'help(s)?{condition: perm *trchat.admin}'
       - 'shout{cooldown: 3}'
-  ITEM-SHOW:
-    ENABLE: true
-    COOLDOWN: 30
-    FORMAT: '&8[&3{0} &bx{1}&8]'
-    ORIGIN-NAME: false
-    KEYS:
+  Item-Show:
+    Enable: true
+    Cooldown: 30
+    Format: '&8[&3{0} &bx{1}&8]'
+    Origin-Name: false
+    Keys:
       - '%i'
       - '%item'
       - '%i%'
       - '%item%'
       - '[i]'
       - '[item]'
-  MENTION:
-    ENABLE: true
-    SELF-MENTION: false
-    FORMAT: '&r &a@&2{0}&r '
-    COOLDOWNS: 30
-    NOTIFY: true
+  Mention:
+    Enable: true
+    Self-Mention: false
+    Format: '&r &a@&2{0}&r '
+    Cooldowns: 30
+    Notify: true
   Inventory-Show:
     Enable: true
     Cooldown: 30
@@ -33,10 +32,10 @@ General:
       - '[inv]'
       - '[inventory]'
 
-CUSTOM:
+Custom:
   # 示例 —— QQ 分享
   shareQQ:
-    requirement: null
+    condition: ~
     priority: 100
     # 匹配表达式
     # 示例模块的表达式部分来自互联网
@@ -117,7 +116,7 @@ CUSTOM:
 
   # 示例 —— 网站分享
   shareUrl:
-    pattern: '^((https|http|ftp|rtsp|mms)?:\/\/)[^\s]+'
+    pattern: '((https|http|ftp|rtsp|mms)?:\/\/)[^\s]+'
     display:
       text: '&8[&f&l网站&8]'
       hover:

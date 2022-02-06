@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.api.config
 
+import me.arasple.mc.trchat.module.display.filter.ChatFilter
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.Configuration
 
@@ -12,4 +13,10 @@ object Filter {
     @Config("filter.yml", autoReload = true)
     lateinit var CONF: Configuration
         private set
+
+    init {
+        CONF.onReload {
+            ChatFilter.loadFilter(true)
+        }
+    }
 }

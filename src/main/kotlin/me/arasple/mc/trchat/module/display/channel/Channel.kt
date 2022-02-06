@@ -20,22 +20,18 @@ class Channel(
         val tellraw = TellrawJson()
         formats.firstOrNull { it.condition.pass(player) }?.let { format ->
             format.prefix.forEach { prefix -> tellraw.append(prefix.value.first { it.condition.pass(player) }.content.toTellrawJson(player)) }
-            format.msg.serialize(player, message)
+            format.msg.serialize(player, message, settings.disabledFunctions)
             format.suffix.forEach { suffix -> tellraw.append(suffix.value.first { it.condition.pass(player) }.content.toTellrawJson(player)) }
-        }
+        } ?: return
 
+        when (val range = settings.target.range) {
+
+        }
 
     }
 
     companion object {
 
         val channels = mutableListOf<Channel>()
-
-        enum class Range {
-
-            ALL, SINGLE_WORLD, DISTANCE, SELF
-        }
-
-        class Target(val range: Range, val distance: Int?)
     }
 }

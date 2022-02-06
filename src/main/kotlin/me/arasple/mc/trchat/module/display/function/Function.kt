@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.module.display
+package me.arasple.mc.trchat.module.display.function
 
 import me.arasple.mc.trchat.module.display.format.JsonComponent
 import me.arasple.mc.trchat.module.internal.script.Condition
@@ -10,8 +10,8 @@ import java.util.regex.Pattern
  * @since 2021/12/12 11:41
  */
 class Function(
-    val condition: Condition?,
     val id: String,
+    val condition: Condition?,
     val priority: Int,
     val regex: Regex,
     val filterTextPattern: Pattern?,
@@ -26,7 +26,7 @@ class Function(
         fun String.replaceRegex(regex: Regex, textPattern: Pattern?, replacement: String): String {
             var string = this
             regex.findAll(string).forEach {
-                val str = it.groupValues[0]
+                val str = it.value
                 val matcher = textPattern?.matcher(str)
                 val rep = replacement.replaceWithOrder(
                     if (matcher != null && matcher.find()) {

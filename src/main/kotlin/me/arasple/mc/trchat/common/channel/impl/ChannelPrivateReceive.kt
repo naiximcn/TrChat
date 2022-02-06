@@ -1,10 +1,8 @@
 package me.arasple.mc.trchat.common.channel.impl
 
-import me.arasple.mc.trchat.common.channel.ChannelAbstract
 import me.arasple.mc.trchat.common.chat.ChatFormats
 import me.arasple.mc.trchat.module.internal.data.ChatLogs
-import me.arasple.mc.trchat.common.chat.obj.ChatType
-import me.arasple.mc.trchat.module.internal.command.CommandReply
+import me.arasple.mc.trchat.module.internal.command.main.CommandReply
 import me.arasple.mc.trchat.util.proxy.sendBukkitMessage
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -20,15 +18,7 @@ import java.util.*
  * @author wlys
  * @since 2021/8/28 21:17
  */
-object ChannelPrivateReceive : ChannelAbstract() {
-
-    private val spying = mutableListOf<UUID>()
-
-    override val chatType: ChatType
-        get() = ChatType.PRIVATE_RECEIVE
-
-    override val format: String
-        get() = "PRIVATE_RECEIVE"
+object ChannelPrivateReceive {
 
     override fun execute(sender: Player, msg: String, args: Array<String>) {
         val formatted = ChatFormats.getFormat(this, sender)?.apply(sender, msg, "true", args[0], privateChat = true) ?: return
@@ -55,18 +45,5 @@ object ChannelPrivateReceive : ChannelAbstract() {
 
         ChatLogs.logPrivate(sender.name, args[0], msg)
         CommandReply.lastMessageFrom[args[0]] = sender.name
-    }
-
-    fun switchSpy(player: Player): Boolean {
-        if (!spying.contains(player.uniqueId)) {
-            spying.add(player.uniqueId)
-        } else {
-            spying.remove(player.uniqueId)
-        }
-        return spying.contains(player.uniqueId)
-    }
-
-    fun isSpying(player: Player): Boolean {
-        return spying.contains(player.uniqueId)
     }
 }

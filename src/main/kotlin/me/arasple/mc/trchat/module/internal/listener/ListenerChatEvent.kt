@@ -4,6 +4,7 @@ import me.arasple.mc.trchat.api.config.Functions
 import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.util.checkMute
 import me.arasple.mc.trchat.util.getSession
+import me.arasple.mc.trchat.util.proxy.bukkit.Players
 import org.bukkit.entity.Player
 import org.bukkit.event.player.AsyncPlayerChatEvent
 import taboolib.common.platform.Platform
@@ -20,12 +21,18 @@ import taboolib.platform.util.sendLang
 @PlatformSide([Platform.BUKKIT])
 object ListenerChatEvent {
 
+    private val hooks = arrayOf(
+        "Dynmap",
+        "DiscordSRV"
+    )
+
     @SubscribeEvent(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onChat(e: AsyncPlayerChatEvent) {
         e.isCancelled = true
         val player = e.player
+        val session = player.getSession()
 
-        player.getSession().recipients = e.recipients
+        session.recipients = e.recipients
 
         if (!player.checkMute()) {
             return
@@ -35,13 +42,14 @@ object ListenerChatEvent {
             return
         }
 
-        e.handlers.registeredListeners.forEach {
-            if (it.plugin.isEnabled && it.priority == org.bukkit.event.EventPriority.MONITOR) {
-                try {
-                    it.callEvent(AsyncPlayerChatEvent(e.isAsynchronous, e.player, e.message, e.recipients))
-                } catch (e: Throwable) {
-                    e.printStackTrace()
-                }
+        session.channel?.execute(player, e.message)
+
+        e.handlers.registeredListeners
+            .filter { hooks.contains(it.plugin.name) && it.plugin.isEnabled && it.priority == org.bukkit.event.EventPriority.MONITOR }.forEach {
+            try {
+                it.callEvent(AsyncPlayerChatEvent(e.isAsynchronous, e.player, e.message, e.recipients))
+            } catch (e: Throwable) {
+                e.printStackTrace()
             }
         }
     }
@@ -66,7 +74,7 @@ object ListenerChatEvent {
             }
         }
         if (!p.hasPermission("trchat.bypass.chatcd")) {
-            if (!Settings.chatDelay.get().hasNext(p.name)) {
+            if (Players.regex.matches(message) && !Settings.chatDelay.get().hasNext(p.name)) {
                 p.sendLang("Cooldowns-Chat", Settings.CONF.getDouble("Chat.Cooldown").toString())
                 return false
             }

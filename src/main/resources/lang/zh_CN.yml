@@ -111,6 +111,8 @@ Mentions-Notify:
     volume: 1
     pitch: 2
 
+Inventory-Show-Expired: '&c&l该背包已过期...'
+
 Private-Message-Spy-Format: '&8[&3监听&8] &6{0} &2-> &3{1}&f: &7{2}'
 Private-Message-Spy-On:
   - type: actionbar

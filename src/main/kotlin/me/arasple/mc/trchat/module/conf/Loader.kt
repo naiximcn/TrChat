@@ -1,7 +1,10 @@
 package me.arasple.mc.trchat.module.conf
 
+import me.arasple.mc.trchat.api.config.Functions
+import me.arasple.mc.trchat.module.display.function.Function
 import me.arasple.mc.trchat.module.display.channel.Channel
 import me.arasple.mc.trchat.module.display.channel.ChannelSettings
+import me.arasple.mc.trchat.module.display.channel.Target
 import me.arasple.mc.trchat.module.display.format.Format
 import me.arasple.mc.trchat.module.display.format.JsonComponent
 import me.arasple.mc.trchat.module.display.format.MsgComponent
@@ -14,6 +17,7 @@ import taboolib.common.platform.function.getDataFolder
 import taboolib.common.platform.function.releaseResourceFile
 import taboolib.common.util.orNull
 import taboolib.common5.Coerce
+import taboolib.module.configuration.util.getMap
 import java.io.File
 
 /**
@@ -32,15 +36,17 @@ object Loader {
         folder
     }
 
-    fun load(): Int {
+    fun loadChannels(): Int {
         Channel.channels.clear()
 
-        filterChannelFiles(folder).forEach { load(it) }
+        filterChannelFiles(folder).forEach {
+            Channel.channels.add(loadChannels(it))
+        }
 
         return Channel.channels.size
     }
 
-    fun load(file: File): Channel {
+    fun loadChannels(file: File): Channel {
         val conf = YamlConfiguration.loadConfiguration(file)
         val id = file.nameWithoutExtension
 
@@ -55,13 +61,37 @@ object Loader {
         }.sortedBy { it.priority }
 
         val settings = conf.getConfigurationSection("Options")!!.let { section ->
-
+            val joinPermission = section.getString("Join-Permission")
+            val speakCondition = section.getString("Speak-Condition")?.toCondition()
+            val target = section.getString("Target", "ALL")!!.uppercase().split(";").let {
+                val distance = it.getOrNull(1)?.toInt() ?: -1
+                Target(Target.Range.valueOf(it[0]), distance)
+            }
             val autoJoin = section.getBoolean("Auto-Join", true)
             val proxy = section.getBoolean("Proxy", false)
-            ChannelSettings()
+            val ports = section.getString("Ports")?.split(";")?.map { it.toInt() }
+            ChannelSettings(joinPermission, speakCondition, target, autoJoin, proxy, ports)
         }
 
         return Channel(id, settings, formats, mutableListOf())
+    }
+
+    fun loadFunctions() {
+        Function.functions.clear()
+
+        val customs = Functions.CONF.getMap<String, Map<String, *>>("Custom")
+        val functions = customs.map { (id, map) ->
+            val condition = map["condition"]?.toString()?.toCondition()
+            val priority = map["priority"]?.toString()?.toInt() ?: 100
+            val regex = map["pattern"]!!.toString().toRegex()
+            val filterTextPattern = map["text-filter"]?.toString()?.toPattern()
+            val displayJson = parseJSON(map["display"] as Map<*, *>)
+            val action = map["action"]?.toString()
+
+            Function(id, condition, priority, regex, filterTextPattern, displayJson, action)
+        }.sortedBy { it.priority }
+
+        Function.functions.addAll(functions)
     }
 
     private fun parseGroups(map: LinkedHashMap<*, *>): Map<String, List<Group>> {

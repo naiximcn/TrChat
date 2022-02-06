@@ -67,3 +67,7 @@ object Proxy {
 fun Player.sendBukkitMessage(vararg args: String) {
     Proxy.sendBukkitMessage(this, *args)
 }
+
+fun Player.sendProxyLang(target: String, node: String, vararg args: String) {
+    Proxy.sendProxyLang(this, target, node, *args)
+}

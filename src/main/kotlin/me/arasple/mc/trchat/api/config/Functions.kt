@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.api.config
 
+import me.arasple.mc.trchat.module.conf.Loader
 import me.arasple.mc.trchat.module.conf.Property
 import me.arasple.mc.trchat.module.internal.script.Condition
 import me.arasple.mc.trchat.util.toCondition
@@ -22,29 +23,20 @@ object Functions {
     lateinit var CONF: Configuration
         private set
 
-    @ConfigNode("General.Command-Controller.List", "function.yml")
-    val commandDelay = ConfigNodeTransfer<List<*>, Map<Regex, Baffle>> {
-        mapNotNull { string ->
-            val (cmd, property) = Property.from(string!!.toString())
-            val cooldown = property[Property.COOLDOWN]?.toFloat() ?: return@mapNotNull null
-            val mCmd = Bukkit.getCommandAliases().entries.firstOrNull { (_, value) ->
-                value.any { it.equals(cmd.split(" ")[0], ignoreCase = true) }
-            }
-            val key = if (mCmd != null) mCmd.key else cmd
-            val regex = if (property[Property.EXACT].toBoolean()) {
-                Regex("(?i)$key\$")
-            } else {
-                Regex("(?i)$key.*")
-            }
-            regex to Baffle.of((cooldown * 1000).toLong(), TimeUnit.MILLISECONDS)
-        }.toMap()
+    init {
+        CONF.onReload {
+            Loader.loadFunctions()
+        }
     }
 
     @ConfigNode("General.Command-Controller.List", "function.yml")
-    val commandCondition = ConfigNodeTransfer<List<*>, Map<Regex, Condition>> {
-        mapNotNull { string ->
+    val commandController = ConfigNodeTransfer<List<*>, Map<Regex, Pair<Condition?, Baffle?>>> {
+        associate { string ->
             val (cmd, property) = Property.from(string!!.toString())
-            val condition = property[Property.CONDITION]?.toCondition() ?: return@mapNotNull null
+            val baffle = property[Property.COOLDOWN]?.toFloat()?.let {
+                Baffle.of((it * 1000).toLong(), TimeUnit.MILLISECONDS)
+            }
+            val condition = property[Property.CONDITION]?.toCondition()
             val mCmd = Bukkit.getCommandAliases().entries.firstOrNull { (_, value) ->
                 value.any { it.equals(cmd.split(" ")[0], ignoreCase = true) }
             }
@@ -54,8 +46,8 @@ object Functions {
             } else {
                 Regex("(?i)$key.*")
             }
-            regex to condition
-        }.toMap()
+            regex to Pair(condition, baffle)
+        }
     }
 
     @ConfigNode("General.Item-Show.Cooldowns", "function.yml")

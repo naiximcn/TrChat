@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.module.internal.command
+package me.arasple.mc.trchat.module.internal.command.main
 
 import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.common.channel.impl.ChannelGlobal

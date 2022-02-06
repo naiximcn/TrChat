@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.module.internal.data
 
-import me.arasple.mc.trchat.api.TrChatFiles.settings
+import me.arasple.mc.trchat.api.config.Settings
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.io.newFile
@@ -40,7 +40,7 @@ object ChatLogs {
 
     @Schedule(delay = (20 * 15).toLong(), period = (20 * 60 * 5).toLong(), async = true)
     fun autoDelete() {
-        val days = settings.getLong("GENERAL.LOG-DELETE-TIME", 0L)
+        val days = Settings.CONF.getLong("General.Log-Delete-Time", 0L)
         if (days > 0) {
             val millis = TimeUnit.DAYS.toMillis(days)
             kotlin.runCatching {
@@ -55,7 +55,7 @@ object ChatLogs {
 
     fun log(player: Player, originalMessage: String) {
         waveList.add(
-            settings.getString("GENERAL.LOG-NORMAL", "[{0}] {1}: {2}")!!.replaceWithOrder(
+            Settings.CONF.getString("General.Log-Normal", "[{0}] {1}: {2}")!!.replaceWithOrder(
                 dateFormat1.format(System.currentTimeMillis()),
                 player.name,
                 originalMessage
@@ -65,7 +65,7 @@ object ChatLogs {
 
     fun logPrivate(from: String, to: String, originalMessage: String) {
         waveList.add(
-            settings.getString("GENERAL.LOG-PRIVATE", "[{0}] {1} -> {2}: {3}")!!.replaceWithOrder(
+            Settings.CONF.getString("General.Log-Private", "[{0}] {1} -> {2}: {3}")!!.replaceWithOrder(
                 dateFormat1.format(System.currentTimeMillis()),
                 from,
                 to,

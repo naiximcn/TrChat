@@ -55,7 +55,7 @@ object ChatFilter {
         replacement = Filter.CONF.getString("Replacement")!![0]
 
         // 更新云端词库
-        if (updateCloud && Filter.CONF.getBoolean("Cloud-Thesaurus.Enabled")) {
+        if (updateCloud && Filter.CONF.getBoolean("Cloud-Thesaurus.Enable")) {
             CLOUD_URL = Filter.CONF.getStringList("Cloud-Thesaurus.Urls")
             submit(async = true) {
                 loadCloudFilter(*notify)

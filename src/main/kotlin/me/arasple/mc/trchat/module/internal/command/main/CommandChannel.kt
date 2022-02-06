@@ -1,7 +1,6 @@
-package me.arasple.mc.trchat.module.internal.command
+package me.arasple.mc.trchat.module.internal.command.main
 
 import me.arasple.mc.trchat.common.channel.impl.ChannelCustom
-import me.arasple.mc.trchat.internal.data.Users
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -27,9 +26,6 @@ object CommandChannel {
     @Awake(LifeCycle.ENABLE)
     fun c() {
         command("channel", listOf("chatchannel", "trchannel"), "聊天频道", permission = "trchat.channel") {
-            execute<Player> { sender, _, _ ->
-                Users.removeCustomChannel(sender)
-            }
             dynamic("channel", optional = true) {
                 suggestion<CommandSender> { _, _ ->
                     ChannelCustom.list.map { it.name }

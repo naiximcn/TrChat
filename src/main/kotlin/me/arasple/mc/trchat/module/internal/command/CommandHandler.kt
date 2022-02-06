@@ -1,9 +1,12 @@
 package me.arasple.mc.trchat.module.internal.command
 
-import me.arasple.mc.trchat.api.TrChatFiles
-import me.arasple.mc.trchat.common.channel.impl.ChannelPrivateReceive
+import me.arasple.mc.trchat.api.config.Filter
+import me.arasple.mc.trchat.api.config.Functions
+import me.arasple.mc.trchat.api.config.Settings
+import me.arasple.mc.trchat.module.conf.Loader
 import me.arasple.mc.trchat.module.internal.menu.MenuControlPanel
 import me.arasple.mc.trchat.module.internal.menu.MenuFilterControl
+import me.arasple.mc.trchat.util.getSession
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import taboolib.common.platform.Platform
@@ -33,7 +36,10 @@ object CommandHandler {
     @CommandBody(permission = "trchat.command.reload", optional = true)
     val reload = subCommand {
         execute<CommandSender> { _, _, _ ->
-            TrChatFiles.reloadAll()
+            Loader.loadChannels()
+            Settings.CONF.reload()
+            Functions.CONF.reload()
+            Filter.CONF.reload()
         }
     }
 
@@ -67,7 +73,7 @@ object CommandHandler {
     @CommandBody(permission = "trchat.admin", optional = true)
     val spy = subCommand {
         execute<Player> { sender, _, _ ->
-            val state = ChannelPrivateReceive.switchSpy(sender)
+            val state = sender.getSession().switchSpy()
             sender.sendLang(if (state) "Private-Message-Spy-On" else "Private-Message-Spy-Off")
         }
     }
