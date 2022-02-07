@@ -7,14 +7,10 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.event.PluginMessageEvent
-import net.md_5.bungee.chat.ComponentSerializer
-import net.md_5.bungee.command.ConsoleCommandSender
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.common.platform.function.console
 import taboolib.common.platform.function.getProxyPlayer
-import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.platform.function.server
 import taboolib.common.util.subList
 import taboolib.module.lang.sendLang
@@ -41,7 +37,7 @@ object ListenerBungeeTransfer {
                     val data = message.build()
                     execute(data)
                 }
-            } catch (ignored: IOException) {
+            } catch (_: IOException) {
             }
         }
     }
@@ -65,7 +61,7 @@ object ListenerBungeeTransfer {
                 val message = GsonComponentSerializer.gson().deserialize(raw)
 
                 server<ProxyServer>().servers.forEach { (_, v) ->
-                    v.players.filter { it.hasPermission(permission) }.forEach {
+                    v.players.filter { permission == "null" || it.hasPermission(permission) }.forEach {
                         TrChatBungee.adventure.player(it).sendMessage(Identity.identity(UUID.fromString(uuid)), message, MessageType.CHAT)
                     }
                 }
@@ -80,7 +76,7 @@ object ListenerBungeeTransfer {
 
                 server<ProxyServer>().servers.forEach { (_, v) ->
                     if (ports.contains(v.address.port)) {
-                        v.players.filter { it.hasPermission(permission) }.forEach {
+                        v.players.filter { permission == "null" || it.hasPermission(permission) }.forEach {
                             TrChatBungee.adventure.player(it).sendMessage(Identity.identity(UUID.fromString(uuid)), message, MessageType.CHAT)
                         }
                     }

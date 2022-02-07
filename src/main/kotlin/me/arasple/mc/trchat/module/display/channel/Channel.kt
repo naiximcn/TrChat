@@ -1,8 +1,10 @@
 package me.arasple.mc.trchat.module.display.channel
 
 import me.arasple.mc.trchat.TrChat
+import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.module.display.format.Format
 import me.arasple.mc.trchat.module.internal.service.Metrics
+import me.arasple.mc.trchat.util.getSession
 import me.arasple.mc.trchat.util.pass
 import me.arasple.mc.trchat.util.proxy.sendBukkitMessage
 import net.kyori.adventure.audience.Audience
@@ -13,6 +15,7 @@ import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 import taboolib.common.platform.ProxyPlayer
 import taboolib.common.platform.function.onlinePlayers
+import taboolib.platform.util.sendLang
 import taboolib.platform.util.toProxyLocation
 import java.util.*
 
@@ -23,8 +26,9 @@ import java.util.*
 class Channel(
     val id: String,
     val settings: ChannelSettings,
+    val bindings: ChannelBindings,
     val formats: List<Format>,
-    val listeners: MutableList<UUID>
+    val listeners: MutableList<UUID> = mutableListOf()
 ) {
 
     fun execute(player: Player, message: String) {
@@ -66,7 +70,7 @@ class Channel(
 
         if (settings.proxy) {
             if (settings.ports != null) {
-                player.sendBukkitMessage("ForwardRaw", player.uniqueId.toString(), gson, settings.joinPermission ?: "null")
+                player.sendBukkitMessage("ForwardRaw", player.uniqueId.toString(), gson, settings.joinPermission ?: "null", settings.ports.joinToString(";"))
             } else {
                 player.sendBukkitMessage("BroadcastRaw", player.uniqueId.toString(), gson, settings.joinPermission ?: "null")
             }
@@ -78,6 +82,22 @@ class Channel(
     companion object {
 
         val channels = mutableListOf<Channel>()
+
+        fun join(player: Player, channel: String) {
+            channels.firstOrNull { it.id == channel }?.let {
+                join(player, it)
+            }
+        }
+
+        fun join(player: Player, channel: Channel) {
+            player.getSession().channel = channel
+            player.sendLang("Channel-Join", channel.id)
+        }
+
+        fun quit(player: Player) {
+            player.getSession().channel?.id?.let { player.sendLang("Channel-Quit", it) }
+            player.getSession().channel = Settings.channelDefault.get()
+        }
 
         private fun ProxyPlayer.toAudience(): Audience {
             return TrChat.adventure.player(cast<Player>())

@@ -114,13 +114,6 @@ Private-Message-Receive:
     pitch: 2
 
 Channel-Proxy-Not-Enable: '&8[&3Tr&bChat&8] &7Unable to connect &eBungeeCord &7.'
-Channel-No-Message:
-  - type: actionbar
-    text: '&7&lMessage required'
-  - type: sound
-    sound: 'ENTITY_ITEM_BREAK'
-    volume: 1
-    pitch: 0
 Channel-Join:
   - type: actionbar
     text: '&a&lJoined the {0} chat channel.'

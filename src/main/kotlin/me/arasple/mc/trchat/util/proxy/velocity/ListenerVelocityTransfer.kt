@@ -6,13 +6,13 @@ import com.velocitypowered.api.proxy.Player
 import com.velocitypowered.api.proxy.ProxyServer
 import me.arasple.mc.trchat.TrChatVelocity
 import net.kyori.adventure.audience.MessageType
+import net.kyori.adventure.identity.Identity
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.getProxyPlayer
-import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.platform.function.server
 import taboolib.common.util.subList
 import taboolib.module.lang.sendLang
@@ -39,7 +39,7 @@ object ListenerVelocityTransfer {
                     val data = message.build()
                     execute(data)
                 }
-            } catch (ignored: IOException) {
+            } catch (_: IOException) {
             }
         }
     }
@@ -48,24 +48,22 @@ object ListenerVelocityTransfer {
         when (data[0]) {
             "SendRaw" -> {
                 val to = data[1]
-                val player = getProxyPlayer(to)
+                val raw = data[2]
+                val player = getProxyPlayer(to)?.cast<Player>() ?: return
+                val message = GsonComponentSerializer.gson().deserialize(raw)
 
-                if (player != null && player.cast<Player>().currentServer.isPresent) {
-                    val raw = data[2]
-                    player.sendRawMessage(raw)
-                }
+                player.sendMessage(message)
+
             }
             "BroadcastRaw" -> {
                 val uuid = data[1]
                 val raw = data[2]
+                val permission = data[3]
                 val message = GsonComponentSerializer.gson().deserialize(raw)
+
                 server<ProxyServer>().allServers.forEach { server ->
-                    server.playersConnected.forEach { player ->
-                        getProxyPlayer(UUID.fromString(uuid))?.cast<Player>()?.let {
-                            player.sendMessage(it, message, MessageType.CHAT)
-                        } ?: kotlin.run {
-                            player.sendMessage(message, MessageType.CHAT)
-                        }
+                    server.playersConnected.filter { permission == "null" || it.hasPermission(permission) }.forEach { player ->
+                        player.sendMessage(Identity.identity(UUID.fromString(uuid)), message, MessageType.CHAT)
                     }
                 }
                 console().cast<ConsoleCommandSource>().sendMessage(message)
@@ -73,28 +71,18 @@ object ListenerVelocityTransfer {
             "ForwardRaw" -> {
                 val uuid = data[1]
                 val raw = data[2]
-                val ports = data[3].split(";").map { it.toInt() }
+                val permission = data[3]
+                val ports = data[4].split(";").map { it.toInt() }
                 val message = GsonComponentSerializer.gson().deserialize(raw)
+
                 server<ProxyServer>().allServers.forEach { server ->
                     if (ports.contains(server.serverInfo.address.port)) {
-                        server.playersConnected.forEach { player ->
-                            getProxyPlayer(UUID.fromString(uuid))?.cast<Player>()?.let {
-                                player.sendMessage(it, message, MessageType.CHAT)
-                            } ?: kotlin.run {
-                                player.sendMessage(message, MessageType.CHAT)
-                            }
+                        server.playersConnected.filter { permission == "null" || it.hasPermission(permission) }.forEach { player ->
+                            player.sendMessage(Identity.identity(UUID.fromString(uuid)), message, MessageType.CHAT)
                         }
                     }
                 }
                 console().cast<ConsoleCommandSource>().sendMessage(message)
-            }
-            "SendRawPerm" -> {
-                val raw = data[1]
-                val perm = data[2]
-
-                onlinePlayers().filter { p -> p.hasPermission(perm) }.forEach { p ->
-                    p.sendRawMessage(raw)
-                }
             }
             "SendLang" -> {
                 val to = data[1]
@@ -103,7 +91,7 @@ object ListenerVelocityTransfer {
 
                 try {
                     getProxyPlayer(to)?.sendLang(node, *args)
-                } catch (ignored: IllegalStateException) {
+                } catch (_: IllegalStateException) {
                 }
             }
         }

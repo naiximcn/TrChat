@@ -119,13 +119,6 @@ Private-Message-Receive:
     pitch: 2
 
 Channel-Proxy-Not-Enable: '&8[&3Tr&bChat&8] &7未启用跨服支持, 暂不支持喊话.'
-Channel-No-Message:
-  - type: actionbar
-    text: '&7&l你必须提供聊天内容'
-  - type: sound
-    sound: 'ENTITY_ITEM_BREAK'
-    volume: 1
-    pitch: 0
 Channel-Join:
   - type: actionbar
     text: '&a&l已加入到{0}频道聊天'

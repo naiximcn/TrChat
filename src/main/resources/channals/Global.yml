@@ -6,7 +6,7 @@ Options:
 
 Bindings:
   Prefix: ['!all']
-  Command: 'global'
+  Command: ['global', 'all', 'shout']
 
 Formats:
   - condition: null

@@ -2,6 +2,7 @@ package me.arasple.mc.trchat.module.internal.listener
 
 import me.arasple.mc.trchat.api.config.Functions
 import me.arasple.mc.trchat.api.config.Settings
+import me.arasple.mc.trchat.module.display.channel.Channel
 import me.arasple.mc.trchat.util.checkMute
 import me.arasple.mc.trchat.util.getSession
 import me.arasple.mc.trchat.util.proxy.bukkit.Players
@@ -30,6 +31,7 @@ object ListenerChatEvent {
     fun onChat(e: AsyncPlayerChatEvent) {
         e.isCancelled = true
         val player = e.player
+        val message = e.message
         val session = player.getSession()
 
         session.recipients = e.recipients
@@ -38,16 +40,19 @@ object ListenerChatEvent {
             return
         }
 
-        if (!checkLimits(player, e.message)) {
+        if (!checkLimits(player, message)) {
             return
         }
 
-        session.channel?.execute(player, e.message)
+        Channel.channels
+            .firstOrNull { it.bindings.prefix?.any { prefix -> message.startsWith(prefix, ignoreCase = true) } == true }
+            ?.execute(player, message)
+            ?: kotlin.run { session.channel?.execute(player, message) }
 
         e.handlers.registeredListeners
             .filter { hooks.contains(it.plugin.name) && it.plugin.isEnabled && it.priority == org.bukkit.event.EventPriority.MONITOR }.forEach {
             try {
-                it.callEvent(AsyncPlayerChatEvent(e.isAsynchronous, e.player, e.message, e.recipients))
+                it.callEvent(AsyncPlayerChatEvent(e.isAsynchronous, e.player, message, e.recipients))
             } catch (e: Throwable) {
                 e.printStackTrace()
             }

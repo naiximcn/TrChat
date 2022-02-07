@@ -1,8 +1,8 @@
 package me.arasple.mc.trchat.module.conf
 
 import me.arasple.mc.trchat.api.config.Functions
-import me.arasple.mc.trchat.module.display.function.Function
 import me.arasple.mc.trchat.module.display.channel.Channel
+import me.arasple.mc.trchat.module.display.channel.ChannelBindings
 import me.arasple.mc.trchat.module.display.channel.ChannelSettings
 import me.arasple.mc.trchat.module.display.channel.Target
 import me.arasple.mc.trchat.module.display.format.Format
@@ -10,6 +10,7 @@ import me.arasple.mc.trchat.module.display.format.JsonComponent
 import me.arasple.mc.trchat.module.display.format.MsgComponent
 import me.arasple.mc.trchat.module.display.format.part.Group
 import me.arasple.mc.trchat.module.display.format.part.json.*
+import me.arasple.mc.trchat.module.display.function.Function
 import me.arasple.mc.trchat.util.color.DefaultColor
 import me.arasple.mc.trchat.util.toCondition
 import org.bukkit.configuration.file.YamlConfiguration
@@ -50,16 +51,6 @@ object Loader {
         val conf = YamlConfiguration.loadConfiguration(file)
         val id = file.nameWithoutExtension
 
-        val formats = conf.getMapList("Formats").map { map ->
-            val condition = map["condition"]?.toString()?.toCondition()
-            val priority = Coerce.asInteger(map["priority"]).orNull() ?: 100
-            val prefix = parseGroups(map["prefix"] as LinkedHashMap<*, *>)
-            val msg = parseMsg(map["msg"] as LinkedHashMap<*, *>)
-            val suffix = parseGroups(map["suffix"] as LinkedHashMap<*, *>)
-
-            Format(condition, priority, prefix, msg, suffix)
-        }.sortedBy { it.priority }
-
         val settings = conf.getConfigurationSection("Options")!!.let { section ->
             val joinPermission = section.getString("Join-Permission")
             val speakCondition = section.getString("Speak-Condition")?.toCondition()
@@ -70,10 +61,27 @@ object Loader {
             val autoJoin = section.getBoolean("Auto-Join", true)
             val proxy = section.getBoolean("Proxy", false)
             val ports = section.getString("Ports")?.split(";")?.map { it.toInt() }
-            ChannelSettings(joinPermission, speakCondition, target, autoJoin, proxy, ports)
+            val disabledFunctions = section.getStringList("Disabled-Functions")
+            ChannelSettings(joinPermission, speakCondition, target, autoJoin, proxy, ports, disabledFunctions)
         }
 
-        return Channel(id, settings, formats, mutableListOf())
+        val bindings = conf.getConfigurationSection("Bindings")?.let {
+            val prefix = it.getStringList("Prefix")
+            val command = it.getStringList("Command")
+            ChannelBindings(prefix, command)
+        } ?: ChannelBindings(null, null)
+
+        val formats = conf.getMapList("Formats").map { map ->
+            val condition = map["condition"]?.toString()?.toCondition()
+            val priority = Coerce.asInteger(map["priority"]).orNull() ?: 100
+            val prefix = parseGroups(map["prefix"] as LinkedHashMap<*, *>)
+            val msg = parseMsg(map["msg"] as LinkedHashMap<*, *>)
+            val suffix = parseGroups(map["suffix"] as LinkedHashMap<*, *>)
+
+            Format(condition, priority, prefix, msg, suffix)
+        }.sortedBy { it.priority }
+
+        return Channel(id, settings, bindings, formats)
     }
 
     fun loadFunctions() {
@@ -117,7 +125,7 @@ object Loader {
 
     private fun parseJSON(content: Map<*, *>): JsonComponent {
         val text = Property.serialize(content["text"] ?: "null").map { Text(it.first, it.second[Property.CONDITION]?.toCondition()) }
-        val hover = content["hover"]?.serialize()?.map { Hover(it.first, it.second[Property.CONDITION]?.toCondition()) }
+        val hover = content["hover"]?.serialize()?.associate { it.first to it.second[Property.CONDITION]?.toCondition() }?.let { Hover(it) }
         val suggest = content["suggest"]?.serialize()?.map { Suggest(it.first, it.second[Property.CONDITION]?.toCondition()) }
         val command = content["command"]?.serialize()?.map { Command(it.first, it.second[Property.CONDITION]?.toCondition()) }
         val url = content["url"]?.serialize()?.map { Url(it.first, it.second[Property.CONDITION]?.toCondition()) }
@@ -128,7 +136,7 @@ object Loader {
 
     private fun parseMsg(content: Map<*, *>): MsgComponent {
         val defaultColor = DefaultColor(content["default-color"]?.toString() ?: "&7")
-        val hover = content["hover"]?.serialize()?.map { Hover(it.first, it.second[Property.CONDITION]?.toCondition()) }
+        val hover = content["hover"]?.serialize()?.associate { it.first to it.second[Property.CONDITION]?.toCondition() }?.let { Hover(it) }
         val suggest = content["suggest"]?.serialize()?.map { Suggest(it.first, it.second[Property.CONDITION]?.toCondition()) }
         val command = content["command"]?.serialize()?.map { Command(it.first, it.second[Property.CONDITION]?.toCondition()) }
         val url = content["url"]?.serialize()?.map { Url(it.first, it.second[Property.CONDITION]?.toCondition()) }

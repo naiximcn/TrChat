@@ -4,9 +4,6 @@ Options:
   Proxy: false
   Auto-Join: true
 
-Bindings:
-  Prefix: ~
-
 Formats:
   - condition: ~
     priority: 100

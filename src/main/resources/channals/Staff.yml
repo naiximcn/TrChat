@@ -5,7 +5,7 @@ Options:
   Auto-Join: true
 
 Bindings:
-  Command: 'staff'
+  Command: ['staff']
 
 Formats:
   - requirement: null

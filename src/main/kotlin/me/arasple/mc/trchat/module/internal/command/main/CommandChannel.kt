@@ -1,22 +1,16 @@
 package me.arasple.mc.trchat.module.internal.command.main
 
-import me.arasple.mc.trchat.common.channel.impl.ChannelCustom
-import org.bukkit.Bukkit
-import org.bukkit.command.CommandSender
+import me.arasple.mc.trchat.module.display.channel.Channel
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.command.command
-import taboolib.common.platform.function.onlinePlayers
+import taboolib.expansion.createHelper
 import taboolib.module.lang.sendLang
-import taboolib.platform.util.sendLang
 
 /**
- * CommandStaffChat
- * me.arasple.mc.trchat.module.internal.command
- *
  * @author wlys
  * @since 2021/7/21 11:24
  */
@@ -26,32 +20,23 @@ object CommandChannel {
     @Awake(LifeCycle.ENABLE)
     fun c() {
         command("channel", listOf("chatchannel", "trchannel"), "聊天频道", permission = "trchat.channel") {
-            dynamic("channel", optional = true) {
-                suggestion<CommandSender> { _, _ ->
-                    ChannelCustom.list.map { it.name }
-                }
-                execute<Player> { sender, _, argument ->
-                    val channel = ChannelCustom.list.first { it.name == argument }
-                    if (sender.hasPermission(channel.permission)) {
-                        ChannelCustom.join(sender, channel)
-                    } else {
-                        sender.sendLang("Command-Controller-Deny")
+            literal("join", optional = true) {
+                dynamic("channel") {
+                    suggestion<Player> { _, _ ->
+                        Channel.channels.map { it.id }
+                    }
+                    execute<Player> { sender, _, argument ->
+                        Channel.join(sender, argument)
                     }
                 }
-                dynamic("player", optional = true) {
-                    suggestion<CommandSender> { _, _ ->
-                        onlinePlayers().map { it.name }
-                    }
-                    execute<CommandSender> { sender, context, argument ->
-                        if (sender.hasPermission("trchat.admin")) {
-                            val channel = ChannelCustom.list.first { it.name == context.argument(-1) }
-                            val player = Bukkit.getPlayerExact(argument) ?: return@execute
-                            ChannelCustom.join(player, channel)
-                        } else {
-                            sender.sendLang("Command-Controller-Deny")
-                        }
-                    }
+            }
+            literal("quit", "leave", optional = true) {
+                execute<Player> { sender, _, _ ->
+                    Channel.quit(sender)
                 }
+            }
+            execute<Player> { _, _, _ ->
+                createHelper()
             }
             incorrectSender { sender, _ ->
                 sender.sendLang("Command-Not-Player")
