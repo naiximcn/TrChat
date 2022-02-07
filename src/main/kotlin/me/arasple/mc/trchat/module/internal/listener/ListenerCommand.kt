@@ -8,6 +8,7 @@ import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.util.subList
 import taboolib.platform.util.sendLang
 
 /**
@@ -52,10 +53,20 @@ object ListenerCommand {
             .firstOrNull { it.bindings.command?.any { c -> c.equals(command[0], ignoreCase = true) } == true } ?: return
         e.isCancelled = true
 
-        if (command.size > 1) {
-            channel.execute(player, cmd.substringAfter(' '))
+        if (channel.settings.private) {
+            if (command.size > 2) {
+                channel.execute(player, subList(command, 2).joinToString(" "), command[1])
+            } else if (command.size == 2) {
+                Channel.join(player, channel)
+            } else {
+                player.sendLang("Private-Message-No-Player")
+            }
         } else {
-            Channel.join(player, channel)
+            if (command.size > 1) {
+                channel.execute(player, cmd.substringAfter(' '))
+            } else {
+                Channel.join(player, channel)
+            }
         }
     }
 }

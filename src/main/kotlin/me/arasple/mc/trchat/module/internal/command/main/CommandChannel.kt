@@ -20,7 +20,7 @@ object CommandChannel {
     @Awake(LifeCycle.ENABLE)
     fun c() {
         command("channel", listOf("chatchannel", "trchannel"), "聊天频道", permission = "trchat.channel") {
-            literal("join", optional = true) {
+            literal("join") {
                 dynamic("channel") {
                     suggestion<Player> { _, _ ->
                         Channel.channels.map { it.id }
@@ -30,7 +30,7 @@ object CommandChannel {
                     }
                 }
             }
-            literal("quit", "leave", optional = true) {
+            literal("quit", "leave") {
                 execute<Player> { sender, _, _ ->
                     Channel.quit(sender)
                 }
@@ -40,6 +40,9 @@ object CommandChannel {
             }
             incorrectSender { sender, _ ->
                 sender.sendLang("Command-Not-Player")
+            }
+            incorrectCommand { _, _, _, _ ->
+                createHelper()
             }
         }
     }

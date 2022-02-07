@@ -13,5 +13,6 @@ class ChannelSettings(
     val autoJoin: Boolean,
     val proxy: Boolean,
     val ports: List<Int>?,
-    val disabledFunctions: List<String>
+    val disabledFunctions: List<String>,
+    val private: Boolean
 )

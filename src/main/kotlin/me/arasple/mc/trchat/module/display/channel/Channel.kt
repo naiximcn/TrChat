@@ -31,7 +31,7 @@ class Channel(
     val listeners: MutableList<UUID> = mutableListOf()
 ) {
 
-    fun execute(player: Player, message: String) {
+    fun execute(player: Player, message: String, vararg vars: String) {
         if (!settings.speakCondition.pass(player)) {
             return
         }

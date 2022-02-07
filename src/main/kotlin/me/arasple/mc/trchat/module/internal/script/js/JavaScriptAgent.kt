@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.internal.script.js
 
 import com.google.common.collect.Maps
+import me.arasple.mc.trchat.util.getSession
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import taboolib.common5.compileJS
@@ -46,10 +47,13 @@ object JavaScriptAgent {
 
     fun eval(player: Player, script: String, cacheScript: Boolean = true): CompletableFuture<Any> {
         return try {
+            val session = player.getSession()
             val context = SimpleScriptContext()
 
             context.setBindings(SimpleBindings(bindings).also {
+                it["session"] = session
                 it["player"] = player
+                it["sender"] = player
             }, ScriptContext.ENGINE_SCOPE)
 
             val compiledScript =

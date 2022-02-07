@@ -1,5 +1,5 @@
 Options:
-  Condition: 'perm *trchat.admin'
+  Join-Permission: 'trchat.admin'
   Range: ALL
   Proxy: true
   Auto-Join: true

@@ -1,8 +1,7 @@
-package me.arasple.mc.trchat.module.internal.command.sub
+package me.arasple.mc.trchat.module.internal.command.main
 
 import me.arasple.mc.trchat.TrChat
-import me.arasple.mc.trchat.internal.data.Users
-import me.arasple.mc.trchat.util.proxy.bukkit.Players
+import me.arasple.mc.trchat.util.getSession
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import taboolib.common.LifeCycle
@@ -11,8 +10,8 @@ import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.command.command
 import taboolib.common.platform.function.onlinePlayers
-import taboolib.common5.Coerce
-import taboolib.module.lang.sendLang
+import taboolib.common5.util.parseMillis
+import taboolib.expansion.createHelper
 import taboolib.platform.util.sendLang
 
 /**
@@ -27,47 +26,28 @@ object CommandMute {
 
     @Awake(LifeCycle.ENABLE)
     fun c() {
-        command("mute", description = "禁言", usage = "/mute [player] [time]", permission = "trchat.mute") {
+        command("mute", description = "禁言", usage = "/mute [player] [time]", permission = "trchat.command.mute") {
             dynamic("player") {
                 suggestion<CommandSender> { _, _ ->
-                    Players.getPlayers()
+                    onlinePlayers().map { it.name }
                 }
-                dynamic("minute") {
+                dynamic("time") {
                     suggestion<CommandSender>(uncheck = true) { _, _ ->
-                        listOf("1", "5", "10", "60")
-                    }
-                    restrict<CommandSender> { _, _, argument ->
-                        Coerce.asInteger(argument).isPresent
+                        listOf("1h", "12h", "3d", "5m")
                     }
                     execute<CommandSender> { sender, context, argument ->
                         Bukkit.getPlayer(context.argument(-1))?.let {
-                            Users.updateMuteTime(it, Coerce.toLong(argument) * 60)
+                            it.getSession().updateMuteTime(argument.parseMillis())
                             sender.sendLang("Mute-Muted-Player", it.name, argument)
                         } ?: sender.sendLang("Command-Player-Not-Exist")
                     }
                 }
             }
-            incorrectSender { sender, _ ->
-                sender.sendLang("Command-Not-Player")
-            }
-            incorrectCommand { sender, _, index, state ->
-                when (state) {
-                    1 -> {
-                        when (index) {
-                            -1 -> sender.sendLang("Mute-No-Player")
-                            0 -> sender.sendLang("Mute-Time-Not-Specified")
-                        }
-                    }
-                    2 -> {
-                        when (index) {
-                            0 -> sender.sendLang("Command-Player-Not-Exist")
-                            1 -> sender.sendLang("Mute-Time-Not-Specified")
-                        }
-                    }
-                }
+            incorrectCommand { _, _, _, _ ->
+                createHelper()
             }
         }
-        command("muteall", listOf("globalmute"), "全员禁言", permission = "trchat.mute") {
+        command("muteall", listOf("globalmute"), "全员禁言", permission = "trchat.command.muteall") {
             execute<CommandSender> { sender, _, _ ->
                 TrChat.isGlobalMuting = !TrChat.isGlobalMuting
                 if (TrChat.isGlobalMuting) {

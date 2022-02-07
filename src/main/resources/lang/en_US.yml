@@ -98,13 +98,6 @@ Private-Message-No-Player:
     sound: 'ENTITY_ITEM_BREAK'
     volume: 1
     pitch: 0
-Private-Message-No-Message:
-  - type: actionbar
-    text: '&7&lChat context required'
-  - type: sound
-    sound: 'ENTITY_ITEM_BREAK'
-    volume: 1
-    pitch: 0
 Private-Message-Receive:
   - type: actionbar
     text: '&8[ &a! &8] &3You''ve received a message from &a{0} &3.'

@@ -93,5 +93,8 @@ object CommandHandler {
         incorrectSender { sender, _ ->
             sender.sendLang("Command-Not-Player")
         }
+        incorrectCommand { _, _, _, _ ->
+            createHelper()
+        }
     }
 }

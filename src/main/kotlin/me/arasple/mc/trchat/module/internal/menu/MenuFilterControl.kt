@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.module.internal.menu
 
-import me.arasple.mc.trchat.internal.data.Users
+import me.arasple.mc.trchat.util.getSession
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.library.xseries.XMaterial
@@ -10,7 +10,7 @@ import taboolib.module.ui.type.Basic
 import taboolib.platform.util.buildItem
 
 /**
- * @author Arasple, wlys
+ * @author Arasple
  * @date 2019/11/30 11:40
  * Internal Menu For Chat Filter Control
  */
@@ -35,7 +35,7 @@ object MenuFilterControl {
             set('A', getToggleButton(player))
             onClick(lock = true) {
                 if (it.slot == 'A') {
-                    Users.setFilter(player, !Users.isFilterEnabled(player))
+                    player.getSession().setFilter(!player.getSession().isFilterEnabled)
                     displayFor(player)
                 }
             }
@@ -44,7 +44,7 @@ object MenuFilterControl {
     }
 
     private fun getToggleButton(player: Player): ItemStack {
-        return if (Users.isFilterEnabled(player)) {
+        return if (player.getSession().isFilterEnabled) {
             buildItem(XMaterial.LIME_STAINED_GLASS_PANE) {
                 name = "&3聊天过滤器 &a√"
                 lore += listOf("", "&7你已经开启聊天过滤器,", "&7系统将会为您过滤掉聊天", "&7内容中的敏感内容, 祝您游戏愉快", "", "&6▶ &e点击关闭此功能")

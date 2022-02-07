@@ -1,10 +1,9 @@
 package me.arasple.mc.trchat.module.internal.menu
 
-import me.arasple.mc.trchat.common.chat.ChatMessage
-import me.arasple.mc.trchat.internal.data.Users
+import me.arasple.mc.trchat.util.getSession
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.onlinePlayers
-import taboolib.common5.Coerce
+import taboolib.common5.util.parseMillis
 import taboolib.library.xseries.XMaterial
 import taboolib.module.ui.openMenu
 import taboolib.module.ui.type.Basic
@@ -69,7 +68,7 @@ object MenuControlPanel {
                 name = "&e${target.name}"
                 lore += listOf(
                     "",
-                    "&aLast message: &7${Users.getLastMessage(target.uniqueId)}",
+                    "&aLast message: &7${target.getSession().lastMessage}",
                     ""
                 )
                 colored()
@@ -78,34 +77,35 @@ object MenuControlPanel {
                 name = "&cMute"
                 colored()
             }
-            set('R', XMaterial.STRING) {
-                name = "&bRemove last message"
-                colored()
-            }
+//            set('R', XMaterial.STRING) {
+//                name = "&bRemove last message"
+//                colored()
+//            }
             onClick(lock = true) { clickEvent ->
                 when (clickEvent.slot) {
                     'M' -> {
                         player.closeInventory()
                         player.sendMessage("Type the time of muting(in minute), 0 = remove mute")
                         player.nextChat {
-                            if (Coerce.asInteger(it).isPresent) {
-                                Users.updateMuteTime(target, Coerce.toLong(it) * 60)
+                            try {
+                                target.getSession().updateMuteTime(it.parseMillis())
                                 player.sendLang("Plugin-Done")
-                            } else {
+                            } catch (_: Throwable) {
                                 player.sendLang("Plugin-Failed")
                             }
                         }
                     }
-                    'R' -> {
-                        Users.formattedMessages[target.uniqueId]?.removeLastOrNull()?.let {
-                            if (it.isNotEmpty()) {
-                                ChatMessage.removeMessage(it.replace("\\s".toRegex(), "").takeLast(32))
-                                ChatMessage.releaseMessage()
-                                Users.setLastMessage(target.uniqueId, "")
-                                player.sendLang("Plugin-Done")
-                            }
-                        }
-                    }
+//                    'R' -> {
+//                        val session = target.getSession()
+//                        Users.formattedMessages[target.uniqueId]?.removeLastOrNull()?.let {
+//                            if (it.isNotEmpty()) {
+//                                ChatMessage.removeMessage(it.replace("\\s".toRegex(), "").takeLast(32))
+//                                ChatMessage.releaseMessage()
+//                                Users.setLastMessage(target.uniqueId, "")
+//                                player.sendLang("Plugin-Done")
+//                            }
+//                        }
+//                    }
                 }
             }
         }

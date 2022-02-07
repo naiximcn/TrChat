@@ -1,9 +1,9 @@
 package me.arasple.mc.trchat.module.internal.hook.impl
 
+import com.willfp.eco.core.display.Display
 import me.arasple.mc.trchat.module.internal.hook.HookAbstract
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import taboolib.common.reflect.Reflex.Companion.invokeMethod
 
 /**
  * @author wlys
@@ -11,10 +11,10 @@ import taboolib.common.reflect.Reflex.Companion.invokeMethod
  */
 class HookEcoEnchants : HookAbstract() {
 
-    fun displayItem(item: ItemStack, player: Player?) {
+    fun displayItem(item: ItemStack, player: Player?): ItemStack {
         if (!isHooked) {
-            return
+            return item
         }
-        plugin!!.invokeMethod<Any>("getDisplayModule")!!.invokeMethod<Any>("display", item, player, false)
+        return Display.displayAndFinalize(item, player)
     }
 }

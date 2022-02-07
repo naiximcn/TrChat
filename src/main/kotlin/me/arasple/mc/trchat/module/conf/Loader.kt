@@ -62,11 +62,12 @@ object Loader {
             val proxy = section.getBoolean("Proxy", false)
             val ports = section.getString("Ports")?.split(";")?.map { it.toInt() }
             val disabledFunctions = section.getStringList("Disabled-Functions")
-            ChannelSettings(joinPermission, speakCondition, target, autoJoin, proxy, ports, disabledFunctions)
+            val private = section.getBoolean("Private", false)
+            ChannelSettings(joinPermission, speakCondition, target, autoJoin, proxy, ports, disabledFunctions, private)
         }
 
         val bindings = conf.getConfigurationSection("Bindings")?.let {
-            val prefix = it.getStringList("Prefix")
+            val prefix = if (!settings.private) it.getStringList("Prefix") else null
             val command = it.getStringList("Command")
             ChannelBindings(prefix, command)
         } ?: ChannelBindings(null, null)

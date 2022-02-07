@@ -1,5 +1,5 @@
 Options:
-  Condition: ~
+  Speak-Condition: 'perm *trchat.global'
   Range: ALL
   Proxy: true
   Auto-Join: true

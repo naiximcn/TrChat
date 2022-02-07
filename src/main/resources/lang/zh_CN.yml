@@ -103,13 +103,6 @@ Private-Message-No-Player:
     sound: 'ENTITY_ITEM_BREAK'
     volume: 1
     pitch: 0
-Private-Message-No-Message:
-  - type: actionbar
-    text: '&7&l请提供私聊内容'
-  - type: sound
-    sound: 'ENTITY_ITEM_BREAK'
-    volume: 1
-    pitch: 0
 Private-Message-Receive:
   - type: actionbar
     text: '&8[ &a! &8] &3你收到来自 &a{0} &3的一条私聊消息'

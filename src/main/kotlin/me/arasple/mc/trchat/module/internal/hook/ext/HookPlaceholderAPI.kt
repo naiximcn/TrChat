@@ -22,13 +22,13 @@ object HookPlaceholderAPI : PlaceholderExpansion {
 
     override fun onPlaceholderRequest(player: Player?, args: String): String {
         if (player != null && player.isOnline) {
-            val params = args.split("_")
+            val params = args.split('_')
             val session = player.getSession()
 
-            return when(params[0].lowercase()) {
+            return when (params[0].lowercase()) {
                 "filter" -> session.isFilterEnabled
                 "channel" -> session.channel?.id
-                "js" -> if (params.size > 1) JavaScriptAgent.eval(player, params[1]).get() else ""
+                "js" -> if (params.size > 1) JavaScriptAgent.eval(player, args.substringAfter('_')).get() else ""
                 else -> ""
             }.toString()
         }

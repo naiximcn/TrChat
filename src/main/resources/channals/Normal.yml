@@ -1,7 +1,5 @@
 Options:
-  Condition: ~
   Range: ALL
-  Proxy: false
   Auto-Join: true
 
 Formats:

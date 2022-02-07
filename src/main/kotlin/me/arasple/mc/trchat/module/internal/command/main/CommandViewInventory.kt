@@ -8,6 +8,8 @@ import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.command.PermissionDefault
 import taboolib.common.platform.command.command
+import taboolib.expansion.createHelper
+import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
 
 /**
@@ -20,7 +22,7 @@ object CommandViewInventory {
     @Awake(LifeCycle.ENABLE)
     fun c() {
         command("view-inventory", permissionDefault = PermissionDefault.TRUE) {
-            dynamic {
+            dynamic("inventory") {
                 execute<Player> { sender, _, argument ->
                     MsgComponent.inventoryCache.getIfPresent(argument)?.let {
                         sender.openInventory(it)
@@ -28,6 +30,12 @@ object CommandViewInventory {
                         sender.sendLang("Inventory-Show-Expired")
                     }
                 }
+            }
+            incorrectSender { sender, _ ->
+                sender.sendLang("Command-Not-Player")
+            }
+            incorrectCommand { _, _, _, _ ->
+                createHelper()
             }
         }
     }

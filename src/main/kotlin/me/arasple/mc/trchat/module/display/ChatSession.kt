@@ -37,7 +37,7 @@ class ChatSession(
     }
 
     fun updateMuteTime(time: Long) {
-        player.getDataContainer()["mute_time"] = System.currentTimeMillis() + time * 1000
+        player.getDataContainer()["mute_time"] = System.currentTimeMillis() + time
     }
 
     fun switchSpy(): Boolean {
