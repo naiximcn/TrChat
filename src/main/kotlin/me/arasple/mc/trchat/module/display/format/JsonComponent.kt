@@ -2,8 +2,9 @@ package me.arasple.mc.trchat.module.display.format
 
 import me.arasple.mc.trchat.module.display.format.part.json.*
 import me.arasple.mc.trchat.util.pass
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
 import org.bukkit.entity.Player
-import taboolib.module.chat.TellrawJson
 
 /**
  * @author Arasple
@@ -11,7 +12,7 @@ import taboolib.module.chat.TellrawJson
  */
 open class JsonComponent(
     val text: List<Text>?,
-    val hover: List<Hover>?,
+    val hover: Hover?,
     val suggest: List<Suggest>?,
     val command: List<Command>?,
     val url: List<Url>?,
@@ -19,17 +20,16 @@ open class JsonComponent(
     val copy: List<Copy>?
 ) {
 
-    open fun toTellrawJson(player: Player, vararg vars: String): TellrawJson {
-        val tellraw = TellrawJson()
+    open fun toTellrawJson(player: Player, vararg vars: String): TextComponent {
+        var component = text?.firstOrNull { it.condition.pass(player) }?.process(player, *vars) ?: return Component.empty()
 
-        text!!.firstOrNull { it.condition.pass(player) }?.process(tellraw, player, *vars)
-        hover?.filter { it.condition.pass(player) }?.joinToString("\n") { it.process(tellraw, player, *vars) }?.let { tellraw.hoverText(it) }
-        suggest?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player, *vars)
-        command?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player, *vars)
-        url?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player, *vars)
-        insertion?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player, *vars)
-        copy?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player, *vars)
+        component = hover?.process(component, player, *vars) ?: component
+        component = suggest?.firstOrNull { it.condition.pass(player) }?.process(component, player, *vars) ?: component
+        component = command?.firstOrNull { it.condition.pass(player) }?.process(component, player, *vars) ?: component
+        component = url?.firstOrNull { it.condition.pass(player) }?.process(component, player, *vars) ?: component
+        component = insertion?.firstOrNull { it.condition.pass(player) }?.process(component, player, *vars) ?: component
+        component = copy?.firstOrNull { it.condition.pass(player) }?.process(component, player, *vars) ?: component
 
-        return tellraw
+        return component
     }
 }

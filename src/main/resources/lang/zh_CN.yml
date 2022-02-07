@@ -1,21 +1,8 @@
-######################################################################
-#
-#  ___________      _________ .__            __
-#  \__    __________\_   ___ \|  |__ _____ _/  |_
-#  |    |  \_  __ /    \  \/|  |  \\__  \\   __\
-#  |    |   |  | \\     \___|   Y  \/ __ \|  |
-#  |____|   |__|   \______  |___|  (____  |__|
-#  \/     \/     \/
-#
-# TrChat 的语言文件
-#
-# 如何自定义更强的消息？查阅文档：https://wiki.ptms.ink/index.php?title=TLocale_%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3 (已完全过时，仅供参考)
-# 所有消息均支持 TEXT / SOUND / TITLE / ACTIONBAR / COMMAND / JSON 等
-#
-######################################################################
-
-Plugin-Loaded-Chat-Formats: '&8[&3Tr&bChat&8] &b聊天 &8| &3成功载入聊天格式... &8[{0} Ms]'
-Plugin-Loaded-Functions: '&8[&3Tr&bChat&8] &b聊天 &8| &3成功载入自定义聊天功能... &8[{0} Ms]'
+Plugin-Loading:
+  - ''
+  - '正在加载&3Tr&bChat&7... &8{0}'
+  - ''
+Plugin-Loaded-Functions: '&8[&3Tr&bChat&8] &b聊天 &8| &3成功载入 &b{0} &3个聊天功能... &8[{0} Ms]'
 Plugin-Loaded-Channels: '&8[&3Tr&bChat&8] &b聊天 &8| &3成功载入 &b{0} &3个聊天频道... &8[{1} Ms]'
 Plugin-Loaded-Filter-Local: '&8[&3Tr&bChat&8] &a过滤器 &8| &3已载入本地敏感词库总计 &b{0} &3个.'
 Plugin-Loaded-Filter-Cloud: '&8[&3Tr&bChat&8] &a过滤器 &8| &3成功从云端更新敏感词汇总计 &a{0} &3个. &8[{1} - {2}]'
@@ -23,29 +10,10 @@ Plugin-Reloaded: '&8[&3Tr&bChat&8] &7监听到配置文件改动, 已自动载�
 Plugin-Failed-Load-Filter-Cloud: '&8[&3Tr&bChat&8] &8无法从云端更新敏感词库......'
 Plugin-Proxy-Supported: '&8[&3Tr&bChat&8] &6已支持 &e{0} &6通讯.'
 Plugin-Proxy-None: '&8[&3Tr&bChat&8] &7当前无跨服支持.'
-Plugin-Depend-Download: '&8[&3Tr&bChat&8] &e挂钩 &8| &7正在下载前置插件 &f{0} &7...'
-Plugin-Depend-Installed: '&8[&3Tr&bChat&8] &e挂钩 &8| &7已成功下载前置 &3{0} &7, 即将重启服务端完成安装...'
-Plugin-Depend-Install-Failed: '&8[&3Tr&bChat&8] &e挂钩 &8| &7自动下载前置 &c{0} &7过程出错, 请手动安装, 服务器即将停止...'
 Plugin-Dependency-Hooked: '&8[&3Tr&bChat&8] &6挂钩 &8| &7软依赖 &f{0} &7已兼容.'
-Plugin-Loaded:
-  - ''
-  - '&3Tr&bChat &7正在载入中...'
-  - ''
 Plugin-Enabled: '&8[&3Tr&bChat&8] &b信息 &8| &3加载完毕. TrChat &av{0} &3现已启用, 敬请使用.'
-Plugin-Disabled: '&8[&3Tr&bChat&8] &b信息 &8| &7感谢使用本插件, 您在论坛为本插件评分即是对作者最大的鼓励!'
-Plugin-Command-Title: '&3「&8&m--------------------------------------------------&3」'
 Plugin-Updater-Latest: '&8[&3Tr&bChat&8] &8你正在运行最新版的 TrChat.'
 Plugin-Updater-Dev: '&8[&3Tr&bChat&8] &7你正在运行开发版本的 TrChat, 请及时反馈漏洞!'
-Plugin-Updater-Too-Old:
-  - "&8--------------------------------------------------"
-  - "&r"
-  - "&8# &4您所运行的 &cTrChat &4版本过旧, 可能潜在很多漏洞"
-  - "&8# &4请及时更新到最新版本以便获得更好的插件体验!"
-  - "&8# &r"
-  - "&8# &4Mcbbs: &chttps://www.mcbbs.net/thread-1245113-1-1.html"
-  - "&8# &r"
-  - "&r"
-  - "&8--------------------------------------------------"
 Plugin-Updater-Header:
   - ''
   - '&3--------------------------------------------------'
@@ -80,7 +48,7 @@ Error-Version: '&8[&3Tr&bChat&8] &c错误 &8| &7检测版本号时发生异常..
 General-Too-Long: '&8[&3Tr&bChat&8] &7你的聊天内容过长. &8[&6{0}&8/&2{1}&8]'
 General-Too-Similar: '&8[&3Tr&bChat&8] &7你的两次聊天内容过于相似, 请勿复读.'
 General-No-Permission: '&8[&3Tr&bChat&8] &7你没有足够的权限执行此操作.'
-General-Muted: '&8[&3Tr&bChat&8] &c你被禁言了!'
+General-Muted: '&8[&3Tr&bChat&8] &c你被禁言了!剩余时间: {0}'
 General-Global-Muting: '&8[&3Tr&bChat&8] &c全员禁言中.'
 
 Cooldowns-Chat:
@@ -99,7 +67,7 @@ Cooldowns-Item-Show:
     pitch: 0
 
 Command-Controller-Deny: '&c&l你不能使用该命令...'
-Command-Controller-Cooldown: '&c&l该命令冷却中...'
+Command-Controller-Cooldown: '&c&l该命令冷却中...({0})'
 Command-Not-Player: '&8[&3Tr&bChat&8] &c你必须是一个玩家才能执行此操作.'
 Command-Player-Not-Exist: '&8[&3Tr&bChat&8] &7目标玩家未在线或不存在.'
 
@@ -111,7 +79,7 @@ Mentions-Notify:
     volume: 1
     pitch: 2
 
-Inventory-Show-Expired: '&c&l该背包已过期...'
+Inventory-Show-Unavailable: '&c&l该背包已过期或不存在...'
 
 Private-Message-Spy-Format: '&8[&3监听&8] &6{0} &2-> &3{1}&f: &7{2}'
 Private-Message-Spy-On:
@@ -150,34 +118,26 @@ Private-Message-Receive:
     volume: 1
     pitch: 2
 
-Global-Message-Not-Enable: '&8[&3Tr&bChat&8] &7未启用跨服支持, 暂不支持喊话.'
-Global-Message-No-Message:
-  - type: actionbar
-    text: '&7&l你必须提供喊话内容'
-  - type: sound
-    sound: 'ENTITY_ITEM_BREAK'
-    volume: 1
-    pitch: 0
-
-Custom-Channel-No-Message:
+Channel-Proxy-Not-Enable: '&8[&3Tr&bChat&8] &7未启用跨服支持, 暂不支持喊话.'
+Channel-No-Message:
   - type: actionbar
     text: '&7&l你必须提供聊天内容'
   - type: sound
     sound: 'ENTITY_ITEM_BREAK'
     volume: 1
     pitch: 0
-Custom-Channel-Join:
+Channel-Join:
   - type: actionbar
     text: '&a&l已加入到{0}频道聊天'
   - type: text
-    text: '&8[&3Tr&bChat&8] &3你已经加入到{0}频道, 输入 /channel 即可退出.'
+    text: '&8[&3Tr&bChat&8] &3你已经加入到{0}频道'
   - type: sound
     sound: 'BLOCK_ANVIL_LAND'
     volume: 1
     pitch: 2
-Custom-Channel-Quit:
+Channel-Quit:
   - type: actionbar
-    text: '&3&l离开{0}聊天频道'
+    text: '&3&l已离开{0}聊天频道'
   - type: text
     text: '&8[&3Tr&bChat&8] &7你已离开{0}频道'
   - type: sound
@@ -185,20 +145,6 @@ Custom-Channel-Quit:
     volume: 1
     pitch: 0
 
-Mute-No-Player:
-  - type: actionbar
-    text: '&3&l请提供你要禁言的玩家'
-  - type: sound
-    sound: 'ENTITY_ITEM_BREAK'
-    volume: 1
-    pitch: 0
-Mute-Time-Not-Specified:
-  - type: actionbar
-    text: '&7&l你必须提供禁言时间 (分钟)'
-  - type: sound
-    sound: 'ENTITY_ITEM_BREAK'
-    volume: 1
-    pitch: 0
-Mute-Muted-Player: '&8[&3Tr&bChat&8] &7你已禁言 {0} {1} 分钟.'
+Mute-Muted-Player: '&8[&3Tr&bChat&8] &7你已禁言 {0} {1}.'
 Mute-Muted-All: '&8[&3Tr&bChat&8] &7全员禁言已开启.'
 Mute-Cancel-Muted-All: '&8[&3Tr&bChat&8] &7全员禁言已关闭.'

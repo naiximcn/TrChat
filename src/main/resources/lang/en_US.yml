@@ -1,20 +1,8 @@
-######################################################################
-#
-#  ___________      _________ .__            __
-#  \__    __________\_   ___ \|  |__ _____ _/  |_
-#  |    |  \_  __ /    \  \/|  |  \\__  \\   __\
-#  |    |   |  | \\     \___|   Y  \/ __ \|  |
-#  |____|   |__|   \______  |___|  (____  |__|
-#  \/     \/     \/
-#
-# TrChat's language file
-#
-# All messages support TEXT / SOUND / TITLE / ACTIONBAR / COMMAND / JSON etc.
-#
-######################################################################
-
-Plugin-Loaded-Chat-Formats: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded chat formats... &8[{0} Ms]'
-Plugin-Loaded-Functions: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded chat functions... &8[{0} Ms]'
+Plugin-Loading:
+  - '&r'
+  - '&7Loading &3Tr&bChat&7... &8{0}'
+  - '&r'
+Plugin-Loaded-Functions: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded &b{0} &3chat functions... &8[{0} Ms]'
 Plugin-Loaded-Channels: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded &b{0} &3chat channels... &8[{1} Ms]'
 Plugin-Loaded-Filter-Local: '&8[&3Tr&bChat&8] &aFILTER &8| &3Loaded local filter words &b{0} &3.'
 Plugin-Loaded-Filter-Cloud: '&8[&3Tr&bChat&8] &aFILTER &8| &3Loaded cloud filter words &a{0} &3. &8[{1} - {2}]'
@@ -22,29 +10,10 @@ Plugin-Reloaded: '&8[&3Tr&bChat&8] &7Settings changed, reloaded...'
 Plugin-Failed-Load-Filter-Cloud: '&8[&3Tr&bChat&8] &8Unable to update filter thesaurus from the cloud...'
 Plugin-Proxy-Supported: '&8[&3Tr&bChat&8] &6Hooked &e{0} &6chat support.'
 Plugin-Proxy-None: '&8[&3Tr&bChat&8] &7No proxy support currently'
-Plugin-Depend-Download: '&8[&3Tr&bChat&8] &eDEPEND &8| &7Downloading depend plugin &f{0} &7...'
-Plugin-Depend-Installed: '&8[&3Tr&bChat&8] &eDEPEND &8| &7Successfully downloaded &3{0} &7, restarting the server...'
-Plugin-Depend-Install-Failed: '&8[&3Tr&bChat&8] &eDEPEND &8| &7Failed to install depend plugin &c{0} &7...'
 Plugin-Dependency-Hooked: '&8[&3Tr&bChat&8] &6HOOK &8| &7Soft-Dependency &f{0} &7is hooked.'
-Plugin-Loaded:
-  - ''
-  - '&3Tr&bChat &7loading...'
-  - ''
 Plugin-Enabled: '&8[&3Tr&bChat&8] &bINFO &8| &3Loaded. TrChat &av{0} &3has been enabled.'
-Plugin-Disabled: '&8[&3Tr&bChat&8] &bINFO &8| &7Disabled. Thanks for using :)'
-Plugin-Command-Title: '&3「&8&m--------------------------------------------------&3」'
 Plugin-Updater-Latest: '&8[&3Tr&bChat&8] &2You''re running the latest version of &3TrChat&a.'
 Plugin-Updater-Dev: '&8[&3Tr&bChat&8] &6You''re running the development version of &3TrChat&6'
-Plugin-Updater-Too-Old:
-  - "&8--------------------------------------------------"
-  - "&r"
-  - "&8# &4The version of &cTrChat &4you are running is too old"
-  - "&8# &4Please update to the latest version in time!"
-  - "&8# &r"
-  - "&8# &4Github: &chttps://github.com/FlickerProjects/TrChat"
-  - "&8# &r"
-  - "&r"
-  - "&8--------------------------------------------------"
 Plugin-Updater-Header:
   - ''
   - '&3--------------------------------------------------'
@@ -95,6 +64,7 @@ Cooldowns-Item-Show:
     pitch: 0
 
 Command-Controller-Deny: '&c&lYou can not use this command.'
+Command-Controller-Cooldown: '&c&lYou need to wait after &6{0} secs &7&lbefore using this command again.'
 Command-Not-Player: '&8[&3Tr&bChat&8] &cYou must be a player to do this.'
 Command-Player-Not-Exist: '&8[&3Tr&bChat&8] &7The target player is not online or does not exist.'
 
@@ -143,32 +113,24 @@ Private-Message-Receive:
     volume: 1
     pitch: 2
 
-Global-Message-Not-Enable: '&8[&3Tr&bChat&8] &7Unable to connect &eBungeeCord &7.'
-Global-Message-No-Message:
+Channel-Proxy-Not-Enable: '&8[&3Tr&bChat&8] &7Unable to connect &eBungeeCord &7.'
+Channel-No-Message:
   - type: actionbar
     text: '&7&lMessage required'
   - type: sound
     sound: 'ENTITY_ITEM_BREAK'
     volume: 1
     pitch: 0
-
-Custom-Channel-No-Message:
-  - type: actionbar
-    text: '&7&lMessage required'
-  - type: sound
-    sound: 'ENTITY_ITEM_BREAK'
-    volume: 1
-    pitch: 0
-Custom-Channel-Join:
+Channel-Join:
   - type: actionbar
     text: '&a&lJoined the {0} chat channel.'
   - type: text
-    text: '&8[&3Tr&bChat&8] &3You''ve been into the {0} chat channel, type /channel to exit'
+    text: '&8[&3Tr&bChat&8] &3You''ve been into the {0} chat channel'
   - type: sound
     sound: 'BLOCK_ANVIL_LAND'
     volume: 1
     pitch: 2
-Custom-Channel-Quit:
+Channel-Quit:
   - type: actionbar
     text: '&3&lLeft the {0} chat channel.'
   - type: text
@@ -178,20 +140,6 @@ Custom-Channel-Quit:
     volume: 1
     pitch: 0
 
-Mute-No-Player:
-  - type: actionbar
-    text: '&3&lPlayer name required'
-  - type: sound
-    sound: 'ENTITY_ITEM_BREAK'
-    volume: 1
-    pitch: 0
-Mute-Time-Not-Specified:
-  - type: actionbar
-    text: '&7&lTime required (in minutes)'
-  - type: sound
-    sound: 'ENTITY_ITEM_BREAK'
-    volume: 1
-    pitch: 0
 Mute-Muted-Player: '&8[&3Tr&bChat&8] &7You muted {0} for {1} minute(s).'
 Mute-Muted-All: '&8[&3Tr&bChat&8] &7Global muted.'
 Mute-Cancel-Muted-All: '&8[&3Tr&bChat&8] &7Global mute canceled.'

@@ -17,7 +17,7 @@ object ListenerQuit {
 
     @SubscribeEvent(EventPriority.HIGHEST)
     fun e(e: PlayerQuitEvent) {
-        Channel.channels.forEach { it.listeners.remove(e.player.name) }
+        Channel.channels.forEach { it.listeners.remove(e.player.uniqueId) }
         Functions.itemShowDelay.get().reset(e.player.name)
         Functions.mentionDelay.get().reset(e.player.name)
         ChatSession.removeSession(e.player)

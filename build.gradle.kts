@@ -41,9 +41,12 @@ repositories {
 }
 
 dependencies {
+    compileOnly("com.willfp:eco:6.6.3")
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("net.md-5:bungeecord-bootstrap:1.17-R0.1-SNAPSHOT")
     compileOnly("com.velocitypowered:velocity-api:3.0.0")
+    compileOnly("net.kyori:adventure-platform-bukkit:4.0.1")
+    compileOnly("net.kyori:adventure-platform-bungeecord:4.0.1")
     compileOnly("ink.ptms.core:v11800:11800:api")
     compileOnly("ink.ptms.core:v11800:11800:universal")
     compileOnly("ink.ptms.core:v11800:11800:mapped")

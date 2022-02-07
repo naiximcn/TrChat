@@ -2,8 +2,7 @@ package me.arasple.mc.trchat.util.proxy.bungee
 
 import com.google.common.io.ByteStreams
 import me.arasple.mc.trchat.TrChat
-import me.arasple.mc.trchat.util.proxy.Proxy
-import me.arasple.mc.trchat.util.proxy.bukkit.Players.setPlayers
+import me.arasple.mc.trchat.util.proxy.bukkit.Players
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.messaging.PluginMessageListener
@@ -25,7 +24,7 @@ class Bungees : PluginMessageListener {
                 val subChannel = data.readUTF()
                 if (subChannel == "PlayerList") {
                     data.readUTF() // server
-                    setPlayers(data.readUTF().split(", "))
+                    Players.setPlayers(data.readUTF().split(", "))
                 }
             } catch (ignored: IOException) {
             }

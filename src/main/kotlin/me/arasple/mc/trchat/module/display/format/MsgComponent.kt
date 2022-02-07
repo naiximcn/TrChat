@@ -11,9 +11,13 @@ import me.arasple.mc.trchat.util.color.DefaultColor
 import me.arasple.mc.trchat.util.color.MessageColors
 import me.arasple.mc.trchat.util.color.colorify
 import me.arasple.mc.trchat.util.hoverItemFixed
+import me.arasple.mc.trchat.util.legacy
 import me.arasple.mc.trchat.util.pass
 import me.arasple.mc.trchat.util.proxy.bukkit.Players
 import me.arasple.mc.trchat.util.proxy.sendProxyLang
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
+import net.kyori.adventure.text.event.ClickEvent
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
@@ -23,8 +27,6 @@ import taboolib.common.reflect.Reflex.Companion.invokeMethod
 import taboolib.common.util.VariableReader
 import taboolib.common.util.replaceWithOrder
 import taboolib.library.xseries.XMaterial
-import taboolib.module.chat.TellrawJson
-import taboolib.module.chat.uncolored
 import taboolib.module.nms.getI18nName
 import taboolib.module.ui.buildMenu
 import taboolib.module.ui.type.Linked
@@ -40,7 +42,7 @@ import java.util.concurrent.TimeUnit
  */
 class MsgComponent(
     var defaultColor: DefaultColor,
-    hover: List<Hover>?,
+    hover: Hover?,
     suggest: List<Suggest>?,
     command: List<Command>?,
     url: List<Url>?,
@@ -48,8 +50,8 @@ class MsgComponent(
     copy: List<Copy>?
 ) : JsonComponent(null, hover, suggest, command, url, insertion, copy) {
 
-    fun serialize(player: Player, msg: String, disabledFunctions: List<String>): TellrawJson {
-        val tellraw = TellrawJson()
+    fun serialize(player: Player, msg: String, disabledFunctions: List<String>): TextComponent {
+        val component = Component.text()
 
         var message = msg
         message = message.itemShow(player).mention().inventoryShow(player)
@@ -65,11 +67,10 @@ class MsgComponent(
                 val args = part.text.split(":", limit = 2)
                 when (val id = args[0]) {
                     "ITEM" -> {
-                        tellraw.append(itemCache.let { cache ->
+                        component.append(itemCache.let { cache ->
                             val item = player.inventory.getItem(args[1].toInt()) ?: ItemStack(Material.AIR)
                             cache.getIfPresent(item) ?: kotlin.run {
-                                TellrawJson()
-                                    .append(Functions.itemShow.getString("Format")!!.replaceWithOrder(item.getDisplayName(player), item.amount.toString()).colorify())
+                                legacy(Functions.itemShow.getString("Format")!!.replaceWithOrder(item.getDisplayName(player), item.amount.toString()).colorify())
                                     .hoverItemFixed(item.run {
                                         if (Functions.itemShow.getBoolean("Compatible", false)) {
                                             buildItem(this) { material = Material.STONE }
@@ -83,7 +84,7 @@ class MsgComponent(
                         })
                     }
                     "MENTION" -> {
-                        tellraw.append(Functions.mention.getString("Format")!!.replaceWithOrder(player.name).colorify())
+                        component.append(legacy(Functions.mention.getString("Format")!!.replaceWithOrder(player.name).colorify()))
                         if (Functions.mention.getBoolean("Notify", true)) {
                             player.sendProxyLang(args[1], "Mentions-Notify", player.name)
                         }
@@ -111,45 +112,44 @@ class MsgComponent(
                         }
                         val sha1 = Base64.getEncoder().encodeToString(player.inventory.serializeToByteArray()).digest("sha-1")
                         inventoryCache.put(sha1, menu)
-                        tellraw
-                            .append(Functions.inventoryShow.getString("Format")!!.replaceWithOrder(player.name).colorify())
-                            .runCommand("/view-inventory $sha1")
+                        component
+                            .append(legacy(Functions.inventoryShow.getString("Format")!!.replaceWithOrder(player.name).colorify()))
+                            .clickEvent(ClickEvent.runCommand("/view-inventory $sha1"))
                     }
                     else -> {
                         Function.functions.firstOrNull { it.id == id }?.let {
-                            tellraw.append(it.displayJson.toTellrawJson(player, args[1]))
+                            component.append(it.displayJson.toTellrawJson(player, args[1]))
                             it.action?.let { action -> TrChatAPI.eval(player, action) }
                         }
                     }
                 }
             } else {
-                tellraw.append(toTellrawJson(player, MessageColors.defaultColored(defaultColor, player, message)))
+                component.append(toTellrawJson(player, MessageColors.defaultColored(defaultColor, player, message)))
             }
         }
 
-        return tellraw
+        return component.build()
     }
 
-    override fun toTellrawJson(player: Player, vararg vars: String): TellrawJson {
-        val tellraw = TellrawJson()
+    override fun toTellrawJson(player: Player, vararg vars: String): TextComponent {
         val message = vars[0]
+        var component = Component.text(message)
 
-        tellraw.append(message)
-        hover?.filter { it.condition.pass(player) }?.joinToString("\n") { it.process(tellraw, player, message = message) }?.let { tellraw.hoverText(it) }
-        suggest?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player, message = message.uncolored())
-        command?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player, message = message.uncolored())
-        url?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player, message = message.uncolored())
-        insertion?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player, message = message.uncolored())
-        copy?.firstOrNull { it.condition.pass(player) }?.process(tellraw, player, message = message.uncolored())
+        component = hover?.process(component, player, *vars) ?: component
+        component = suggest?.firstOrNull { it.condition.pass(player) }?.process(component, player, *vars) ?: component
+        component = command?.firstOrNull { it.condition.pass(player) }?.process(component, player, *vars) ?: component
+        component = url?.firstOrNull { it.condition.pass(player) }?.process(component, player, *vars) ?: component
+        component = insertion?.firstOrNull { it.condition.pass(player) }?.process(component, player, *vars) ?: component
+        component = copy?.firstOrNull { it.condition.pass(player) }?.process(component, player, *vars) ?: component
 
-        return tellraw
+        return component
     }
 
     companion object {
 
         private val parser = VariableReader()
 
-        val itemCache: Cache<ItemStack, TellrawJson> = CacheBuilder.newBuilder()
+        val itemCache: Cache<ItemStack, Component> = CacheBuilder.newBuilder()
             .expireAfterWrite(10L, TimeUnit.MINUTES)
             .build()
 

@@ -3,10 +3,11 @@ package me.arasple.mc.trchat.util
 import me.arasple.mc.trchat.api.TrChatAPI
 import me.arasple.mc.trchat.api.nms.NMS
 import me.arasple.mc.trchat.module.internal.hook.HookPlugin
-import net.md_5.bungee.api.chat.ComponentBuilder
-import net.md_5.bungee.api.chat.HoverEvent
-import net.md_5.bungee.api.chat.ItemTag
-import net.md_5.bungee.api.chat.hover.content.Item
+import net.kyori.adventure.key.Key
+import net.kyori.adventure.nbt.api.BinaryTagHolder
+import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer
+import net.kyori.adventure.text.TextComponent
+import net.kyori.adventure.text.event.HoverEvent
 import org.bukkit.Material
 import org.bukkit.block.ShulkerBox
 import org.bukkit.entity.Player
@@ -15,7 +16,6 @@ import org.bukkit.inventory.meta.BlockStateMeta
 import org.bukkit.inventory.meta.ItemMeta
 import taboolib.common.reflect.Reflex.Companion.invokeConstructor
 import taboolib.common.reflect.Reflex.Companion.invokeMethod
-import taboolib.module.chat.TellrawJson
 import taboolib.module.nms.getI18nName
 import taboolib.module.nms.nmsClass
 import taboolib.platform.util.isNotAir
@@ -30,22 +30,19 @@ private val classNBTTagCompound by lazy {
     nmsClass("NBTTagCompound")
 }
 
-fun TellrawJson.hoverItemFixed(item: ItemStack, player: Player): TellrawJson {
+fun legacy(string: String): TextComponent {
+    return BukkitComponentSerializer.legacy().deserialize(string)
+}
+
+fun TextComponent.hoverItemFixed(item: ItemStack, player: Player): TextComponent {
     val newItem = NMS.INSTANCE.optimizeNBT(item.optimizeShulkerBox())
     HookPlugin.getEcoEnchants().displayItem(newItem, player)
     val nmsItemStack = TrChatAPI.classCraftItemStack.invokeMethod<Any>("asNMSCopy", newItem, fixed = true)!!
     val nmsNBTTabCompound = classNBTTagCompound.invokeConstructor()
     val itemJson = nmsItemStack.invokeMethod<Any>("save", nmsNBTTabCompound)!!
-    val id = itemJson.invokeMethod<String>("getString", "id") ?: "air"
+    val id = itemJson.invokeMethod<String>("getString", "id") ?: "minecraft:air"
     val tag = itemJson.invokeMethod<Any>("get", "tag")?.toString() ?: "{}"
-    componentsLatest.forEach {
-        try {
-            it.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_ITEM, Item(id, item.amount, ItemTag.ofNbt(tag)))
-        } catch (_: NoClassDefFoundError) {
-            it.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_ITEM, ComponentBuilder(itemJson.toString()).create())
-        }
-    }
-    return this
+    return hoverEvent(HoverEvent.showItem(Key.key(id), newItem.amount, BinaryTagHolder.of(tag)))
 }
 
 private fun ItemStack.optimizeShulkerBox(): ItemStack {

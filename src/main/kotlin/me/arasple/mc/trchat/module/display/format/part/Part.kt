@@ -1,8 +1,8 @@
 package me.arasple.mc.trchat.module.display.format.part
 
 import me.arasple.mc.trchat.module.internal.script.Condition
+import net.kyori.adventure.text.TextComponent
 import org.bukkit.entity.Player
-import taboolib.module.chat.TellrawJson
 
 /**
  * @author wlys
@@ -16,5 +16,5 @@ abstract class Part {
 
     abstract val dynamic: Boolean
 
-    abstract fun process(tellraw: TellrawJson, player: Player, vararg vars: String, message: String = ""): String?
+    abstract fun process(component: TextComponent, player: Player, vararg vars: String, message: String = ""): TextComponent
 }

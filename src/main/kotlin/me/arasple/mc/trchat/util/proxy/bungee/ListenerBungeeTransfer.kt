@@ -1,5 +1,9 @@
 package me.arasple.mc.trchat.util.proxy.bungee
 
+import me.arasple.mc.trchat.TrChatBungee
+import net.kyori.adventure.audience.MessageType
+import net.kyori.adventure.identity.Identity
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.event.PluginMessageEvent
@@ -30,7 +34,7 @@ object ListenerBungeeTransfer {
 
     @SubscribeEvent(ignoreCancelled = true)
     fun onTransfer(e: PluginMessageEvent) {
-        if (e.tag == "trchat:main") {
+        if (e.tag == TrChatBungee.TRCHAT_CHANNEL) {
             try {
                 val message = MessageReader.read(e.data)
                 if (message.isCompleted) {
@@ -46,47 +50,42 @@ object ListenerBungeeTransfer {
         when (data[0]) {
             "SendRaw" -> {
                 val to = data[1]
-                val player = getProxyPlayer(to)
+                val raw = data[2]
+                val player = getProxyPlayer(to)?.cast<ProxiedPlayer>() ?: return
+                val message = GsonComponentSerializer.gson().deserialize(raw)
 
-                if (player != null && player.cast<ProxiedPlayer>().isConnected) {
-                    val raw = data[2]
-                    player.sendRawMessage(raw)
+                if (player.isConnected) {
+                    TrChatBungee.adventure.player(player).sendMessage(message)
                 }
             }
             "BroadcastRaw" -> {
                 val uuid = data[1]
                 val raw = data[2]
-                val message = ComponentSerializer.parse(raw)
+                val permission = data[3]
+                val message = GsonComponentSerializer.gson().deserialize(raw)
 
                 server<ProxyServer>().servers.forEach { (_, v) ->
-                    v.players.forEach {
-                        it.sendMessage(UUID.fromString(uuid), *message)
+                    v.players.filter { it.hasPermission(permission) }.forEach {
+                        TrChatBungee.adventure.player(it).sendMessage(Identity.identity(UUID.fromString(uuid)), message, MessageType.CHAT)
                     }
                 }
-                console().cast<ConsoleCommandSender>().sendMessage(*message)
+                TrChatBungee.adventure.console().sendMessage(message)
             }
             "ForwardRaw" -> {
                 val uuid = data[1]
                 val raw = data[2]
-                val ports = data[3].split(";").map { it.toInt() }
-                val message = ComponentSerializer.parse(raw)
+                val permission = data[3]
+                val ports = data[4].split(";").map { it.toInt() }
+                val message = GsonComponentSerializer.gson().deserialize(raw)
 
                 server<ProxyServer>().servers.forEach { (_, v) ->
                     if (ports.contains(v.address.port)) {
-                        v.players.forEach {
-                            it.sendMessage(UUID.fromString(uuid), *message)
+                        v.players.filter { it.hasPermission(permission) }.forEach {
+                            TrChatBungee.adventure.player(it).sendMessage(Identity.identity(UUID.fromString(uuid)), message, MessageType.CHAT)
                         }
                     }
                 }
-                console().cast<ConsoleCommandSender>().sendMessage(*message)
-            }
-            "SendRawPerm" -> {
-                val raw = data[1]
-                val perm = data[2]
-
-                onlinePlayers().filter { p -> p.hasPermission(perm) }.forEach { p ->
-                    p.sendRawMessage(raw)
-                }
+                TrChatBungee.adventure.console().sendMessage(message)
             }
             "SendLang" -> {
                 val to = data[1]
@@ -95,7 +94,7 @@ object ListenerBungeeTransfer {
 
                 try {
                     getProxyPlayer(to)?.sendLang(node, *args)
-                } catch (ignored: IllegalStateException) {
+                } catch (_: IllegalStateException) {
                 }
             }
         }

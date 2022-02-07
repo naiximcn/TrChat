@@ -12,8 +12,11 @@ object ListenerJoin {
 
     @SubscribeEvent
     fun e(e: PlayerJoinEvent) {
+        val player = e.player
         Channel.channels.filter { it.settings.autoJoin }.forEach {
-            it.listeners.add(e.player.name)
+            if (it.settings.joinPermission == null || player.hasPermission(it.settings.joinPermission)) {
+                it.listeners.add(player.uniqueId)
+            }
         }
     }
 }
