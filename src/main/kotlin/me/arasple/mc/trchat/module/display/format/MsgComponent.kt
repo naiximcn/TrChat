@@ -54,9 +54,16 @@ class MsgComponent(
         val component = Component.text()
 
         var message = msg
-        message = message.itemShow(player).mention().inventoryShow(player)
-
-        Function.functions.filter { it.condition.pass(player) }.forEach {
+        if (!disabledFunctions.contains("Item-Show")) {
+            message = message.itemShow(player)
+        }
+        if (!disabledFunctions.contains("Mention")) {
+            message = message.mention()
+        }
+        if (!disabledFunctions.contains("Item-Show")) {
+            message = message.inventoryShow(player)
+        }
+        Function.functions.filter { it.condition.pass(player) && !disabledFunctions.contains(it.id) }.forEach {
             message = message.replaceRegex(it.regex, it.filterTextPattern, "{{${it.id}:{0}}}")
         }
 
@@ -118,22 +125,21 @@ class MsgComponent(
                     }
                     else -> {
                         Function.functions.firstOrNull { it.id == id }?.let {
-                            component.append(it.displayJson.toTellrawJson(player, args[1]))
+                            component.append(it.displayJson.toTextComponent(player, args[1]))
                             it.action?.let { action -> TrChatAPI.eval(player, action) }
                         }
                     }
                 }
             } else {
-                component.append(toTellrawJson(player, MessageColors.defaultColored(defaultColor, player, message)))
+                component.append(toTextComponent(player, MessageColors.defaultColored(defaultColor, player, message)))
             }
         }
-
         return component.build()
     }
 
-    override fun toTellrawJson(player: Player, vararg vars: String): TextComponent {
+    override fun toTextComponent(player: Player, vararg vars: String): TextComponent {
         val message = vars[0]
-        var component = Component.text(message)
+        var component = legacy(message)
 
         component = hover?.process(component, player, *vars) ?: component
         component = suggest?.firstOrNull { it.condition.pass(player) }?.process(component, player, *vars) ?: component

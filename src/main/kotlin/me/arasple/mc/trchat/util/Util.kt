@@ -7,9 +7,9 @@ import me.arasple.mc.trchat.module.internal.script.Condition
 import org.bukkit.entity.Player
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.library.configuration.ConfigurationSection
-import taboolib.module.configuration.Configuration
 import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
+import java.util.concurrent.TimeUnit
 
 /**
  * Util
@@ -28,7 +28,7 @@ fun Player.checkMute(): Boolean {
         return false
     }
     if (this.getSession().isMuted) {
-        sendLang("General-Muted")
+        sendLang("General-Muted", TimeUnit.MILLISECONDS.toSeconds(getDataContainer().getLong("mute_time")))
         return false
     }
     return true

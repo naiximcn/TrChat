@@ -50,7 +50,9 @@ object ListenerChatEvent {
             ?: kotlin.run { session.channel?.execute(player, message) }
 
         e.handlers.registeredListeners
-            .filter { hooks.contains(it.plugin.name) && it.plugin.isEnabled && it.priority == org.bukkit.event.EventPriority.MONITOR }.forEach {
+            .filter { hooks.contains(it.plugin.name)
+                    && it.plugin.isEnabled
+                    && it.priority == org.bukkit.event.EventPriority.MONITOR }.forEach {
             try {
                 it.callEvent(AsyncPlayerChatEvent(e.isAsynchronous, e.player, message, e.recipients))
             } catch (e: Throwable) {

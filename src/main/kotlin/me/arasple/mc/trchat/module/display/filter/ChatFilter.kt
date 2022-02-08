@@ -6,6 +6,7 @@ import me.arasple.mc.trchat.module.display.filter.processer.FilteredObject
 import me.arasple.mc.trchat.module.display.filter.processer.WordContext
 import me.arasple.mc.trchat.module.display.filter.processer.WordFilter
 import me.arasple.mc.trchat.module.display.filter.processer.WordType
+import me.arasple.mc.trchat.module.internal.service.Metrics
 import me.arasple.mc.trchat.util.notify
 import taboolib.common.env.DependencyDownloader.readFully
 import taboolib.common.platform.Platform
@@ -135,7 +136,9 @@ object ChatFilter {
     fun filter(string: String, execute: Boolean = true): FilteredObject {
         return if (execute) {
             mirrorNow("Handler:Filter:doFilter") {
-                WordFilter(context).replace(string, skip, replacement)
+                WordFilter(context).replace(string, skip, replacement).also {
+                    Metrics.increase(1, it.sensitiveWords)
+                }
             }
         } else {
             FilteredObject(string, 0)

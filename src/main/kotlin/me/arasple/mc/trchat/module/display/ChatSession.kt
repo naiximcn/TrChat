@@ -22,7 +22,7 @@ class ChatSession(
 
     var lastMessage = ""
 
-    var lastPrivateFrom: UUID? = null
+    var lastPrivateTo = ""
 
     var isSpying = false
 

@@ -20,7 +20,7 @@ open class JsonComponent(
     val copy: List<Copy>?
 ) {
 
-    open fun toTellrawJson(player: Player, vararg vars: String): TextComponent {
+    open fun toTextComponent(player: Player, vararg vars: String): TextComponent {
         var component = text?.firstOrNull { it.condition.pass(player) }?.process(player, *vars) ?: return Component.empty()
 
         component = hover?.process(component, player, *vars) ?: component

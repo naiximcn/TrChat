@@ -1,9 +1,7 @@
 package me.arasple.mc.trchat.module.conf
 
 import me.arasple.mc.trchat.api.config.Functions
-import me.arasple.mc.trchat.module.display.channel.Channel
-import me.arasple.mc.trchat.module.display.channel.ChannelBindings
-import me.arasple.mc.trchat.module.display.channel.ChannelSettings
+import me.arasple.mc.trchat.module.display.channel.*
 import me.arasple.mc.trchat.module.display.channel.Target
 import me.arasple.mc.trchat.module.display.format.Format
 import me.arasple.mc.trchat.module.display.format.JsonComponent
@@ -62,27 +60,47 @@ object Loader {
             val proxy = section.getBoolean("Proxy", false)
             val ports = section.getString("Ports")?.split(";")?.map { it.toInt() }
             val disabledFunctions = section.getStringList("Disabled-Functions")
-            val private = section.getBoolean("Private", false)
-            ChannelSettings(joinPermission, speakCondition, target, autoJoin, proxy, ports, disabledFunctions, private)
+            ChannelSettings(joinPermission, speakCondition, target, autoJoin, proxy, ports, disabledFunctions)
         }
+        val private = conf.getBoolean("Options.Private", false)
 
         val bindings = conf.getConfigurationSection("Bindings")?.let {
-            val prefix = if (!settings.private) it.getStringList("Prefix") else null
+            val prefix = if (!private) it.getStringList("Prefix") else null
             val command = it.getStringList("Command")
             ChannelBindings(prefix, command)
         } ?: ChannelBindings(null, null)
 
-        val formats = conf.getMapList("Formats").map { map ->
-            val condition = map["condition"]?.toString()?.toCondition()
-            val priority = Coerce.asInteger(map["priority"]).orNull() ?: 100
-            val prefix = parseGroups(map["prefix"] as LinkedHashMap<*, *>)
-            val msg = parseMsg(map["msg"] as LinkedHashMap<*, *>)
-            val suffix = parseGroups(map["suffix"] as LinkedHashMap<*, *>)
+        if (private) {
+            val sender = conf.getMapList("Sender").map { map ->
+                val condition = map["condition"]?.toString()?.toCondition()
+                val priority = Coerce.asInteger(map["priority"]).orNull() ?: 100
+                val prefix = parseGroups(map["prefix"] as LinkedHashMap<*, *>)
+                val msg = parseMsg(map["msg"] as LinkedHashMap<*, *>)
+                val suffix = parseGroups(map["suffix"] as LinkedHashMap<*, *>)
+                Format(condition, priority, prefix, msg, suffix)
+            }.sortedBy { it.priority }
+            val receiver = conf.getMapList("Receiver").map { map ->
+                val condition = map["condition"]?.toString()?.toCondition()
+                val priority = Coerce.asInteger(map["priority"]).orNull() ?: 100
+                val prefix = parseGroups(map["prefix"] as LinkedHashMap<*, *>)
+                val msg = parseMsg(map["msg"] as LinkedHashMap<*, *>)
+                val suffix = parseGroups(map["suffix"] as LinkedHashMap<*, *>)
+                Format(condition, priority, prefix, msg, suffix)
+            }.sortedBy { it.priority }
 
-            Format(condition, priority, prefix, msg, suffix)
-        }.sortedBy { it.priority }
+            return PrivateChannel(id, settings, bindings, sender, receiver)
+        } else {
+            val formats = conf.getMapList("Formats").map { map ->
+                val condition = map["condition"]?.toString()?.toCondition()
+                val priority = Coerce.asInteger(map["priority"]).orNull() ?: 100
+                val prefix = parseGroups(map["prefix"] as LinkedHashMap<*, *>)
+                val msg = parseMsg(map["msg"] as LinkedHashMap<*, *>)
+                val suffix = parseGroups(map["suffix"] as LinkedHashMap<*, *>)
+                Format(condition, priority, prefix, msg, suffix)
+            }.sortedBy { it.priority }
 
-        return Channel(id, settings, bindings, formats)
+            return Channel(id, settings, bindings, formats)
+        }
     }
 
     fun loadFunctions() {

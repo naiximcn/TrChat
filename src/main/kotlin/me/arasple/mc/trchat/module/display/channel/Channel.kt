@@ -23,26 +23,49 @@ import java.util.*
  * @author wlys
  * @since 2021/12/11 22:27
  */
-class Channel(
+open class Channel(
     val id: String,
     val settings: ChannelSettings,
     val bindings: ChannelBindings,
     val formats: List<Format>,
-    val listeners: MutableList<UUID> = mutableListOf()
 ) {
 
-    fun execute(player: Player, message: String, vararg vars: String) {
+    val listeners = mutableListOf<UUID>()
+
+    open fun execute(player: Player, message: String) {
         if (!settings.speakCondition.pass(player)) {
             return
         }
         var builder = Component.text()
         formats.firstOrNull { it.condition.pass(player) }?.let { format ->
-            format.prefix.forEach { prefix -> builder = builder.append(prefix.value.first { it.condition.pass(player) }.content.toTellrawJson(player)) }
+            format.prefix.forEach { prefix ->
+                builder = builder.append(prefix.value.first { it.condition.pass(player) }.content.toTextComponent(player)) }
             builder = builder.append(format.msg.serialize(player, message, settings.disabledFunctions))
-            format.suffix.forEach { suffix -> builder = builder.append(suffix.value.first { it.condition.pass(player) }.content.toTellrawJson(player)) }
+            format.suffix.forEach { suffix ->
+                builder = builder.append(suffix.value.first { it.condition.pass(player) }.content.toTextComponent(player)) }
         } ?: return
         val component = builder.build()
 
+        if (settings.proxy) {
+            val gson = BukkitComponentSerializer.gson().serialize(component)
+            if (settings.ports != null) {
+                player.sendBukkitMessage(
+                    "ForwardRaw",
+                    player.uniqueId.toString(),
+                    gson,
+                    settings.joinPermission ?: "null",
+                    settings.ports.joinToString(";")
+                )
+            } else {
+                player.sendBukkitMessage(
+                    "BroadcastRaw",
+                    player.uniqueId.toString(),
+                    gson,
+                    settings.joinPermission ?: "null"
+                )
+            }
+            return
+        }
         when (settings.target.range) {
             Target.Range.ALL -> {
                 listeners.forEach {
@@ -65,17 +88,6 @@ class Channel(
                 TrChat.adventure.player(player).sendMessage(Identity.identity(player.uniqueId), component, MessageType.CHAT)
             }
         }
-
-        val gson = BukkitComponentSerializer.gson().serialize(component)
-
-        if (settings.proxy) {
-            if (settings.ports != null) {
-                player.sendBukkitMessage("ForwardRaw", player.uniqueId.toString(), gson, settings.joinPermission ?: "null", settings.ports.joinToString(";"))
-            } else {
-                player.sendBukkitMessage("BroadcastRaw", player.uniqueId.toString(), gson, settings.joinPermission ?: "null")
-            }
-        }
-
         Metrics.increase(0)
     }
 
@@ -90,6 +102,10 @@ class Channel(
         }
 
         fun join(player: Player, channel: Channel) {
+            if (channel.settings.joinPermission?.let { player.hasPermission(it) } == false) {
+                player.sendLang("General-No-Permission")
+                return
+            }
             player.getSession().channel = channel
             player.sendLang("Channel-Join", channel.id)
         }
@@ -99,7 +115,7 @@ class Channel(
             player.getSession().channel = Settings.channelDefault.get()
         }
 
-        private fun ProxyPlayer.toAudience(): Audience {
+        internal fun ProxyPlayer.toAudience(): Audience {
             return TrChat.adventure.player(cast<Player>())
         }
     }
