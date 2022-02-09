@@ -4,9 +4,13 @@
 
 **Advanced chat control for Minecraft servers**
 
-已知问题: [#3](https://github.com/FlickerProjects/TrChat/issues/3)
+2.0即将到来
+
+已知问题:[#10](https://github.com/FlickerProjects/TrChat/issues/10)
         [#20](https://github.com/FlickerProjects/TrChat/issues/20)
         [#51](https://github.com/FlickerProjects/TrChat/issues/51)
+        [#52](https://github.com/FlickerProjects/TrChat/issues/52)
+        [#61](https://github.com/FlickerProjects/TrChat/issues/61)
 
 API usage: 
 ```java
