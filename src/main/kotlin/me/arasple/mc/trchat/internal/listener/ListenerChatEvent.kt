@@ -28,6 +28,7 @@ object ListenerChatEvent {
     @SubscribeEvent(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onChat(e: AsyncPlayerChatEvent) {
         val player = e.player
+        var message = e.message
         // Disable worlds
         if (TrChatFiles.settings.getStringList("GENERAL.DISABLED-WORLDS").contains(player.world.name)) {
             e.isCancelled = true
@@ -38,15 +39,16 @@ object ListenerChatEvent {
             return
         }
         // Limit
-        if (!checkLimits(adaptPlayer(player), e.message)) {
+        if (!checkLimits(adaptPlayer(player), message)) {
             e.isCancelled = true
             return
         }
+        message = HookPlugin.getItemsAdder().replaceFontImages(player, message)
         // Custom Channel
         val channel = Users.getCustomChannel(player)
         if (channel != null) {
             e.isCancelled = true
-            TrChatEvent(channel, player, e.message).call()
+            TrChatEvent(channel, player, message).call()
             return
         }
         // DiscordSRV
@@ -54,15 +56,15 @@ object ListenerChatEvent {
         // Global
         val globalPrefix = TrChatFiles.channels.getString("FORCE-GLOBAL-PREFIX", "!all")!!
         if (TrChatFiles.channels.getBoolean("FORCE-GLOBAL", false)
-            || e.message.startsWith(globalPrefix)) {
+            || message.startsWith(globalPrefix)) {
             e.isCancelled = true
-            TrChatEvent(ChannelGlobal, player, e.message.removePrefix(globalPrefix)).call()
+            TrChatEvent(ChannelGlobal, player, message.removePrefix(globalPrefix)).call()
             return
         }
         // Normal
         e.isCancelled = true
         ChannelNormal.targets[player.uniqueId] = e.recipients.map { adaptPlayer(it) }
-        TrChatEvent(ChannelNormal, player, e.message).call()
+        TrChatEvent(ChannelNormal, player, message).call()
     }
 
     private fun checkLimits(p: ProxyPlayer, message: String): Boolean {

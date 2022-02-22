@@ -14,6 +14,7 @@ taboolib {
             name("PlaceholderAPI").optional(true).with("bukkit")
             name("Dynmap").optional(true).with("bukkit")
             name("DiscordSRV").optional(true).with("bukkit")
+            name("ItemsAdder").optional(true).with("bukkit")
         }
         desc("Advanced Minecraft Chat Control")
     }
