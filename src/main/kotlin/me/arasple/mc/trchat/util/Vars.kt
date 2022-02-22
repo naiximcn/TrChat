@@ -43,7 +43,9 @@ object Vars {
                         PlaceholderAPIPlugin.getInstance().cloudExpansionManager.downloadExpansion(cloudExpansion, cloudExpansion.version)
                     }
                     submit(delay = 20) {
-                        PlaceholderAPIPlugin.getInstance().localExpansionManager.expansions.forEach { PlaceholderAPIPlugin.getInstance().localExpansionManager.register(it) }
+                        PlaceholderAPIPlugin.getInstance().localExpansionManager.expansions.forEach {
+                            PlaceholderAPIPlugin.getInstance().localExpansionManager.register(it)
+                        }
                     }
                 }
             }

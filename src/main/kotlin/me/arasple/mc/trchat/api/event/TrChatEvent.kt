@@ -1,7 +1,7 @@
 package me.arasple.mc.trchat.api.event
 
+import me.arasple.mc.trchat.module.display.ChatSession
 import me.arasple.mc.trchat.module.display.channel.Channel
-import org.bukkit.entity.Player
 import taboolib.platform.type.BukkitProxyEvent
 
 /**
@@ -13,9 +13,9 @@ import taboolib.platform.type.BukkitProxyEvent
  */
 class TrChatEvent(
     val channel: Channel,
-    val sender: Player,
+    val session: ChatSession,
     var message: String,
-    val args: Array<String> = emptyArray()) : BukkitProxyEvent() {
+) : BukkitProxyEvent() {
 
     init {
         message = message.replace("{{", "\\{\\{")

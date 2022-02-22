@@ -27,7 +27,7 @@ object CommandViewInventory {
                     MsgComponent.inventoryCache.getIfPresent(argument)?.let {
                         sender.openInventory(it)
                     } ?: kotlin.run {
-                        sender.sendLang("Inventory-Show-Expired")
+                        sender.sendLang("Inventory-Show-Unavailable")
                     }
                 }
             }

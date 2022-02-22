@@ -2,7 +2,8 @@ Plugin-Loading:
   - '&r'
   - '&7Loading &3Tr&bChat&7... &8{0}'
   - '&r'
-Plugin-Loaded-Functions: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded &b{0} &3chat functions... &8[{0} Ms]'
+Plugin-Enabled: '&8[&3Tr&bChat&8] &bINFO &8| &3Loaded. TrChat &av{0} &3has been enabled.'
+Plugin-Loaded-Functions: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded &b{0} &3chat functions... &8[{1} Ms]'
 Plugin-Loaded-Channels: '&8[&3Tr&bChat&8] &bCHAT &8| &3Loaded &b{0} &3chat channels... &8[{1} Ms]'
 Plugin-Loaded-Filter-Local: '&8[&3Tr&bChat&8] &aFILTER &8| &3Loaded local filter words &b{0} &3.'
 Plugin-Loaded-Filter-Cloud: '&8[&3Tr&bChat&8] &aFILTER &8| &3Loaded cloud filter words &a{0} &3. &8[{1} - {2}]'
@@ -11,7 +12,6 @@ Plugin-Failed-Load-Filter-Cloud: '&8[&3Tr&bChat&8] &8Unable to update filter the
 Plugin-Proxy-Supported: '&8[&3Tr&bChat&8] &6Hooked &e{0} &6chat support.'
 Plugin-Proxy-None: '&8[&3Tr&bChat&8] &7No proxy support currently'
 Plugin-Dependency-Hooked: '&8[&3Tr&bChat&8] &6HOOK &8| &7Soft-Dependency &f{0} &7is hooked.'
-Plugin-Enabled: '&8[&3Tr&bChat&8] &bINFO &8| &3Loaded. TrChat &av{0} &3has been enabled.'
 Plugin-Updater-Latest: '&8[&3Tr&bChat&8] &2You''re running the latest version of &3TrChat&a.'
 Plugin-Updater-Dev: '&8[&3Tr&bChat&8] &6You''re running the development version of &3TrChat&6'
 Plugin-Updater-Header:
@@ -58,6 +58,13 @@ Cooldowns-Chat:
 Cooldowns-Item-Show:
   - type: actionbar
     text: '&3&lYou need to wait after &a{0} secs &3&lbefore showing your item again.'
+  - type: sound
+    sound: 'ENTITY_ITEM_BREAK'
+    volume: 1
+    pitch: 0
+Cooldowns-Inventory-Show:
+  - type: actionbar
+    text: '&3&lYou need to wait after &a{0} secs &3&lbefore showing your inventory again.'
   - type: sound
     sound: 'ENTITY_ITEM_BREAK'
     volume: 1

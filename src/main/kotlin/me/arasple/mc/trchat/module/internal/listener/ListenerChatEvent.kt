@@ -5,7 +5,6 @@ import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.module.display.channel.Channel
 import me.arasple.mc.trchat.util.checkMute
 import me.arasple.mc.trchat.util.getSession
-import me.arasple.mc.trchat.util.proxy.bukkit.Players
 import org.bukkit.entity.Player
 import org.bukkit.event.player.AsyncPlayerChatEvent
 import taboolib.common.platform.Platform
@@ -81,17 +80,22 @@ object ListenerChatEvent {
             }
         }
         if (!p.hasPermission("trchat.bypass.chatcd")) {
-            if (Players.regex.matches(message) && !Settings.chatDelay.get().hasNext(p.name)) {
+            if (!Settings.chatDelay.get().hasNext(p.name)) {
                 p.sendLang("Cooldowns-Chat", Settings.CONF.getDouble("Chat.Cooldown").toString())
                 return false
             }
         }
         if (!p.hasPermission("trchat.bypass.itemcd")) {
-            if (Functions.itemShow.getStringList("Keys").any { message.contains(it) }) {
-                if (!Functions.itemShowDelay.get().hasNext(p.name)) {
-                    p.sendLang("Cooldowns-Item-Show", Functions.itemShow.getDouble("Cooldowns").toString())
-                    return false
-                }
+            if (Functions.itemShowKeys.get().any { it.matches(message) } && !Functions.itemShowDelay.get().hasNext(p.name)) {
+                p.sendLang("Cooldowns-Item-Show", Functions.itemShow.getDouble("Cooldowns").toString())
+                return false
+            }
+        }
+        if (!p.hasPermission("trchat.bypass.inventorycd")) {
+            if (Functions.inventoryShow.getStringList("Keys").any { message.contains(it, ignoreCase = true) }
+                && !Functions.itemShowDelay.get().hasNext(p.name)) {
+                p.sendLang("Cooldowns-Item-Show", Functions.itemShow.getDouble("Cooldowns").toString())
+                return false
             }
         }
         return true

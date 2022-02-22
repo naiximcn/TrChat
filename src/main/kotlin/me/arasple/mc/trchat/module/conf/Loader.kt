@@ -12,17 +12,31 @@ import me.arasple.mc.trchat.module.display.function.Function
 import me.arasple.mc.trchat.util.color.DefaultColor
 import me.arasple.mc.trchat.util.toCondition
 import org.bukkit.configuration.file.YamlConfiguration
+import taboolib.common.env.RuntimeDependencies
+import taboolib.common.env.RuntimeDependency
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
+import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.function.getDataFolder
 import taboolib.common.platform.function.releaseResourceFile
 import taboolib.common.util.orNull
 import taboolib.common5.Coerce
+import taboolib.library.configuration.ConfigurationSection
 import taboolib.module.configuration.util.getMap
+import taboolib.module.lang.sendLang
 import java.io.File
+import kotlin.system.measureTimeMillis
 
 /**
  * @author wlys
  * @since 2021/12/12 13:45
  */
+@RuntimeDependencies(
+    RuntimeDependency("!net.kyori:adventure-api:4.9.1", test = "!net.kyori.adventure.Adventure"),
+    RuntimeDependency("!net.kyori:adventure-platform-bukkit:4.0.1", test = "!net.kyori.adventure.platform.bukkit.BukkitAudience"),
+    RuntimeDependency("!net.kyori:adventure-platform-bungeecord:4.0.1", test = "!net.kyori.adventure.platform.bungeecord.BukkitAudience")
+)
+@PlatformSide([Platform.BUKKIT])
 object Loader {
 
     private val folder by lazy {
@@ -30,9 +44,18 @@ object Loader {
 
         if (!folder.exists()) {
             releaseResourceFile("channels/Normal.yml")
+            releaseResourceFile("channels/Global.yml")
+            releaseResourceFile("channels/Staff.yml")
+            releaseResourceFile("channels/Private.yml")
         }
 
         folder
+    }
+
+    fun loadChannels(sender: ProxyCommandSender) {
+        measureTimeMillis { loadChannels() }.let {
+            sender.sendLang("Plugin-Loaded-Channels", Channel.channels.size, it)
+        }
     }
 
     fun loadChannels(): Int {
@@ -103,16 +126,22 @@ object Loader {
         }
     }
 
+    fun loadFunctions(sender: ProxyCommandSender) {
+        measureTimeMillis { loadFunctions() }.let {
+            sender.sendLang("Plugin-Loaded-Functions", Function.functions.size + 3, it)
+        }
+    }
+
     fun loadFunctions() {
         Function.functions.clear()
 
-        val customs = Functions.CONF.getMap<String, Map<String, *>>("Custom")
+        val customs = Functions.CONF.getMap<String, ConfigurationSection>("Custom")
         val functions = customs.map { (id, map) ->
-            val condition = map["condition"]?.toString()?.toCondition()
-            val priority = map["priority"]?.toString()?.toInt() ?: 100
-            val regex = map["pattern"]!!.toString().toRegex()
-            val filterTextPattern = map["text-filter"]?.toString()?.toPattern()
-            val displayJson = parseJSON(map["display"] as Map<*, *>)
+            val condition = map.getString("condition")?.toCondition()
+            val priority = map.getInt("priority", 100)
+            val regex = map.getString("pattern")!!.toRegex()
+            val filterTextPattern = map.getString("text-filter")?.toPattern()
+            val displayJson = parseJSON(map.getConfigurationSection("display")!!.toMap())
             val action = map["action"]?.toString()
 
             Function(id, condition, priority, regex, filterTextPattern, displayJson, action)

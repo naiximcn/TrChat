@@ -1,10 +1,11 @@
 package me.arasple.mc.trchat
 
+import me.arasple.mc.trchat.module.conf.Loader
 import me.arasple.mc.trchat.module.internal.data.Database
 import me.arasple.mc.trchat.module.internal.hook.HookPlugin
+import me.arasple.mc.trchat.util.proxy.Proxy
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
-import taboolib.common.env.RuntimeDependencies
-import taboolib.common.env.RuntimeDependency
+import org.bukkit.Bukkit
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.Plugin
@@ -17,10 +18,6 @@ import taboolib.platform.BukkitPlugin
  * @author Arasple
  */
 @PlatformSide([Platform.BUKKIT])
-@RuntimeDependencies(
-    RuntimeDependency("!net.kyori:adventure-api:4.9.3", test = "net.kyori.adventure.Adventure"),
-    RuntimeDependency("!net.kyori:adventure-platform-bukkit:4.0.1")
-)
 object TrChat : Plugin() {
 
     val plugin by lazy { BukkitPlugin.getInstance() }
@@ -31,14 +28,19 @@ object TrChat : Plugin() {
     var isGlobalMuting = false
 
     override fun onLoad() {
-        console().sendLang("Plugin-Loaded")
+        console().sendLang("Plugin-Loading", Bukkit.getBukkitVersion())
     }
 
     override fun onEnable() {
-        console().sendLang("Plugin-Enabled", pluginVersion)
         adventure = BukkitAudiences.create(plugin)
+
+        Loader.loadChannels(console())
+        Loader.loadFunctions(console())
+
+        Proxy.init()
         Database.init()
         HookPlugin.printInfo()
+        console().sendLang("Plugin-Enabled", pluginVersion)
     }
 
     override fun onDisable() {

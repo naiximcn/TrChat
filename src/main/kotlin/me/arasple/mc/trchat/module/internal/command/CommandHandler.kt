@@ -8,7 +8,6 @@ import me.arasple.mc.trchat.module.internal.command.sub.CommandRemoveMessage
 import me.arasple.mc.trchat.module.internal.menu.MenuControlPanel
 import me.arasple.mc.trchat.module.internal.menu.MenuFilterControl
 import me.arasple.mc.trchat.util.getSession
-import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
@@ -36,11 +35,12 @@ object CommandHandler {
 
     @CommandBody(permission = "trchat.command.reload", optional = true)
     val reload = subCommand {
-        execute<CommandSender> { _, _, _ ->
-            Loader.loadChannels()
+        execute<ProxyCommandSender> { sender, _, _ ->
             Settings.CONF.reload()
             Functions.CONF.reload()
             Filter.CONF.reload()
+            Loader.loadChannels(sender)
+            Loader.loadFunctions(sender)
         }
     }
 

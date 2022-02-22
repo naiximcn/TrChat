@@ -23,7 +23,7 @@ General:
     Enable: true
     Self-Mention: false
     Format: '&r &a@&2{0}&r '
-    Cooldowns: 30
+    Cooldown: 30
     Notify: true
   Inventory-Show:
     Enable: true

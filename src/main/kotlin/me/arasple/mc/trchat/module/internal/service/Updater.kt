@@ -1,18 +1,13 @@
 package me.arasple.mc.trchat.module.internal.service
 
 import com.google.gson.JsonParser
-import org.bukkit.event.player.PlayerJoinEvent
 import taboolib.common.LifeCycle
 import taboolib.common.env.DependencyDownloader.readFully
-import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.SkipTo
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.*
 import taboolib.module.lang.sendLang
-import taboolib.platform.util.sendLang
 import java.io.BufferedInputStream
 import java.net.URL
 import java.nio.charset.StandardCharsets
@@ -32,7 +27,7 @@ object Updater {
     private var current_version = pluginVersion.split("-")[0].toDoubleOrNull() ?: -1.0
     private var latest_Version = -1.0
 
-    @Awake(LifeCycle.LOAD)
+//    @Awake(LifeCycle.LOAD)
     fun init() {
         if (current_version < 0) {
             console().sendLang("Error-Version")
@@ -50,9 +45,6 @@ object Updater {
             console().sendLang("Plugin-Updater-Header", current_version, latest_Version)
             console().sendMessage(information)
             console().sendLang("Plugin-Updater-Footer")
-            if (latest_Version - current_version >= 0.2) {
-                console().sendLang("Plugin-Updater-Too-Old")
-            }
         } else {
             if (!notify) {
                 notify = true
@@ -82,12 +74,12 @@ object Updater {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    fun onJoin(e: PlayerJoinEvent) {
-        val player = e.player
-        if (player.hasPermission("trmenu.admin") && latest_Version - current_version >= 0.2 && !notified.contains(player.uniqueId)) {
-            player.sendLang("Plugin-Updater-Too-Old")
-            notified.add(player.uniqueId)
-        }
-    }
+//    @SubscribeEvent(priority = EventPriority.HIGHEST)
+//    fun onJoin(e: PlayerJoinEvent) {
+//        val player = e.player
+//        if (player.hasPermission("trmenu.admin") && latest_Version - current_version >= 0.2 && !notified.contains(player.uniqueId)) {
+//            player.sendLang("Plugin-Updater-Too-Old")
+//            notified.add(player.uniqueId)
+//        }
+//    }
 }

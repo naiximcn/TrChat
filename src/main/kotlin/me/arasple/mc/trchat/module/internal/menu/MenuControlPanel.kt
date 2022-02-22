@@ -2,6 +2,8 @@ package me.arasple.mc.trchat.module.internal.menu
 
 import me.arasple.mc.trchat.util.getSession
 import org.bukkit.entity.Player
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.common5.util.parseMillis
 import taboolib.library.xseries.XMaterial
@@ -20,6 +22,7 @@ import taboolib.platform.util.sendLang
  * @author wlys
  * @since 2021/8/20 20:47
  */
+@PlatformSide([Platform.BUKKIT])
 object MenuControlPanel {
 
     fun displayFor(player: Player) {

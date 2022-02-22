@@ -58,10 +58,10 @@ class MsgComponent(
             message = message.itemShow(player)
         }
         if (!disabledFunctions.contains("Mention")) {
-            message = message.mention()
+            message = message.mention(player)
         }
         if (!disabledFunctions.contains("Item-Show")) {
-            message = message.inventoryShow(player)
+            message = message.inventoryShow()
         }
         Function.functions.filter { it.condition.pass(player) && !disabledFunctions.contains(it.id) }.forEach {
             message = message.replaceRegex(it.regex, it.filterTextPattern, "{{${it.id}:{0}}}")
@@ -192,17 +192,19 @@ class MsgComponent(
             return result
         }
 
-        private fun String.mention(): String {
+        private fun String.mention(player: Player): String {
             var result = this
             if (Functions.mention.getBoolean("Enable")) {
-                result = Players.regex.replace(result) {
-                    "{{MENTION:${it.groupValues[1]}}}"
+                if (result.contains(Players.regex) && Functions.mentionDelay.get().hasNext(player.name)) {
+                    result = Players.regex.replace(result) {
+                        "{{MENTION:${it.groupValues[1]}}}"
+                    }
                 }
             }
             return result
         }
 
-        private fun String.inventoryShow(player: Player): String {
+        private fun String.inventoryShow(): String {
             var result = this
             if (Functions.inventoryShow.getBoolean("Enable")) {
                 Functions.inventoryShow.getStringList("Keys").forEach {

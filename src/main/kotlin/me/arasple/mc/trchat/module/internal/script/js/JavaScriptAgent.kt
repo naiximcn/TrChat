@@ -4,6 +4,8 @@ import com.google.common.collect.Maps
 import me.arasple.mc.trchat.util.getSession
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
 import taboolib.common5.compileJS
 import java.util.concurrent.CompletableFuture
 import javax.script.CompiledScript
@@ -18,6 +20,7 @@ import javax.script.SimpleScriptContext
  * @author wlys
  * @since 2021/8/27 16:10
  */
+@PlatformSide([Platform.BUKKIT])
 object JavaScriptAgent {
 
     private val prefixes = arrayOf(

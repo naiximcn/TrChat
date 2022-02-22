@@ -2,6 +2,8 @@ package me.arasple.mc.trchat.util.color
 
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.command.CommandSender
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
 import taboolib.module.nms.MinecraftVersion
 import java.awt.Color
 import java.util.*
@@ -14,6 +16,7 @@ import kotlin.math.*
  * @author Esophose
  * converted from https://github.com/Rosewood-Development/RoseGarden/blob/master/src/main/java/dev/rosewood/rosegarden/utils/HexUtils.java
  */
+@PlatformSide([Platform.BUKKIT])
 object Hex {
 
     private const val CHARS_UNTIL_LOOP = 30

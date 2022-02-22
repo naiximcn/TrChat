@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.display.channel
 
 import me.arasple.mc.trchat.TrChat
+import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.module.display.ChatSession
 import me.arasple.mc.trchat.module.display.format.Format
 import me.arasple.mc.trchat.module.internal.command.main.CommandReply
@@ -32,11 +33,21 @@ class PrivateChannel(
 ) : Channel(id, settings, bindings, emptyList()) {
 
     override fun execute(player: Player, message: String) {
+        if (!settings.speakCondition.pass(player)) {
+            return
+        }
+        val session = player.getSession()
+        val event = TrChatEvent(this, session, message)
+        if (!event.call()) {
+            return
+        }
+
+        val msg = event.message
         var builder = Component.text()
         sender.firstOrNull { it.condition.pass(player) }?.let { format ->
             format.prefix.forEach { prefix ->
                 builder = builder.append(prefix.value.first { it.condition.pass(player) }.content.toTextComponent(player)) }
-            builder = builder.append(format.msg.serialize(player, message, settings.disabledFunctions))
+            builder = builder.append(format.msg.serialize(player, msg, settings.disabledFunctions))
             format.suffix.forEach { suffix ->
                 builder = builder.append(suffix.value.first { it.condition.pass(player) }.content.toTextComponent(player)) }
         } ?: return
@@ -46,15 +57,13 @@ class PrivateChannel(
         receiver.firstOrNull { it.condition.pass(player) }?.let { format ->
             format.prefix.forEach { prefix ->
                 builder = builder.append(prefix.value.first { it.condition.pass(player) }.content.toTextComponent(player)) }
-            builder = builder.append(format.msg.serialize(player, message, settings.disabledFunctions))
+            builder = builder.append(format.msg.serialize(player, msg, settings.disabledFunctions))
             format.suffix.forEach { suffix ->
                 builder = builder.append(suffix.value.first { it.condition.pass(player) }.content.toTextComponent(player)) }
         } ?: return
         val receive = builder.build()
 
         TrChat.adventure.player(player).sendMessage(send)
-
-        val session = player.getSession()
 
         if (settings.proxy && Proxy.isEnabled) {
             player.sendBukkitMessage(
@@ -71,9 +80,9 @@ class PrivateChannel(
         }
 
         ChatSession.SESSIONS.filterValues { it.isSpying }.entries.forEach { (_, v) ->
-            v.player.sendLang("Private-Message-Spy-Format", player.name, session.lastPrivateTo, message)
+            v.player.sendLang("Private-Message-Spy-Format", player.name, session.lastPrivateTo, msg)
         }
-        console().sendLang("Private-Message-Spy-Format", player.name, session.lastPrivateTo, message)
+        console().sendLang("Private-Message-Spy-Format", player.name, session.lastPrivateTo, msg)
 
         CommandReply.lastMessageFrom[session.lastPrivateTo] = player.name
         ChatLogs.logPrivate(player.name, session.lastPrivateTo, message)

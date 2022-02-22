@@ -1,6 +1,8 @@
 package me.arasple.mc.trchat.api.config
 
 import me.arasple.mc.trchat.module.display.channel.Channel
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
 import taboolib.common5.Baffle
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.ConfigNode
@@ -12,6 +14,7 @@ import java.util.concurrent.TimeUnit
  * @author wlys
  * @since 2021/12/11 23:59
  */
+@PlatformSide([Platform.BUKKIT])
 object Settings {
 
     @Config("settings.yml", autoReload = true)

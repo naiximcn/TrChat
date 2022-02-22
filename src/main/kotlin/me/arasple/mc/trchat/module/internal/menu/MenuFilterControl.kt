@@ -3,6 +3,8 @@ package me.arasple.mc.trchat.module.internal.menu
 import me.arasple.mc.trchat.util.getSession
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
 import taboolib.library.xseries.XMaterial
 import taboolib.library.xseries.XSound
 import taboolib.module.ui.openMenu
@@ -14,6 +16,7 @@ import taboolib.platform.util.buildItem
  * @date 2019/11/30 11:40
  * Internal Menu For Chat Filter Control
  */
+@PlatformSide([Platform.BUKKIT])
 object MenuFilterControl {
 
     private val SOUND = XSound.BLOCK_NOTE_BLOCK_PLING

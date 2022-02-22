@@ -30,6 +30,9 @@ object NMSListener {
                 if (!Filter.CONF.getBoolean("Filter.Chat") || !e.player.getSession().isFilterEnabled) {
                     return
                 }
+//                if (MinecraftComponentSerializer.isSupported()){
+//                    MinecraftComponentSerializer.get().deserialize()
+//                }
                 kotlin.runCatching {
                     val components = e.packet.read<Array<BaseComponent>>("components") ?: return
                     e.packet.write("components", components.map { filterComponent(it) }.toTypedArray())

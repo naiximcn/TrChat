@@ -1,7 +1,6 @@
 package me.arasple.mc.trchat.api.nms
 
 import me.arasple.mc.trchat.api.TrChatAPI
-import me.arasple.mc.trchat.module.display.filter.ChatFilter.filter
 import net.minecraft.server.v1_16_R3.NBTBase
 import net.minecraft.server.v1_16_R3.NBTTagCompound
 import org.bukkit.inventory.ItemStack
@@ -15,17 +14,6 @@ import taboolib.platform.util.isNotAir
  * @date 2019/11/30 11:16
  */
 class NMSImpl : NMS() {
-
-    override fun filterIChatComponent(component: Any?): Any? {
-        component ?: return null
-        return try {
-            val raw = TrChatAPI.classChatSerializer.invokeMethod<String>("a", component, fixed = true)!!
-            val filtered = filter(raw).filtered
-            TrChatAPI.classChatSerializer.invokeMethod<Any>("a", filtered, fixed = true)
-        } catch (e: Throwable) {
-            component
-        }
-    }
 
     override fun filterItem(item: Any?) {
         item ?: return

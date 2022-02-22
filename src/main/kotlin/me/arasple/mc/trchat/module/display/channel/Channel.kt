@@ -2,7 +2,9 @@ package me.arasple.mc.trchat.module.display.channel
 
 import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.api.config.Settings
+import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.module.display.format.Format
+import me.arasple.mc.trchat.module.internal.data.ChatLogs
 import me.arasple.mc.trchat.module.internal.service.Metrics
 import me.arasple.mc.trchat.util.getSession
 import me.arasple.mc.trchat.util.pass
@@ -36,11 +38,17 @@ open class Channel(
         if (!settings.speakCondition.pass(player)) {
             return
         }
+        val event = TrChatEvent(this, player.getSession(), message)
+        if (!event.call()) {
+            return
+        }
+        val msg = event.message
+
         var builder = Component.text()
         formats.firstOrNull { it.condition.pass(player) }?.let { format ->
             format.prefix.forEach { prefix ->
                 builder = builder.append(prefix.value.first { it.condition.pass(player) }.content.toTextComponent(player)) }
-            builder = builder.append(format.msg.serialize(player, message, settings.disabledFunctions))
+            builder = builder.append(format.msg.serialize(player, msg, settings.disabledFunctions))
             format.suffix.forEach { suffix ->
                 builder = builder.append(suffix.value.first { it.condition.pass(player) }.content.toTextComponent(player)) }
         } ?: return
@@ -88,6 +96,7 @@ open class Channel(
                 TrChat.adventure.player(player).sendMessage(Identity.identity(player.uniqueId), component, MessageType.CHAT)
             }
         }
+        ChatLogs.log(player, message)
         Metrics.increase(0)
     }
 
