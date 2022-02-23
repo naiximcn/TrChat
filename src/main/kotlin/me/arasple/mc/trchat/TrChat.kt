@@ -6,6 +6,8 @@ import me.arasple.mc.trchat.module.internal.hook.HookPlugin
 import me.arasple.mc.trchat.util.proxy.Proxy
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bukkit.Bukkit
+import taboolib.common.env.RuntimeDependencies
+import taboolib.common.env.RuntimeDependency
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.Plugin
@@ -17,6 +19,11 @@ import taboolib.platform.BukkitPlugin
 /**
  * @author Arasple
  */
+@RuntimeDependencies(
+    RuntimeDependency("!net.kyori:adventure-api:4.9.3", test = "!net.kyori.adventure.Adventure"),
+    RuntimeDependency("!net.kyori:adventure-platform-bukkit:4.0.1", test = "!net.kyori.adventure.platform.bukkit.BukkitAudience"),
+    RuntimeDependency("!net.kyori:adventure-platform-bungeecord:4.0.1", test = "!net.kyori.adventure.platform.bungeecord.BukkitAudience")
+)
 @PlatformSide([Platform.BUKKIT])
 object TrChat : Plugin() {
 

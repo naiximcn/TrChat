@@ -12,8 +12,6 @@ import me.arasple.mc.trchat.module.display.function.Function
 import me.arasple.mc.trchat.util.color.DefaultColor
 import me.arasple.mc.trchat.util.toCondition
 import org.bukkit.configuration.file.YamlConfiguration
-import taboolib.common.env.RuntimeDependencies
-import taboolib.common.env.RuntimeDependency
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.ProxyCommandSender
@@ -31,11 +29,6 @@ import kotlin.system.measureTimeMillis
  * @author wlys
  * @since 2021/12/12 13:45
  */
-@RuntimeDependencies(
-    RuntimeDependency("!net.kyori:adventure-api:4.9.1", test = "!net.kyori.adventure.Adventure"),
-    RuntimeDependency("!net.kyori:adventure-platform-bukkit:4.0.1", test = "!net.kyori.adventure.platform.bukkit.BukkitAudience"),
-    RuntimeDependency("!net.kyori:adventure-platform-bungeecord:4.0.1", test = "!net.kyori.adventure.platform.bungeecord.BukkitAudience")
-)
 @PlatformSide([Platform.BUKKIT])
 object Loader {
 

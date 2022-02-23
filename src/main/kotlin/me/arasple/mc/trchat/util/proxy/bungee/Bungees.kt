@@ -5,7 +5,6 @@ import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.util.proxy.bukkit.Players
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import org.bukkit.plugin.messaging.PluginMessageListener
 import taboolib.common.platform.function.submit
 import taboolib.module.porticus.common.MessageBuilder
 import java.io.IOException
@@ -15,7 +14,7 @@ import java.util.*
  * @author Arasple
  * @date 2019/8/4 21:23
  */
-class Bungees : PluginMessageListener {
+class 0Bungees : PluginMessageListener {
 
     override fun onPluginMessageReceived(channel: String, player: Player, message: ByteArray) {
         val data = ByteStreams.newDataInput(message)
