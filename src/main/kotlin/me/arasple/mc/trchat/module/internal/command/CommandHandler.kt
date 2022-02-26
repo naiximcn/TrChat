@@ -4,9 +4,9 @@ import me.arasple.mc.trchat.api.config.Filter
 import me.arasple.mc.trchat.api.config.Functions
 import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.module.conf.Loader
+import me.arasple.mc.trchat.module.display.menu.MenuControlPanel
+import me.arasple.mc.trchat.module.display.menu.MenuFilterControl
 import me.arasple.mc.trchat.module.internal.command.sub.CommandRemoveMessage
-import me.arasple.mc.trchat.module.internal.menu.MenuControlPanel
-import me.arasple.mc.trchat.module.internal.menu.MenuFilterControl
 import me.arasple.mc.trchat.util.getSession
 import org.bukkit.entity.Player
 import taboolib.common.platform.Platform

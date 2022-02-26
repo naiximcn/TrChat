@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.module.internal.menu
+package me.arasple.mc.trchat.module.display.menu
 
 import me.arasple.mc.trchat.util.getSession
 import org.bukkit.entity.Player

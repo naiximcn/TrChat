@@ -8,9 +8,9 @@ Bindings:
   Command: ['staff']
 
 Formats:
-  - requirement: null
-    prefix:
-      - text: '&8[&cSTAFF&8] '
+  - prefix:
+      staff:
+        text: '&8[&cSTAFF&8] '
         hover: |-
           &7Server &3%server_name%
           &r
@@ -20,7 +20,8 @@ Formats:
           &7
           &a▶ &2Click to connect to this server
         command: '/server %server_name%'
-      - text: '&e%player_name%&8: '
+      player:
+        text: '&e%player_name%&8: '
     msg:
       default-color: 'a'
       hover: '&7Date: %server_time_HH:mm:ss%'

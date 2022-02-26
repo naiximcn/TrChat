@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.util.proxy
 
 import me.arasple.mc.trchat.util.proxy.bungee.Bungees
+import me.arasple.mc.trchat.util.proxy.common.MessageBuilder
 import me.arasple.mc.trchat.util.proxy.velocity.Velocity
 import org.bukkit.Bukkit
 import org.bukkit.configuration.file.YamlConfiguration
@@ -10,6 +11,7 @@ import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.function.getProxyPlayer
 import taboolib.common.reflect.Reflex.Companion.invokeMethod
 import taboolib.module.lang.sendLang
+import java.util.*
 
 /**
  * Proxy
@@ -71,3 +73,5 @@ fun Player.sendBukkitMessage(vararg args: String) {
 fun Player.sendProxyLang(target: String, node: String, vararg args: String) {
     Proxy.sendProxyLang(this, target, node, *args)
 }
+
+fun Array<out String>.serialize() = MessageBuilder.create(arrayOf(UUID.randomUUID().toString(), *this))

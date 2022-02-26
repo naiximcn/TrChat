@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.util.proxy.bungee
 
 import me.arasple.mc.trchat.TrChatBungee
+import me.arasple.mc.trchat.util.proxy.common.MessageReader
 import net.kyori.adventure.audience.MessageType
 import net.kyori.adventure.identity.Identity
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
@@ -14,7 +15,6 @@ import taboolib.common.platform.function.getProxyPlayer
 import taboolib.common.platform.function.server
 import taboolib.common.util.subList
 import taboolib.module.lang.sendLang
-import taboolib.module.porticus.common.MessageReader
 import java.io.IOException
 import java.util.*
 

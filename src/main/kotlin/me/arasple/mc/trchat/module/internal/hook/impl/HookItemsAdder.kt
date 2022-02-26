@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.module.internal.hook.impl
 
+import dev.lone.itemsadder.api.FontImages.FontImageWrapper
 import me.arasple.mc.trchat.module.internal.hook.HookAbstract
 import org.bukkit.entity.Player
 

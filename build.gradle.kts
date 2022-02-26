@@ -29,7 +29,6 @@ taboolib {
         "module-metrics",
         "module-nms",
         "module-nms-util",
-        "module-porticus",
         "module-ui",
         "platform-bukkit",
         "platform-bungee",

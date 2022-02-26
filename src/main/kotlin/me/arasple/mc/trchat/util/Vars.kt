@@ -50,7 +50,7 @@ object Vars {
                 }
             }
         }.onFailure {
-            it.printStackTrace()
+            it.print("PlaceholderAPI expansion(s) $expansions installed failed!Please install manually.")
         }
     }
 }

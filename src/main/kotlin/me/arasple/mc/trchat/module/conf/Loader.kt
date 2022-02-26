@@ -10,8 +10,10 @@ import me.arasple.mc.trchat.module.display.format.part.Group
 import me.arasple.mc.trchat.module.display.format.part.json.*
 import me.arasple.mc.trchat.module.display.function.Function
 import me.arasple.mc.trchat.util.color.DefaultColor
+import me.arasple.mc.trchat.util.print
 import me.arasple.mc.trchat.util.toCondition
 import org.bukkit.configuration.file.YamlConfiguration
+import taboolib.common.io.newFile
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.ProxyCommandSender
@@ -36,10 +38,13 @@ object Loader {
         val folder = File(getDataFolder(), "channels")
 
         if (!folder.exists()) {
-            releaseResourceFile("channels/Normal.yml")
-            releaseResourceFile("channels/Global.yml")
-            releaseResourceFile("channels/Staff.yml")
-            releaseResourceFile("channels/Private.yml")
+            arrayOf(
+                "Normal.yml",
+                "Global.yml",
+                "Staff.yml",
+                "Private.yml"
+            ).forEach { releaseResourceFile("channels/$it", replace = true) }
+            newFile(File(getDataFolder(), "data"), folder = true)
         }
 
         folder
@@ -55,13 +60,17 @@ object Loader {
         Channel.channels.clear()
 
         filterChannelFiles(folder).forEach {
-            Channel.channels.add(loadChannels(it))
+            try {
+                Channel.channels.add(loadChannel(it))
+            } catch (t: Throwable) {
+                t.print("Channel file ${it.name} loaded failed!")
+            }
         }
 
         return Channel.channels.size
     }
 
-    fun loadChannels(file: File): Channel {
+    fun loadChannel(file: File): Channel {
         val conf = YamlConfiguration.loadConfiguration(file)
         val id = file.nameWithoutExtension
 
@@ -92,7 +101,7 @@ object Loader {
                 val priority = Coerce.asInteger(map["priority"]).orNull() ?: 100
                 val prefix = parseGroups(map["prefix"] as LinkedHashMap<*, *>)
                 val msg = parseMsg(map["msg"] as LinkedHashMap<*, *>)
-                val suffix = parseGroups(map["suffix"] as LinkedHashMap<*, *>)
+                val suffix = parseGroups(map["suffix"] as? LinkedHashMap<*, *>)
                 Format(condition, priority, prefix, msg, suffix)
             }.sortedBy { it.priority }
             val receiver = conf.getMapList("Receiver").map { map ->
@@ -100,7 +109,7 @@ object Loader {
                 val priority = Coerce.asInteger(map["priority"]).orNull() ?: 100
                 val prefix = parseGroups(map["prefix"] as LinkedHashMap<*, *>)
                 val msg = parseMsg(map["msg"] as LinkedHashMap<*, *>)
-                val suffix = parseGroups(map["suffix"] as LinkedHashMap<*, *>)
+                val suffix = parseGroups(map["suffix"] as? LinkedHashMap<*, *>)
                 Format(condition, priority, prefix, msg, suffix)
             }.sortedBy { it.priority }
 
@@ -111,7 +120,7 @@ object Loader {
                 val priority = Coerce.asInteger(map["priority"]).orNull() ?: 100
                 val prefix = parseGroups(map["prefix"] as LinkedHashMap<*, *>)
                 val msg = parseMsg(map["msg"] as LinkedHashMap<*, *>)
-                val suffix = parseGroups(map["suffix"] as LinkedHashMap<*, *>)
+                val suffix = parseGroups(map["suffix"] as? LinkedHashMap<*, *>)
                 Format(condition, priority, prefix, msg, suffix)
             }.sortedBy { it.priority }
 
@@ -143,7 +152,8 @@ object Loader {
         Function.functions.addAll(functions)
     }
 
-    private fun parseGroups(map: LinkedHashMap<*, *>): Map<String, List<Group>> {
+    private fun parseGroups(map: LinkedHashMap<*, *>?): Map<String, List<Group>> {
+        map ?: return emptyMap()
         return map.map { (id, content) ->
             id as String
             when (content) {

@@ -2,15 +2,13 @@ package me.arasple.mc.trchat.util.proxy.velocity
 
 import com.google.common.io.ByteStreams
 import me.arasple.mc.trchat.TrChat
-import me.arasple.mc.trchat.util.proxy.Proxy
 import me.arasple.mc.trchat.util.proxy.bukkit.Players
+import me.arasple.mc.trchat.util.proxy.serialize
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.messaging.PluginMessageListener
 import taboolib.common.platform.function.submit
-import taboolib.module.porticus.common.MessageBuilder
 import java.io.IOException
-import java.util.*
 
 /**
  * Velocity
@@ -52,7 +50,7 @@ class Velocity : PluginMessageListener {
         fun sendBukkitMessage(player: Player, vararg args: String, async: Boolean = true) {
             submit(async = async) {
                 try {
-                    for (bytes in MessageBuilder.create(arrayOf(UUID.randomUUID().toString(), *args))) {
+                    for (bytes in args.serialize()) {
                         player.sendPluginMessage(TrChat.plugin, OUTGOING_CHANNEL, bytes)
                     }
                 } catch (e: IOException) {

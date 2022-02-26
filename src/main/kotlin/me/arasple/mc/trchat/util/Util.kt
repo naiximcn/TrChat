@@ -18,6 +18,14 @@ import java.util.concurrent.TimeUnit
  * @author wlys
  * @since 2021/9/12 18:11
  */
+fun Throwable.print(title: String) {
+    println("§c[TrChat] §8$title")
+    println("         §8${localizedMessage}")
+    stackTrace.forEach {
+        println("         §8$it")
+    }
+}
+
 fun String.toCondition() = Condition(this)
 
 fun Player.getSession() = ChatSession.getSession(this)
