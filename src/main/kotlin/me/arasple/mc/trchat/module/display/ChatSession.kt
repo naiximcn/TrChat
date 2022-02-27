@@ -1,6 +1,5 @@
 package me.arasple.mc.trchat.module.display
 
-import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.module.display.channel.Channel
 import me.arasple.mc.trchat.util.getDataContainer
 import net.md_5.bungee.api.chat.BaseComponent
@@ -69,7 +68,9 @@ class ChatSession(
         val SESSIONS = mutableMapOf<UUID, ChatSession>()
 
         fun getSession(player: Player): ChatSession {
-            return SESSIONS.computeIfAbsent(player.uniqueId) { ChatSession(player, Settings.channelDefault.get(), onlinePlayers().map { it.cast<Player>() }.toSet()) }
+            return SESSIONS.computeIfAbsent(player.uniqueId) {
+                ChatSession(player, Channel.defaultChannel, onlinePlayers().map { it.cast<Player>() }.toSet())
+            }
         }
 
         fun removeSession(player: Player) {

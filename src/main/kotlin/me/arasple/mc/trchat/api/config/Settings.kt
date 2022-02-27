@@ -1,6 +1,5 @@
 package me.arasple.mc.trchat.api.config
 
-import me.arasple.mc.trchat.module.display.channel.Channel
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common5.Baffle
@@ -29,7 +28,4 @@ object Settings {
 
     @ConfigNode("Chat.Length-Limit", "settings.yml")
     var chatLengthLimit = 100
-
-    @ConfigNode("Channel.Default", "settings.yml")
-    val channelDefault = ConfigNodeTransfer<String, Channel?> { Channel.channels.firstOrNull { it.id == this } }
 }

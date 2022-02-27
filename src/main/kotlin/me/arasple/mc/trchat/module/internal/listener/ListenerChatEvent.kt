@@ -3,6 +3,7 @@ package me.arasple.mc.trchat.module.internal.listener
 import me.arasple.mc.trchat.api.config.Functions
 import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.module.display.channel.Channel
+import me.arasple.mc.trchat.module.internal.hook.HookPlugin
 import me.arasple.mc.trchat.util.checkMute
 import me.arasple.mc.trchat.util.getSession
 import org.bukkit.entity.Player
@@ -21,16 +22,11 @@ import taboolib.platform.util.sendLang
 @PlatformSide([Platform.BUKKIT])
 object ListenerChatEvent {
 
-    private val hooks = arrayOf(
-        "Dynmap",
-        "DiscordSRV"
-    )
-
     @SubscribeEvent(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onChat(e: AsyncPlayerChatEvent) {
         e.isCancelled = true
         val player = e.player
-        val message = e.message
+        var message = e.message
         val session = player.getSession()
 
         session.recipients = e.recipients
@@ -38,6 +34,8 @@ object ListenerChatEvent {
         if (!player.checkMute()) {
             return
         }
+
+        message = HookPlugin.getItemsAdder().replaceFontImages(player, message)
 
         if (!checkLimits(player, message)) {
             return
@@ -49,11 +47,11 @@ object ListenerChatEvent {
             ?: kotlin.run { session.channel?.execute(player, message) }
 
         e.handlers.registeredListeners
-            .filter { hooks.contains(it.plugin.name)
-                    && it.plugin.isEnabled
-                    && it.priority == org.bukkit.event.EventPriority.MONITOR }.forEach {
+            .filter { it.plugin.isEnabled
+                    && it.priority == org.bukkit.event.EventPriority.MONITOR
+                    && it.isIgnoringCancelled }.forEach {
             try {
-                it.callEvent(AsyncPlayerChatEvent(e.isAsynchronous, e.player, message, e.recipients))
+                it.callEvent(AsyncPlayerChatEvent(e.isAsynchronous, e.player, e.message, e.recipients))
             } catch (e: Throwable) {
                 e.printStackTrace()
             }

@@ -15,8 +15,10 @@ import me.arasple.mc.trchat.util.proxy.sendProxyLang
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import org.bukkit.entity.Player
+import taboolib.common.platform.command.command
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.getProxyPlayer
+import taboolib.common.util.subList
 import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
 
@@ -31,6 +33,14 @@ class PrivateChannel(
     val sender: List<Format>,
     val receiver: List<Format>
 ) : Channel(id, settings, bindings, emptyList()) {
+
+    init {
+        if (!bindings.command.isNullOrEmpty()) {
+            command(bindings.command[0], subList(bindings.command, 1)) {
+
+            }
+        }
+    }
 
     override fun execute(player: Player, message: String) {
         if (!settings.speakCondition.pass(player)) {

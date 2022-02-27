@@ -16,7 +16,9 @@ import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 import taboolib.common.platform.ProxyPlayer
+import taboolib.common.platform.command.command
 import taboolib.common.platform.function.onlinePlayers
+import taboolib.common.util.subList
 import taboolib.platform.util.sendLang
 import taboolib.platform.util.toProxyLocation
 import java.util.*
@@ -31,6 +33,14 @@ open class Channel(
     val bindings: ChannelBindings,
     val formats: List<Format>,
 ) {
+
+    init {
+        if (!bindings.command.isNullOrEmpty()) {
+            command(bindings.command[0], subList(bindings.command, 1)) {
+
+            }
+        }
+    }
 
     val listeners = mutableListOf<UUID>()
 
@@ -104,6 +114,10 @@ open class Channel(
 
         val channels = mutableListOf<Channel>()
 
+        val defaultChannel by lazy {
+            channels.first { it.id == Settings.CONF.getString("Channel.Default") }
+        }
+
         fun join(player: Player, channel: String) {
             channels.firstOrNull { it.id == channel }?.let {
                 join(player, it)
@@ -121,7 +135,7 @@ open class Channel(
 
         fun quit(player: Player) {
             player.getSession().channel?.id?.let { player.sendLang("Channel-Quit", it) }
-            player.getSession().channel = Settings.channelDefault.get()
+            player.getSession().channel = defaultChannel
         }
 
         internal fun ProxyPlayer.toAudience(): Audience {

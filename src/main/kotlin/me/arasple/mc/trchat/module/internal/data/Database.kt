@@ -22,7 +22,7 @@ object Database {
     lateinit var database: Database
 
     fun init() {
-        when (val type = Settings.CONF.getString("Database.Method")!!.uppercase()) {
+        database = when (val type = Settings.CONF.getString("Database.Method")!!.uppercase()) {
             "SQLITE" -> DatabaseSQLite()
             "SQL" -> DatabaseSQL()
             "MONGODB" -> DatabaseMongodb()

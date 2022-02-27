@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.internal.hook
 
 import me.arasple.mc.trchat.module.internal.hook.impl.HookEcoEnchants
+import me.arasple.mc.trchat.module.internal.hook.impl.HookItemsAdder
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.function.console
@@ -20,11 +21,16 @@ object HookPlugin {
     }
 
     private val registry: Array<HookAbstract> = arrayOf(
-        HookEcoEnchants()
+        HookEcoEnchants(),
+        HookItemsAdder()
     )
 
     fun getEcoEnchants(): HookEcoEnchants {
         return registry[0] as HookEcoEnchants
+    }
+
+    fun getItemsAdder(): HookItemsAdder {
+        return registry[1] as HookItemsAdder
     }
 
 }

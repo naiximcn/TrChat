@@ -62,7 +62,7 @@ object Updater {
             URL(api_url).openStream().use { inputStream ->
                 BufferedInputStream(inputStream).use { bufferedInputStream ->
                     val read = readFully(bufferedInputStream, StandardCharsets.UTF_8)
-                    val json = JsonParser().parse(read).asJsonObject
+                    val json = JsonParser.parseString(read).asJsonObject
                     val latestVersion = json["tag_name"].asString
                     latest_Version = Version(latestVersion)
                     notifyVersion(json["body"].asString)
