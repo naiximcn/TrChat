@@ -31,7 +31,7 @@ taboolib {
     install("platform-bukkit", "platform-bungee", "platform-velocity")
     install("expansion-command-helper", "expansion-player-database", "expansion-javascript")
     classifier = null
-    version = "6.0.7-26"
+    version = "6.0.7-39"
 }
 
 repositories {
@@ -49,10 +49,11 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("net.md-5:bungeecord-bootstrap:1.17-R0.1-SNAPSHOT")
     compileOnly("com.velocitypowered:velocity-api:3.0.0")
-    compileOnly("ink.ptms.core:v11800:11800-minimize:api")
-    compileOnly("ink.ptms.core:v11800:11800-minimize:universal")
-    compileOnly("ink.ptms.core:v11800:11800-minimize:mapped")
+
+    compileOnly("ink.ptms.core:v11802:11802:mapped")
+    compileOnly("ink.ptms.core:v11802:11802:universal")
     compileOnly("ink.ptms:nms-all:1.0.0")
+
     compileOnly(kotlin("stdlib"))
     compileOnly(fileTree("libs"))
 }
