@@ -99,7 +99,7 @@ object ChatFilter {
         return kotlin.runCatching {
             URL(url).openStream().use { inputStream ->
                 BufferedInputStream(inputStream).use { bufferedInputStream ->
-                    val database = JsonParser.parseString(readFully(bufferedInputStream, StandardCharsets.UTF_8)).asJsonObject
+                    val database = JsonParser().parse(readFully(bufferedInputStream, StandardCharsets.UTF_8)).asJsonObject
                     if (!database.has("lastUpdateDate") || !database.has("words")) {
                         error("Wrong database json object")
                     }

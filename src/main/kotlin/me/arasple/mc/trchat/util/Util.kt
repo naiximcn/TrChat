@@ -4,12 +4,14 @@ import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.module.display.ChatSession
 import me.arasple.mc.trchat.module.internal.data.Database
 import me.arasple.mc.trchat.module.internal.script.Condition
+import net.kyori.adventure.audience.Audience
 import org.bukkit.entity.Player
 import taboolib.common.platform.ProxyCommandSender
+import taboolib.common.platform.ProxyPlayer
 import taboolib.library.configuration.ConfigurationSection
 import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
-import java.util.concurrent.TimeUnit
+import java.text.SimpleDateFormat
 
 /**
  * Util
@@ -18,6 +20,8 @@ import java.util.concurrent.TimeUnit
  * @author wlys
  * @since 2021/9/12 18:11
  */
+val muteDateFormat = SimpleDateFormat()
+
 fun Throwable.print(title: String) {
     println("§c[TrChat] §8$title")
     println("         §8${localizedMessage}")
@@ -36,7 +40,7 @@ fun Player.checkMute(): Boolean {
         return false
     }
     if (this.getSession().isMuted) {
-        sendLang("General-Muted", TimeUnit.MILLISECONDS.toSeconds(getDataContainer().getLong("mute_time")))
+        sendLang("General-Muted", muteDateFormat.format(getDataContainer().getLong("mute_time") - System.currentTimeMillis()))
         return false
     }
     return true
@@ -44,6 +48,14 @@ fun Player.checkMute(): Boolean {
 
 fun Player.getDataContainer(): ConfigurationSection {
     return Database.database.pull(this)
+}
+
+internal fun Player.toAudience(): Audience {
+    return TrChat.adventure.player(this)
+}
+
+internal fun ProxyPlayer.toAudience(): Audience {
+    return cast<Player>().toAudience()
 }
 
 fun Condition?.pass(player: Player): Boolean {

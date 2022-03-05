@@ -181,8 +181,8 @@ class MsgComponent(
         private fun String.itemShow(player: Player): String {
             var result = this
             if (Functions.itemShow.getBoolean("Enable")) {
-                Functions.itemShowKeys.get().forEach { regex ->
-                    result = result.replace(regex) {
+                Functions.itemShowKeys.get().firstOrNull { it.containsMatchIn(result) }?.let {
+                    result = result.replace(it) {
                         "{{ITEM:${it.groups[1]?.value?.takeLast(1)?.toInt() ?: player.inventory.heldItemSlot}}}"
                     }
                 }
@@ -193,11 +193,14 @@ class MsgComponent(
         private fun String.mention(player: Player): String {
             var result = this
             if (Functions.mention.getBoolean("Enable")) {
-                if (result.contains(Players.regex) && !player.isInCooldown(CooldownType.MENTION)) {
-                    result = Players.regex.replace(result) {
+                val regex = Players.getRegex(player)
+                if (result.contains(regex) && !player.isInCooldown(CooldownType.MENTION)) {
+                    result = regex.replace(result) {
                         "{{MENTION:${it.groupValues[1]}}}"
                     }
-                    player.updateCooldown(CooldownType.MENTION, Functions.mentionCooldown.get())
+                    if (!player.hasPermission("trchat.bypass.mentioncd")) {
+                        player.updateCooldown(CooldownType.MENTION, Functions.mentionCooldown.get())
+                    }
                 }
             }
             return result

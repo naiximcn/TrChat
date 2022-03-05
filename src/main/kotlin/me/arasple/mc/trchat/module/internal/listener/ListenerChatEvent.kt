@@ -72,8 +72,6 @@ object ListenerChatEvent {
             if (Strings.similarDegree(lastMessage, message) > Settings.chatSimilarity) {
                 player.sendLang("General-Too-Similar")
                 return false
-            } else {
-                player.getSession().lastMessage = message
             }
         }
         if (!player.hasPermission("trchat.bypass.chatcd")) {
@@ -85,7 +83,7 @@ object ListenerChatEvent {
         }
         if (!player.hasPermission("trchat.bypass.itemcd")) {
             val itemCooldown = player.getCooldownLeft(CooldownType.ITEM_SHOW)
-            if (Functions.itemShowKeys.get().any { it.matches(message) } && itemCooldown > 0) {
+            if (Functions.itemShowKeys.get().any { it.containsMatchIn(message) } && itemCooldown > 0) {
                 player.sendLang("Cooldowns-Item-Show", itemCooldown / 1000)
                 return false
             } else {

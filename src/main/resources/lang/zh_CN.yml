@@ -1,7 +1,7 @@
 Plugin-Loading:
-  - ''
-  - '正在加载&3Tr&bChat&7... &8{0}'
-  - ''
+  - '&r'
+  - '&7正在加载 &3Tr&bChat&7... &8{0}'
+  - '&r'
 Plugin-Enabled: '&8[&3Tr&bChat&8] &b信息 &8| &3加载完毕. TrChat &av{0} &3现已启用, 敬请使用.'
 Plugin-Loaded-Functions: '&8[&3Tr&bChat&8] &b聊天 &8| &3成功载入 &b{0} &3个聊天功能... &8[{1} Ms]'
 Plugin-Loaded-Channels: '&8[&3Tr&bChat&8] &b聊天 &8| &3成功载入 &b{0} &3个聊天频道... &8[{1} Ms]'
@@ -135,6 +135,13 @@ Channel-Quit:
     text: '&8[&3Tr&bChat&8] &7你已离开{0}频道'
   - type: sound
     sound: 'BLOCK_ANVIL_LAND'
+    volume: 1
+    pitch: 0
+Channel-No-Speak-Permission:
+  - type: actionbar
+    text: '&c&l你没有这个频道的说话权限'
+  - type: sound
+    sound: 'ENTITY_ITEM_BREAK'
     volume: 1
     pitch: 0
 

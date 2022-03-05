@@ -3,15 +3,20 @@ package me.arasple.mc.trchat.module.display.channel
 import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.module.display.ChatSession
+import me.arasple.mc.trchat.module.display.channel.obj.ChannelBindings
+import me.arasple.mc.trchat.module.display.channel.obj.ChannelSettings
 import me.arasple.mc.trchat.module.display.format.Format
 import me.arasple.mc.trchat.module.internal.command.main.CommandReply
 import me.arasple.mc.trchat.module.internal.data.ChatLogs
 import me.arasple.mc.trchat.module.internal.service.Metrics
+import me.arasple.mc.trchat.util.checkMute
 import me.arasple.mc.trchat.util.getSession
 import me.arasple.mc.trchat.util.pass
 import me.arasple.mc.trchat.util.proxy.Proxy
+import me.arasple.mc.trchat.util.proxy.bukkit.Players
 import me.arasple.mc.trchat.util.proxy.sendBukkitMessage
 import me.arasple.mc.trchat.util.proxy.sendProxyLang
+import me.arasple.mc.trchat.util.toAudience
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import org.bukkit.entity.Player
@@ -36,14 +41,52 @@ class PrivateChannel(
 
     init {
         if (!bindings.command.isNullOrEmpty()) {
-            command(bindings.command[0], subList(bindings.command, 1)) {
-
+            command(bindings.command[0], subList(bindings.command, 1), "Channel $id speak command") {
+                dynamic("player") {
+                    suggestion<Player> { _, _ ->
+                        Players.getPlayers()
+                    }
+                    execute<Player> { sender, _, argument ->
+                        sender.getSession().lastPrivateTo = Players.getPlayerFullName(argument) ?: return@execute sender.sendLang("Command-Player-Not-Exist")
+                        join(sender, this@PrivateChannel)
+                    }
+                    dynamic("message") {
+                        suggestion<Player>(uncheck = true) { _, context ->
+                            Players.getPlayers().filter {
+                                it.lowercase().startsWith(context.argument(-1))
+                            }
+                        }
+                        execute<Player> { sender, context, argument ->
+                            Players.getPlayerFullName(context.argument(-1))?.let {
+                                sender.getSession().lastPrivateTo = it
+                                execute(sender, argument)
+                            } ?: sender.sendLang("Command-Player-Not-Exist")
+                        }
+                    }
+                }
+                incorrectSender { sender, _ ->
+                    sender.sendLang("Command-Not-Player")
+                }
+                incorrectCommand { sender, _, index, state ->
+                    when(state) {
+                        1 -> {
+                            when(index) {
+                                -1 -> sender.sendLang("Private-Message-No-Player")
+                            }
+                        }
+                        2 -> sender.sendLang("Command-Player-Not-Exist")
+                    }
+                }
             }
         }
     }
 
     override fun execute(player: Player, message: String) {
+        if (!player.checkMute()) {
+            return
+        }
         if (!settings.speakCondition.pass(player)) {
+            player.sendLang("Channel-No-Speak-Permission")
             return
         }
         val session = player.getSession()
@@ -53,25 +96,25 @@ class PrivateChannel(
         }
 
         val msg = event.message
-        var builder = Component.text()
+        val builderSender = Component.text()
         sender.firstOrNull { it.condition.pass(player) }?.let { format ->
             format.prefix.forEach { prefix ->
-                builder = builder.append(prefix.value.first { it.condition.pass(player) }.content.toTextComponent(player)) }
-            builder = builder.append(format.msg.serialize(player, msg, settings.disabledFunctions))
+                builderSender.append(prefix.value.first { it.condition.pass(player) }.content.toTextComponent(player)) }
+            builderSender.append(format.msg.serialize(player, msg, settings.disabledFunctions))
             format.suffix.forEach { suffix ->
-                builder = builder.append(suffix.value.first { it.condition.pass(player) }.content.toTextComponent(player)) }
+                builderSender.append(suffix.value.first { it.condition.pass(player) }.content.toTextComponent(player)) }
         } ?: return
-        val send = builder.build()
+        val send = builderSender.build()
 
-        builder = Component.text()
+        val builderReceiver = Component.text()
         receiver.firstOrNull { it.condition.pass(player) }?.let { format ->
             format.prefix.forEach { prefix ->
-                builder = builder.append(prefix.value.first { it.condition.pass(player) }.content.toTextComponent(player)) }
-            builder = builder.append(format.msg.serialize(player, msg, settings.disabledFunctions))
+                builderReceiver.append(prefix.value.first { it.condition.pass(player) }.content.toTextComponent(player)) }
+            builderReceiver.append(format.msg.serialize(player, msg, settings.disabledFunctions))
             format.suffix.forEach { suffix ->
-                builder = builder.append(suffix.value.first { it.condition.pass(player) }.content.toTextComponent(player)) }
+                builderReceiver.append(suffix.value.first { it.condition.pass(player) }.content.toTextComponent(player)) }
         } ?: return
-        val receive = builder.build()
+        val receive = builderReceiver.build()
 
         TrChat.adventure.player(player).sendMessage(send)
 
@@ -95,6 +138,7 @@ class PrivateChannel(
         console().sendLang("Private-Message-Spy-Format", player.name, session.lastPrivateTo, msg)
 
         CommandReply.lastMessageFrom[session.lastPrivateTo] = player.name
+        player.getSession().lastMessage = message
         ChatLogs.logPrivate(player.name, session.lastPrivateTo, message)
         Metrics.increase(0)
     }

@@ -1,8 +1,11 @@
 package me.arasple.mc.trchat.module.conf
 
 import me.arasple.mc.trchat.api.config.Functions
-import me.arasple.mc.trchat.module.display.channel.*
-import me.arasple.mc.trchat.module.display.channel.Target
+import me.arasple.mc.trchat.module.display.channel.Channel
+import me.arasple.mc.trchat.module.display.channel.PrivateChannel
+import me.arasple.mc.trchat.module.display.channel.obj.ChannelBindings
+import me.arasple.mc.trchat.module.display.channel.obj.ChannelSettings
+import me.arasple.mc.trchat.module.display.channel.obj.Target
 import me.arasple.mc.trchat.module.display.format.Format
 import me.arasple.mc.trchat.module.display.format.JsonComponent
 import me.arasple.mc.trchat.module.display.format.MsgComponent

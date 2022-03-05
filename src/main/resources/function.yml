@@ -13,8 +13,10 @@ General:
     Origin-Name: false
     Compatible: false
     Keys:
-      - '%i(tem)?%?'
-      - '[i(tem)?]'
+      - '(?i)%i%?'
+      - '(?i)%item%?'
+      - '(?i)[i]'
+      - '(?i)[item]'
   Mention:
     Enable: true
     Self-Mention: false

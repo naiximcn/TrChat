@@ -1,8 +1,10 @@
 package me.arasple.mc.trchat.util.proxy.bukkit
 
+import me.arasple.mc.trchat.api.config.Functions
 import me.arasple.mc.trchat.util.proxy.Proxy
 import me.arasple.mc.trchat.util.proxy.bungee.Bungees
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
@@ -19,7 +21,12 @@ object Players {
 
     private var players = listOf<String>()
 
-    val regex get() = Regex("(?i)@? ?(${getPlayers().joinToString("|") { Regex.escapeReplacement(it) }})")
+    fun getRegex(player: Player): Regex {
+        return Regex("(?i)@? ?(${getPlayers()
+            .filter { Functions.mention.getBoolean("Self-Mention") || it != player.name }
+            .joinToString("|") { Regex.escapeReplacement(it) }
+        })")
+    }
 
     @Awake(LifeCycle.ENABLE)
     fun startTask() {
@@ -45,7 +52,7 @@ object Players {
 
     fun getPlayerFullName(target: String): String? {
         val player = Bukkit.getPlayerExact(target)
-        return if (player != null && player.isOnline) player.name else players.firstOrNull { p -> p.equals(target, ignoreCase = true) }
+        return if (player != null && player.isOnline) player.name else players.firstOrNull { it.equals(target, ignoreCase = true) }
     }
 
     fun getPlayers(): List<String> {

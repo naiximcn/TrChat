@@ -1,4 +1,4 @@
-package me.arasple.mc.trchat.module.display.channel
+package me.arasple.mc.trchat.module.display.channel.obj
 
 import me.arasple.mc.trchat.module.internal.script.Condition
 

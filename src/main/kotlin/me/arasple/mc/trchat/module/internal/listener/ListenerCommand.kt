@@ -1,16 +1,12 @@
 package me.arasple.mc.trchat.module.internal.listener
 
 import me.arasple.mc.trchat.api.config.Functions
-import me.arasple.mc.trchat.module.display.channel.Channel
-import me.arasple.mc.trchat.module.display.channel.PrivateChannel
-import me.arasple.mc.trchat.util.getSession
 import org.bukkit.Bukkit
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.common.util.subList
 import taboolib.platform.util.sendLang
 
 /**
@@ -49,35 +45,6 @@ object ListenerCommand {
             e.isCancelled =  true
             player.sendLang("Command-Controller-Cooldown")
             return
-        }
-
-        val channel = Channel.channels
-            .firstOrNull { it.bindings.command?.any { c -> c.equals(command[0], ignoreCase = true) } == true } ?: return
-
-        e.isCancelled = true
-
-        val session = player.getSession()
-
-        if (channel is PrivateChannel) {
-            if (command.size > 2) {
-                val message = subList(command, 2).joinToString(" ")
-                channel.execute(player, message)
-                session.lastPrivateTo = command[1]
-                session.lastMessage = message
-            } else if (command.size == 2) {
-                Channel.join(player, channel)
-                session.lastPrivateTo = command[1]
-            } else {
-                player.sendLang("Private-Message-No-Player")
-            }
-        } else {
-            if (command.size > 1) {
-                val message = cmd.substringAfter(' ')
-                channel.execute(player, message)
-                session.lastMessage = message
-            } else {
-                Channel.join(player, channel)
-            }
         }
     }
 }

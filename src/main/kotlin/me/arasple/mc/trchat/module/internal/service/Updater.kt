@@ -1,16 +1,20 @@
 package me.arasple.mc.trchat.module.internal.service
 
 import com.google.gson.JsonParser
+import org.bukkit.event.player.PlayerJoinEvent
 import taboolib.common.LifeCycle
 import taboolib.common.env.DependencyDownloader.readFully
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.SkipTo
+import taboolib.common.platform.event.EventPriority
+import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.pluginVersion
 import taboolib.common.platform.function.submit
 import taboolib.common.util.Version
 import taboolib.module.lang.sendLang
+import taboolib.platform.util.sendLang
 import java.io.BufferedInputStream
 import java.net.URL
 import java.nio.charset.StandardCharsets
@@ -28,7 +32,8 @@ object Updater {
     private val notified = mutableListOf<UUID>()
     private var notify = false
     private val current_version = Version(pluginVersion)
-    private var latest_Version = Version("-1.0.0")
+    private var latest_Version = Version("0.0")
+    private var information = ""
 
 //    @Awake(LifeCycle.LOAD)
     fun init() {
@@ -37,7 +42,7 @@ object Updater {
         }
     }
 
-    private fun notifyVersion(information: String) {
+    private fun notifyVersion() {
         if (latest_Version > current_version) {
             console().sendLang("Plugin-Updater-Header", current_version, latest_Version)
             console().sendMessage(information)
@@ -62,21 +67,24 @@ object Updater {
             URL(api_url).openStream().use { inputStream ->
                 BufferedInputStream(inputStream).use { bufferedInputStream ->
                     val read = readFully(bufferedInputStream, StandardCharsets.UTF_8)
-                    val json = JsonParser.parseString(read).asJsonObject
+                    val json = JsonParser().parse(read).asJsonObject
                     val latestVersion = json["tag_name"].asString
                     latest_Version = Version(latestVersion)
-                    notifyVersion(json["body"].asString)
+                    information = json["body"].asString
+                    notifyVersion()
                 }
             }
         }
     }
 
-//    @SubscribeEvent(priority = EventPriority.HIGHEST)
-//    fun onJoin(e: PlayerJoinEvent) {
-//        val player = e.player
-//        if (player.hasPermission("trchat.admin") && latest_Version - current_version >= 0.2 && !notified.contains(player.uniqueId)) {
-//            player.sendLang("Plugin-Updater-Too-Old")
-//            notified.add(player.uniqueId)
-//        }
-//    }
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    fun onJoin(e: PlayerJoinEvent) {
+        val player = e.player
+        if (player.hasPermission("trchat.admin") && latest_Version > current_version && !notified.contains(player.uniqueId)) {
+            player.sendLang("Plugin-Updater-Header", current_version, latest_Version)
+            player.sendMessage(information)
+            player.sendLang("Plugin-Updater-Footer")
+            notified.add(player.uniqueId)
+        }
+    }
 }
