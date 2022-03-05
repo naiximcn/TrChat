@@ -23,7 +23,7 @@ Database:
 
 Chat:
   Anti-Repeat: 0.85
-  Cooldown: 2.0
+  Cooldown: '2.0s'
   Length-Limit: 100
 
 Color:

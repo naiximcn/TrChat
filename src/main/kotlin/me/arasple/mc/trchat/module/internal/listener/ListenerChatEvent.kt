@@ -4,8 +4,7 @@ import me.arasple.mc.trchat.api.config.Functions
 import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.module.display.channel.Channel
 import me.arasple.mc.trchat.module.internal.hook.HookPlugin
-import me.arasple.mc.trchat.util.checkMute
-import me.arasple.mc.trchat.util.getSession
+import me.arasple.mc.trchat.util.*
 import org.bukkit.entity.Player
 import org.bukkit.event.player.AsyncPlayerChatEvent
 import taboolib.common.platform.Platform
@@ -58,44 +57,52 @@ object ListenerChatEvent {
         }
     }
 
-    private fun checkLimits(p: Player, message: String): Boolean {
-        if (p.hasPermission("trchat.bypass.*")) {
+    private fun checkLimits(player: Player, message: String): Boolean {
+        if (player.hasPermission("trchat.bypass.*")) {
             return true
         }
-        if (!p.hasPermission("trchat.bypass.chatlength")) {
+        if (!player.hasPermission("trchat.bypass.chatlength")) {
             if (message.length > Settings.chatLengthLimit) {
-                p.sendLang("General-Too-Long", message.length, Settings.chatLengthLimit)
+                player.sendLang("General-Too-Long", message.length, Settings.chatLengthLimit)
                 return false
             }
         }
-        if (!p.hasPermission("trchat.bypass.repeat")) {
-            val lastMessage = p.getSession().lastMessage
+        if (!player.hasPermission("trchat.bypass.repeat")) {
+            val lastMessage = player.getSession().lastMessage
             if (Strings.similarDegree(lastMessage, message) > Settings.chatSimilarity) {
-                p.sendLang("General-Too-Similar")
+                player.sendLang("General-Too-Similar")
                 return false
             } else {
-                p.getSession().lastMessage = message
+                player.getSession().lastMessage = message
             }
         }
-        if (!p.hasPermission("trchat.bypass.chatcd")) {
-            if (!Settings.chatDelay.get().hasNext(p.name)) {
-                p.sendLang("Cooldowns-Chat", Settings.CONF.getDouble("Chat.Cooldown").toString())
+        if (!player.hasPermission("trchat.bypass.chatcd")) {
+            val chatCooldown = player.getCooldownLeft(CooldownType.CHAT)
+            if (chatCooldown > 0) {
+                player.sendLang("Cooldowns-Chat", chatCooldown / 1000)
                 return false
             }
         }
-        if (!p.hasPermission("trchat.bypass.itemcd")) {
-            if (Functions.itemShowKeys.get().any { it.matches(message) } && !Functions.itemShowDelay.get().hasNext(p.name)) {
-                p.sendLang("Cooldowns-Item-Show", Functions.itemShow.getDouble("Cooldowns").toString())
+        if (!player.hasPermission("trchat.bypass.itemcd")) {
+            val itemCooldown = player.getCooldownLeft(CooldownType.ITEM_SHOW)
+            if (Functions.itemShowKeys.get().any { it.matches(message) } && itemCooldown > 0) {
+                player.sendLang("Cooldowns-Item-Show", itemCooldown / 1000)
                 return false
+            } else {
+                player.updateCooldown(CooldownType.ITEM_SHOW, Functions.itemShowCooldown.get())
             }
         }
-        if (!p.hasPermission("trchat.bypass.inventorycd")) {
+        if (!player.hasPermission("trchat.bypass.inventorycd")) {
+            val inventoryCooldown = player.getCooldownLeft(CooldownType.INVENTORY_SHOW)
             if (Functions.inventoryShow.getStringList("Keys").any { message.contains(it, ignoreCase = true) }
-                && !Functions.itemShowDelay.get().hasNext(p.name)) {
-                p.sendLang("Cooldowns-Item-Show", Functions.itemShow.getDouble("Cooldowns").toString())
+                && inventoryCooldown > 0) {
+                player.sendLang("Cooldowns-Item-Show", inventoryCooldown / 1000)
                 return false
+            } else {
+                player.updateCooldown(CooldownType.INVENTORY_SHOW, Functions.inventoryShowCooldown.get())
             }
         }
+        player.updateCooldown(CooldownType.CHAT, Settings.chatCooldown.get())
         return true
     }
 }

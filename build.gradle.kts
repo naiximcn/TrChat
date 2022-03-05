@@ -37,7 +37,7 @@ taboolib {
         "expansion-javascript"
     )
     classifier = null
-    version = "6.0.7-35"
+    version = "6.0.7-37"
 }
 
 repositories {
@@ -53,7 +53,7 @@ dependencies {
     compileOnly("net.kyori:adventure-platform-bukkit:4.0.1")
     compileOnly("net.kyori:adventure-platform-bungeecord:4.0.1")
 
-    compileOnly("net.md-5:bungeecord-bootstrap:1.18-R0.1-SNAPSHOT")
+    compileOnly("net.md-5:bungeecord-bootstrap:1.17-R0.1-SNAPSHOT")
     compileOnly("com.velocitypowered:velocity-api:3.0.0")
 
     compileOnly("ink.ptms.core:v11800:11800:mapped")

@@ -2,12 +2,11 @@ package me.arasple.mc.trchat.api.config
 
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
-import taboolib.common5.Baffle
+import taboolib.common5.util.parseMillis
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.ConfigNode
 import taboolib.module.configuration.ConfigNodeTransfer
 import taboolib.module.configuration.Configuration
-import java.util.concurrent.TimeUnit
 
 /**
  * @author wlys
@@ -21,7 +20,7 @@ object Settings {
         private set
 
     @ConfigNode("Chat.Cooldown", "settings.yml")
-    val chatDelay = ConfigNodeTransfer<Double, Baffle> { Baffle.of((this * 1000).toLong(), TimeUnit.MILLISECONDS) }
+    val chatCooldown = ConfigNodeTransfer<String, Long> { parseMillis() }
 
     @ConfigNode("Chat.Anti-Repeat", "settings.yml")
     var chatSimilarity = 0.85

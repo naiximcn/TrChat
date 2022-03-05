@@ -8,26 +8,22 @@ General:
       - 'shout{cooldown: 3}'
   Item-Show:
     Enable: true
-    Cooldown: 30
+    Cooldown: '30s'
     Format: '&8[&3{0} &bx{1}&8]'
     Origin-Name: false
     Compatible: false
     Keys:
-      - '%i'
-      - '%item'
-      - '%i%'
-      - '%item%'
-      - '[i]'
-      - '[item]'
+      - '%i(tem)?%?'
+      - '[i(tem)?]'
   Mention:
     Enable: true
     Self-Mention: false
     Format: '&r &a@&2{0}&r '
-    Cooldown: 30
+    Cooldown: '30s'
     Notify: true
   Inventory-Show:
     Enable: true
-    Cooldown: 30
+    Cooldown: '30s'
     Format: '&8[&3{0} &b的背包&8]'
     Keys:
       - '[inv]'

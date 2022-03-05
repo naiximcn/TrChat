@@ -7,12 +7,10 @@ import me.arasple.mc.trchat.api.config.Functions
 import me.arasple.mc.trchat.module.display.format.part.json.*
 import me.arasple.mc.trchat.module.display.function.Function
 import me.arasple.mc.trchat.module.display.function.Function.Companion.replaceRegex
+import me.arasple.mc.trchat.util.*
 import me.arasple.mc.trchat.util.color.DefaultColor
 import me.arasple.mc.trchat.util.color.MessageColors
 import me.arasple.mc.trchat.util.color.colorify
-import me.arasple.mc.trchat.util.hoverItemFixed
-import me.arasple.mc.trchat.util.legacy
-import me.arasple.mc.trchat.util.pass
 import me.arasple.mc.trchat.util.proxy.bukkit.Players
 import me.arasple.mc.trchat.util.proxy.sendProxyLang
 import net.kyori.adventure.text.Component
@@ -195,10 +193,11 @@ class MsgComponent(
         private fun String.mention(player: Player): String {
             var result = this
             if (Functions.mention.getBoolean("Enable")) {
-                if (result.contains(Players.regex) && Functions.mentionDelay.get().hasNext(player.name)) {
+                if (result.contains(Players.regex) && !player.isInCooldown(CooldownType.MENTION)) {
                     result = Players.regex.replace(result) {
                         "{{MENTION:${it.groupValues[1]}}}"
                     }
+                    player.updateCooldown(CooldownType.MENTION, Functions.mentionCooldown.get())
                 }
             }
             return result

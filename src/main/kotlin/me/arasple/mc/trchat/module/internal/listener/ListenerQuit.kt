@@ -1,7 +1,5 @@
 package me.arasple.mc.trchat.module.internal.listener
 
-import me.arasple.mc.trchat.api.config.Functions
-import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.module.display.ChatSession
 import me.arasple.mc.trchat.module.display.channel.Channel
 import me.arasple.mc.trchat.module.internal.data.Database
@@ -24,11 +22,6 @@ object ListenerQuit {
         val player = e.player
 
         Channel.channels.forEach { it.listeners.remove(player.uniqueId) }
-
-        Settings.chatDelay.get().reset(player.name)
-        Functions.itemShowDelay.get().reset(player.name)
-        Functions.mentionDelay.get().reset(player.name)
-        Functions.inventoryShowDelay.get().reset(player.name)
 
         ChatSession.removeSession(player)
 
