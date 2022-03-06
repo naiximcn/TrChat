@@ -18,8 +18,7 @@ class Cooldowns {
         private val COOLDOWNS = mutableMapOf<UUID, Cooldowns>()
 
         fun getCooldownLeft(uuid: UUID, type: CooldownType): Long {
-            COOLDOWNS.putIfAbsent(uuid, Cooldowns())
-            return COOLDOWNS[uuid]!!.cooldowns.firstOrNull {
+            return COOLDOWNS.computeIfAbsent(uuid) { Cooldowns() }.cooldowns.firstOrNull {
                 it.id == type.alias
             }?.let { it.time - System.currentTimeMillis() } ?: -1
         }
@@ -29,8 +28,7 @@ class Cooldowns {
         }
 
         fun updateCooldown(uuid: UUID, type: CooldownType, lasts: Long) {
-            COOLDOWNS.putIfAbsent(uuid, Cooldowns())
-            COOLDOWNS[uuid]!!.let { cooldowns ->
+            COOLDOWNS.computeIfAbsent(uuid) { Cooldowns() }.let { cooldowns ->
                 cooldowns.cooldowns.removeIf { it.id == type.alias }
                 cooldowns.cooldowns.add(Cooldown(type.alias, System.currentTimeMillis() + lasts))
             }

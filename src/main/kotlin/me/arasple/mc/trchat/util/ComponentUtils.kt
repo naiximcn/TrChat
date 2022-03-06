@@ -35,8 +35,9 @@ fun legacy(string: String): TextComponent {
 }
 
 fun TextComponent.hoverItemFixed(item: ItemStack, player: Player): TextComponent {
-    val newItem = NMS.INSTANCE.optimizeNBT(item.optimizeShulkerBox())
-    HookPlugin.getEcoEnchants().displayItem(newItem, player)
+    var newItem = item.optimizeShulkerBox()
+    newItem = NMS.INSTANCE.optimizeNBT(newItem)
+    newItem = HookPlugin.getEcoEnchants().displayItem(newItem, player)
     val nmsItemStack = TrChatAPI.classCraftItemStack.invokeMethod<Any>("asNMSCopy", newItem, fixed = true)!!
     val nmsNBTTabCompound = classNBTTagCompound.invokeConstructor()
     val itemJson = nmsItemStack.invokeMethod<Any>("save", nmsNBTTabCompound)!!
