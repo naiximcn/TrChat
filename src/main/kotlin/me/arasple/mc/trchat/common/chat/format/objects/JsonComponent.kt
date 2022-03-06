@@ -2,6 +2,7 @@ package me.arasple.mc.trchat.common.chat.format.objects
 
 import me.arasple.mc.trchat.api.TrChatAPI
 import me.arasple.mc.trchat.api.nms.NMS
+import me.arasple.mc.trchat.internal.hook.HookPlugin
 import me.arasple.mc.trchat.internal.script.Condition
 import me.arasple.mc.trchat.util.coloredAll
 import net.md_5.bungee.api.chat.ComponentBuilder
@@ -95,8 +96,10 @@ open class JsonComponent {
             }
         }
 
-        fun TellrawJson.hoverItemFixed(item: ItemStack): TellrawJson {
-            val newItem = NMS.INSTANCE.optimizeNBT(NMS.INSTANCE.optimizeShulkerBox(item))
+        fun TellrawJson.hoverItemFixed(item: ItemStack, player: Player): TellrawJson {
+            var newItem = NMS.INSTANCE.optimizeShulkerBox(item)
+            newItem = NMS.INSTANCE.optimizeNBT(newItem)
+            newItem = HookPlugin.getEcoEnchants().displayItem(newItem, player)
             val nmsItemStack = TrChatAPI.classCraftItemStack.invokeMethod<Any>("asNMSCopy", newItem, fixed = true)!!
             val nmsNBTTabCompound = classNBTTagCompound.invokeConstructor()
             val itemJson = nmsItemStack.invokeMethod<Any>("save", nmsNBTTabCompound)!!

@@ -86,7 +86,7 @@ class MsgComponent : JsonComponent {
                                 } else {
                                     this
                                 }
-                            })
+                            }, player)
                     })
                     continue
                 }

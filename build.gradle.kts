@@ -1,7 +1,7 @@
 plugins {
     java
     id("io.izzel.taboolib") version "1.34"
-    id("org.jetbrains.kotlin.jvm") version "1.5.31"
+    id("org.jetbrains.kotlin.jvm") version "1.6.10"
 }
 
 taboolib {
@@ -15,6 +15,7 @@ taboolib {
             name("Dynmap").optional(true).with("bukkit")
             name("DiscordSRV").optional(true).with("bukkit")
             name("ItemsAdder").optional(true).with("bukkit")
+            name("EcoEnchants").optional(true).with("bukkit")
         }
         desc("Advanced Minecraft Chat Control")
     }
@@ -45,14 +46,16 @@ repositories {
 }
 
 dependencies {
-    compileOnly("us.dynmap:dynmap-api:2.5")
-    compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("net.md-5:bungeecord-bootstrap:1.17-R0.1-SNAPSHOT")
     compileOnly("com.velocitypowered:velocity-api:3.0.0")
 
     compileOnly("ink.ptms.core:v11802:11802:mapped")
     compileOnly("ink.ptms.core:v11802:11802:universal")
     compileOnly("ink.ptms:nms-all:1.0.0")
+
+    compileOnly("us.dynmap:dynmap-api:2.5") { isTransitive = false }
+    compileOnly("me.clip:placeholderapi:2.10.9") { isTransitive = false }
+    compileOnly("com.willfp:eco:6.6.3") { isTransitive = false }
 
     compileOnly(kotlin("stdlib"))
     compileOnly(fileTree("libs"))
