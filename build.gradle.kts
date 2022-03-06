@@ -36,11 +36,11 @@ taboolib {
 }
 
 repositories {
-    maven("https://maven.izzel.io/releases")
     maven("https://nexus.velocitypowered.com/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.codemc.io/repository/maven-public/")
     maven("http://repo.mikeprimm.com/") { isAllowInsecureProtocol = true }
+    maven("https://jitpack.io")
     mavenLocal()
     mavenCentral()
 }
