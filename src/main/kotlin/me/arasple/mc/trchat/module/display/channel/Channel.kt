@@ -42,9 +42,13 @@ open class Channel(
         if (!bindings.command.isNullOrEmpty()) {
             command(bindings.command[0], subList(bindings.command, 1), "Channel $id speak command") {
                 execute<Player> { sender, _, _ ->
-                    join(sender, this@Channel)
+                    if (sender.getSession().channel == this@Channel) {
+                        quit(sender)
+                    } else {
+                        join(sender, this@Channel)
+                    }
                 }
-                dynamic("message") {
+                dynamic("message", optional = true) {
                     execute<Player> { sender, _, argument ->
                         execute(sender, argument)
                     }

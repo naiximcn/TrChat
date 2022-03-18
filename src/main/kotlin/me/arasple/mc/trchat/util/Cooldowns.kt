@@ -9,18 +9,15 @@ import java.util.*
  */
 class Cooldowns {
 
-    var cooldowns = mutableListOf<Cooldown>()
-
-    class Cooldown(var id: String, var time: Long)
+    var cooldowns = mutableMapOf<String, Long>()
 
     companion object {
 
         private val COOLDOWNS = mutableMapOf<UUID, Cooldowns>()
 
         fun getCooldownLeft(uuid: UUID, type: CooldownType): Long {
-            return COOLDOWNS.computeIfAbsent(uuid) { Cooldowns() }.cooldowns.firstOrNull {
-                it.id == type.alias
-            }?.let { it.time - System.currentTimeMillis() } ?: -1
+            return COOLDOWNS.computeIfAbsent(uuid) { Cooldowns() }
+                .cooldowns[type.alias]?.let { it - System.currentTimeMillis() } ?: -1
         }
 
         fun isInCooldown(uuid: UUID, type: CooldownType): Boolean {
@@ -29,8 +26,7 @@ class Cooldowns {
 
         fun updateCooldown(uuid: UUID, type: CooldownType, lasts: Long) {
             COOLDOWNS.computeIfAbsent(uuid) { Cooldowns() }.let { cooldowns ->
-                cooldowns.cooldowns.removeIf { it.id == type.alias }
-                cooldowns.cooldowns.add(Cooldown(type.alias, System.currentTimeMillis() + lasts))
+                cooldowns.cooldowns[type.alias] = System.currentTimeMillis() + lasts
             }
         }
 

@@ -42,7 +42,14 @@ class PrivateChannel(
     init {
         if (!bindings.command.isNullOrEmpty()) {
             command(bindings.command[0], subList(bindings.command, 1), "Channel $id speak command") {
-                dynamic("player") {
+                execute<Player> { sender, _, _ ->
+                    if (sender.getSession().channel == this@PrivateChannel) {
+                        quit(sender)
+                    } else {
+                        sender.sendLang("Private-Message-No-Player")
+                    }
+                }
+                dynamic("player", optional = true) {
                     suggestion<Player> { _, _ ->
                         Players.getPlayers()
                     }
@@ -50,7 +57,7 @@ class PrivateChannel(
                         sender.getSession().lastPrivateTo = Players.getPlayerFullName(argument) ?: return@execute sender.sendLang("Command-Player-Not-Exist")
                         join(sender, this@PrivateChannel)
                     }
-                    dynamic("message") {
+                    dynamic("message", optional = true) {
                         suggestion<Player>(uncheck = true) { _, context ->
                             Players.getPlayers().filter {
                                 it.lowercase().startsWith(context.argument(-1))
@@ -66,16 +73,6 @@ class PrivateChannel(
                 }
                 incorrectSender { sender, _ ->
                     sender.sendLang("Command-Not-Player")
-                }
-                incorrectCommand { sender, _, index, state ->
-                    when(state) {
-                        1 -> {
-                            when(index) {
-                                -1 -> sender.sendLang("Private-Message-No-Player")
-                            }
-                        }
-                        2 -> sender.sendLang("Command-Player-Not-Exist")
-                    }
                 }
             }
         }

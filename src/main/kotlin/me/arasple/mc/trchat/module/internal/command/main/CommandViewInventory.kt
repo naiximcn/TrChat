@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.internal.command.main
 
 import me.arasple.mc.trchat.module.display.format.MsgComponent
+import me.arasple.mc.trchat.module.display.function.InventoryShow
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -24,7 +25,7 @@ object CommandViewInventory {
         command("view-inventory", permissionDefault = PermissionDefault.TRUE) {
             dynamic("inventory") {
                 execute<Player> { sender, _, argument ->
-                    MsgComponent.inventoryCache.getIfPresent(argument)?.let {
+                    InventoryShow.cache.getIfPresent(argument)?.let {
                         sender.openInventory(it)
                     } ?: kotlin.run {
                         sender.sendLang("Inventory-Show-Unavailable")

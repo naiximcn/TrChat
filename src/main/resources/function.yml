@@ -1,13 +1,13 @@
 General:
   Command-Controller:
-    Enable: true
+    Enabled: true
     List:
       - 'arasple{exact: true}{condition: perm *trchat.admin}'
       - 'ver(sion)?(s)?{condition: perm *trchat.admin}'
       - 'help(s)?{condition: perm *trchat.admin}'
       - 'shout{cooldown: 3}'
   Item-Show:
-    Enable: true
+    Enabled: true
     Cooldown: '30s'
     Format: '&8[&3{0} &bx{1}&8]'
     Origin-Name: false
@@ -18,20 +18,34 @@ General:
       - '(?i)[i]'
       - '(?i)[item]'
   Mention:
-    Enable: true
+    Enabled: true
     Self-Mention: false
     Format: '&r &a@&2{0}&r '
     Cooldown: '30s'
     Notify: true
   Inventory-Show:
-    Enable: true
+    Enabled: true
     Cooldown: '30s'
-    Format: '&8[&3{0} &b的背包&8]'
+    Format: "&8[&3{0}'s Inventory&8]"
     Keys:
       - '[inv]'
       - '[inventory]'
 
 Custom:
+  # 示例 —— 网站分享
+  shareUrl:
+    pattern: '((https|http|ftp|rtsp|mms)?:\/\/)[^\s]+'
+    display:
+      text: '&8[&f&l网站&8]'
+      hover:
+        - ''
+        - '&3网站: {0}'
+        - ''
+        - '&7点击进入!'
+        - ''
+        - '&8[&c!&8] &7谨防任何诈骗'
+      url: '{0}'
+
   # 示例 —— QQ 分享
   shareQQ:
     condition: ~
@@ -112,17 +126,3 @@ Custom:
         - '&7这是一个邮箱'
         - '&7点击复制!'
       copy: '{0}'
-
-  # 示例 —— 网站分享
-  shareUrl:
-    pattern: '((https|http|ftp|rtsp|mms)?:\/\/)[^\s]+'
-    display:
-      text: '&8[&f&l网站&8]'
-      hover:
-        - ''
-        - '&3网站: {0}'
-        - ''
-        - '&7点击进入!'
-        - ''
-        - '&8[&c!&8] &7谨防任何诈骗'
-      url: '{0}'

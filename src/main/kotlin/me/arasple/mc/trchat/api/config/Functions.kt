@@ -56,25 +56,4 @@ object Functions {
             regex to Pair(condition, baffle)
         }
     }
-
-    @ConfigNode("General.Item-Show.Cooldown", "function.yml")
-    val itemShowCooldown = ConfigNodeTransfer<String, Long> { parseMillis() }
-
-    @ConfigNode("General.Item-Show.Keys", "function.yml")
-    val itemShowKeys = ConfigNodeTransfer<List<String>, List<Regex>> { map { Regex("$it(-[1-9])?") } }
-
-    @ConfigNode("General.Mention.Cooldown", "function.yml")
-    val mentionCooldown = ConfigNodeTransfer<String, Long> { parseMillis() }
-
-    @ConfigNode("General.Inventory-Show.Cooldown", "function.yml")
-    val inventoryShowCooldown = ConfigNodeTransfer<String, Long> { parseMillis() }
-
-    @ConfigNode("General.Item-Show", "function.yml")
-    lateinit var itemShow: ConfigurationSection
-
-    @ConfigNode("General.Mention", "function.yml")
-    lateinit var mention: ConfigurationSection
-
-    @ConfigNode("General.Inventory-Show", "function.yml")
-    lateinit var inventoryShow: ConfigurationSection
 }

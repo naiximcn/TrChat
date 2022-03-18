@@ -4,6 +4,7 @@ import com.willfp.eco.core.display.Display
 import me.arasple.mc.trchat.module.internal.hook.HookAbstract
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import taboolib.platform.util.isAir
 
 /**
  * @author wlys
@@ -11,8 +12,8 @@ import org.bukkit.inventory.ItemStack
  */
 class HookEcoEnchants : HookAbstract() {
 
-    fun displayItem(item: ItemStack, player: Player?): ItemStack {
-        if (!isHooked) {
+    fun displayItem(item: ItemStack, player: Player? = null): ItemStack {
+        if (!isHooked || item.isAir()) {
             return item
         }
         return Display.displayAndFinalize(item, player)
