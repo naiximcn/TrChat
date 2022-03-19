@@ -1,41 +1,20 @@
 package me.arasple.mc.trchat.module.display.format
 
-import com.google.common.cache.Cache
-import com.google.common.cache.CacheBuilder
 import me.arasple.mc.trchat.api.TrChatAPI
-import me.arasple.mc.trchat.api.config.Functions
 import me.arasple.mc.trchat.module.display.format.part.json.*
 import me.arasple.mc.trchat.module.display.function.Function
 import me.arasple.mc.trchat.module.display.function.Function.Companion.replaceRegex
 import me.arasple.mc.trchat.module.display.function.InventoryShow
 import me.arasple.mc.trchat.module.display.function.ItemShow
 import me.arasple.mc.trchat.module.display.function.Mention
-import me.arasple.mc.trchat.util.*
 import me.arasple.mc.trchat.util.color.DefaultColor
 import me.arasple.mc.trchat.util.color.MessageColors
-import me.arasple.mc.trchat.util.color.colorify
-import me.arasple.mc.trchat.util.proxy.bukkit.Players
-import me.arasple.mc.trchat.util.proxy.sendProxyLang
+import me.arasple.mc.trchat.util.legacy
+import me.arasple.mc.trchat.util.pass
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
-import net.kyori.adventure.text.event.ClickEvent
-import org.bukkit.Material
 import org.bukkit.entity.Player
-import org.bukkit.inventory.Inventory
-import org.bukkit.inventory.ItemStack
-import taboolib.common.io.digest
-import taboolib.common.reflect.Reflex.Companion.invokeMethod
 import taboolib.common.util.VariableReader
-import taboolib.common.util.replaceWithOrder
-import taboolib.library.xseries.XMaterial
-import taboolib.module.nms.getI18nName
-import taboolib.module.ui.buildMenu
-import taboolib.module.ui.type.Linked
-import taboolib.platform.util.buildItem
-import taboolib.platform.util.isAir
-import taboolib.platform.util.serializeToByteArray
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 /**
  * @author wlys
@@ -61,7 +40,7 @@ class MsgComponent(
         if (!disabledFunctions.contains("Mention")) {
             message = Mention.replaceMessage(message, player)
         }
-        if (!disabledFunctions.contains("Item-Show")) {
+        if (!disabledFunctions.contains("Inventory-Show")) {
             message = InventoryShow.replaceMessage(message)
         }
         Function.functions.filter { it.condition.pass(player) && !disabledFunctions.contains(it.id) }.forEach {

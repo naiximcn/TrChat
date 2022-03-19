@@ -43,7 +43,7 @@ fun TextComponent.hoverItemFixed(item: ItemStack, player: Player): TextComponent
     val itemJson = nmsItemStack.invokeMethod<Any>("save", nmsNBTTabCompound)!!
     val id = itemJson.invokeMethod<String>("getString", "id") ?: "minecraft:air"
     val tag = itemJson.invokeMethod<Any>("get", "tag")?.toString() ?: "{}"
-    return hoverEvent(HoverEvent.showItem(Key.key(id), newItem.amount, BinaryTagHolder.of(tag)))
+    return hoverEvent(HoverEvent.showItem(Key.key(id), newItem.amount, BinaryTagHolder.binaryTagHolder(tag)))
 }
 
 private fun ItemStack.optimizeShulkerBox(): ItemStack {

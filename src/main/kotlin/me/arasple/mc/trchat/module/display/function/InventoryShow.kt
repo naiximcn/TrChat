@@ -62,24 +62,27 @@ object InventoryShow {
     }
 
     fun createComponent(player: Player): Component {
-        val menu = buildMenu<Linked<ItemStack>>("${player.name} 的背包") {
+        val menu = buildMenu<Linked<ItemStack>>("${player.name}'s Inventory") {
             rows(6)
             slots(inventorySlots)
             elements {
                 IntRange(9, 35).map { player.inventory.getItem(it) ?: AIR_ITEM } +
-                        IntRange(0, 8).map { player.inventory.getItem(it) ?: ItemStack(Material.AIR) }
+                        IntRange(0, 8).map { player.inventory.getItem(it) ?: AIR_ITEM }
             }
             onGenerate { _, element, _, _ ->
                 element
             }
             onBuild {
+                it.setItem(0, PLACEHOLDER_ITEM)
                 it.setItem(1, player.inventory.invokeMethod<ItemStack>("getItemInOffHand") ?: AIR_ITEM)
                 it.setItem(2, buildItem(XMaterial.PLAYER_HEAD) { name = "§e${player.name}" })
                 it.setItem(3, player.inventory.itemInHand)
+                it.setItem(4, PLACEHOLDER_ITEM)
                 it.setItem(5, player.inventory.helmet ?: AIR_ITEM)
                 it.setItem(6, player.inventory.chestplate ?: AIR_ITEM)
                 it.setItem(7, player.inventory.leggings ?: AIR_ITEM)
                 it.setItem(8, player.inventory.boots ?: AIR_ITEM)
+                (9..17).forEach { slot -> it.setItem(slot, PLACEHOLDER_ITEM) }
             }
         }
         val sha1 = Base64.getEncoder().encodeToString(player.inventory.serializeToByteArray()).digest("sha-1")
@@ -89,5 +92,6 @@ object InventoryShow {
 
     private val inventorySlots = IntRange(18, 53).toList()
 
-    private val AIR_ITEM = buildItem(XMaterial.GRAY_STAINED_GLASS_PANE) { name = "Air" }
+    private val AIR_ITEM = buildItem(XMaterial.GRAY_STAINED_GLASS_PANE) { name = "" }
+    private val PLACEHOLDER_ITEM = buildItem(XMaterial.WHITE_STAINED_GLASS_PANE) { name = "" }
 }

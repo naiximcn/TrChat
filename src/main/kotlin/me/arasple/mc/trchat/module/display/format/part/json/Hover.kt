@@ -18,14 +18,8 @@ import taboolib.platform.compat.replacePlaceholder
 class Hover(val content: Map<String, Condition?>) {
 
     fun process(component: TextComponent, player: Player, vararg vars: String, message: String = ""): TextComponent {
-        val hover = Component.text()
-        content.entries.forEach { (line, condition) ->
-            if (condition.pass(player)) {
-                val text = line.replacePlaceholder(player).replace("\$message", message).replaceWithOrder(*vars).colorify()
-                hover.append(legacy(text))
-                hover.append(Component.newline())
-            }
-        }
-        return component.hoverEvent(HoverEvent.showText(hover.build()))
+        val text = content.entries.filter { it.value.pass(player) }.joinToString("\n") { it.key }
+            .replacePlaceholder(player).replace("\$message", message).replaceWithOrder(*vars).colorify()
+        return component.hoverEvent(HoverEvent.showText(legacy(text)))
     }
 }

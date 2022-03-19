@@ -29,6 +29,7 @@ object HookPlaceholderAPI : PlaceholderExpansion {
                 "filter" -> session.isFilterEnabled
                 "channel" -> session.channel?.id
                 "js" -> if (params.size > 1) JavaScriptAgent.eval(player, args.substringAfter('_')).get() else ""
+                "toplayer" -> session.lastPrivateTo
                 else -> ""
             }.toString()
         }

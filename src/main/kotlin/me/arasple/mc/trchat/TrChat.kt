@@ -20,9 +20,20 @@ import taboolib.platform.BukkitPlugin
  * @author Arasple
  */
 @RuntimeDependencies(
-    RuntimeDependency("!net.kyori:adventure-api:4.9.3", test = "!net.kyori.adventure.Adventure"),
-    RuntimeDependency("!net.kyori:adventure-platform-bukkit:4.0.1", test = "!net.kyori.adventure.platform.bukkit.BukkitAudience"),
-    RuntimeDependency("!net.kyori:adventure-platform-bungeecord:4.0.1", test = "!net.kyori.adventure.platform.bungeecord.BukkitAudience")
+    RuntimeDependency(
+        value = "!net.kyori:adventure-api:4.10.0",
+        test = "!net.kyori.adventure.Adventure"
+    ),
+    RuntimeDependency(
+        value = "!net.kyori:adventure-platform-bukkit:4.1.0",
+        test = "!net.kyori.adventure.platform.bukkit.BukkitAudiences",
+        repository = "https://repo.maven.apache.org/maven2"
+    ),
+    RuntimeDependency(
+        value = "!net.kyori:adventure-platform-bungeecord:4.1.0",
+        test = "!net.kyori.adventure.platform.bungeecord.BungeeAudiences",
+        repository = "https://repo.maven.apache.org/maven2"
+    )
 )
 @PlatformSide([Platform.BUKKIT])
 object TrChat : Plugin() {

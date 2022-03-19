@@ -3,8 +3,13 @@ package me.arasple.mc.trchat.util
 import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.module.display.ChatSession
 import me.arasple.mc.trchat.module.internal.data.Database
+import me.arasple.mc.trchat.module.internal.hook.HookPlugin
 import me.arasple.mc.trchat.module.internal.script.Condition
 import net.kyori.adventure.audience.Audience
+import net.kyori.adventure.audience.MessageType
+import net.kyori.adventure.identity.Identity
+import net.kyori.adventure.text.Component
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.ProxyPlayer
@@ -40,7 +45,7 @@ fun Player.checkMute(): Boolean {
         return false
     }
     if (this.getSession().isMuted) {
-        sendLang("General-Muted", muteDateFormat.format(getDataContainer().getLong("mute_time") - System.currentTimeMillis()))
+        sendLang("General-Muted", muteDateFormat.format(getDataContainer().getLong("mute_time")))
         return false
     }
     return true
@@ -50,12 +55,20 @@ fun Player.getDataContainer(): ConfigurationSection {
     return Database.database.pull(this)
 }
 
-internal fun Player.toAudience(): Audience {
-    return TrChat.adventure.player(this)
+internal fun CommandSender.sendProcessedMessage(sender: Player, component: Component) {
+    if (!HookPlugin.getInteractiveChat().sendMessage(this, component)) {
+        TrChat.adventure.sender(this).sendMessage(Identity.identity(sender.uniqueId), component, MessageType.CHAT)
+    }
 }
 
-internal fun ProxyPlayer.toAudience(): Audience {
-    return cast<Player>().toAudience()
+internal fun Player.sendProcessedMessage(sender: Player, component: Component) {
+    if (!HookPlugin.getInteractiveChat().sendMessage(this, component)) {
+        TrChat.adventure.player(this).sendMessage(Identity.identity(sender.uniqueId), component, MessageType.CHAT)
+    }
+}
+
+internal fun ProxyPlayer.sendProcessedMessage(sender: Player, component: Component) {
+    cast<Player>().sendProcessedMessage(sender, component)
 }
 
 fun Condition?.pass(player: Player): Boolean {
@@ -63,7 +76,5 @@ fun Condition?.pass(player: Player): Boolean {
 }
 
 fun notify(notify: Array<out ProxyCommandSender>, node: String, vararg args: Any) {
-    notify.forEach {
-        it.sendLang(node, *args)
-    }
+    notify.forEach { it.sendLang(node, *args) }
 }

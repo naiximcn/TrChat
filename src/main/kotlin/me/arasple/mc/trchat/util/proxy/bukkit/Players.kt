@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.util.proxy.bukkit
 
 import me.arasple.mc.trchat.api.config.Functions
+import me.arasple.mc.trchat.module.display.function.Mention
 import me.arasple.mc.trchat.util.proxy.Proxy
 import me.arasple.mc.trchat.util.proxy.bungee.Bungees
 import org.bukkit.Bukkit
@@ -21,11 +22,10 @@ object Players {
 
     private var players = listOf<String>()
 
-    fun getRegex(player: Player): Regex {
-        return Regex("(?i)@? ?(${getPlayers()
-            .filter { Functions.mention.getBoolean("Self-Mention") || it != player.name }
-            .joinToString("|") { Regex.escapeReplacement(it) }
-        })")
+    fun getRegex(player: Player): List<Regex> {
+        return getPlayers().filter { Mention.selfMention || it != player.name }.map {
+            Regex("(?i)@? ?($it)")
+        }
     }
 
     @Awake(LifeCycle.ENABLE)
@@ -40,10 +40,6 @@ object Players {
             }
         }
     }
-
-    /*
-    GETTERS & SETTERS
-     */
 
     fun isPlayerOnline(target: String): Boolean {
         val player = Bukkit.getPlayerExact(target)

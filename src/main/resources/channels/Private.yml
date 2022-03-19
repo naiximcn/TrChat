@@ -10,7 +10,7 @@ Bindings:
 Sender:
   - prefix:
       sender:
-        text: '&8[&a%player_name% &7➦ %toplayer_name%&3&8] '
+        text: '&8[&a%player_name% &7➦ %trchat_toplayer%&3&8] '
     msg:
       default-color: 'f'
       hover: '&7日期: %server_time_HH:mm:ss%'
@@ -18,7 +18,7 @@ Sender:
 Receiver:
   - prefix:
       receiver:
-        text: '&8[&6%player_name% &7➥ &2%toplayer_name%&8] '
+        text: '&8[&6%player_name% &7➥ &2%trchat_toplayer%&8] '
     msg:
       default-color: 'f'
       hover: '&7日期: %server_time_HH:mm:ss%'

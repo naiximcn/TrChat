@@ -18,7 +18,7 @@ import taboolib.common.platform.function.onlinePlayers
 object CommandRemoveMessage {
 
     val command = subCommand {
-        dynamic {
+        dynamic("message") {
             suggestion<Player> { sender, _ ->
                 sender.getSession().receivedMessages.mapNotNull { it.message }
             }

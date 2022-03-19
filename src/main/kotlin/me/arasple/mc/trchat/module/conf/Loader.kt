@@ -13,14 +13,17 @@ import me.arasple.mc.trchat.module.display.format.part.Group
 import me.arasple.mc.trchat.module.display.format.part.json.*
 import me.arasple.mc.trchat.module.display.function.Function
 import me.arasple.mc.trchat.util.color.DefaultColor
+import me.arasple.mc.trchat.util.getSession
 import me.arasple.mc.trchat.util.print
 import me.arasple.mc.trchat.util.toCondition
 import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.entity.Player
 import taboolib.common.io.newFile
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.function.getDataFolder
+import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.platform.function.releaseResourceFile
 import taboolib.common.util.orNull
 import taboolib.common5.Coerce
@@ -69,6 +72,8 @@ object Loader {
                 t.print("Channel file ${it.name} loaded failed!")
             }
         }
+
+        onlinePlayers().map { it.cast<Player>() }.forEach { it.getSession().channel?.id?.let { id -> Channel.join(it, id) } }
 
         return Channel.channels.size
     }

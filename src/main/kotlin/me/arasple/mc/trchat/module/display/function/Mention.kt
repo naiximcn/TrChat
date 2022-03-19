@@ -32,6 +32,9 @@ object Mention {
     @ConfigNode("General.Mention.Notify", "function.yml")
     var notify = true
 
+    @ConfigNode("General.Mention.Self-Mention", "function.yml")
+    var selfMention = false
+
     @ConfigNode("General.Mention.Cooldown", "function.yml")
     val cooldown = ConfigNodeTransfer<String, Long> { parseMillis() }
 
@@ -40,14 +43,15 @@ object Mention {
             message
         } else {
             var result = message
-            val regex = Players.getRegex(player)
-            if (result.contains(regex) && !player.isInCooldown(CooldownType.MENTION)) {
-                result = regex.replace(result) {
-                    "{{MENTION:${it.groupValues[1]}}}"
+            var mentioned = false
+            Players.getRegex(player).forEach { regex ->
+                if (result.contains(regex) && !player.isInCooldown(CooldownType.MENTION)) {
+                    result = regex.replace(result, "{{MENTION:\$1}}")
+                    mentioned = true
                 }
-                if (!player.hasPermission("trchat.bypass.mentioncd")) {
-                    player.updateCooldown(CooldownType.MENTION, cooldown.get())
-                }
+            }
+            if (mentioned && !player.hasPermission("trchat.bypass.mentioncd")) {
+                player.updateCooldown(CooldownType.MENTION, cooldown.get())
             }
             return result
         }

@@ -26,7 +26,7 @@ object CommandMute {
 
     @Awake(LifeCycle.ENABLE)
     fun c() {
-        command("mute", description = "禁言", usage = "/mute [player] [time]", permission = "trchat.command.mute") {
+        command("mute", description = "禁言", permission = "trchat.command.mute") {
             dynamic("player") {
                 suggestion<CommandSender> { _, _ ->
                     onlinePlayers().map { it.name }

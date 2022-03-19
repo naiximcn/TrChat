@@ -9,18 +9,20 @@ import me.arasple.mc.trchat.module.display.channel.obj.Target
 import me.arasple.mc.trchat.module.display.format.Format
 import me.arasple.mc.trchat.module.internal.data.ChatLogs
 import me.arasple.mc.trchat.module.internal.service.Metrics
-import me.arasple.mc.trchat.util.checkMute
-import me.arasple.mc.trchat.util.getSession
-import me.arasple.mc.trchat.util.pass
+import me.arasple.mc.trchat.util.*
+import me.arasple.mc.trchat.util.proxy.Proxy
 import me.arasple.mc.trchat.util.proxy.sendBukkitMessage
-import me.arasple.mc.trchat.util.toAudience
 import net.kyori.adventure.audience.MessageType
 import net.kyori.adventure.identity.Identity
 import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer
 import net.kyori.adventure.text.Component
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import taboolib.common.platform.command.command
+import taboolib.common.platform.function.console
+import taboolib.common.platform.function.getProxyPlayer
 import taboolib.common.platform.function.onlinePlayers
+import taboolib.common.platform.function.severe
 import taboolib.common.util.subList
 import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
@@ -86,7 +88,7 @@ open class Channel(
         } ?: return
         val component = builder.build()
 
-        if (settings.proxy) {
+        if (settings.proxy && Proxy.isEnabled) {
             val gson = BukkitComponentSerializer.gson().serialize(component)
             if (settings.ports != null) {
                 player.sendBukkitMessage(
@@ -109,25 +111,26 @@ open class Channel(
         when (settings.target.range) {
             Target.Range.ALL -> {
                 listeners.forEach {
-                    TrChat.adventure.player(it).sendMessage(Identity.identity(player.uniqueId), component, MessageType.CHAT)
+                    getProxyPlayer(it)?.sendProcessedMessage(player, component)
                 }
             }
             Target.Range.SINGLE_WORLD -> {
                 onlinePlayers().filter { listeners.contains(it.uniqueId) && it.world == player.world.name }.forEach {
-                    it.toAudience().sendMessage(Identity.identity(player.uniqueId), component, MessageType.CHAT)
+                    it.sendProcessedMessage(player, component)
                 }
             }
             Target.Range.DISTANCE -> {
                 onlinePlayers().filter { listeners.contains(it.uniqueId)
                         && it.world == player.world.name
                         && it.location.distance(player.location.toProxyLocation()) <= settings.target.distance }.forEach {
-                    it.toAudience().sendMessage(Identity.identity(player.uniqueId), component, MessageType.CHAT)
+                    it.sendProcessedMessage(player, component)
                 }
             }
             Target.Range.SELF -> {
-                player.toAudience().sendMessage(Identity.identity(player.uniqueId), component, MessageType.CHAT)
+                player.sendProcessedMessage(player, component)
             }
         }
+        console().cast<CommandSender>().sendProcessedMessage(player, component)
 
         player.getSession().lastMessage = message
         ChatLogs.log(player, message)
@@ -139,13 +142,16 @@ open class Channel(
         val channels = mutableListOf<Channel>()
 
         val defaultChannel by lazy {
-            channels.first { it.id == Settings.CONF.getString("Channel.Default") }
+            val id = Settings.CONF.getString("Channel.Default")
+            channels.firstOrNull { it.id == id }.also {
+                if (it == null) severe("Default channel $id not found.")
+            }
         }
 
         fun join(player: Player, channel: String) {
             channels.firstOrNull { it.id == channel }?.let {
                 join(player, it)
-            }
+            } ?: quit(player)
         }
 
         fun join(player: Player, channel: Channel) {

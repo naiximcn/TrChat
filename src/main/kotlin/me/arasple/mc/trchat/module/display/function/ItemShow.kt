@@ -2,6 +2,7 @@ package me.arasple.mc.trchat.module.display.function
 
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
+import me.arasple.mc.trchat.module.internal.hook.HookPlugin
 import me.arasple.mc.trchat.util.color.colorify
 import me.arasple.mc.trchat.util.hoverItemFixed
 import me.arasple.mc.trchat.util.legacy
@@ -43,7 +44,7 @@ object ItemShow {
     val cooldown = ConfigNodeTransfer<String, Long> { parseMillis() }
 
     @ConfigNode("General.Item-Show.Keys", "function.yml")
-    val keys = ConfigNodeTransfer<List<String>, List<Regex>> { map { Regex("$it(-[1-9])?") } }
+    var keys = emptyList<String>()
 
     private val cache: Cache<ItemStack, Component> = CacheBuilder.newBuilder()
         .expireAfterWrite(10L, TimeUnit.MINUTES)
@@ -54,28 +55,29 @@ object ItemShow {
             message
         } else {
             var result = message
-            keys.get().firstOrNull { it.containsMatchIn(result) }?.let { regex ->
-                result = result.replace(regex) {
-                    "{{ITEM:${it.groups[1]?.value?.takeLast(1)?.toInt() ?: player.inventory.heldItemSlot}}}"
+            keys.forEach { key ->
+                (1..9).forEach {
+                    result = result.replace("$key-$it", "{{ITEM:$it}}")
                 }
+                result = result.replace(key, "{{ITEM:${player.inventory.heldItemSlot + 1}}}", ignoreCase = true)
             }
             return result
         }
     }
 
     fun createComponent(player: Player, slot: Int): Component {
-        val item = player.inventory.getItem(slot) ?: ItemStack(Material.AIR)
+        val item = (player.inventory.getItem(slot - 1) ?: ItemStack(Material.AIR)).run {
+            if (compatible) {
+                buildItem(this) { material = Material.STONE }
+            } else {
+                clone()
+            }
+        }
         return cache.getIfPresent(item) ?: kotlin.run {
+            HookPlugin.getInteractiveChat().createItemDisplayComponent(player, item) ?:
             legacy(format.replaceWithOrder(item.getDisplayName(player), item.amount.toString()).colorify())
-                .hoverItemFixed(item.run {
-                    if (compatible) {
-                        buildItem(this) { material = Material.STONE }
-                    } else {
-                        this.clone()
-                    }
-                }, player).also {
-                    cache.put(item, it)
-                }
+                .hoverItemFixed(item, player)
+                .also { cache.put(item, it) }
         }
     }
 

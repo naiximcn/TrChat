@@ -8,12 +8,13 @@ taboolib {
     description {
         contributors {
             name("Arasple")
-            name("ItsFlicker")
+            name("ItsFlicker").description("Maintainer")
         }
         dependencies {
             name("PlaceholderAPI").with("bukkit")
             name("EcoEnchants").with("bukkit").optional(true)
             name("ItemsAdder").with("bukkit").optional(true)
+            name("InteractiveChat").with("bukkit").optional(true)
         }
         desc("Advanced Minecraft Chat Control")
     }
@@ -37,7 +38,7 @@ taboolib {
         "expansion-javascript"
     )
     classifier = null
-    version = "6.0.7-38"
+    version = "6.0.7-44"
 }
 
 repositories {
@@ -50,9 +51,9 @@ repositories {
 
 dependencies {
     compileOnly(kotlin("stdlib"))
-    compileOnly("net.kyori:adventure-api:4.9.3")
-    compileOnly("net.kyori:adventure-platform-bukkit:4.0.1")
-    compileOnly("net.kyori:adventure-platform-bungeecord:4.0.1")
+    compileOnly("net.kyori:adventure-api:4.10.1")
+    compileOnly("net.kyori:adventure-platform-bukkit:4.1.0")
+    compileOnly("net.kyori:adventure-platform-bungeecord:4.1.0")
 
     compileOnly("ink.ptms.core:v11800:11800:api")
     compileOnly("ink.ptms.core:v11800:11800:mapped")

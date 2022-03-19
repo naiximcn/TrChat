@@ -45,7 +45,7 @@ Error-Version: '&8[&3Tr&bChat&8] &cERROR &8| &7Plugin version error. Please re-d
 General-Too-Long: '&8[&3Tr&bChat&8] &7Message is too long. &8[&6{0}&8/&2{1}&8]'
 General-Too-Similar: '&8[&3Tr&bChat&8] &7Please do not repeat your message.'
 General-No-Permission: '&8[&3Tr&bChat&8] &7You do not have enough permission to do this.'
-General-Muted: '&8[&3Tr&bChat&8] &cYou have been muted!'
+General-Muted: '&8[&3Tr&bChat&8] &cYou have been muted until {0}!'
 General-Global-Muting: '&8[&3Tr&bChat&8] &cAll members are being muted.'
 
 Cooldowns-Chat:

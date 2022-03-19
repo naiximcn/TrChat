@@ -50,8 +50,7 @@ object MenuControlPanel {
                     name = "&e${element.name}"
                     lore += listOf(
                         "",
-                        "&a➦ Click to view",
-                        ""
+                        "&a➦ Click to view"
                     )
                     colored()
                 }
@@ -88,7 +87,7 @@ object MenuControlPanel {
                 when (clickEvent.slot) {
                     'M' -> {
                         player.closeInventory()
-                        player.sendMessage("Type the time of muting(in minute), 0 = remove mute")
+                        player.sendMessage("Type the time of muting, 0 = remove mute")
                         player.nextChat {
                             try {
                                 target.getSession().updateMuteTime(it.parseMillis())

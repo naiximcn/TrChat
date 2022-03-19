@@ -9,14 +9,11 @@ import me.arasple.mc.trchat.module.display.format.Format
 import me.arasple.mc.trchat.module.internal.command.main.CommandReply
 import me.arasple.mc.trchat.module.internal.data.ChatLogs
 import me.arasple.mc.trchat.module.internal.service.Metrics
-import me.arasple.mc.trchat.util.checkMute
-import me.arasple.mc.trchat.util.getSession
-import me.arasple.mc.trchat.util.pass
+import me.arasple.mc.trchat.util.*
 import me.arasple.mc.trchat.util.proxy.Proxy
 import me.arasple.mc.trchat.util.proxy.bukkit.Players
 import me.arasple.mc.trchat.util.proxy.sendBukkitMessage
 import me.arasple.mc.trchat.util.proxy.sendProxyLang
-import me.arasple.mc.trchat.util.toAudience
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import org.bukkit.entity.Player
@@ -113,7 +110,7 @@ class PrivateChannel(
         } ?: return
         val receive = builderReceiver.build()
 
-        TrChat.adventure.player(player).sendMessage(send)
+        player.sendProcessedMessage(player, send)
 
         if (settings.proxy && Proxy.isEnabled) {
             player.sendBukkitMessage(
@@ -124,7 +121,7 @@ class PrivateChannel(
             player.sendProxyLang("Private-Message-Receive", player.name)
         } else {
             getProxyPlayer(player.getSession().lastPrivateTo)?.let {
-                it.toAudience().sendMessage(receive)
+                it.sendProcessedMessage(player, receive)
                 it.sendLang("Private-Message-Receive", player.name)
             }
         }

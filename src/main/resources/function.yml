@@ -13,10 +13,12 @@ General:
     Origin-Name: false
     Compatible: false
     Keys:
-      - '(?i)%i%?'
-      - '(?i)%item%?'
-      - '(?i)[i]'
-      - '(?i)[item]'
+      - "%i"
+      - "%i%"
+      - "%item"
+      - "%item%"
+      - "[i]"
+      - "[item]"
   Mention:
     Enabled: true
     Self-Mention: false

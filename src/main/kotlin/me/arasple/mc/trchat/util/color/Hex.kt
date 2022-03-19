@@ -29,7 +29,7 @@ object Hex {
         Pattern.compile("\\{#([A-Fa-f0-9]){6}}"),  // {#FFFFFF}
         Pattern.compile("&#([A-Fa-f0-9]){6}"),  // &#FFFFFF
         Pattern.compile("#([A-Fa-f0-9]){6}"), // #FFFFFF
-        Pattern.compile("&\\{#([A-Fa-f0-9]){6}}") // #
+        Pattern.compile("&\\{#([A-Fa-f0-9]){6}}") // &{#FFFFFF}
     )
     private val STOP = Pattern.compile(
         "<(rainbow|r)(#(\\d+))?(:(\\d*\\.?\\d+))?(:(\\d*\\.?\\d+))?(:(l|L|loop))?>|" +
@@ -409,9 +409,7 @@ object Hex {
         }
 
         init {
-            var totalColors = totalColors
-            if (totalColors < 1) totalColors = 1
-            hueStep = 1.0f / totalColors
+            hueStep = 1.0f / if (totalColors < 1) 1 else totalColors
             this.saturation = 0f.coerceAtLeast(1f.coerceAtMost(saturation))
             this.brightness = 0f.coerceAtLeast(1f.coerceAtMost(brightness))
             hue = 0f
