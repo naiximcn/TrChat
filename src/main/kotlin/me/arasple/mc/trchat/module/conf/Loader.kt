@@ -63,6 +63,7 @@ object Loader {
     }
 
     fun loadChannels(): Int {
+        Channel.channels.forEach { it.unregister() }
         Channel.channels.clear()
 
         filterChannelFiles(folder).forEach {

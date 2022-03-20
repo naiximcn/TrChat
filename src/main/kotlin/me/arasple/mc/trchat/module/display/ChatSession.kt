@@ -5,6 +5,8 @@ import me.arasple.mc.trchat.util.getDataContainer
 import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.onlinePlayers
+import taboolib.common.reflect.Reflex.Companion.invokeMethod
+import taboolib.module.nms.MinecraftVersion
 import taboolib.module.nms.Packet
 import taboolib.module.nms.sendPacket
 import java.util.*
@@ -79,7 +81,11 @@ class ChatSession(
 
         private fun Packet.toMessage(): String? {
             return kotlin.runCatching {
-                BaseComponent.toPlainText(*read<Array<BaseComponent>>("components")!!)
+                if (MinecraftVersion.majorLegacy >= 11700) {
+                    read<Any>("message")!!
+                } else {
+                    read<Any>("a")!!
+                }.invokeMethod<String>("getContents")
             }.getOrNull()
         }
 

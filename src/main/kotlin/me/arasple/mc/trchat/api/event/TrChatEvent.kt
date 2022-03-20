@@ -18,6 +18,6 @@ class TrChatEvent(
 ) : BukkitProxyEvent() {
 
     init {
-        message = message.replace("{{", "\\{\\{")
+        message = message.replace("{{", "\\{{").replace("}}", "\\}}")
     }
 }

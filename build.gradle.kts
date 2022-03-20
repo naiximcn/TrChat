@@ -45,13 +45,14 @@ repositories {
     maven("https://nexus.velocitypowered.com/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.codemc.io/repository/maven-public/")
+    maven("https://papermc.io/repo/repository/maven-public/")
     maven("https://jitpack.io")
     mavenCentral()
 }
 
 dependencies {
     compileOnly(kotlin("stdlib"))
-    compileOnly("net.kyori:adventure-api:4.10.1")
+    compileOnly("net.kyori:adventure-api:4.10.0")
     compileOnly("net.kyori:adventure-platform-bukkit:4.1.0")
     compileOnly("net.kyori:adventure-platform-bungeecord:4.1.0")
 

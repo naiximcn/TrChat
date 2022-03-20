@@ -46,21 +46,27 @@ object ListenerChatEvent {
             return
         }
 
-        Channel.channels
-            .firstOrNull { it.bindings.prefix?.any { prefix -> message.startsWith(prefix, ignoreCase = true) } == true }
-            ?.execute(player, message)
-            ?: kotlin.run { session.channel?.execute(player, message) }
-
         e.handlers.registeredListeners
             .filter { it.plugin.isEnabled
                     && (it.priority == org.bukkit.event.EventPriority.MONITOR
                     && it.isIgnoringCancelled) || hooks.contains(it.plugin.name) }.forEach {
-            try {
-                it.callEvent(AsyncPlayerChatEvent(e.isAsynchronous, e.player, e.message, e.recipients))
-            } catch (e: Throwable) {
-                e.printStackTrace()
+                try {
+                    it.callEvent(AsyncPlayerChatEvent(e.isAsynchronous, e.player, e.message, e.recipients))
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                }
+            }
+
+        Channel.channels.forEach { channel ->
+            channel.bindings.prefix?.forEach {
+                if (message.startsWith(it, ignoreCase = true)) {
+                    channel.execute(player, message.substring(it.length))
+                    return
+                }
             }
         }
+
+        session.channel?.execute(player, message)
     }
 
     private fun checkLimits(player: Player, message: String): Boolean {

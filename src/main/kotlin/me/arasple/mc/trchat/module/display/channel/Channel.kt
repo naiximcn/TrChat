@@ -19,10 +19,7 @@ import net.kyori.adventure.text.Component
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import taboolib.common.platform.command.command
-import taboolib.common.platform.function.console
-import taboolib.common.platform.function.getProxyPlayer
-import taboolib.common.platform.function.onlinePlayers
-import taboolib.common.platform.function.severe
+import taboolib.common.platform.function.*
 import taboolib.common.util.subList
 import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
@@ -42,7 +39,7 @@ open class Channel(
 
     init {
         if (!bindings.command.isNullOrEmpty()) {
-            command(bindings.command[0], subList(bindings.command, 1), "Channel $id speak command") {
+            command(bindings.command[0], subList(bindings.command, 1), "Channel $id speak command", permission = settings.joinPermission ?: "") {
                 execute<Player> { sender, _, _ ->
                     if (sender.getSession().channel == this@Channel) {
                         quit(sender)
@@ -62,7 +59,7 @@ open class Channel(
         }
     }
 
-    val listeners = mutableListOf<UUID>()
+    val listeners = mutableSetOf<UUID>()
 
     open fun execute(player: Player, message: String) {
         if (!player.checkMute()) {
@@ -137,6 +134,11 @@ open class Channel(
         Metrics.increase(0)
     }
 
+    open fun unregister() {
+        bindings.command?.forEach { unregisterCommand(it) }
+        listeners.clear()
+    }
+
     companion object {
 
         val channels = mutableListOf<Channel>()
@@ -160,9 +162,8 @@ open class Channel(
                 return
             }
             player.getSession().channel = channel
-            if (!channel.settings.autoJoin) {
-                channel.listeners.add(player.uniqueId)
-            }
+            channel.listeners.add(player.uniqueId)
+
             player.sendLang("Channel-Join", channel.id)
         }
 

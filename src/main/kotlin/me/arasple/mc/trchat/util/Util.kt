@@ -5,12 +5,14 @@ import me.arasple.mc.trchat.module.display.ChatSession
 import me.arasple.mc.trchat.module.internal.data.Database
 import me.arasple.mc.trchat.module.internal.hook.HookPlugin
 import me.arasple.mc.trchat.module.internal.script.Condition
-import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.audience.MessageType
 import net.kyori.adventure.identity.Identity
+import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import net.kyori.adventure.text.Component
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.ProxyPlayer
 import taboolib.library.configuration.ConfigurationSection
@@ -25,6 +27,21 @@ import java.text.SimpleDateFormat
  * @author wlys
  * @since 2021/9/12 18:11
  */
+@PlatformSide([Platform.BUKKIT])
+object Util {
+
+    lateinit var adventure: BukkitAudiences
+        private set
+
+    fun init() {
+        adventure = BukkitAudiences.create(TrChat.plugin)
+    }
+
+    fun release() {
+        adventure.close()
+    }
+}
+
 val muteDateFormat = SimpleDateFormat()
 
 fun Throwable.print(title: String) {
@@ -57,13 +74,21 @@ fun Player.getDataContainer(): ConfigurationSection {
 
 internal fun CommandSender.sendProcessedMessage(sender: Player, component: Component) {
     if (!HookPlugin.getInteractiveChat().sendMessage(this, component)) {
-        TrChat.adventure.sender(this).sendMessage(Identity.identity(sender.uniqueId), component, MessageType.CHAT)
+        if (TrChat.paperEnv) {
+            sendMessage(sender.identity(), component, MessageType.CHAT)
+        } else {
+            Util.adventure.sender(this).sendMessage(Identity.identity(sender.uniqueId), component, MessageType.CHAT)
+        }
     }
 }
 
 internal fun Player.sendProcessedMessage(sender: Player, component: Component) {
     if (!HookPlugin.getInteractiveChat().sendMessage(this, component)) {
-        TrChat.adventure.player(this).sendMessage(Identity.identity(sender.uniqueId), component, MessageType.CHAT)
+        if (TrChat.paperEnv) {
+            sendMessage(sender.identity(), component, MessageType.CHAT)
+        } else {
+            Util.adventure.player(this).sendMessage(Identity.identity(sender.uniqueId), component, MessageType.CHAT)
+        }
     }
 }
 

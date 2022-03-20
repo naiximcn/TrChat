@@ -91,7 +91,7 @@ object MenuControlPanel {
                         player.nextChat {
                             try {
                                 target.getSession().updateMuteTime(it.parseMillis())
-                                player.sendLang("Plugin-Done")
+                                player.sendLang("Mute-Muted-Player", target.name, it)
                             } catch (_: Throwable) {
                                 player.sendLang("Plugin-Failed")
                             }

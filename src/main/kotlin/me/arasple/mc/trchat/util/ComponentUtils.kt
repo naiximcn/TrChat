@@ -1,5 +1,7 @@
 package me.arasple.mc.trchat.util
 
+import io.papermc.paper.text.PaperComponents
+import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.api.TrChatAPI
 import me.arasple.mc.trchat.api.nms.NMS
 import me.arasple.mc.trchat.module.internal.hook.HookPlugin
@@ -25,13 +27,16 @@ import taboolib.platform.util.modifyMeta
  * @author wlys
  * @since 2022/2/4 12:54
  */
-
 private val classNBTTagCompound by lazy {
     nmsClass("NBTTagCompound")
 }
 
 fun legacy(string: String): TextComponent {
-    return BukkitComponentSerializer.legacy().deserialize(string)
+    return if (TrChat.paperEnv) {
+        PaperComponents.legacySectionSerializer().deserialize(string)
+    } else {
+        BukkitComponentSerializer.legacy().deserialize(string)
+    }
 }
 
 fun TextComponent.hoverItemFixed(item: ItemStack, player: Player): TextComponent {
@@ -54,10 +59,10 @@ private fun ItemStack.optimizeShulkerBox(): ItemStack {
         val itemClone = clone()
         val blockStateMeta = itemClone.itemMeta!! as BlockStateMeta
         val shulkerBox = blockStateMeta.blockState as ShulkerBox
-        val contents = shulkerBox.inventory.contents
+        val contents = shulkerBox.inventory.contents ?: return this
         val contentsClone = contents.mapNotNull {
             if (it.isNotAir()) {
-                ItemStack(Material.STONE, it.amount, it.durability).modifyMeta<ItemMeta> {
+                ItemStack(Material.STONE, it!!.amount, it.durability).modifyMeta<ItemMeta> {
                     if (it.itemMeta?.hasDisplayName() == true) {
                         setDisplayName(it.itemMeta!!.displayName)
                     } else {

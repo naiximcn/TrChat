@@ -1,12 +1,9 @@
 package me.arasple.mc.trchat
 
 import com.google.common.io.ByteStreams
-import net.kyori.adventure.platform.bungeecord.BungeeAudiences
 import net.md_5.bungee.api.ProxyServer
-import taboolib.common.platform.Platform
-import taboolib.common.platform.PlatformSide
-import taboolib.common.platform.Plugin
-import taboolib.common.platform.ProxyCommandSender
+import taboolib.common.env.RuntimeEnv
+import taboolib.common.platform.*
 import taboolib.common.platform.command.command
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.pluginVersion
@@ -25,10 +22,12 @@ object TrChatBungee : Plugin() {
 
     val plugin by lazy { BungeePlugin.getInstance() }
 
-    lateinit var adventure: BungeeAudiences
-        private set
-
     const val TRCHAT_CHANNEL = "trchat:main"
+
+    @Awake
+    fun loadDependency() {
+        RuntimeEnv.ENV.loadDependency(BungeeEnv::class.java, true)
+    }
 
     override fun onLoad() {
         ProxyServer.getInstance().registerChannel(TRCHAT_CHANNEL)
@@ -40,8 +39,6 @@ object TrChatBungee : Plugin() {
     }
 
     override fun onEnable() {
-        adventure = BungeeAudiences.create(plugin)
-
         console().sendLang("Plugin-Enabled", pluginVersion)
 
         command("muteallservers", permission = "trchat.mute") {

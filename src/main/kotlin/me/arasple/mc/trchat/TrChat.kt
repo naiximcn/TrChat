@@ -3,54 +3,55 @@ package me.arasple.mc.trchat
 import me.arasple.mc.trchat.module.conf.Loader
 import me.arasple.mc.trchat.module.internal.data.Database
 import me.arasple.mc.trchat.module.internal.hook.HookPlugin
+import me.arasple.mc.trchat.util.Util
 import me.arasple.mc.trchat.util.proxy.Proxy
-import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bukkit.Bukkit
-import taboolib.common.env.RuntimeDependencies
-import taboolib.common.env.RuntimeDependency
+import taboolib.common.env.RuntimeEnv
+import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.Plugin
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.pluginVersion
 import taboolib.module.lang.sendLang
+import taboolib.module.nms.MinecraftVersion.majorLegacy
 import taboolib.platform.BukkitPlugin
 
 /**
  * @author Arasple
  */
-@RuntimeDependencies(
-    RuntimeDependency(
-        value = "!net.kyori:adventure-api:4.10.0",
-        test = "!net.kyori.adventure.Adventure"
-    ),
-    RuntimeDependency(
-        value = "!net.kyori:adventure-platform-bukkit:4.1.0",
-        test = "!net.kyori.adventure.platform.bukkit.BukkitAudiences",
-        repository = "https://repo.maven.apache.org/maven2"
-    ),
-    RuntimeDependency(
-        value = "!net.kyori:adventure-platform-bungeecord:4.1.0",
-        test = "!net.kyori.adventure.platform.bungeecord.BungeeAudiences",
-        repository = "https://repo.maven.apache.org/maven2"
-    )
-)
 @PlatformSide([Platform.BUKKIT])
 object TrChat : Plugin() {
 
     val plugin by lazy { BukkitPlugin.getInstance() }
 
-    lateinit var adventure: BukkitAudiences
+    var paperEnv = false
         private set
 
     var isGlobalMuting = false
+
+    @Awake
+    fun loadDependency() {
+        try {
+            Class.forName("com.destroystokyo.paper.PaperConfig")
+            if (majorLegacy >= 11605) {
+                paperEnv = true
+            }
+        } catch (_: ClassNotFoundException) {
+        }
+        if (!paperEnv) {
+            RuntimeEnv.ENV.loadDependency(BukkitEnv::class.java, true)
+        }
+    }
 
     override fun onLoad() {
         console().sendLang("Plugin-Loading", Bukkit.getBukkitVersion())
     }
 
     override fun onEnable() {
-        adventure = BukkitAudiences.create(plugin)
+        if (!paperEnv) {
+            Util.init()
+        }
 
         Loader.loadChannels(console())
         Loader.loadFunctions(console())
@@ -62,6 +63,8 @@ object TrChat : Plugin() {
     }
 
     override fun onDisable() {
-        adventure.close()
+        if (!paperEnv) {
+            Util.release()
+        }
     }
 }
