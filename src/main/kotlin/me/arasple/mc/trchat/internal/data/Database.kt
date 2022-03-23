@@ -25,8 +25,8 @@ import java.io.File
 object Database {
 
     fun init() {
-        if (settings.getBoolean("database.enable")) {
-            setupPlayerDatabase(settings.getConfigurationSection("database")!!)
+        if (settings.getBoolean("GENERAL.DATABASE.enable")) {
+            setupPlayerDatabase(settings.getConfigurationSection("GENERAL.DATABASE")!!)
         } else {
             setupPlayerDatabase(newFile(File(getDataFolder(), "data"), "data.db"))
         }
