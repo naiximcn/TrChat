@@ -61,6 +61,6 @@ object Mention {
         if (notify) {
             player.sendProxyLang(target, "Mentions-Notify", player.name)
         }
-        return legacy(format.replaceWithOrder(player.name).colorify())
+        return legacy(format.replaceWithOrder(target).colorify())
     }
 }

@@ -8,6 +8,7 @@ import me.arasple.mc.trchat.module.internal.hook.HookPlugin
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.nbt.api.BinaryTagHolder
 import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer
+import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.event.HoverEvent
 import org.bukkit.Material
@@ -31,18 +32,35 @@ private val classNBTTagCompound by lazy {
     nmsClass("NBTTagCompound")
 }
 
-fun legacy(string: String): TextComponent {
-    return if (TrChat.paperEnv) {
-        PaperComponents.legacySectionSerializer().deserialize(string)
+private val LEGACY_SERIALIZER by lazy {
+    if (TrChat.paperEnv) {
+        PaperComponents.legacySectionSerializer()
     } else {
-        BukkitComponentSerializer.legacy().deserialize(string)
+        BukkitComponentSerializer.legacy()
     }
 }
+
+private val GSON_SERIALIZER by lazy {
+    if (TrChat.paperEnv) {
+        PaperComponents.gsonSerializer()
+    } else {
+        BukkitComponentSerializer.gson()
+    }
+}
+
+fun legacy(string: String) = LEGACY_SERIALIZER.deserialize(string)
+
+fun gson(component: Component) = GSON_SERIALIZER.serialize(component)
+
+fun gson(string: String) = GSON_SERIALIZER.deserialize(string)
 
 fun TextComponent.hoverItemFixed(item: ItemStack, player: Player): TextComponent {
     var newItem = item.optimizeShulkerBox()
     newItem = NMS.INSTANCE.optimizeNBT(newItem)
     newItem = HookPlugin.getEcoEnchants().displayItem(newItem, player)
+    if (TrChat.paperEnv) {
+        return hoverEvent(newItem.asHoverEvent())
+    }
     val nmsItemStack = TrChatAPI.classCraftItemStack.invokeMethod<Any>("asNMSCopy", newItem, fixed = true)!!
     val nmsNBTTabCompound = classNBTTagCompound.invokeConstructor()
     val itemJson = nmsItemStack.invokeMethod<Any>("save", nmsNBTTabCompound)!!

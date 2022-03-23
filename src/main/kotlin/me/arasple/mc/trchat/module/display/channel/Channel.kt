@@ -1,6 +1,5 @@
 package me.arasple.mc.trchat.module.display.channel
 
-import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.module.display.channel.obj.ChannelBindings
@@ -12,9 +11,6 @@ import me.arasple.mc.trchat.module.internal.service.Metrics
 import me.arasple.mc.trchat.util.*
 import me.arasple.mc.trchat.util.proxy.Proxy
 import me.arasple.mc.trchat.util.proxy.sendBukkitMessage
-import net.kyori.adventure.audience.MessageType
-import net.kyori.adventure.identity.Identity
-import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer
 import net.kyori.adventure.text.Component
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -86,7 +82,7 @@ open class Channel(
         val component = builder.build()
 
         if (settings.proxy && Proxy.isEnabled) {
-            val gson = BukkitComponentSerializer.gson().serialize(component)
+            val gson = gson(component)
             if (settings.ports != null) {
                 player.sendBukkitMessage(
                     "ForwardRaw",

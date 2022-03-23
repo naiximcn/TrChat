@@ -22,6 +22,7 @@ import taboolib.module.configuration.ConfigNodeTransfer
 import taboolib.module.ui.buildMenu
 import taboolib.module.ui.type.Linked
 import taboolib.platform.util.buildItem
+import taboolib.platform.util.isAir
 import taboolib.platform.util.serializeToByteArray
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -74,9 +75,9 @@ object InventoryShow {
             }
             onBuild {
                 it.setItem(0, PLACEHOLDER_ITEM)
-                it.setItem(1, player.inventory.invokeMethod<ItemStack>("getItemInOffHand") ?: AIR_ITEM)
+                it.setItem(1, player.inventory.invokeMethod<ItemStack>("getItemInOffHand").replaceAir())
                 it.setItem(2, buildItem(XMaterial.PLAYER_HEAD) { name = "§e${player.name}" })
-                it.setItem(3, player.inventory.itemInHand)
+                it.setItem(3, player.inventory.itemInHand.replaceAir())
                 it.setItem(4, PLACEHOLDER_ITEM)
                 it.setItem(5, player.inventory.helmet ?: AIR_ITEM)
                 it.setItem(6, player.inventory.chestplate ?: AIR_ITEM)
@@ -94,4 +95,6 @@ object InventoryShow {
 
     private val AIR_ITEM = buildItem(XMaterial.GRAY_STAINED_GLASS_PANE) { name = "" }
     private val PLACEHOLDER_ITEM = buildItem(XMaterial.WHITE_STAINED_GLASS_PANE) { name = "" }
+
+    private fun ItemStack?.replaceAir() = if (isAir()) AIR_ITEM else this
 }

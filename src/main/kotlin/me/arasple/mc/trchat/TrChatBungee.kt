@@ -61,8 +61,4 @@ object TrChatBungee : Plugin() {
             }
         }
     }
-
-    override fun onDisable() {
-        console().sendLang("Plugin-Disabled")
-    }
 }

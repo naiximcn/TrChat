@@ -1,8 +1,10 @@
 package me.arasple.mc.trchat.module.display
 
+import me.arasple.mc.trchat.api.TrChatAPI
 import me.arasple.mc.trchat.module.display.channel.Channel
 import me.arasple.mc.trchat.util.getDataContainer
-import net.md_5.bungee.api.chat.BaseComponent
+import me.arasple.mc.trchat.util.gson
+import net.kyori.adventure.text.flattener.ComponentFlattener
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.reflect.Reflex.Companion.invokeMethod
@@ -81,11 +83,16 @@ class ChatSession(
 
         private fun Packet.toMessage(): String? {
             return kotlin.runCatching {
-                if (MinecraftVersion.majorLegacy >= 11700) {
+                val iChat = if (MinecraftVersion.majorLegacy >= 11700) {
                     read<Any>("message")!!
                 } else {
                     read<Any>("a")!!
-                }.invokeMethod<String>("getContents")
+                }
+                val json = TrChatAPI.classChatSerializer.invokeMethod<String>("a", iChat, fixed = true)!!
+                val component = gson(json)
+                var string = ""
+                ComponentFlattener.textOnly().flatten(component) { string += it }
+                string
             }.getOrNull()
         }
 

@@ -9,6 +9,7 @@ import taboolib.common.platform.function.adaptPlayer
 import taboolib.common5.mirrorNow
 import taboolib.library.kether.LocalizedException
 import taboolib.module.kether.KetherShell
+import taboolib.module.nms.nmsClass
 import taboolib.module.nms.obcClass
 import taboolib.platform.util.isAir
 import taboolib.platform.util.modifyLore
@@ -76,5 +77,9 @@ object TrChatAPI {
 
     val classCraftItemStack by lazy {
         obcClass("inventory.CraftItemStack")
+    }
+
+    val classChatSerializer by lazy {
+        nmsClass("IChatBaseComponent\$ChatSerializer")
     }
 }

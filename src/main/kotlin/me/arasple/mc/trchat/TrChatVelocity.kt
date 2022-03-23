@@ -30,7 +30,7 @@ object TrChatVelocity : Plugin() {
     lateinit var outgoing: MinecraftChannelIdentifier
 
     override fun onLoad() {
-        console().sendLang("Plugin-Loading", plugin.server.version)
+        console().sendLang("Plugin-Loading", plugin.server.version.version)
         console().sendLang("Plugin-Proxy-Supported", "Velocity")
 
         incoming = MinecraftChannelIdentifier.create("trchat", "proxy").also {
@@ -57,9 +57,5 @@ object TrChatVelocity : Plugin() {
                 server.sendPluginMessage(outgoing, out.toByteArray())
             }
         }
-    }
-
-    override fun onDisable() {
-        console().sendLang("Plugin-Disabled")
     }
 }

@@ -1,6 +1,11 @@
 package me.arasple.mc.trchat.api.nms
 
 import me.arasple.mc.trchat.api.TrChatAPI
+import me.arasple.mc.trchat.module.display.filter.ChatFilter.filter
+import me.arasple.mc.trchat.util.gson
+import me.arasple.mc.trchat.util.print
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
 import net.minecraft.server.v1_16_R3.NBTBase
 import net.minecraft.server.v1_16_R3.NBTTagCompound
 import org.bukkit.inventory.ItemStack
@@ -14,6 +19,18 @@ import taboolib.platform.util.isNotAir
  * @date 2019/11/30 11:16
  */
 class NMSImpl : NMS() {
+
+    override fun filterIChatComponent(iChat: Any?): Any? {
+        iChat ?: return null
+        return try {
+            val json = TrChatAPI.classChatSerializer.invokeMethod<String>("a", iChat, fixed = true)!!
+            val component = filterComponent(gson(json))
+            TrChatAPI.classChatSerializer.invokeMethod<Any>("b", gson(component), fixed = true) ?: iChat
+        } catch (t: Throwable) {
+            t.print("Error occurred while filtering chat component")
+            iChat
+        }
+    }
 
     override fun filterItem(item: Any?) {
         item ?: return
@@ -53,5 +70,15 @@ class NMSImpl : NMS() {
         } catch (_: Throwable) {
         }
         return itemStack
+    }
+
+    private fun filterComponent(component: Component): Component {
+        return if (component is TextComponent && component.content().isNotEmpty()) {
+            component.content(filter(component.content()).filtered)
+        } else if (component.children().isNotEmpty()) {
+            Component.text { builder -> component.children().forEach { builder.append(filterComponent(it)) } }
+        } else {
+            component
+        }
     }
 }

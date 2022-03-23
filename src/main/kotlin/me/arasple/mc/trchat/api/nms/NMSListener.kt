@@ -3,9 +3,8 @@ package me.arasple.mc.trchat.api.nms
 import me.arasple.mc.trchat.api.config.Filter
 import me.arasple.mc.trchat.module.display.filter.ChatFilter.filter
 import me.arasple.mc.trchat.util.getSession
-import net.kyori.adventure.platform.bukkit.MinecraftComponentSerializer
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.TextComponent
+import net.md_5.bungee.api.chat.BaseComponent
+import net.md_5.bungee.api.chat.TextComponent
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.event.EventPriority
@@ -29,23 +28,15 @@ object NMSListener {
                 if (!Filter.CONF.getBoolean("Filter.Chat") || !e.player.getSession().isFilterEnabled) {
                     return
                 }
-                val message = if (majorLegacy >= 11700) {
-                    e.packet.read<Any>("message")!!
+                if (majorLegacy >= 11700) {
+                    e.packet.write("message", NMS.INSTANCE.filterIChatComponent(e.packet.read<Any>("message")))
                 } else {
-                    e.packet.read<Any>("a")!!
+                    e.packet.write("a", NMS.INSTANCE.filterIChatComponent(e.packet.read<Any>("a")))
                 }
-                if (MinecraftComponentSerializer.isSupported()){
-                    val component = MinecraftComponentSerializer.get().deserialize(message)
-                    if (majorLegacy >= 11700) {
-                        e.packet.write("message", MinecraftComponentSerializer.get().serialize(filterComponent(component)))
-                    } else {
-                        e.packet.write("a", MinecraftComponentSerializer.get().serialize(filterComponent(component)))
-                    }
+                kotlin.runCatching {
+                    val components = e.packet.read<Array<BaseComponent>>("components") ?: return
+                    e.packet.write("components", components.map { filterComponent(it) }.toTypedArray())
                 }
-//                kotlin.runCatching {
-//                    val components = e.packet.read<Array<BaseComponent>>("components") ?: return
-//                    e.packet.write("components", components.map { filterComponent(it) }.toTypedArray())
-//                }
                 return
             }
             "PacketPlayOutWindowItems" -> {
@@ -88,26 +79,13 @@ object NMSListener {
 //        }
     }
 
-    private fun filterComponent(component: Component): Component {
-        return if (component is TextComponent && component.content().isNotEmpty()) {
-            component.content(filter(component.content()).filtered)
-        } else if (component.children().isNotEmpty()) {
-            Component.text {
-                component.children().forEach { it.append(filterComponent(it)) }
-            }
-
-        } else {
-            component
+    private fun filterComponent(component: BaseComponent): BaseComponent {
+        if (component is TextComponent && component.text.isNotEmpty()) {
+            component.text = filter(component.text).filtered
         }
+        if (!component.extra.isNullOrEmpty()) {
+            component.extra = component.extra.map { filterComponent(it) }
+        }
+        return component
     }
-
-//    private fun filterComponent(component: BaseComponent): BaseComponent {
-//        if (component is TextComponent && component.text.isNotEmpty()) {
-//            component.text = filter(component.text).filtered
-//        }
-//        if (!component.extra.isNullOrEmpty()) {
-//            component.extra = component.extra.map { filterComponent(it) }
-//        }
-//        return component
-//    }
 }
