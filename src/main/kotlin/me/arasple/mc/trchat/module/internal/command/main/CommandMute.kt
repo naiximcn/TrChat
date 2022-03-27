@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.internal.command.main
 
 import me.arasple.mc.trchat.TrChat
+import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.getSession
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
@@ -21,12 +22,13 @@ import taboolib.platform.util.sendLang
  * @author wlys
  * @since 2021/7/21 10:40
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 object CommandMute {
 
     @Awake(LifeCycle.ENABLE)
     fun c() {
-        command("mute", description = "禁言", permission = "trchat.command.mute") {
+        command("mute", description = "Mute", permission = "trchat.command.mute") {
             dynamic("player") {
                 suggestion<CommandSender> { _, _ ->
                     onlinePlayers().map { it.name }
@@ -47,7 +49,7 @@ object CommandMute {
                 createHelper()
             }
         }
-        command("muteall", listOf("globalmute"), "全员禁言", permission = "trchat.command.muteall") {
+        command("muteall", listOf("globalmute"), "Mute all", permission = "trchat.command.muteall") {
             execute<CommandSender> { sender, _, _ ->
                 TrChat.isGlobalMuting = !TrChat.isGlobalMuting
                 if (TrChat.isGlobalMuting) {

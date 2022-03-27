@@ -2,6 +2,7 @@ package me.arasple.mc.trchat.util.proxy.velocity
 
 import com.google.common.io.ByteStreams
 import me.arasple.mc.trchat.TrChat
+import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.proxy.bukkit.Players
 import me.arasple.mc.trchat.util.proxy.serialize
 import org.bukkit.Bukkit
@@ -17,6 +18,7 @@ import java.io.IOException
  * @author wlys
  * @since 2021/8/21 19:15
  */
+@Internal
 class Velocity : PluginMessageListener {
 
     override fun onPluginMessageReceived(channel: String, player: Player, message: ByteArray) {

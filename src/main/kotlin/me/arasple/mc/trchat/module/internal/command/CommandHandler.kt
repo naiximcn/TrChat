@@ -8,6 +8,7 @@ import me.arasple.mc.trchat.module.display.filter.ChatFilter
 import me.arasple.mc.trchat.module.display.menu.MenuControlPanel
 import me.arasple.mc.trchat.module.display.menu.MenuFilterControl
 import me.arasple.mc.trchat.module.internal.command.sub.CommandRemoveMessage
+import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.getSession
 import org.bukkit.entity.Player
 import taboolib.common.platform.Platform
@@ -30,6 +31,7 @@ import taboolib.platform.util.sendLang
  * @author wlys
  * @since 2021/8/21 12:23
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 @CommandHeader("trchat", ["trc"], "TrChat主命令", permission = "trchat.access")
 object CommandHandler {

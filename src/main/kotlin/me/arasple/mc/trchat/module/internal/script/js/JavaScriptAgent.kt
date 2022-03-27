@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.internal.script.js
 
 import com.google.common.collect.Maps
+import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.getSession
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -20,6 +21,7 @@ import javax.script.SimpleScriptContext
  * @author wlys
  * @since 2021/8/27 16:10
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 object JavaScriptAgent {
 

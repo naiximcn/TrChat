@@ -13,6 +13,7 @@ import me.arasple.mc.trchat.module.display.format.MsgComponent
 import me.arasple.mc.trchat.module.display.format.part.Group
 import me.arasple.mc.trchat.module.display.format.part.json.*
 import me.arasple.mc.trchat.module.display.function.Function
+import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.color.DefaultColor
 import me.arasple.mc.trchat.util.getSession
 import me.arasple.mc.trchat.util.print
@@ -38,6 +39,7 @@ import kotlin.system.measureTimeMillis
  * @author wlys
  * @since 2021/12/12 13:45
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 object Loader {
 

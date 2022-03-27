@@ -2,6 +2,7 @@ package me.arasple.mc.trchat.module.internal.command.main
 
 import me.arasple.mc.trchat.module.display.channel.Channel
 import me.arasple.mc.trchat.module.display.channel.PrivateChannel
+import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.checkMute
 import me.arasple.mc.trchat.util.getSession
 import me.arasple.mc.trchat.util.proxy.bukkit.Players
@@ -21,6 +22,7 @@ import taboolib.platform.util.sendLang
  * @author wlys
  * @since 2021/7/21 11:14
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 object CommandReply {
 

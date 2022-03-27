@@ -1,10 +1,23 @@
 # TrChat
 
-[![Version](https://img.shields.io/badge/dynamic/json?label=Version&query=%24.tag_name&url=https%3A%2F%2Fapi.github.com%2Frepos%2FFlickerProjects%2FTrChat%2Freleases%2Flatest)](https://github.com/FlickerProjects/TrChat/releases) [![CodeFactor](https://www.codefactor.io/repository/github/flickerprojects/trchat/badge)](https://www.codefactor.io/repository/github/flickerprojects/trchat)
+[![Version](https://img.shields.io/github/v/release/FlickerProjects/TrChat?logo=VirusTotal&style=for-the-badge)](https://github.com/FlickerProjects/TrChat/releases)
+[![Issues](https://img.shields.io/github/issues/FlickerProjects/TrChat?logo=StackOverflow&style=for-the-badge)](https://github.com/FlickerProjects/TrChat/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/FlickerProjects/TrChat?logo=ApacheRocketMQ&style=for-the-badge&color=1e90ff)](https://github.com/FlickerProjects/TrChat/commits/v2)
+[![Downloads](https://img.shields.io/github/downloads/FlickerProjects/TrChat/total?style=for-the-badge&logo=docusign)](https://github.com/FlickerProjects/TrChat/releases)
 
 **Advanced chat control for Minecraft servers**
 
-API usage: 
+---
+
+### 🔔 What's new in TrChat v2?
+- **Optimized performance**
+- **New Channel & Format System**
+- **Better compatibility with other plugins**
+- **Use `Adventure`**
+
+---
+
+### ⛏ API usage: 
 ```java
 public class Demo implements Listener {
     

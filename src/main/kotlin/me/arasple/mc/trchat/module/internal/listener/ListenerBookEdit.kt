@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.internal.listener
 
 import me.arasple.mc.trchat.api.config.Settings
+import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.color.MessageColors
 import org.bukkit.event.player.PlayerEditBookEvent
 import taboolib.common.platform.Platform
@@ -12,6 +13,7 @@ import taboolib.common.platform.event.SubscribeEvent
  * @author Arasple, wlys
  * @date 2019/8/15 21:18
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 object ListenerBookEdit {
 

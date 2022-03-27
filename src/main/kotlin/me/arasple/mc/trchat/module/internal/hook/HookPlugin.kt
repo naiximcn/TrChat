@@ -3,6 +3,7 @@ package me.arasple.mc.trchat.module.internal.hook
 import me.arasple.mc.trchat.module.internal.hook.impl.HookEcoEnchants
 import me.arasple.mc.trchat.module.internal.hook.impl.HookInteractiveChat
 import me.arasple.mc.trchat.module.internal.hook.impl.HookItemsAdder
+import me.arasple.mc.trchat.util.Internal
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.function.console
@@ -12,6 +13,7 @@ import taboolib.module.lang.sendLang
  * @author Arasple
  * @date 2021/1/26 22:04
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 object HookPlugin {
 

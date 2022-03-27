@@ -2,6 +2,7 @@ package me.arasple.mc.trchat.api.nms
 
 import me.arasple.mc.trchat.api.config.Filter
 import me.arasple.mc.trchat.module.display.filter.ChatFilter.filter
+import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.getSession
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.TextComponent
@@ -17,6 +18,7 @@ import taboolib.module.nms.PacketSendEvent
  * @author Arasple
  * @date 2019/11/30 10:16
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 object NMSListener {
 

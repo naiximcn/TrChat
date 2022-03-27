@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.module.display.menu
 
+import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.getSession
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -16,6 +17,7 @@ import taboolib.platform.util.buildItem
  * @date 2019/11/30 11:40
  * Internal Menu For Chat Filter Control
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 object MenuFilterControl {
 

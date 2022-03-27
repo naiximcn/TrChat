@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.internal.service
 
 import com.google.gson.JsonParser
+import me.arasple.mc.trchat.util.Internal
 import org.bukkit.event.player.PlayerJoinEvent
 import taboolib.common.LifeCycle
 import taboolib.common.env.DependencyDownloader.readFully
@@ -24,6 +25,7 @@ import java.util.*
  * @author Arasple
  * @date 2019/11/29 21:04
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 @SkipTo(LifeCycle.LOAD)
 object Updater {
@@ -68,7 +70,7 @@ object Updater {
                 BufferedInputStream(inputStream).use { bufferedInputStream ->
                     val read = readFully(bufferedInputStream, StandardCharsets.UTF_8)
                     val json = JsonParser().parse(read).asJsonObject
-                    val latestVersion = json["tag_name"].asString
+                    val latestVersion = json["tag_name"].asString.substring(1)
                     latest_Version = Version(latestVersion)
                     information = json["body"].asString
                     notifyVersion()

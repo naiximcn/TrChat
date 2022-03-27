@@ -1,7 +1,7 @@
 package me.arasple.mc.trchat.util.proxy.bukkit
 
-import me.arasple.mc.trchat.api.config.Functions
 import me.arasple.mc.trchat.module.display.function.Mention
+import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.proxy.Proxy
 import me.arasple.mc.trchat.util.proxy.bungee.Bungees
 import org.bukkit.Bukkit
@@ -17,6 +17,7 @@ import taboolib.common.platform.function.submit
  * @author Arasple
  * @date 2019/8/4 21:28
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 object Players {
 

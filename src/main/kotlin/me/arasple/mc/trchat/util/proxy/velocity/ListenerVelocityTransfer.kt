@@ -5,6 +5,7 @@ import com.velocitypowered.api.proxy.ConsoleCommandSource
 import com.velocitypowered.api.proxy.Player
 import com.velocitypowered.api.proxy.ProxyServer
 import me.arasple.mc.trchat.TrChatVelocity
+import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.proxy.common.MessageReader
 import net.kyori.adventure.audience.MessageType
 import net.kyori.adventure.identity.Identity
@@ -27,6 +28,7 @@ import java.util.*
  * @author wlys
  * @since 2021/8/21 13:29
  */
+@Internal
 @PlatformSide([Platform.VELOCITY])
 object ListenerVelocityTransfer {
 

@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.internal.database
 
 import me.arasple.mc.trchat.api.config.Settings
+import me.arasple.mc.trchat.util.Internal
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.adaptPlayer
 import taboolib.library.configuration.ConfigurationSection
@@ -11,6 +12,7 @@ import taboolib.module.database.bridge.createBridgeCollection
  * @author sky
  * @since 2020-08-14 14:46
  */
+@Internal
 class DatabaseMongodb : Database() {
 
     val collection = createBridgeCollection(

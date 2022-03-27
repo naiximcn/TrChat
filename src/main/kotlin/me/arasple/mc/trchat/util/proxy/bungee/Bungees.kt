@@ -2,6 +2,7 @@ package me.arasple.mc.trchat.util.proxy.bungee
 
 import com.google.common.io.ByteStreams
 import me.arasple.mc.trchat.TrChat
+import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.proxy.bukkit.Players
 import me.arasple.mc.trchat.util.proxy.serialize
 import org.bukkit.Bukkit
@@ -14,6 +15,7 @@ import java.io.IOException
  * @author Arasple
  * @date 2019/8/4 21:23
  */
+@Internal
 class Bungees : PluginMessageListener {
 
     override fun onPluginMessageReceived(channel: String, player: Player, message: ByteArray) {

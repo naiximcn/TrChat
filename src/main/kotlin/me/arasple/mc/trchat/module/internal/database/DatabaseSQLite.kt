@@ -1,10 +1,11 @@
 package me.arasple.mc.trchat.module.internal.database
 
 import me.arasple.mc.trchat.api.config.Settings
+import me.arasple.mc.trchat.util.Internal
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.getDataFolder
-import taboolib.module.configuration.Configuration
 import taboolib.library.configuration.ConfigurationSection
+import taboolib.module.configuration.Configuration
 import taboolib.module.configuration.Type
 import taboolib.module.database.ColumnOptionSQLite
 import taboolib.module.database.ColumnTypeSQLite
@@ -17,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap
  * @author sky
  * @since 2020-08-14 14:46
  */
+@Internal
 class DatabaseSQLite : Database() {
 
     val host = File(Settings.CONF.getString("Database.SQLite.file")!!.replace("{plugin_folder}", getDataFolder().absolutePath)).getHost()

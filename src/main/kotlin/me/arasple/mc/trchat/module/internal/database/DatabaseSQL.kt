@@ -1,15 +1,18 @@
 package me.arasple.mc.trchat.module.internal.database
 
 import me.arasple.mc.trchat.api.config.Settings
+import me.arasple.mc.trchat.util.Internal
 import org.bukkit.entity.Player
-import taboolib.common.platform.function.getDataFolder
-import taboolib.module.configuration.Configuration
 import taboolib.library.configuration.ConfigurationSection
+import taboolib.module.configuration.Configuration
 import taboolib.module.configuration.Type
-import taboolib.module.database.*
-import java.io.File
+import taboolib.module.database.ColumnOptionSQL
+import taboolib.module.database.ColumnTypeSQL
+import taboolib.module.database.Table
+import taboolib.module.database.getHost
 import java.util.concurrent.ConcurrentHashMap
 
+@Internal
 class DatabaseSQL : Database() {
 
     val host = Settings.CONF.getHost("Database.SQL")

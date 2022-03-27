@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.util.proxy.bungee
 
 import me.arasple.mc.trchat.TrChatBungee
+import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.proxy.common.MessageReader
 import net.kyori.adventure.audience.MessageType
 import net.kyori.adventure.identity.Identity
@@ -28,6 +29,7 @@ import java.util.*
  * @author Arasple, wlys
  * @since 2021/8/9 15:01
  */
+@Internal
 @PlatformSide([Platform.BUNGEE])
 object ListenerBungeeTransfer {
 

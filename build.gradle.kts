@@ -2,6 +2,7 @@ plugins {
     `java-library`
     id("io.izzel.taboolib") version "1.34"
     id("org.jetbrains.kotlin.jvm") version "1.6.10"
+    id("org.tabooproject.shrinkingkt") version "1.0.6"
 }
 
 taboolib {
@@ -38,7 +39,11 @@ taboolib {
         "expansion-javascript"
     )
     classifier = null
-    version = "6.0.7-44"
+    version = "6.0.7-47"
+}
+
+configure<org.tabooproject.shrinkingkt.ShrinkingExt> {
+    annotation = "me.arasple.mc.trchat.util.Internal"
 }
 
 repositories {

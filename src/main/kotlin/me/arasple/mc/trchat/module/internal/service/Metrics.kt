@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.module.internal.service
 
+import me.arasple.mc.trchat.util.Internal
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
@@ -11,6 +12,7 @@ import taboolib.module.metrics.charts.SingleLineChart
 /**
  * @author Arasple
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 object Metrics {
 

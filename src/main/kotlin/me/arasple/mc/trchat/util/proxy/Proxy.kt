@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.util.proxy
 
+import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.proxy.bungee.Bungees
 import me.arasple.mc.trchat.util.proxy.common.MessageBuilder
 import me.arasple.mc.trchat.util.proxy.velocity.Velocity
@@ -20,6 +21,7 @@ import java.util.*
  * @author wlys
  * @since 2021/8/21 13:24
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 object Proxy {
 

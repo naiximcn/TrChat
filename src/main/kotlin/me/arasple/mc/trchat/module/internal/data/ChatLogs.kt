@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.internal.data
 
 import me.arasple.mc.trchat.api.config.Settings
+import me.arasple.mc.trchat.util.Internal
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
 import taboolib.common.io.newFile
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeUnit
  * @author Arasple
  * @date 2019/11/30 16:08
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 object ChatLogs {
 

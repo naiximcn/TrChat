@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.internal.hook.ext
 
 import me.arasple.mc.trchat.module.internal.script.js.JavaScriptAgent
+import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.getSession
 import org.bukkit.entity.Player
 import taboolib.common.platform.Platform
@@ -14,6 +15,7 @@ import taboolib.platform.compat.PlaceholderExpansion
  * @author Arasple
  * @since 2021/8/9 23:09
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 object HookPlaceholderAPI : PlaceholderExpansion {
 

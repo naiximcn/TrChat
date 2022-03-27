@@ -4,6 +4,7 @@ package me.arasple.mc.trchat.util
  * @author Arasple
  * @date 2021/1/24 16:57
  */
+@Internal
 object Regexs {
 
     private val PLACEHOLDER_API = "(%)(.+?)(%)|(?!\\{\")((\\{)(.+?)(}))".toRegex()

@@ -1,6 +1,5 @@
 package me.arasple.mc.trchat.module.internal.listener
 
-import me.arasple.mc.trchat.api.config.Functions
 import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.module.display.channel.Channel
 import me.arasple.mc.trchat.module.display.function.InventoryShow
@@ -23,7 +22,7 @@ import taboolib.platform.util.sendLang
 @PlatformSide([Platform.BUKKIT])
 object ListenerChatEvent {
 
-    private val hooks = arrayOf(
+    var hooks = arrayOf(
         "PlayMoreSounds"
     )
 
