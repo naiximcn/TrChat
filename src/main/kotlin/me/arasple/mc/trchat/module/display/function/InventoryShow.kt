@@ -93,8 +93,8 @@ object InventoryShow {
 
     private val inventorySlots = IntRange(18, 53).toList()
 
-    private val AIR_ITEM = buildItem(XMaterial.GRAY_STAINED_GLASS_PANE) { name = "" }
-    private val PLACEHOLDER_ITEM = buildItem(XMaterial.WHITE_STAINED_GLASS_PANE) { name = "" }
+    private val AIR_ITEM = buildItem(XMaterial.GRAY_STAINED_GLASS_PANE) { name = " " }
+    private val PLACEHOLDER_ITEM = buildItem(XMaterial.WHITE_STAINED_GLASS_PANE) { name = " " }
 
     private fun ItemStack?.replaceAir() = if (isAir()) AIR_ITEM else this
 }

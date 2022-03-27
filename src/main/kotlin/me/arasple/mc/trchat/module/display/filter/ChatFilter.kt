@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.display.filter
 
 import com.google.gson.JsonParser
+import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.api.config.Filter
 import me.arasple.mc.trchat.module.display.filter.processer.FilteredObject
 import me.arasple.mc.trchat.module.display.filter.processer.WordContext
@@ -8,6 +9,7 @@ import me.arasple.mc.trchat.module.display.filter.processer.WordFilter
 import me.arasple.mc.trchat.module.display.filter.processer.WordType
 import me.arasple.mc.trchat.module.internal.service.Metrics
 import me.arasple.mc.trchat.util.notify
+import me.arasple.mc.trchat.util.print
 import taboolib.common.env.DependencyDownloader.readFully
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
@@ -46,7 +48,6 @@ object ChatFilter {
      * @param notify      接受通知反馈
      */
     fun loadFilter(updateCloud: Boolean, vararg notify: ProxyCommandSender) {
-
         // 初始化本地配置
         context = WordContext().also {
             it.addWord(Filter.CONF.getStringList("Local"), WordType.BLACK)
@@ -99,7 +100,7 @@ object ChatFilter {
         return kotlin.runCatching {
             URL(url).openStream().use { inputStream ->
                 BufferedInputStream(inputStream).use { bufferedInputStream ->
-                    val database = JsonParser.parseString(readFully(bufferedInputStream, StandardCharsets.UTF_8)).asJsonObject
+                    val database = JsonParser().parse(readFully(bufferedInputStream, StandardCharsets.UTF_8)).asJsonObject
                     if (!database.has("lastUpdateDate") || !database.has("words")) {
                         error("Wrong database json object")
                     }
@@ -121,7 +122,10 @@ object ChatFilter {
             notify(notify, "Plugin-Loaded-Filter-Cloud", collected.size, url, CLOUD_LAST_UPDATE[url]!!)
             collected
         }.getOrElse {
-            it.printStackTrace()
+            if (!TrChat.reportedErrors.contains("catchCloudThesaurus")) {
+                it.print("Error occurred while catching cloud thesaurus.")
+                TrChat.reportedErrors.add("catchCloudThesaurus")
+            }
             emptyList()
         }
     }

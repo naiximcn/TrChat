@@ -139,12 +139,7 @@ open class Channel(
 
         val channels = mutableListOf<Channel>()
 
-        val defaultChannel by lazy {
-            val id = Settings.CONF.getString("Channel.Default")
-            channels.firstOrNull { it.id == id }.also {
-                if (it == null) severe("Default channel $id not found.")
-            }
-        }
+        var defaultChannel: Channel? = null
 
         fun join(player: Player, channel: String) {
             channels.firstOrNull { it.id == channel }?.let {

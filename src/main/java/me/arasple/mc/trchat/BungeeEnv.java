@@ -1,14 +1,11 @@
 package me.arasple.mc.trchat;
 
+import taboolib.common.env.RuntimeDependency;
+
 /**
  * @author wlys
  * @since 2022/3/20 12:54
  */
-
-import taboolib.common.env.RuntimeDependencies;
-import taboolib.common.env.RuntimeDependency;
-
-
 @RuntimeDependency(
         value = "!net.kyori:adventure-api:4.10.0",
         test = "!net.kyori.adventure.Adventure",
@@ -20,5 +17,4 @@ import taboolib.common.env.RuntimeDependency;
         repository = "https://repo.maven.apache.org/maven2",
         initiative = true
 )
-
 public class BungeeEnv {  }

@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat
 
 import me.arasple.mc.trchat.module.conf.Loader
+import me.arasple.mc.trchat.module.display.filter.ChatFilter
 import me.arasple.mc.trchat.module.internal.data.Database
 import me.arasple.mc.trchat.module.internal.hook.HookPlugin
 import me.arasple.mc.trchat.util.Util
@@ -30,6 +31,8 @@ object TrChat : Plugin() {
 
     var isGlobalMuting = false
 
+    val reportedErrors = mutableListOf<String>()
+
     @Awake
     fun loadDependency() {
         try {
@@ -55,6 +58,7 @@ object TrChat : Plugin() {
 
         Loader.loadChannels(console())
         Loader.loadFunctions(console())
+        ChatFilter.loadFilter(true, console())
 
         Proxy.init()
         Database.init()

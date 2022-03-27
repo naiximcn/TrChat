@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.module.conf
 
 import me.arasple.mc.trchat.api.config.Functions
+import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.module.display.channel.Channel
 import me.arasple.mc.trchat.module.display.channel.PrivateChannel
 import me.arasple.mc.trchat.module.display.channel.obj.ChannelBindings
@@ -60,6 +61,7 @@ object Loader {
         measureTimeMillis { loadChannels() }.let {
             sender.sendLang("Plugin-Loaded-Channels", Channel.channels.size, it)
         }
+        Settings.onReload()
     }
 
     fun loadChannels(): Int {

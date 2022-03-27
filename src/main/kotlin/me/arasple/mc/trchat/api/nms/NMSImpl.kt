@@ -1,11 +1,13 @@
 package me.arasple.mc.trchat.api.nms
 
+import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.api.TrChatAPI
 import me.arasple.mc.trchat.module.display.filter.ChatFilter.filter
 import me.arasple.mc.trchat.util.gson
 import me.arasple.mc.trchat.util.print
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
+import net.minecraft.network.chat.IChatBaseComponent
 import net.minecraft.server.v1_16_R3.NBTBase
 import net.minecraft.server.v1_16_R3.NBTTagCompound
 import org.bukkit.inventory.ItemStack
@@ -25,9 +27,12 @@ class NMSImpl : NMS() {
         return try {
             val json = TrChatAPI.classChatSerializer.invokeMethod<String>("a", iChat, fixed = true)!!
             val component = filterComponent(gson(json))
-            TrChatAPI.classChatSerializer.invokeMethod<Any>("b", gson(component), fixed = true) ?: iChat
+            TrChatAPI.classChatSerializer.invokeMethod<IChatBaseComponent>("b", gson(component), fixed = true)!!
         } catch (t: Throwable) {
-            t.print("Error occurred while filtering chat component")
+            if (!TrChat.reportedErrors.contains("filterIChatComponent")) {
+                t.print("Error occurred while filtering chat component.")
+                TrChat.reportedErrors.add("filterIChatComponent")
+            }
             iChat
         }
     }

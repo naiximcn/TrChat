@@ -48,6 +48,8 @@ private val GSON_SERIALIZER by lazy {
     }
 }
 
+fun legacy(component: Component) = LEGACY_SERIALIZER.serialize(component)
+
 fun legacy(string: String) = LEGACY_SERIALIZER.deserialize(string)
 
 fun gson(component: Component) = GSON_SERIALIZER.serialize(component)

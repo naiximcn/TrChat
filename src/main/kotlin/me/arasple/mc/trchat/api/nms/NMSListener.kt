@@ -9,6 +9,7 @@ import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.reflect.Reflex.Companion.invokeMethod
 import taboolib.module.nms.MinecraftVersion.majorLegacy
 import taboolib.module.nms.PacketSendEvent
 
@@ -21,11 +22,20 @@ object NMSListener {
 
     @SubscribeEvent(EventPriority.LOWEST)
     fun e(e: PacketSendEvent) {
+        val session = e.player.getSession()
         // Chat Filter
         when (e.packet.name) {
             "PacketPlayOutChat" -> {
-                e.player.getSession().addMessage(e.packet)
-                if (!Filter.CONF.getBoolean("Filter.Chat") || !e.player.getSession().isFilterEnabled) {
+                session.addMessage(e.packet)
+                if (!Filter.CONF.getBoolean("Enable.Chat") || !session.isFilterEnabled) {
+                    return
+                }
+                val type = if (majorLegacy >= 11700) {
+                    e.packet.read<Any>("type")!!.invokeMethod<Byte>("a")
+                } else {
+                    e.packet.read<Any>("b")!!.invokeMethod<Byte>("a")
+                }
+                if (type != 0.toByte()) {
                     return
                 }
                 if (majorLegacy >= 11700) {
@@ -40,7 +50,7 @@ object NMSListener {
                 return
             }
             "PacketPlayOutWindowItems" -> {
-                if (!Filter.CONF.getBoolean("Filter.Item") || !e.player.getSession().isFilterEnabled) {
+                if (!Filter.CONF.getBoolean("Enable.Item") || !session.isFilterEnabled) {
                     return
                 }
                 if (majorLegacy >= 11700) {
@@ -51,7 +61,7 @@ object NMSListener {
                 return
             }
             "PacketPlayOutSetSlot" -> {
-                if (!Filter.CONF.getBoolean("Filter.Item") || !e.player.getSession().isFilterEnabled) {
+                if (!Filter.CONF.getBoolean("Enable.Item") || !session.isFilterEnabled) {
                     return
                 }
                 if (majorLegacy >= 11700) {

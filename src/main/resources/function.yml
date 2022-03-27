@@ -13,10 +13,10 @@ General:
     Origin-Name: false
     Compatible: false
     Keys:
-      - "%i"
       - "%i%"
-      - "%item"
+      - "%i"
       - "%item%"
+      - "%item"
       - "[i]"
       - "[item]"
   Mention:

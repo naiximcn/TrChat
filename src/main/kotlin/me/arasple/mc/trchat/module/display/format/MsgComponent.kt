@@ -21,7 +21,7 @@ import taboolib.common.util.VariableReader
  * @since 2021/12/12 13:46
  */
 class MsgComponent(
-    var defaultColor: DefaultColor,
+    val defaultColor: DefaultColor,
     hover: Hover?,
     suggest: List<Suggest>?,
     command: List<Command>?,
@@ -49,29 +49,33 @@ class MsgComponent(
 
         val defaultColor = MessageColors.catchDefaultMessageColor(player, defaultColor)
 
-        parser.readToFlatten(message).forEach { part ->
+        for (part in parser.readToFlatten(message)) {
             if (part.isVariable) {
                 val args = part.text.split(":", limit = 2)
                 when (val id = args[0]) {
                     "ITEM" -> {
                         component.append(ItemShow.createComponent(player, args[1].toInt()))
+                        continue
                     }
                     "MENTION" -> {
                         component.append(Mention.createComponent(player, args[1]))
+                        continue
                     }
                     "INVENTORY" -> {
                         component.append(InventoryShow.createComponent(player))
+                        continue
                     }
                     else -> {
-                        Function.functions.firstOrNull { it.id == id }?.let {
-                            component.append(it.displayJson.toTextComponent(player, args[1]))
-                            it.action?.let { action -> TrChatAPI.eval(player, action) }
+                        val function = Function.functions.firstOrNull { it.id == id }
+                        if (function != null) {
+                            component.append(function.displayJson.toTextComponent(player, args[1]))
+                            function.action?.let { action -> TrChatAPI.eval(player, action) }
+                            continue
                         }
                     }
                 }
-            } else {
-                component.append(toTextComponent(player, MessageColors.defaultColored(defaultColor, player, message)))
             }
+            component.append(toTextComponent(player, MessageColors.defaultColored(defaultColor, player, part.text)))
         }
         return component.build()
     }

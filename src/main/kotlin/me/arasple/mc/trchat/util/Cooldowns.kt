@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.util
 
+import com.google.common.collect.Maps
 import org.bukkit.entity.Player
 import java.util.*
 
@@ -9,15 +10,14 @@ import java.util.*
  */
 class Cooldowns {
 
-    var cooldowns = mutableMapOf<String, Long>()
+    val data = Maps.newConcurrentMap<String, Long>()!!
 
     companion object {
 
         private val COOLDOWNS = mutableMapOf<UUID, Cooldowns>()
 
         fun getCooldownLeft(uuid: UUID, type: CooldownType): Long {
-            return COOLDOWNS.computeIfAbsent(uuid) { Cooldowns() }
-                .cooldowns[type.alias]?.let { it - System.currentTimeMillis() } ?: -1
+            return COOLDOWNS.computeIfAbsent(uuid) { Cooldowns() }.data[type.alias]?.let { it - System.currentTimeMillis() } ?: -1
         }
 
         fun isInCooldown(uuid: UUID, type: CooldownType): Boolean {
@@ -26,7 +26,7 @@ class Cooldowns {
 
         fun updateCooldown(uuid: UUID, type: CooldownType, lasts: Long) {
             COOLDOWNS.computeIfAbsent(uuid) { Cooldowns() }.let { cooldowns ->
-                cooldowns.cooldowns[type.alias] = System.currentTimeMillis() + lasts
+                cooldowns.data[type.alias] = System.currentTimeMillis() + lasts
             }
         }
 

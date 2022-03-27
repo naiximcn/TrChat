@@ -34,7 +34,7 @@ object ListenerAnvilChange {
             if (!hasDisplayName()) {
                 return@modifyMeta
             }
-            if (Filter.CONF.getBoolean("Filter.Anvil")) {
+            if (Filter.CONF.getBoolean("Enable.Anvil")) {
                 setDisplayName(TrChatAPI.filterString(p, displayName).filtered)
             }
             if (Settings.CONF.getBoolean("Color.Anvil")) {

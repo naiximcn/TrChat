@@ -57,7 +57,8 @@ object ItemShow {
             var result = message
             keys.forEach { key ->
                 (1..9).forEach {
-                    result = result.replace("$key-$it", "{{ITEM:$it}}")
+                    result = result.replace("$key-$it", "{{ITEM:$it}}", ignoreCase = true)
+                    result = result.replace("$key$it", "{{ITEM:$it}}", ignoreCase = true)
                 }
                 result = result.replace(key, "{{ITEM:${player.inventory.heldItemSlot + 1}}}", ignoreCase = true)
             }

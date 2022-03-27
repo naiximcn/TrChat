@@ -75,19 +75,9 @@ fun Player.getDataContainer(): ConfigurationSection {
 internal fun CommandSender.sendProcessedMessage(sender: Player, component: Component) {
     if (!HookPlugin.getInteractiveChat().sendMessage(this, component)) {
         if (TrChat.paperEnv) {
-            sendMessage(sender.identity(), component, MessageType.CHAT)
+            sendMessage(sender.uniqueId, legacy(component))
         } else {
             Util.adventure.sender(this).sendMessage(Identity.identity(sender.uniqueId), component, MessageType.CHAT)
-        }
-    }
-}
-
-internal fun Player.sendProcessedMessage(sender: Player, component: Component) {
-    if (!HookPlugin.getInteractiveChat().sendMessage(this, component)) {
-        if (TrChat.paperEnv) {
-            sendMessage(sender.identity(), component, MessageType.CHAT)
-        } else {
-            Util.adventure.player(this).sendMessage(Identity.identity(sender.uniqueId), component, MessageType.CHAT)
         }
     }
 }
