@@ -78,7 +78,9 @@ object Loader {
             }
         }
 
-        onlinePlayers().map { it.cast<Player>() }.forEach { it.getSession().channel?.id?.let { id -> Channel.join(it, id) } }
+        onlinePlayers().map { it.cast<Player>() }.forEach {
+            it.getSession().channel?.id?.let { id -> Channel.join(it, id, hint = false) }
+        }
 
         return Channel.channels.size
     }

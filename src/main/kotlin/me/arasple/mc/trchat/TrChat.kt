@@ -36,8 +36,9 @@ object TrChat : Plugin() {
     @Awake
     fun loadDependency() {
         try {
+            // Paper 1.16.5+
             Class.forName("com.destroystokyo.paper.PaperConfig")
-            if (majorLegacy >= 11605) {
+            if (majorLegacy >= 11604) {
                 paperEnv = true
             }
         } catch (_: ClassNotFoundException) {

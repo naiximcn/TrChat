@@ -17,12 +17,12 @@ class Text(val content: String, val condition: Condition?) {
 
     val dynamic by lazy { Regexs.containsPlaceholder(content) }
 
-    fun process(player: Player, vararg vars: String, message: String = ""): TextComponent {
+    fun process(player: Player, vararg vars: String, message: String = ""): TextComponent.Builder {
         val text = if (dynamic) {
             content.replacePlaceholder(player).replace("\$message", message).replaceWithOrder(*vars).colorify()
         } else {
             content.replace("\$message", message).replaceWithOrder(*vars).colorify()
         }
-        return legacy(text)
+        return legacy(text).toBuilder()
     }
 }

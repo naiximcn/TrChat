@@ -16,5 +16,5 @@ abstract class Part {
 
     abstract val dynamic: Boolean
 
-    abstract fun process(component: TextComponent, player: Player, vararg vars: String, message: String = ""): TextComponent
+    abstract fun process(builder: TextComponent.Builder, player: Player, vararg vars: String, message: String = "")
 }

@@ -82,16 +82,16 @@ class MsgComponent(
 
     override fun toTextComponent(player: Player, vararg vars: String): TextComponent {
         val message = vars[0]
-        var component = legacy(message)
+        val builder = legacy(message).toBuilder()
 
-        component = hover?.process(component, player, *vars) ?: component
-        component = suggest?.firstOrNull { it.condition.pass(player) }?.process(component, player, *vars) ?: component
-        component = command?.firstOrNull { it.condition.pass(player) }?.process(component, player, *vars) ?: component
-        component = url?.firstOrNull { it.condition.pass(player) }?.process(component, player, *vars) ?: component
-        component = insertion?.firstOrNull { it.condition.pass(player) }?.process(component, player, *vars) ?: component
-        component = copy?.firstOrNull { it.condition.pass(player) }?.process(component, player, *vars) ?: component
+        hover?.process(builder, player, *vars)
+        suggest?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
+        command?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
+        url?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
+        insertion?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
+        copy?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
 
-        return component
+        return builder.build()
     }
 
     companion object {

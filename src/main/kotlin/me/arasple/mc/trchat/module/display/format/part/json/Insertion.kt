@@ -16,11 +16,11 @@ class Insertion(override val content: String, override val condition: Condition?
 
     override val dynamic by lazy { Regexs.containsPlaceholder(content) }
 
-    override fun process(component: TextComponent, player: Player, vararg vars: String, message: String): TextComponent {
-        return if (dynamic) {
-            component.insertion(content.replacePlaceholder(player).replace("\$message", message).replaceWithOrder(*vars))
+    override fun process(builder: TextComponent.Builder, player: Player, vararg vars: String, message: String) {
+        if (dynamic) {
+            builder.insertion(content.replacePlaceholder(player).replace("\$message", message).replaceWithOrder(*vars))
         } else {
-            component.insertion(content.replace("\$message", message).replaceWithOrder(*vars))
+            builder.insertion(content.replace("\$message", message).replaceWithOrder(*vars))
         }
     }
 }

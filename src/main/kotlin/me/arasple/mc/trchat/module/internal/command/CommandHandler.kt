@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat.module.internal.command
 
-import me.arasple.mc.trchat.api.config.Filter
+import me.arasple.mc.trchat.api.config.Filters
 import me.arasple.mc.trchat.api.config.Functions
 import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.module.conf.Loader
@@ -41,7 +41,7 @@ object CommandHandler {
         execute<ProxyCommandSender> { sender, _, _ ->
             Settings.CONF.reload()
             Functions.CONF.reload()
-            Filter.CONF.reload()
+            Filters.CONF.reload()
             Loader.loadChannels(sender)
             Loader.loadFunctions(sender)
             ChatFilter.loadFilter(true, sender)

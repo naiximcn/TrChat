@@ -6,6 +6,7 @@ import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.module.configuration.Config
+import taboolib.module.configuration.ConfigNode
 import taboolib.module.configuration.Configuration
 
 /**
@@ -13,11 +14,14 @@ import taboolib.module.configuration.Configuration
  * @since 2022/2/4 13:04
  */
 @PlatformSide([Platform.BUKKIT])
-object Filter {
+object Filters {
 
     @Config("filter.yml", autoReload = true)
     lateinit var CONF: Configuration
         private set
+
+    @ConfigNode("Cloud-Thesaurus.Enabled", "filter.yml")
+    var cloud_enabled = true
 
     @Awake(LifeCycle.LOAD)
     fun init() {

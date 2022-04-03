@@ -27,9 +27,9 @@ class ChatSession(
 
     var lastPrivateTo = ""
 
-    var isSpying = false
-
     val receivedMessages = mutableListOf<ChatMessage>()
+
+    val isSpying get() = player.getDataContainer().getBoolean("spying", false)
 
     val isFilterEnabled get() = player.getDataContainer().getBoolean("filter", true)
 
@@ -44,12 +44,12 @@ class ChatSession(
     }
 
     fun switchSpy(): Boolean {
-        isSpying = !isSpying
+        player.getDataContainer()["spying"] = !isSpying
         return isSpying
     }
 
     internal fun addMessage(packet: Packet) {
-        receivedMessages += ChatMessage(packet.source, packet.toMessage()?.replace("\\s".toRegex(), "")?.takeLast(32))
+        receivedMessages += ChatMessage(packet.source, packet.toMessage()?.replace("\\s".toRegex(), "")?.takeLast(48))
         if (receivedMessages.size > 100) {
             receivedMessages.removeFirstOrNull()
         }

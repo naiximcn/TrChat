@@ -1,7 +1,7 @@
 package me.arasple.mc.trchat.module.internal.listener
 
 import me.arasple.mc.trchat.api.TrChatAPI
-import me.arasple.mc.trchat.api.config.Filter
+import me.arasple.mc.trchat.api.config.Filters
 import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.color.MessageColors
@@ -29,7 +29,7 @@ object ListenerSignChange {
                 if (Settings.CONF.getBoolean("Color.Sign")) {
                     line = MessageColors.replaceWithPermission(p, line ?: "")
                 }
-                if (Filter.CONF.getBoolean("Enable.Sign")) {
+                if (Filters.CONF.getBoolean("Enable.Sign")) {
                     TrChatAPI.filterString(p, line).filtered
                 } else {
                     line

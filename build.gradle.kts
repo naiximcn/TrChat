@@ -57,13 +57,12 @@ repositories {
 
 dependencies {
     compileOnly(kotlin("stdlib"))
-    compileOnly("net.kyori:adventure-api:4.10.0")
+    compileOnly("net.kyori:adventure-api:4.10.1")
     compileOnly("net.kyori:adventure-platform-bukkit:4.1.0")
     compileOnly("net.kyori:adventure-platform-bungeecord:4.1.0")
 
-    compileOnly("ink.ptms.core:v11800:11800:api")
-    compileOnly("ink.ptms.core:v11800:11800:mapped")
-    compileOnly("ink.ptms.core:v11800:11800:universal")
+    compileOnly("ink.ptms.core:v11802:11802:mapped")
+    compileOnly("ink.ptms.core:v11802:11802:universal")
     compileOnly("ink.ptms:nms-all:1.0.0")
 
     compileOnly("net.md-5:bungeecord-bootstrap:1.17-R0.1-SNAPSHOT")

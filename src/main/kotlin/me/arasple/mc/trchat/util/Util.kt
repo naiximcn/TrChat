@@ -15,6 +15,7 @@ import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.ProxyPlayer
+import taboolib.common.platform.function.info
 import taboolib.library.configuration.ConfigurationSection
 import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
@@ -45,10 +46,10 @@ object Util {
 val muteDateFormat = SimpleDateFormat()
 
 fun Throwable.print(title: String) {
-    println("§c[TrChat] §8$title")
-    println("         §8${localizedMessage}")
+    info("§c[TrChat] §8$title")
+    info("         §8${localizedMessage}")
     stackTrace.forEach {
-        println("         §8$it")
+        info("         §8$it")
     }
 }
 
@@ -75,7 +76,7 @@ fun Player.getDataContainer(): ConfigurationSection {
 internal fun CommandSender.sendProcessedMessage(sender: Player, component: Component) {
     if (!HookPlugin.getInteractiveChat().sendMessage(this, component)) {
         if (TrChat.paperEnv) {
-            sendMessage(sender.uniqueId, legacy(component))
+            sendMessage(sender.identity(), component, MessageType.CHAT)
         } else {
             Util.adventure.sender(this).sendMessage(Identity.identity(sender.uniqueId), component, MessageType.CHAT)
         }

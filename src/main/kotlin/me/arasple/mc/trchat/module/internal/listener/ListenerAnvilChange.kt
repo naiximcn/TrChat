@@ -1,7 +1,7 @@
 package me.arasple.mc.trchat.module.internal.listener
 
 import me.arasple.mc.trchat.api.TrChatAPI
-import me.arasple.mc.trchat.api.config.Filter
+import me.arasple.mc.trchat.api.config.Filters
 import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.color.MessageColors
@@ -36,7 +36,7 @@ object ListenerAnvilChange {
             if (!hasDisplayName()) {
                 return@modifyMeta
             }
-            if (Filter.CONF.getBoolean("Enable.Anvil")) {
+            if (Filters.CONF.getBoolean("Enable.Anvil")) {
                 setDisplayName(TrChatAPI.filterString(p, displayName).filtered)
             }
             if (Settings.CONF.getBoolean("Color.Anvil")) {

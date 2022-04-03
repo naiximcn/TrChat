@@ -2,11 +2,9 @@ package me.arasple.mc.trchat.module.display.filter
 
 import com.google.gson.JsonParser
 import me.arasple.mc.trchat.TrChat
-import me.arasple.mc.trchat.api.config.Filter
+import me.arasple.mc.trchat.api.config.Filters
+import me.arasple.mc.trchat.module.display.filter.processer.Filter
 import me.arasple.mc.trchat.module.display.filter.processer.FilteredObject
-import me.arasple.mc.trchat.module.display.filter.processer.WordContext
-import me.arasple.mc.trchat.module.display.filter.processer.WordFilter
-import me.arasple.mc.trchat.module.display.filter.processer.WordType
 import me.arasple.mc.trchat.module.internal.service.Metrics
 import me.arasple.mc.trchat.util.notify
 import me.arasple.mc.trchat.util.print
@@ -28,13 +26,11 @@ import java.nio.charset.StandardCharsets
 @PlatformSide([Platform.BUKKIT])
 object ChatFilter {
 
-    lateinit var context: WordContext
-    var skip = 2
-    var replacement = '*'
-
-    private val CLOUD_LAST_UPDATE = mutableMapOf<String, String>()
-    private var CLOUD_URL = listOf<String>()
-    private val CLOUD_WORDS = mutableSetOf<String>()
+    private val custom_replacements = mutableMapOf<String, String>()
+    private val cloud_words = mutableListOf<String>()
+    private val white_words = mutableListOf<String>()
+    private val cloud_last_update = mutableMapOf<String, String>()
+    private var cloud_url = listOf<String>()
 
     @Schedule(delay = (20 * 120).toLong(), period = (30 * 60 * 20).toLong(), async = true)
     fun asyncRefreshCloud() {
@@ -49,21 +45,19 @@ object ChatFilter {
      */
     fun loadFilter(updateCloud: Boolean, vararg notify: ProxyCommandSender) {
         // 初始化本地配置
-        context = WordContext().also {
-            it.addWord(Filter.CONF.getStringList("Local"), WordType.BLACK)
-            it.addWord(Filter.CONF.getStringList("WhiteList"), WordType.WHITE)
-        }
-        skip = Filter.CONF.getInt("Skip")
-        replacement = Filter.CONF.getString("Replacement")!![0]
+        Filter.setSensitiveWord(Filters.CONF.getStringList("Local"))
+        Filter.setPunctuations(Filters.CONF.getStringList("Ignored-Punctuations"))
+        Filter.setReplacement(Filters.CONF.getString("Replacement")!![0])
+
+        notify(notify, "Plugin-Loaded-Filter-Local", Filters.CONF.getStringList("Local").size)
 
         // 更新云端词库
-        if (updateCloud && Filter.CONF.getBoolean("Cloud-Thesaurus.Enabled")) {
-            CLOUD_URL = Filter.CONF.getStringList("Cloud-Thesaurus.Urls")
+        if (updateCloud && Filters.cloud_enabled) {
+            cloud_url = Filters.CONF.getStringList("Cloud-Thesaurus.Urls")
             submit(async = true) {
                 loadCloudFilter(*notify)
             }
         }
-        notify(notify, "Plugin-Loaded-Filter-Local", Filter.CONF.getStringList("Local").size)
     }
 
     /**
@@ -72,18 +66,18 @@ object ChatFilter {
      * @param notify 接受通知反馈
      */
     private fun loadCloudFilter(vararg notify: ProxyCommandSender) {
-        if (CLOUD_URL.isEmpty()) {
+        if (cloud_url.isEmpty()) {
             return
         }
         val collected = mutableListOf<String>()
-        CLOUD_URL.forEach {
+        cloud_url.forEach {
             collected += catchCloudThesaurus(it, *notify)
         }
-        CLOUD_WORDS += collected
-        if (CLOUD_WORDS.isEmpty()) {
+        cloud_words += collected
+        if (cloud_words.isEmpty()) {
             notify(notify, "Plugin-Failed-Load-Filter-Cloud")
         } else {
-            context.addWord(CLOUD_WORDS, WordType.BLACK)
+            Filter.addSensitiveWord(cloud_words)
         }
     }
 
@@ -94,7 +88,7 @@ object ChatFilter {
      * @param notify 接受通知反馈
      */
     private fun catchCloudThesaurus(url: String, vararg notify: ProxyCommandSender): List<String> {
-        val whitelist = Filter.CONF.getStringList("Cloud-Thesaurus.Ignored")
+        val whitelist = Filters.CONF.getStringList("Cloud-Thesaurus.Ignored")
         val collected = mutableListOf<String>()
 
         return kotlin.runCatching {
@@ -106,7 +100,7 @@ object ChatFilter {
                     }
 
                     val lastUpdateDate = database["lastUpdateDate"].asString
-                    CLOUD_LAST_UPDATE[url] = when (CLOUD_LAST_UPDATE[url]) {
+                    cloud_last_update[url] = when (cloud_last_update[url]) {
                         null -> lastUpdateDate
                         lastUpdateDate -> return emptyList()
                         else -> lastUpdateDate
@@ -119,7 +113,7 @@ object ChatFilter {
                     }
                 }
             }
-            notify(notify, "Plugin-Loaded-Filter-Cloud", collected.size, url, CLOUD_LAST_UPDATE[url]!!)
+            notify(notify, "Plugin-Loaded-Filter-Cloud", collected.size, url, cloud_last_update[url]!!)
             collected
         }.getOrElse {
             if (!TrChat.reportedErrors.contains("catchCloudThesaurus")) {
@@ -138,14 +132,10 @@ object ChatFilter {
      * @return 过滤后的字符串
      */
     fun filter(string: String, execute: Boolean = true): FilteredObject {
-        return if (execute) {
-            mirrorNow("Handler:Filter:doFilter") {
-                WordFilter(context).replace(string, skip, replacement).also {
-                    Metrics.increase(1, it.sensitiveWords)
-                }
+        return mirrorNow("Handler:Filter:doFilter") {
+            Filter.doFilter(string, execute).also {
+                Metrics.increase(1, it.sensitiveWords)
             }
-        } else {
-            FilteredObject(string, 0)
         }
     }
 }

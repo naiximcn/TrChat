@@ -17,11 +17,11 @@ class Suggest(override val content: String, override val condition: Condition?) 
 
     override val dynamic by lazy { Regexs.containsPlaceholder(content) }
 
-    override fun process(component: TextComponent, player: Player, vararg vars: String, message: String): TextComponent {
-        return if (dynamic) {
-            component.clickEvent(ClickEvent.suggestCommand(content.replacePlaceholder(player).replace("\$message", message).replaceWithOrder(*vars)))
+    override fun process(builder: TextComponent.Builder, player: Player, vararg vars: String, message: String) {
+        if (dynamic) {
+            builder.clickEvent(ClickEvent.suggestCommand(content.replacePlaceholder(player).replace("\$message", message).replaceWithOrder(*vars)))
         } else {
-            component.clickEvent(ClickEvent.suggestCommand(content.replace("\$message", message).replaceWithOrder(*vars)))
+            builder.clickEvent(ClickEvent.suggestCommand(content.replace("\$message", message).replaceWithOrder(*vars)))
         }
     }
 }

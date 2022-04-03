@@ -1,6 +1,5 @@
 package me.arasple.mc.trchat.module.display.channel
 
-import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.module.display.channel.obj.ChannelBindings
 import me.arasple.mc.trchat.module.display.channel.obj.ChannelSettings
@@ -15,7 +14,10 @@ import net.kyori.adventure.text.Component
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import taboolib.common.platform.command.command
-import taboolib.common.platform.function.*
+import taboolib.common.platform.function.console
+import taboolib.common.platform.function.getProxyPlayer
+import taboolib.common.platform.function.onlinePlayers
+import taboolib.common.platform.function.unregisterCommand
 import taboolib.common.util.subList
 import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
@@ -141,13 +143,13 @@ open class Channel(
 
         var defaultChannel: Channel? = null
 
-        fun join(player: Player, channel: String) {
+        fun join(player: Player, channel: String, hint: Boolean = true) {
             channels.firstOrNull { it.id == channel }?.let {
-                join(player, it)
+                join(player, it, hint)
             } ?: quit(player)
         }
 
-        fun join(player: Player, channel: Channel) {
+        fun join(player: Player, channel: Channel, hint: Boolean = true) {
             if (channel.settings.joinPermission?.let { player.hasPermission(it) } == false) {
                 player.sendLang("General-No-Permission")
                 return
@@ -155,7 +157,9 @@ open class Channel(
             player.getSession().channel = channel
             channel.listeners.add(player.uniqueId)
 
-            player.sendLang("Channel-Join", channel.id)
+            if (hint) {
+                player.sendLang("Channel-Join", channel.id)
+            }
         }
 
         fun quit(player: Player) {
