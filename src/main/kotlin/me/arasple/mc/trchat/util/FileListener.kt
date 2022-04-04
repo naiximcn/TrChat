@@ -11,6 +11,7 @@ import java.io.File
  * @author wlys
  * @since 2022/4/4 13:50
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 object FileListener {
 

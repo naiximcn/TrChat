@@ -7,12 +7,12 @@ import taboolib.common.LifeCycle
 import taboolib.common.env.DependencyDownloader.readFully
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
+import taboolib.common.platform.Schedule
 import taboolib.common.platform.SkipTo
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.pluginVersion
-import taboolib.common.platform.function.submit
 import taboolib.common.util.Version
 import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
@@ -37,10 +37,22 @@ object Updater {
     private var latest_Version = Version("0.0")
     private var information = ""
 
-//    @Awake(LifeCycle.LOAD)
-    fun init() {
-        submit(delay = 20, period = (15 * 60 * 20).toLong(), async = true) {
-            grabInfo()
+    @Schedule(delay = 20, period = (15 * 60 * 20).toLong(), async = true)
+    fun grabInfo() {
+        if (latest_Version.version[0] > 0) {
+            return
+        }
+        kotlin.runCatching {
+            URL(api_url).openStream().use { inputStream ->
+                BufferedInputStream(inputStream).use { bufferedInputStream ->
+                    val read = readFully(bufferedInputStream, StandardCharsets.UTF_8)
+                    val json = JsonParser().parse(read).asJsonObject
+                    val latestVersion = json["tag_name"].asString.substring(1)
+                    latest_Version = Version(latestVersion)
+                    information = json["body"].asString
+                    notifyVersion()
+                }
+            }
         }
     }
 
@@ -56,24 +68,6 @@ object Updater {
                     console().sendLang("Plugin-Updater-Dev")
                 } else {
                     console().sendLang("Plugin-Updater-Latest")
-                }
-            }
-        }
-    }
-
-    private fun grabInfo() {
-        if (latest_Version.version[0] > 0) {
-            return
-        }
-        kotlin.runCatching {
-            URL(api_url).openStream().use { inputStream ->
-                BufferedInputStream(inputStream).use { bufferedInputStream ->
-                    val read = readFully(bufferedInputStream, StandardCharsets.UTF_8)
-                    val json = JsonParser().parse(read).asJsonObject
-                    val latestVersion = json["tag_name"].asString.substring(1)
-                    latest_Version = Version(latestVersion)
-                    information = json["body"].asString
-                    notifyVersion()
                 }
             }
         }
