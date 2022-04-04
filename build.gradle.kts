@@ -66,10 +66,10 @@ dependencies {
     compileOnly("ink.ptms:nms-all:1.0.0")
 
     compileOnly("net.md-5:bungeecord-bootstrap:1.17-R0.1-SNAPSHOT")
-    compileOnly("com.velocitypowered:velocity-api:3.0.0")
+    compileOnly("com.velocitypowered:velocity-api:3.1.1")
 
     compileOnly("com.willfp:eco:6.6.3") { isTransitive = false }
-    compileOnly("me.clip:placeholderapi:2.10.9") { isTransitive = false }
+    compileOnly("me.clip:placeholderapi:2.11.1") { isTransitive = false }
 
     compileOnly(fileTree("libs"))
 }

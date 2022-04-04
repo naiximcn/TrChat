@@ -6,10 +6,9 @@ import me.arasple.mc.trchat.util.proxy.Proxy
 import me.arasple.mc.trchat.util.proxy.bungee.Bungees
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import taboolib.common.LifeCycle
-import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
+import taboolib.common.platform.Schedule
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.platform.function.submit
 
@@ -29,14 +28,12 @@ object Players {
         }
     }
 
-    @Awake(LifeCycle.ENABLE)
-    fun startTask() {
-        submit(delay = 20) {
-            if (Proxy.platform == Platform.BUNGEE && Proxy.isEnabled) {
-                submit(period = 60, async = true) {
-                    if (Bukkit.getOnlinePlayers().isNotEmpty()) {
-                        Bungees.sendBungeeData(Bukkit.getOnlinePlayers().iterator().next(), "PlayerList", "ALL")
-                    }
+    @Schedule(delay = 20)
+    fun sendPlayerList() {
+        if (Proxy.isEnabled && Proxy.platform == Platform.BUNGEE) {
+            submit(period = 60, async = true) {
+                if (Bukkit.getOnlinePlayers().isNotEmpty()) {
+                    Bungees.sendBungeeData(Bukkit.getOnlinePlayers().iterator().next(), "PlayerList", "ALL")
                 }
             }
         }

@@ -13,11 +13,8 @@ import me.arasple.mc.trchat.module.display.format.MsgComponent
 import me.arasple.mc.trchat.module.display.format.part.Group
 import me.arasple.mc.trchat.module.display.format.part.json.*
 import me.arasple.mc.trchat.module.display.function.Function
-import me.arasple.mc.trchat.util.Internal
+import me.arasple.mc.trchat.util.*
 import me.arasple.mc.trchat.util.color.DefaultColor
-import me.arasple.mc.trchat.util.getSession
-import me.arasple.mc.trchat.util.print
-import me.arasple.mc.trchat.util.toCondition
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import taboolib.common.io.newFile
@@ -43,6 +40,8 @@ import kotlin.system.measureTimeMillis
 @PlatformSide([Platform.BUKKIT])
 object Loader {
 
+    private var init = false
+
     private val folder by lazy {
         val folder = File(getDataFolder(), "channels")
 
@@ -63,7 +62,6 @@ object Loader {
         measureTimeMillis { loadChannels() }.let {
             sender.sendLang("Plugin-Loaded-Channels", Channel.channels.size, it)
         }
-        Settings.onReload()
     }
 
     fun loadChannels(): Int {
@@ -71,16 +69,28 @@ object Loader {
         Channel.channels.clear()
 
         filterChannelFiles(folder).forEach {
-            try {
-                Channel.channels.add(loadChannel(it))
-            } catch (t: Throwable) {
-                t.print("Channel file ${it.name} loaded failed!")
+            if (FileListener.isListening(it)) {
+                try {
+                    Channel.channels.add(loadChannel(it))
+                } catch (t: Throwable) {
+                    t.print("Channel file ${it.name} loaded failed!")
+                }
+            } else {
+                FileListener.listen(it, runFirst = true) {
+                    try {
+                        Channel.channels.add(loadChannel(it))
+                        refreshChannels()
+                    } catch (t: Throwable) {
+                        t.print("Channel file ${it.name} loaded failed!")
+                    }
+                }
             }
         }
 
-        onlinePlayers().map { it.cast<Player>() }.forEach {
-            it.getSession().channel?.id?.let { id -> Channel.join(it, id, hint = false) }
+        if (!init) {
+            init = true
         }
+        refreshChannels()
 
         return Channel.channels.size
     }
@@ -88,6 +98,11 @@ object Loader {
     fun loadChannel(file: File): Channel {
         val conf = YamlConfiguration.loadConfiguration(file)
         val id = file.nameWithoutExtension
+
+        Channel.channels.firstOrNull { it.id == id }?.let {
+            it.unregister()
+            Channel.channels.remove(it)
+        }
 
         val settings = conf.getConfigurationSection("Options")!!.let { section ->
             val joinPermission = section.getString("Join-Permission")
@@ -209,6 +224,16 @@ object Loader {
         val insertion = content["insertion"]?.serialize()?.map { Insertion(it.first, it.second[Property.CONDITION]?.toCondition()) }
         val copy = content["copy"]?.serialize()?.map { Copy(it.first, it.second[Property.CONDITION]?.toCondition()) }
         return MsgComponent(defaultColor, hover, suggest, command, url, insertion, copy)
+    }
+
+    private fun refreshChannels() {
+        if (init) {
+            onlinePlayers().map { it.cast<Player>() }.forEach {
+                it.getSession().channel?.id?.let { id -> Channel.join(it, id, hint = false) }
+            }
+
+            Settings.onReload()
+        }
     }
 
     private fun filterChannelFiles(file: File): List<File> {

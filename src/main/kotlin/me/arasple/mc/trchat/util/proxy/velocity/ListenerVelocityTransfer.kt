@@ -1,10 +1,9 @@
 package me.arasple.mc.trchat.util.proxy.velocity
 
 import com.velocitypowered.api.event.connection.PluginMessageEvent
-import com.velocitypowered.api.proxy.ConsoleCommandSource
 import com.velocitypowered.api.proxy.Player
-import com.velocitypowered.api.proxy.ProxyServer
 import me.arasple.mc.trchat.TrChatVelocity
+import me.arasple.mc.trchat.TrChatVelocity.plugin
 import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.proxy.common.MessageReader
 import net.kyori.adventure.audience.MessageType
@@ -13,9 +12,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.common.platform.function.console
 import taboolib.common.platform.function.getProxyPlayer
-import taboolib.common.platform.function.server
 import taboolib.common.util.subList
 import taboolib.module.lang.sendLang
 import java.io.IOException
@@ -32,7 +29,7 @@ import java.util.*
 @PlatformSide([Platform.VELOCITY])
 object ListenerVelocityTransfer {
 
-    @SubscribeEvent
+    @SubscribeEvent(ignoreCancelled = true)
     fun onTransfer(e: PluginMessageEvent) {
         if (e.identifier == TrChatVelocity.incoming) {
             try {
@@ -63,12 +60,12 @@ object ListenerVelocityTransfer {
                 val permission = data[3]
                 val message = GsonComponentSerializer.gson().deserialize(raw)
 
-                server<ProxyServer>().allServers.forEach { server ->
+                plugin.server.allServers.forEach { server ->
                     server.playersConnected.filter { permission == "null" || it.hasPermission(permission) }.forEach { player ->
                         player.sendMessage(Identity.identity(UUID.fromString(uuid)), message, MessageType.CHAT)
                     }
                 }
-                console().cast<ConsoleCommandSource>().sendMessage(message)
+                plugin.server.consoleCommandSource.sendMessage(message)
             }
             "ForwardRaw" -> {
                 val uuid = data[1]
@@ -77,14 +74,14 @@ object ListenerVelocityTransfer {
                 val ports = data[4].split(";").map { it.toInt() }
                 val message = GsonComponentSerializer.gson().deserialize(raw)
 
-                server<ProxyServer>().allServers.forEach { server ->
+                plugin.server.allServers.forEach { server ->
                     if (ports.contains(server.serverInfo.address.port)) {
                         server.playersConnected.filter { permission == "null" || it.hasPermission(permission) }.forEach { player ->
                             player.sendMessage(Identity.identity(UUID.fromString(uuid)), message, MessageType.CHAT)
                         }
                     }
                 }
-                console().cast<ConsoleCommandSource>().sendMessage(message)
+                plugin.server.consoleCommandSource.sendMessage(message)
             }
             "SendLang" -> {
                 val to = data[1]

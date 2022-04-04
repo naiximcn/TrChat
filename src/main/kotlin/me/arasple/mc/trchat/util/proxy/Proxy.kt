@@ -5,12 +5,11 @@ import me.arasple.mc.trchat.util.proxy.bungee.Bungees
 import me.arasple.mc.trchat.util.proxy.common.MessageBuilder
 import me.arasple.mc.trchat.util.proxy.velocity.Velocity
 import org.bukkit.Bukkit
-import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
+import taboolib.common.platform.function.console
 import taboolib.common.platform.function.getProxyPlayer
-import taboolib.common.reflect.Reflex.Companion.invokeMethod
 import taboolib.module.lang.sendLang
 import java.util.*
 
@@ -30,11 +29,16 @@ object Proxy {
     val platform by lazy {
         if (Bukkit.getServer().spigot().config.getBoolean("settings.bungeecord")) {
             isEnabled = true
+            console().sendLang("Plugin-Proxy-Supported", "Bungee")
             Platform.BUNGEE
-        } else if (Bukkit.getServer().spigot().invokeMethod<YamlConfiguration>("getPaperConfig")?.getBoolean("settings.velocity-support.enabled") == true) {
-            isEnabled = false
+        } else if (kotlin.runCatching {
+                Bukkit.getServer().spigot().paperConfig.getBoolean("settings.velocity-support.enabled")
+        }.getOrDefault(false)) {
+            isEnabled = true
+            console().sendLang("Plugin-Proxy-Supported", "Velocity")
             Platform.VELOCITY
         } else {
+            console().sendLang("Plugin-Proxy-None")
             Platform.UNKNOWN
         }
     }
