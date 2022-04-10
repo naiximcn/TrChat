@@ -6,7 +6,6 @@ import me.arasple.mc.trchat.util.color.colorify
 import me.arasple.mc.trchat.util.legacy
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
-import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
@@ -56,7 +55,7 @@ object InventoryShow {
         } else {
             var result = message
             keys.forEach {
-                result = result.replace(it, "{{INVENTORY:SELF}}", ignoreCase = true)
+                result = result.replaceFirst(it, "{{INVENTORY:SELF}}", ignoreCase = true)
             }
             return result
         }

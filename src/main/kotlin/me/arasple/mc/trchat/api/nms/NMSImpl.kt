@@ -27,7 +27,7 @@ class NMSImpl : NMS() {
         return try {
             val json = TrChatAPI.classChatSerializer.invokeMethod<String>("a", iChat, fixed = true)!!
             val component = filterComponent(gson(json))
-            TrChatAPI.classChatSerializer.invokeMethod<IChatBaseComponent>("b", gson(component), fixed = true)!!
+            TrChatAPI.classChatSerializer.invokeMethod<IChatBaseComponent>("b", gson(component).let { if (it.length > 32767) "{\"text\":\"This chat packet is too big to send.\"}" else it }, fixed = true)!!
         } catch (t: Throwable) {
             if (!TrChat.reportedErrors.contains("filterIChatComponent")) {
                 t.print("Error occurred while filtering chat component.")

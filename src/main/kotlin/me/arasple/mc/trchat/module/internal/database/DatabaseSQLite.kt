@@ -3,6 +3,7 @@ package me.arasple.mc.trchat.module.internal.database
 import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.util.Internal
 import org.bukkit.entity.Player
+import taboolib.common.io.newFile
 import taboolib.common.platform.function.getDataFolder
 import taboolib.library.configuration.ConfigurationSection
 import taboolib.module.configuration.Configuration
@@ -11,7 +12,6 @@ import taboolib.module.database.ColumnOptionSQLite
 import taboolib.module.database.ColumnTypeSQLite
 import taboolib.module.database.Table
 import taboolib.module.database.getHost
-import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap
 @Internal
 class DatabaseSQLite : Database() {
 
-    val host = File(Settings.CONF.getString("Database.SQLite.file")!!.replace("{plugin_folder}", getDataFolder().absolutePath)).getHost()
+    val host = newFile(Settings.CONF.getString("Database.SQLite.file")!!.replace("{plugin_folder}", getDataFolder().absolutePath)).getHost()
 
     val table = Table(Settings.CONF.getString("Database.SQLite.table")!!, host) {
         add {
