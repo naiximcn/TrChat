@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.util.proxy.bukkit
 
+import me.arasple.mc.trchat.module.display.ChatSession
 import me.arasple.mc.trchat.module.display.function.Mention
 import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.proxy.Proxy
@@ -23,7 +24,7 @@ object Players {
     private var players = listOf<String>()
 
     fun getRegex(player: Player): List<Regex> {
-        return getPlayers().filter { Mention.selfMention || it != player.name }.map {
+        return getPlayers().filter { (Mention.selfMention || it != player.name) && !ChatSession.vanishing.contains(it) }.map {
             Regex("(?i)@? ?($it)")
         }
     }

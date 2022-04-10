@@ -28,10 +28,12 @@ object HookPlaceholderAPI : PlaceholderExpansion {
             val session = player.getSession()
 
             return when (params[0].lowercase()) {
+                "js" -> if (params.size > 1) JavaScriptAgent.eval(player, args.substringAfter('_')).get() else ""
                 "filter" -> session.isFilterEnabled
                 "channel" -> session.channel?.id
-                "js" -> if (params.size > 1) JavaScriptAgent.eval(player, args.substringAfter('_')).get() else ""
                 "toplayer" -> session.lastPrivateTo
+                "spy" -> session.isSpying
+                "lastmessage" -> session.lastMessage
                 else -> ""
             }.toString()
         }

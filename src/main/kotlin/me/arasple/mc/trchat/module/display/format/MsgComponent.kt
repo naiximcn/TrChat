@@ -27,8 +27,9 @@ class MsgComponent(
     command: List<Command>?,
     url: List<Url>?,
     insertion: List<Insertion>?,
-    copy: List<Copy>?
-) : JsonComponent(null, hover, suggest, command, url, insertion, copy) {
+    copy: List<Copy>?,
+    font: List<Font>?
+) : JsonComponent(null, hover, suggest, command, url, insertion, copy, font) {
 
     fun serialize(player: Player, msg: String, disabledFunctions: List<String>): TextComponent {
         val component = Component.text()
@@ -90,6 +91,7 @@ class MsgComponent(
         url?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
         insertion?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
         copy?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
+        font?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
 
         return builder.build()
     }

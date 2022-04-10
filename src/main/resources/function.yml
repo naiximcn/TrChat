@@ -12,6 +12,7 @@ General:
     Format: '&8[&3{0} &bx{1}&8]'
     Origin-Name: false
     Compatible: false
+    Max: 5
     Keys:
       - "%i%"
       - "%i"

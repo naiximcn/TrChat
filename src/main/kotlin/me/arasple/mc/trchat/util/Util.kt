@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat
  * @author wlys
  * @since 2021/9/12 18:11
  */
+@Internal
 @PlatformSide([Platform.BUKKIT])
 object Util {
 
@@ -73,7 +74,7 @@ fun Player.getDataContainer(): ConfigurationSection {
     return Database.database.pull(this)
 }
 
-internal fun CommandSender.sendProcessedMessage(sender: Player, component: Component) {
+fun CommandSender.sendProcessedMessage(sender: Player, component: Component) {
     if (!HookPlugin.getInteractiveChat().sendMessage(this, component)) {
         if (TrChat.paperEnv) {
             sendMessage(sender.identity(), component, MessageType.CHAT)
@@ -83,7 +84,7 @@ internal fun CommandSender.sendProcessedMessage(sender: Player, component: Compo
     }
 }
 
-internal fun ProxyPlayer.sendProcessedMessage(sender: Player, component: Component) {
+fun ProxyPlayer.sendProcessedMessage(sender: Player, component: Component) {
     cast<Player>().sendProcessedMessage(sender, component)
 }
 

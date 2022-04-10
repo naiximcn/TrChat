@@ -78,12 +78,11 @@ object ListenerBungeeTransfer {
                 val permission = data[3]
                 val message = GsonComponentSerializer.gson().deserialize(raw)
 
-                server<ProxyServer>().servers.forEach { (_, v) ->
-                    v.players.filter { permission == "null" || it.hasPermission(permission) }.forEach {
-                        adventure.player(it).sendMessage(Identity.identity(UUID.fromString(uuid)), message, MessageType.CHAT)
-                    }
+                if (permission == "null") {
+                    adventure.all().sendMessage(message)
+                } else {
+                    adventure.permission(permission).sendMessage(message)
                 }
-                adventure.console().sendMessage(message)
             }
             "ForwardRaw" -> {
                 val uuid = data[1]

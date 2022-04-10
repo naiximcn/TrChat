@@ -36,22 +36,22 @@ object MessageColors {
             }
         }
 
+        string = if (player.hasPermission(COLOR_PERMISSION_NODE + "rainbow")) {
+            string.parseRainbow()
+        } else {
+            string.replace(Hex.RAINBOW_PATTERN.toRegex(), "")
+        }
+
+        string = if (player.hasPermission(COLOR_PERMISSION_NODE + "gradients")) {
+            string.parseGradients()
+        } else {
+            string.replace(Hex.GRADIENT_PATTERN.toRegex(), "")
+        }
+
         if (player.hasPermission(COLOR_PERMISSION_NODE + "hex")) {
             string = string.parseHex()
         } else {
             Hex.HEX_PATTERNS.forEach { string = string.replace(it.toRegex(), "") }
-        }
-
-        if (player.hasPermission(COLOR_PERMISSION_NODE + "rainbow")) {
-            string = string.parseRainbow()
-        } else {
-            string = string.replace(Hex.RAINBOW_PATTERN.toRegex(), "")
-        }
-
-        if (player.hasPermission(COLOR_PERMISSION_NODE + "gradients")) {
-            string = string.parseGradients()
-        } else {
-            string = string.replace(Hex.GRADIENT_PATTERN.toRegex(), "")
         }
 
         return string

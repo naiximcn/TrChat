@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.util.proxy
 
+import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.proxy.bungee.Bungees
 import me.arasple.mc.trchat.util.proxy.common.MessageBuilder
@@ -27,13 +28,14 @@ object Proxy {
     var isEnabled = false
 
     val platform by lazy {
-        if (Bukkit.getServer().spigot().config.getBoolean("settings.bungeecord")) {
+        val force = Settings.CONF.getString("Options.Force-Proxy")?.uppercase()
+        if (Bukkit.getServer().spigot().config.getBoolean("settings.bungeecord") || force == "BUNGEE") {
             isEnabled = true
             console().sendLang("Plugin-Proxy-Supported", "Bungee")
             Platform.BUNGEE
         } else if (kotlin.runCatching {
                 Bukkit.getServer().spigot().paperConfig.getBoolean("settings.velocity-support.enabled")
-        }.getOrDefault(false)) {
+        }.getOrDefault(false) || force == "VELOCITY") {
             isEnabled = true
             console().sendLang("Plugin-Proxy-Supported", "Velocity")
             Platform.VELOCITY

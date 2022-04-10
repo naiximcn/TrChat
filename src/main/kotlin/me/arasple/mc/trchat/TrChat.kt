@@ -57,12 +57,13 @@ object TrChat : Plugin() {
             Util.init()
         }
 
+        Database.init()
+
         Loader.loadChannels(console())
         Loader.loadFunctions(console())
         ChatFilter.loadFilter(true, console())
 
         Proxy.init()
-        Database.init()
         HookPlugin.printInfo()
         console().sendLang("Plugin-Enabled", pluginVersion)
     }

@@ -17,7 +17,8 @@ open class JsonComponent(
     val command: List<Command>?,
     val url: List<Url>?,
     val insertion: List<Insertion>?,
-    val copy: List<Copy>?
+    val copy: List<Copy>?,
+    val font: List<Font>?
 ) {
 
     open fun toTextComponent(player: Player, vararg vars: String): TextComponent {
@@ -29,6 +30,7 @@ open class JsonComponent(
         url?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
         insertion?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
         copy?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
+        font?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
 
         return builder.build()
     }

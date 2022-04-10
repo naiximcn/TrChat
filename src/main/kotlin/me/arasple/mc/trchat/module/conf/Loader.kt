@@ -65,6 +65,7 @@ object Loader {
     }
 
     fun loadChannels(): Int {
+        init = false
         Channel.channels.forEach { it.unregister() }
         Channel.channels.clear()
 
@@ -87,9 +88,7 @@ object Loader {
             }
         }
 
-        if (!init) {
-            init = true
-        }
+        init = true
         refreshChannels()
 
         return Channel.channels.size
@@ -212,7 +211,8 @@ object Loader {
         val url = content["url"]?.serialize()?.map { Url(it.first, it.second[Property.CONDITION]?.toCondition()) }
         val insertion = content["insertion"]?.serialize()?.map { Insertion(it.first, it.second[Property.CONDITION]?.toCondition()) }
         val copy = content["copy"]?.serialize()?.map { Copy(it.first, it.second[Property.CONDITION]?.toCondition()) }
-        return JsonComponent(text, hover, suggest, command, url, insertion, copy)
+        val font = content["font"]?.serialize()?.map { Font(it.first, it.second[Property.CONDITION]?.toCondition()) }
+        return JsonComponent(text, hover, suggest, command, url, insertion, copy, font)
     }
 
     private fun parseMsg(content: Map<*, *>): MsgComponent {
@@ -223,7 +223,8 @@ object Loader {
         val url = content["url"]?.serialize()?.map { Url(it.first, it.second[Property.CONDITION]?.toCondition()) }
         val insertion = content["insertion"]?.serialize()?.map { Insertion(it.first, it.second[Property.CONDITION]?.toCondition()) }
         val copy = content["copy"]?.serialize()?.map { Copy(it.first, it.second[Property.CONDITION]?.toCondition()) }
-        return MsgComponent(defaultColor, hover, suggest, command, url, insertion, copy)
+        val font = content["font"]?.serialize()?.map { Font(it.first, it.second[Property.CONDITION]?.toCondition()) }
+        return MsgComponent(defaultColor, hover, suggest, command, url, insertion, copy, font)
     }
 
     private fun refreshChannels() {

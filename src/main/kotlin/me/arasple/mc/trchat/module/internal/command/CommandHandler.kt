@@ -86,6 +86,13 @@ object CommandHandler {
     @CommandBody(permission = "trchat.command.removemessage", optional = true)
     val removeMessage = CommandRemoveMessage.command
 
+    @CommandBody(permission = "trchat.command.vanish", optional = true)
+    val vanish = subCommand {
+        execute<Player> { sender, _, _ ->
+            sender.getSession().switchVanish()
+        }
+    }
+
     @CommandBody
     val help = subCommand {
         createHelper()

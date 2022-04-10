@@ -35,6 +35,8 @@ class ChatSession(
 
     val isMuted get() = (player.getDataContainer().getLong("mute_time", 0)) > System.currentTimeMillis()
 
+    val isVanishing get() = player.getDataContainer().getBoolean("vanish", false)
+
     fun setFilter(value: Boolean) {
         player.getDataContainer()["filter"] = value
     }
@@ -46,6 +48,13 @@ class ChatSession(
     fun switchSpy(): Boolean {
         player.getDataContainer()["spying"] = !isSpying
         return isSpying
+    }
+
+    fun switchVanish(): Boolean {
+        player.getDataContainer()["vanish"] = !isVanishing
+        return isVanishing.also {
+            if (it) vanishing.add(player.name) else vanishing.remove(player.name)
+        }
     }
 
     internal fun addMessage(packet: Packet) {
@@ -71,9 +80,13 @@ class ChatSession(
         @JvmField
         val SESSIONS = mutableMapOf<UUID, ChatSession>()
 
+        val vanishing = mutableSetOf<String>()
+
         fun getSession(player: Player): ChatSession {
             return SESSIONS.computeIfAbsent(player.uniqueId) {
-                ChatSession(player, Channel.defaultChannel, onlinePlayers().map { it.cast<Player>() }.toSet())
+                ChatSession(player, Channel.defaultChannel, onlinePlayers().map { it.cast<Player>() }.toSet()).also {
+                    if (it.isVanishing) vanishing.add(player.name)
+                }
             }
         }
 

@@ -3,6 +3,7 @@ Options:
   Log-Private: '[{0}] {1} -> {2}: {3}'
   Depend-Expansions: ['player', 'server', 'vault']
   Prevent-Tab-Complete: false
+  Force-Proxy: ~
 
 Database:
   Method: SQLite

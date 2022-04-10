@@ -1,6 +1,5 @@
 package me.arasple.mc.trchat.module.display.channel
 
-import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.module.display.ChatSession
 import me.arasple.mc.trchat.module.display.channel.obj.ChannelBindings
@@ -15,7 +14,6 @@ import me.arasple.mc.trchat.util.proxy.bukkit.Players
 import me.arasple.mc.trchat.util.proxy.sendBukkitMessage
 import me.arasple.mc.trchat.util.proxy.sendProxyLang
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import org.bukkit.entity.Player
 import taboolib.common.platform.command.command
 import taboolib.common.platform.function.console
@@ -48,18 +46,13 @@ class PrivateChannel(
                 }
                 dynamic("player", optional = true) {
                     suggestion<Player> { _, _ ->
-                        Players.getPlayers()
+                        Players.getPlayers().filter { !ChatSession.vanishing.contains(it) }
                     }
                     execute<Player> { sender, _, argument ->
                         sender.getSession().lastPrivateTo = Players.getPlayerFullName(argument) ?: return@execute sender.sendLang("Command-Player-Not-Exist")
                         join(sender, this@PrivateChannel)
                     }
                     dynamic("message", optional = true) {
-                        suggestion<Player>(uncheck = true) { _, context ->
-                            Players.getPlayers().filter {
-                                it.lowercase().startsWith(context.argument(-1))
-                            }
-                        }
                         execute<Player> { sender, context, argument ->
                             Players.getPlayerFullName(context.argument(-1))?.let {
                                 sender.getSession().lastPrivateTo = it

@@ -2,6 +2,7 @@ package me.arasple.mc.trchat.module.internal.listener
 
 import me.arasple.mc.trchat.module.display.channel.Channel
 import me.arasple.mc.trchat.util.Internal
+import me.arasple.mc.trchat.util.getSession
 import org.bukkit.event.player.PlayerJoinEvent
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
@@ -23,5 +24,6 @@ object ListenerJoin {
                 it.listeners.add(player.uniqueId)
             }
         }
+        player.getSession()
     }
 }
