@@ -34,8 +34,10 @@ object NMSListener {
                 }
                 val type = if (majorLegacy >= 11700) {
                     e.packet.read<Any>("type")!!.invokeMethod<Byte>("a")
-                } else {
+                } else if (majorLegacy >= 11200) {
                     e.packet.read<Any>("b")!!.invokeMethod<Byte>("a")
+                } else {
+                    e.packet.read<Byte>("b")
                 }
                 if (type != 0.toByte()) {
                     return
