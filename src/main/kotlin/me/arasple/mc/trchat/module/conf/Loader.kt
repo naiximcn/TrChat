@@ -114,7 +114,8 @@ object Loader {
             val proxy = section.getBoolean("Proxy", false)
             val ports = section.getString("Ports")?.split(";")?.map { it.toInt() }
             val disabledFunctions = section.getStringList("Disabled-Functions")
-            ChannelSettings(joinPermission, speakCondition, target, autoJoin, proxy, ports, disabledFunctions)
+            val filterBeforeSending = section.getBoolean("Filter-Before-Sending", false)
+            ChannelSettings(joinPermission, speakCondition, target, autoJoin, proxy, ports, disabledFunctions, filterBeforeSending)
         }
         val private = conf.getBoolean("Options.Private", false)
 
@@ -152,8 +153,13 @@ object Loader {
                 val suffix = parseGroups(map["suffix"] as? LinkedHashMap<*, *>)
                 Format(condition, priority, prefix, msg, suffix)
             }.sortedBy { it.priority }
-
-            return Channel(id, settings, bindings, formats)
+            val console = conf.getConfigurationSection("Console")?.let { map ->
+                val prefix = parseGroups(map["prefix"] as LinkedHashMap<*, *>)
+                val msg = parseMsg(map["msg"] as LinkedHashMap<*, *>)
+                val suffix = parseGroups(map["suffix"] as? LinkedHashMap<*, *>)
+                Format(null, 100, prefix, msg, suffix)
+            }
+            return Channel(id, settings, bindings, formats, console)
         }
     }
 

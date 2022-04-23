@@ -4,19 +4,20 @@ Options:
   Depend-Expansions: ['player', 'server', 'vault']
   Prevent-Tab-Complete: false
   Force-Proxy: ~
+  Kether-Allow-Tolerance-Parser: true
 
 Database:
   Method: SQLite
   SQLite:
     file: '{plugin_folder}/data/data.db'
-    table: trchat
+    table: trchat_user_data
   SQL:
     host: localhost
     port: 3306
     user: root
     password: root
     database: root
-    table: trchat
+    table: trchat_user_data
   Mongodb:
     client: 'mongodb://localhost:3307'
     database: trixey

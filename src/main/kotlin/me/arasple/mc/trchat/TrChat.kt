@@ -57,6 +57,7 @@ object TrChat : Plugin() {
             Util.init()
         }
 
+
         Database.init()
 
         Loader.loadChannels(console())

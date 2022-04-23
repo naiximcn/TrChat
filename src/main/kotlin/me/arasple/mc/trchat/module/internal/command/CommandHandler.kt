@@ -4,7 +4,6 @@ import me.arasple.mc.trchat.api.config.Filters
 import me.arasple.mc.trchat.api.config.Functions
 import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.module.conf.Loader
-import me.arasple.mc.trchat.module.display.filter.ChatFilter
 import me.arasple.mc.trchat.module.display.menu.MenuControlPanel
 import me.arasple.mc.trchat.module.display.menu.MenuFilterControl
 import me.arasple.mc.trchat.module.internal.command.sub.CommandRemoveMessage
@@ -43,8 +42,6 @@ object CommandHandler {
             Functions.CONF.reload()
             Filters.CONF.reload()
             Loader.loadChannels(sender)
-            Loader.loadFunctions(sender)
-            ChatFilter.loadFilter(true, sender)
         }
     }
 

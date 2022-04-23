@@ -4,6 +4,7 @@ import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.module.display.ChatSession
 import me.arasple.mc.trchat.module.display.channel.obj.ChannelBindings
 import me.arasple.mc.trchat.module.display.channel.obj.ChannelSettings
+import me.arasple.mc.trchat.module.display.filter.ChatFilter
 import me.arasple.mc.trchat.module.display.format.Format
 import me.arasple.mc.trchat.module.internal.command.main.CommandReply
 import me.arasple.mc.trchat.module.internal.data.ChatLogs
@@ -74,6 +75,10 @@ class PrivateChannel(
         }
         if (!settings.speakCondition.pass(player)) {
             player.sendLang("Channel-No-Speak-Permission")
+            return
+        }
+        if (settings.filterBeforeSending && ChatFilter.filter(message).sensitiveWords > 0) {
+            player.sendLang("Channel-Filter-Before-Sending")
             return
         }
         val session = player.getSession()

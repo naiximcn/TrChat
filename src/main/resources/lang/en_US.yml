@@ -146,6 +146,13 @@ Channel-No-Speak-Permission:
     sound: 'ENTITY_ITEM_BREAK'
     volume: 1
     pitch: 0
+Channel-Bad-Language:
+  - type: actionbar
+    text: '&cYou cannot speak bad language.'
+  - type: sound
+    sound: 'ENTITY_ITEM_BREAK'
+    volume: 1
+    pitch: 0
 
 Mute-Muted-Player: '&8[&3Tr&bChat&8] &7You muted {0} for {1} minute(s).'
 Mute-Muted-All: '&8[&3Tr&bChat&8] &7Global muted.'

@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     id("io.izzel.taboolib") version "1.38"
-    id("org.jetbrains.kotlin.jvm") version "1.6.10"
+    id("org.jetbrains.kotlin.jvm") version "1.5.10"
     id("org.tabooproject.shrinkingkt") version "1.0.6"
 }
 
@@ -47,12 +47,12 @@ configure<org.tabooproject.shrinkingkt.ShrinkingExt> {
 }
 
 repositories {
+    mavenCentral()
     maven("https://nexus.velocitypowered.com/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.codemc.io/repository/maven-public/")
     maven("https://papermc.io/repo/repository/maven-public/")
     maven("https://jitpack.io")
-    mavenCentral()
 }
 
 dependencies {

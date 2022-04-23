@@ -18,6 +18,10 @@ class HookEcoEnchants : HookAbstract() {
         if (!isHooked || item.isAir()) {
             return item
         }
-        return Display.displayAndFinalize(item, player)
+        return try {
+            Display.displayAndFinalize(item, player)
+        } catch (_: Throwable){
+            Display.displayAndFinalize(item)
+        }
     }
 }

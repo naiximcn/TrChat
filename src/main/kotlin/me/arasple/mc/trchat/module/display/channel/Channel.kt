@@ -4,6 +4,7 @@ import me.arasple.mc.trchat.api.event.TrChatEvent
 import me.arasple.mc.trchat.module.display.channel.obj.ChannelBindings
 import me.arasple.mc.trchat.module.display.channel.obj.ChannelSettings
 import me.arasple.mc.trchat.module.display.channel.obj.Target
+import me.arasple.mc.trchat.module.display.filter.ChatFilter
 import me.arasple.mc.trchat.module.display.format.Format
 import me.arasple.mc.trchat.module.internal.data.ChatLogs
 import me.arasple.mc.trchat.module.internal.service.Metrics
@@ -33,6 +34,7 @@ open class Channel(
     val settings: ChannelSettings,
     val bindings: ChannelBindings,
     val formats: List<Format>,
+    val console: Format? = null
 ) {
 
     init {
@@ -46,8 +48,41 @@ open class Channel(
                     }
                 }
                 dynamic("message", optional = true) {
-                    execute<Player> { sender, _, argument ->
-                        execute(sender, argument)
+                    execute<CommandSender> { sender, _, argument ->
+                        if (sender is Player) {
+                            execute(sender, argument)
+                        } else {
+//                            val builder = Component.text()
+//                            console?.let { format ->
+//                                format.prefix.forEach { prefix ->
+//                                    builder.append(prefix.value.first().content.toTextComponent(player)) }
+//                                builder.append(format.msg.serialize(player, argument, settings.disabledFunctions))
+//                                format.suffix.forEach { suffix ->
+//                                    builder.append(suffix.value.first().content.toTextComponent(player)) }
+//                            } ?: return@execute
+//                            val component = builder.build()
+//
+//                            if (settings.proxy && Proxy.isEnabled) {
+//                                val gson = gson(component)
+//                                if (settings.ports != null) {
+//                                    player.sendBukkitMessage(
+//                                        "ForwardRaw",
+//                                        player.uniqueId.toString(),
+//                                        gson,
+//                                        settings.joinPermission ?: "null",
+//                                        settings.ports.joinToString(";")
+//                                    )
+//                                } else {
+//                                    player.sendBukkitMessage(
+//                                        "BroadcastRaw",
+//                                        player.uniqueId.toString(),
+//                                        gson,
+//                                        settings.joinPermission ?: "null"
+//                                    )
+//                                }
+//                                return
+//                            }
+                        }
                     }
                 }
                 incorrectSender { sender, _ ->
@@ -65,6 +100,10 @@ open class Channel(
         }
         if (!settings.speakCondition.pass(player)) {
             player.sendLang("Channel-No-Speak-Permission")
+            return
+        }
+        if (settings.filterBeforeSending && ChatFilter.filter(message).sensitiveWords > 0) {
+            player.sendLang("Channel-Filter-Before-Sending")
             return
         }
         val event = TrChatEvent(this, player.getSession(), message)

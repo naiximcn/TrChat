@@ -30,7 +30,7 @@ class ActionChannel(val symbol: Symbol, val channel: String?): ScriptAction<Void
 
     companion object {
 
-        @KetherParser(["channel"], namespace = "trchat")
+        @KetherParser(["channel"], namespace = "trchat", shared = true)
         fun parser() = scriptParser {
             val symbol = when(val type = it.nextToken().lowercase()) {
                 "join" -> Symbol.JOIN
