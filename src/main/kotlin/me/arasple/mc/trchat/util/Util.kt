@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat.util
 
+import com.google.gson.JsonParser
 import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.module.display.ChatSession
 import me.arasple.mc.trchat.module.internal.data.Database
@@ -15,7 +16,7 @@ import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.ProxyPlayer
-import taboolib.common.platform.function.info
+import taboolib.common.platform.function.console
 import taboolib.library.configuration.ConfigurationSection
 import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
@@ -44,15 +45,21 @@ object Util {
     }
 }
 
+val jsonParser = JsonParser()
+
 val muteDateFormat = SimpleDateFormat()
 
-fun Throwable.print(title: String) {
-    info("§c[TrChat] §8$title")
-    info("         §8${localizedMessage}")
-    stackTrace.forEach {
-        info("         §8$it")
+fun Throwable.print(title: String, printStackTrace: Boolean = true) {
+    console().sendMessage("§c[TrChat] §8$title")
+    console().sendMessage("         §8${localizedMessage}")
+    if (printStackTrace){
+        stackTrace.forEach {
+            console().sendMessage("         §8$it")
+        }
     }
 }
+
+fun String.parseJson() = jsonParser.parse(this)
 
 fun String.toCondition() = Condition(this)
 

@@ -1,12 +1,12 @@
 package me.arasple.mc.trchat.module.display.filter
 
-import com.google.gson.JsonParser
 import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.api.config.Filters
 import me.arasple.mc.trchat.module.display.filter.processer.Filter
 import me.arasple.mc.trchat.module.display.filter.processer.FilteredObject
 import me.arasple.mc.trchat.module.internal.service.Metrics
 import me.arasple.mc.trchat.util.notify
+import me.arasple.mc.trchat.util.parseJson
 import me.arasple.mc.trchat.util.print
 import taboolib.common.env.DependencyDownloader.readFully
 import taboolib.common.platform.Platform
@@ -94,7 +94,7 @@ object ChatFilter {
         return kotlin.runCatching {
             URL(url).openStream().use { inputStream ->
                 BufferedInputStream(inputStream).use { bufferedInputStream ->
-                    val database = JsonParser().parse(readFully(bufferedInputStream, StandardCharsets.UTF_8)).asJsonObject
+                    val database = readFully(bufferedInputStream, StandardCharsets.UTF_8).parseJson().asJsonObject
                     if (!database.has("lastUpdateDate") || !database.has("words")) {
                         error("Wrong database json object")
                     }
@@ -117,7 +117,7 @@ object ChatFilter {
             collected
         }.getOrElse {
             if (!TrChat.reportedErrors.contains("catchCloudThesaurus")) {
-                it.print("Error occurred while catching cloud thesaurus.")
+                it.print("Error occurred while catching cloud thesaurus.", printStackTrace = false)
                 TrChat.reportedErrors.add("catchCloudThesaurus")
             }
             emptyList()

@@ -1,7 +1,7 @@
 package me.arasple.mc.trchat.module.internal.service
 
-import com.google.gson.JsonParser
 import me.arasple.mc.trchat.util.Internal
+import me.arasple.mc.trchat.util.parseJson
 import org.bukkit.event.player.PlayerJoinEvent
 import taboolib.common.LifeCycle
 import taboolib.common.env.DependencyDownloader.readFully
@@ -46,7 +46,7 @@ object Updater {
             URL(api_url).openStream().use { inputStream ->
                 BufferedInputStream(inputStream).use { bufferedInputStream ->
                     val read = readFully(bufferedInputStream, StandardCharsets.UTF_8)
-                    val json = JsonParser().parse(read).asJsonObject
+                    val json = read.parseJson().asJsonObject
                     val latestVersion = json["tag_name"].asString.substring(1)
                     latest_Version = Version(latestVersion)
                     information = json["body"].asString

@@ -153,13 +153,13 @@ object Loader {
                 val suffix = parseGroups(map["suffix"] as? LinkedHashMap<*, *>)
                 Format(condition, priority, prefix, msg, suffix)
             }.sortedBy { it.priority }
-            val console = conf.getConfigurationSection("Console")?.let { map ->
-                val prefix = parseGroups(map["prefix"] as LinkedHashMap<*, *>)
-                val msg = parseMsg(map["msg"] as LinkedHashMap<*, *>)
-                val suffix = parseGroups(map["suffix"] as? LinkedHashMap<*, *>)
-                Format(null, 100, prefix, msg, suffix)
-            }
-            return Channel(id, settings, bindings, formats, console)
+//            val console = conf.getConfigurationSection("Console")?.let { map ->
+//                val prefix = parseGroups(map["prefix"] as LinkedHashMap<*, *>)
+//                val msg = parseMsg(map["msg"] as LinkedHashMap<*, *>)
+//                val suffix = parseGroups(map["suffix"] as? LinkedHashMap<*, *>)
+//                Format(null, 100, prefix, msg, suffix)
+//            }
+            return Channel(id, settings, bindings, formats)
         }
     }
 
