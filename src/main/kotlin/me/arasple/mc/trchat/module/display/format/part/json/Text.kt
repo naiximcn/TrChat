@@ -5,6 +5,7 @@ import me.arasple.mc.trchat.util.Regexs
 import me.arasple.mc.trchat.util.color.colorify
 import me.arasple.mc.trchat.util.legacy
 import net.kyori.adventure.text.TextComponent
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import taboolib.common.util.replaceWithOrder
 import taboolib.platform.compat.replacePlaceholder
@@ -17,11 +18,11 @@ class Text(val content: String, val condition: Condition?) {
 
     val dynamic by lazy { Regexs.containsPlaceholder(content) }
 
-    fun process(player: Player, vararg vars: String, message: String = ""): TextComponent.Builder {
-        val text = if (dynamic) {
-            content.replacePlaceholder(player).replace("\$message", message).replaceWithOrder(*vars).colorify()
-        } else {
+    fun process(sender: CommandSender, vararg vars: String, message: String = ""): TextComponent.Builder {
+        val text = if (!dynamic || sender !is Player) {
             content.replace("\$message", message).replaceWithOrder(*vars).colorify()
+        } else {
+            content.replacePlaceholder(sender).replace("\$message", message).replaceWithOrder(*vars).colorify()
         }
         return legacy(text).toBuilder()
     }

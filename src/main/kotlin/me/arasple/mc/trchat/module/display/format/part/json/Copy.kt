@@ -5,6 +5,7 @@ import me.arasple.mc.trchat.module.internal.script.Condition
 import me.arasple.mc.trchat.util.Regexs
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.event.ClickEvent
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import taboolib.common.util.replaceWithOrder
 import taboolib.platform.compat.replacePlaceholder
@@ -17,11 +18,11 @@ class Copy(override val content: String, override val condition: Condition?) : P
 
     override val dynamic by lazy { Regexs.containsPlaceholder(content) }
 
-    override fun process(builder: TextComponent.Builder, player: Player, vararg vars: String, message: String) {
-        if (dynamic) {
-            builder.clickEvent(ClickEvent.copyToClipboard(content.replacePlaceholder(player).replace("\$message", message).replaceWithOrder(*vars)))
-        } else {
+    override fun process(builder: TextComponent.Builder, sender: CommandSender, vararg vars: String, message: String) {
+        if (!dynamic || sender !is Player) {
             builder.clickEvent(ClickEvent.copyToClipboard(content.replace("\$message", message).replaceWithOrder(*vars)))
+        } else {
+            builder.clickEvent(ClickEvent.copyToClipboard(content.replacePlaceholder(sender).replace("\$message", message).replaceWithOrder(*vars)))
         }
     }
 }

@@ -1,15 +1,20 @@
 package me.arasple.mc.trchat.util.proxy.velocity
 
-import com.google.common.io.ByteStreams
 import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.proxy.bukkit.Players
+import me.arasple.mc.trchat.util.proxy.common.MessageReader
 import me.arasple.mc.trchat.util.proxy.serialize
+import me.arasple.mc.trchat.util.sendProcessedMessage
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.messaging.PluginMessageListener
+import taboolib.common.platform.function.console
+import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.platform.function.submit
 import java.io.IOException
+import java.util.*
 
 /**
  * Velocity
@@ -25,13 +30,39 @@ class Velocity : PluginMessageListener {
         if (channel != INCOMING_CHANNEL) {
             return
         }
-        val data = ByteStreams.newDataInput(message)
         try {
-            val subChannel = data.readUTF()
-            if (subChannel == "PlayerList") {
-                Players.setPlayers(data.readUTF().split(", "))
+            val data = MessageReader.read(message)
+            if (data.isCompleted) {
+                execute(data.build())
             }
-        } catch (ignored: IOException) {
+        } catch (_: IOException) {
+        }
+    }
+
+    private fun execute(data: Array<String>) {
+        when (data[0]) {
+            "PlayerList" -> {
+                Players.setPlayers(data[1].split(", "))
+            }
+            "GlobalMute" -> {
+                when (data[1]) {
+                    "on" -> TrChat.isGlobalMuting = true
+                    "off" -> TrChat.isGlobalMuting = false
+                }
+            }
+            "BroadcastRaw" -> {
+                val uuid = UUID.fromString(data[1])
+                val raw = data[2]
+                val permission = data[3]
+                val message = GsonComponentSerializer.gson().deserialize(raw)
+
+                if (permission == "null") {
+                    onlinePlayers().forEach { it.sendProcessedMessage(uuid, message) }
+                } else {
+                    onlinePlayers().filter { it.hasPermission(permission) }.forEach { it.sendProcessedMessage(uuid, message) }
+                }
+                console().sendProcessedMessage(uuid, message)
+            }
         }
     }
 

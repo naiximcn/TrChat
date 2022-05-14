@@ -11,7 +11,6 @@ import taboolib.module.configuration.Config
 import taboolib.module.configuration.ConfigNode
 import taboolib.module.configuration.ConfigNodeTransfer
 import taboolib.module.configuration.Configuration
-import taboolib.module.kether.Kether
 
 /**
  * @author wlys
@@ -32,11 +31,10 @@ object Settings {
     }
 
     fun onReload() {
-        val id = CONF.getString("Channel.Default")
-        Channel.defaultChannel = Channel.channels.firstOrNull { it.id == id }.also {
+        val id = CONF.getString("Channel.Default", "Normal")!!
+        Channel.defaultChannel = Channel.channels.firstOrNull { it.id.equals(id, ignoreCase = true) }.also {
             if (it == null) severe("Default channel $id not found.")
         }
-        Kether.isAllowToleranceParser = CONF.getBoolean("Options.Kether-Allow-Tolerance-Parser", true)
     }
 
     @ConfigNode("Chat.Cooldown", "settings.yml")

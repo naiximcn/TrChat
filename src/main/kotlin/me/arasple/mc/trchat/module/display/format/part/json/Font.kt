@@ -4,7 +4,7 @@ import me.arasple.mc.trchat.module.display.format.part.Part
 import me.arasple.mc.trchat.module.internal.script.Condition
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.TextComponent
-import org.bukkit.entity.Player
+import org.bukkit.command.CommandSender
 
 /**
  * @author wlys
@@ -16,7 +16,7 @@ class Font(override val content: String, override val condition: Condition?) : P
 
     private val key = content.split(":").let { Key.key(it[0], it[1]) }
 
-    override fun process(builder: TextComponent.Builder, player: Player, vararg vars: String, message: String) {
+    override fun process(builder: TextComponent.Builder, sender: CommandSender, vararg vars: String, message: String) {
         builder.font(key)
     }
 }

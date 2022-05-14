@@ -114,7 +114,8 @@ class PrivateChannel(
             player.sendBukkitMessage(
                 "SendRaw",
                 session.lastPrivateTo,
-                gson(receive)
+                gson(receive),
+                settings.doubleTransfer.toString()
             )
             player.sendProxyLang("Private-Message-Receive", player.name)
         } else {

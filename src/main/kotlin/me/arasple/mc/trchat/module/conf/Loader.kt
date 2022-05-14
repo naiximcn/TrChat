@@ -112,10 +112,11 @@ object Loader {
             }
             val autoJoin = section.getBoolean("Auto-Join", true)
             val proxy = section.getBoolean("Proxy", false)
+            val doubleTransfer = section.getBoolean("Double-Transfer", true)
             val ports = section.getString("Ports")?.split(";")?.map { it.toInt() }
             val disabledFunctions = section.getStringList("Disabled-Functions")
             val filterBeforeSending = section.getBoolean("Filter-Before-Sending", false)
-            ChannelSettings(joinPermission, speakCondition, target, autoJoin, proxy, ports, disabledFunctions, filterBeforeSending)
+            ChannelSettings(joinPermission, speakCondition, target, autoJoin, proxy, doubleTransfer, ports, disabledFunctions, filterBeforeSending)
         }
         val private = conf.getBoolean("Options.Private", false)
 
@@ -153,13 +154,13 @@ object Loader {
                 val suffix = parseGroups(map["suffix"] as? LinkedHashMap<*, *>)
                 Format(condition, priority, prefix, msg, suffix)
             }.sortedBy { it.priority }
-//            val console = conf.getConfigurationSection("Console")?.let { map ->
-//                val prefix = parseGroups(map["prefix"] as LinkedHashMap<*, *>)
-//                val msg = parseMsg(map["msg"] as LinkedHashMap<*, *>)
-//                val suffix = parseGroups(map["suffix"] as? LinkedHashMap<*, *>)
-//                Format(null, 100, prefix, msg, suffix)
-//            }
-            return Channel(id, settings, bindings, formats)
+            val console = conf.getMapList("Console").firstOrNull()?.let { map ->
+                val prefix = parseGroups(map["prefix"] as LinkedHashMap<*, *>)
+                val msg = parseMsg(map["msg"] as LinkedHashMap<*, *>)
+                val suffix = parseGroups(map["suffix"] as? LinkedHashMap<*, *>)
+                Format(null, 100, prefix, msg, suffix)
+            }
+            return Channel(id, settings, bindings, formats, console)
         }
     }
 
@@ -235,11 +236,11 @@ object Loader {
 
     private fun refreshChannels() {
         if (init) {
+            Settings.onReload()
+
             onlinePlayers().map { it.cast<Player>() }.forEach {
                 it.getSession().channel?.id?.let { id -> Channel.join(it, id, hint = false) }
             }
-
-            Settings.onReload()
         }
     }
 

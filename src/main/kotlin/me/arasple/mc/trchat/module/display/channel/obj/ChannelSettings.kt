@@ -12,6 +12,7 @@ class ChannelSettings(
     val target: Target,
     val autoJoin: Boolean,
     val proxy: Boolean,
+    val doubleTransfer: Boolean,
     val ports: List<Int>?,
     val disabledFunctions: List<String>,
     val filterBeforeSending: Boolean

@@ -1,5 +1,6 @@
 package me.arasple.mc.trchat
 
+import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.module.conf.Loader
 import me.arasple.mc.trchat.module.display.filter.ChatFilter
 import me.arasple.mc.trchat.module.internal.data.Database
@@ -14,6 +15,7 @@ import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.Plugin
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.pluginVersion
+import taboolib.module.kether.Kether
 import taboolib.module.lang.sendLang
 import taboolib.module.nms.MinecraftVersion.majorLegacy
 import taboolib.platform.BukkitPlugin
@@ -56,7 +58,7 @@ object TrChat : Plugin() {
         if (!paperEnv) {
             Util.init()
         }
-
+        Kether.isAllowToleranceParser = Settings.CONF.getBoolean("Options.Kether-Allow-Tolerance-Parser", true)
 
         Database.init()
 

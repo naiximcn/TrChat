@@ -1,6 +1,6 @@
 package me.arasple.mc.trchat
 
-import com.google.common.io.ByteStreams
+import me.arasple.mc.trchat.util.proxy.serialize
 import net.md_5.bungee.api.ProxyServer
 import taboolib.common.env.RuntimeEnv
 import taboolib.common.platform.*
@@ -41,21 +41,20 @@ object TrChatBungee : Plugin() {
     override fun onEnable() {
         console().sendLang("Plugin-Enabled", pluginVersion)
 
-        command("muteallservers", permission = "trchat.mute") {
+        command("muteallservers", permission = "trchatb.muteallservers") {
             dynamic("state") {
                 suggestion<ProxyCommandSender> { _, _ ->
                     listOf("on", "off")
                 }
                 execute<ProxyCommandSender> { _, _, argument ->
-                    val out = ByteStreams.newDataOutput()
                     try {
-                        out.writeUTF("GlobalMute")
-                        out.writeUTF(argument)
+                        server<ProxyServer>().servers.forEach { (_, v) ->
+                            for (bytes in arrayOf("GlobalMute", argument).serialize()) {
+                                v.sendData(TRCHAT_CHANNEL, bytes)
+                            }
+                        }
                     } catch (e: IOException) {
                         e.printStackTrace()
-                    }
-                    server<ProxyServer>().servers.forEach { (_, v) ->
-                        v.sendData(TRCHAT_CHANNEL, out.toByteArray())
                     }
                 }
             }

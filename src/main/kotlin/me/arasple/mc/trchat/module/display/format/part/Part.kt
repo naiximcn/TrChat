@@ -2,7 +2,7 @@ package me.arasple.mc.trchat.module.display.format.part
 
 import me.arasple.mc.trchat.module.internal.script.Condition
 import net.kyori.adventure.text.TextComponent
-import org.bukkit.entity.Player
+import org.bukkit.command.CommandSender
 
 /**
  * @author wlys
@@ -16,5 +16,5 @@ abstract class Part {
 
     abstract val dynamic: Boolean
 
-    abstract fun process(builder: TextComponent.Builder, player: Player, vararg vars: String, message: String = "")
+    abstract fun process(builder: TextComponent.Builder, sender: CommandSender, vararg vars: String, message: String = "")
 }

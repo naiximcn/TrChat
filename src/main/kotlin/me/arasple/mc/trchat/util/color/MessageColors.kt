@@ -19,6 +19,12 @@ object MessageColors {
     private const val COLOR_PERMISSION_NODE = "trchat.color."
     private const val FORCE_CHAT_COLOR_PERMISSION_NODE = "trchat.color.force-defaultcolor."
 
+    private val specialColors = arrayOf(
+        "rainbow",
+        "gradients",
+        "hex"
+    )
+
     fun replaceWithPermission(player: Player, strings: List<String>): List<String> {
         return strings.map { replaceWithPermission(player, it) }
     }
@@ -34,6 +40,9 @@ object MessageColors {
                     string = string.replace("&$code", COLOR_CHAR + code)
                 }
             }
+//            getColorsFromPermissions(player, COLOR_PERMISSION_NODE).forEach {
+//                string.replace(it, DefaultColor(it).color)
+//            }
         }
 
         string = if (player.hasPermission(COLOR_PERMISSION_NODE + "rainbow")) {
@@ -75,12 +84,18 @@ object MessageColors {
             return defaultColor
         }
 
-        for (code in COLOR_CODES) {
-            if (player.hasPermission(FORCE_CHAT_COLOR_PERMISSION_NODE + code)) {
-                return DefaultColor(code)
-            }
-        }
+        return getColorsFromPermissions(player, FORCE_CHAT_COLOR_PERMISSION_NODE).firstOrNull()?.let { DefaultColor(it) } ?: defaultColor
+    }
 
-        return defaultColor
+    private fun getColorsFromPermissions(player: Player, prefix: String): List<String> {
+        player.recalculatePermissions()
+        return player.effectivePermissions.mapNotNull {
+            val permission = it.permission
+            if (permission.startsWith(prefix)) {
+                permission.split(".").last()
+            } else {
+                null
+            }
+        }.filterNot { it in specialColors }
     }
 }

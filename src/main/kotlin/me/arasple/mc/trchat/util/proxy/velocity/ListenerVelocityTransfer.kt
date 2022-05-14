@@ -6,6 +6,7 @@ import me.arasple.mc.trchat.TrChatVelocity
 import me.arasple.mc.trchat.TrChatVelocity.plugin
 import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.proxy.common.MessageReader
+import me.arasple.mc.trchat.util.proxy.serialize
 import net.kyori.adventure.audience.MessageType
 import net.kyori.adventure.identity.Identity
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
@@ -58,13 +59,23 @@ object ListenerVelocityTransfer {
                 val uuid = data[1]
                 val raw = data[2]
                 val permission = data[3]
+                val doubleTransfer = data[4].toBoolean()
                 val message = GsonComponentSerializer.gson().deserialize(raw)
 
-                plugin.server.allServers.forEach { server ->
-                    server.playersConnected.filter { permission == "null" || it.hasPermission(permission) }.forEach { player ->
-                        player.sendMessage(Identity.identity(UUID.fromString(uuid)), message, MessageType.CHAT)
+                if (doubleTransfer) {
+                    plugin.server.allServers.forEach {
+                        for (bytes in arrayOf("BroadcastRaw", uuid, raw, permission).serialize()) {
+                            it.sendPluginMessage(TrChatVelocity.outgoing, bytes)
+                        }
+                    }
+                } else {
+                    plugin.server.allServers.forEach { server ->
+                        server.playersConnected.filter { permission == "null" || it.hasPermission(permission) }.forEach { player ->
+                            player.sendMessage(Identity.identity(UUID.fromString(uuid)), message, MessageType.CHAT)
+                        }
                     }
                 }
+
                 plugin.server.consoleCommandSource.sendMessage(message)
             }
             "ForwardRaw" -> {
@@ -72,15 +83,27 @@ object ListenerVelocityTransfer {
                 val raw = data[2]
                 val permission = data[3]
                 val ports = data[4].split(";").map { it.toInt() }
+                val doubleTransfer = data[5].toBoolean()
                 val message = GsonComponentSerializer.gson().deserialize(raw)
 
-                plugin.server.allServers.forEach { server ->
-                    if (ports.contains(server.serverInfo.address.port)) {
-                        server.playersConnected.filter { permission == "null" || it.hasPermission(permission) }.forEach { player ->
-                            player.sendMessage(Identity.identity(UUID.fromString(uuid)), message, MessageType.CHAT)
+                if (doubleTransfer) {
+                    plugin.server.allServers.forEach {
+                        if (ports.contains(it.serverInfo.address.port)) {
+                            for (bytes in arrayOf("BroadcastRaw", uuid, raw, permission).serialize()) {
+                                it.sendPluginMessage(TrChatVelocity.outgoing, bytes)
+                            }
+                        }
+                    }
+                } else {
+                    plugin.server.allServers.forEach { server ->
+                        if (ports.contains(server.serverInfo.address.port)) {
+                            server.playersConnected.filter { permission == "null" || it.hasPermission(permission) }.forEach { player ->
+                                player.sendMessage(Identity.identity(UUID.fromString(uuid)), message, MessageType.CHAT)
+                            }
                         }
                     }
                 }
+
                 plugin.server.consoleCommandSource.sendMessage(message)
             }
             "SendLang" -> {

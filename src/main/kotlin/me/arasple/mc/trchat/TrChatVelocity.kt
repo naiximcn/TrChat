@@ -1,10 +1,12 @@
 package me.arasple.mc.trchat
 
-import com.google.common.io.ByteStreams
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier
+import me.arasple.mc.trchat.util.proxy.serialize
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.Plugin
+import taboolib.common.platform.ProxyCommandSender
+import taboolib.common.platform.command.command
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.platform.function.pluginVersion
@@ -46,16 +48,33 @@ object TrChatVelocity : Plugin() {
         console().sendLang("Plugin-Enabled", pluginVersion)
         Metrics(12541, pluginVersion, Platform.VELOCITY)
 
-        submit(period = 60, async = true) {
-            val out = ByteStreams.newDataOutput()
-            try {
-                out.writeUTF("PlayerList")
-                out.writeUTF(onlinePlayers().joinToString(", ") { it.name })
-            } catch (e: IOException) {
-                e.printStackTrace()
+        command("muteallservers", permission = "trchatv.muteallservers") {
+            dynamic("state") {
+                suggestion<ProxyCommandSender> { _, _ ->
+                    listOf("on", "off")
+                }
+                execute<ProxyCommandSender> { _, _, argument ->
+                    try {
+                        plugin.server.allServers.forEach { server ->
+                            for (bytes in arrayOf("GlobalMute", argument).serialize()) {
+                                server.sendPluginMessage(outgoing, bytes)
+                            }
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
             }
-            plugin.server.allServers.forEach { server ->
-                server.sendPluginMessage(outgoing, out.toByteArray())
+        }
+
+        submit(period = 60, async = true) {
+            try {
+                plugin.server.allServers.forEach { server ->
+                    for (bytes in arrayOf("PlayerList", onlinePlayers().joinToString(", ") { it.name }).serialize()) {
+                        server.sendPluginMessage(outgoing, bytes)
+                    }
+                }
+            } catch (_: IOException) {
             }
         }
     }

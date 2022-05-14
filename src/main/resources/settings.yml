@@ -3,7 +3,6 @@ Options:
   Log-Private: '[{0}] {1} -> {2}: {3}'
   Depend-Expansions: ['player', 'server', 'vault']
   Prevent-Tab-Complete: false
-  Force-Proxy: ~
   Kether-Allow-Tolerance-Parser: true
 
 Database:

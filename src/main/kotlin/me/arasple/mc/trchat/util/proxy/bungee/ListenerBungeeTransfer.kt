@@ -3,6 +3,7 @@ package me.arasple.mc.trchat.util.proxy.bungee
 import me.arasple.mc.trchat.TrChatBungee
 import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.proxy.common.MessageReader
+import me.arasple.mc.trchat.util.proxy.serialize
 import net.kyori.adventure.audience.MessageType
 import net.kyori.adventure.identity.Identity
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences
@@ -76,28 +77,51 @@ object ListenerBungeeTransfer {
                 val uuid = data[1]
                 val raw = data[2]
                 val permission = data[3]
+                val doubleTransfer = data[4].toBoolean()
                 val message = GsonComponentSerializer.gson().deserialize(raw)
 
-                if (permission == "null") {
-                    adventure.all().sendMessage(message)
+                if (doubleTransfer) {
+                    server<ProxyServer>().servers.forEach { (_, v) ->
+                        for (bytes in arrayOf("BroadcastRaw", uuid, raw, permission).serialize()) {
+                            v.sendData(TrChatBungee.TRCHAT_CHANNEL, bytes)
+                        }
+                    }
                 } else {
-                    adventure.permission(permission).sendMessage(message)
+                    server<ProxyServer>().servers.forEach { (_, v) ->
+                        v.players.filter { permission == "null" || it.hasPermission(permission) }.forEach {
+                            adventure.player(it).sendMessage(Identity.identity(UUID.fromString(uuid)), message, MessageType.CHAT)
+                        }
+                    }
                 }
+
+                adventure.console().sendMessage(message)
             }
             "ForwardRaw" -> {
                 val uuid = data[1]
                 val raw = data[2]
                 val permission = data[3]
                 val ports = data[4].split(";").map { it.toInt() }
+                val doubleTransfer = data[5].toBoolean()
                 val message = GsonComponentSerializer.gson().deserialize(raw)
 
-                server<ProxyServer>().servers.forEach { (_, v) ->
-                    if (ports.contains(v.address.port)) {
-                        v.players.filter { permission == "null" || it.hasPermission(permission) }.forEach {
-                            adventure.player(it).sendMessage(Identity.identity(UUID.fromString(uuid)), message, MessageType.CHAT)
+                if (doubleTransfer) {
+                    server<ProxyServer>().servers.forEach { (_, v) ->
+                        if (ports.contains(v.address.port)) {
+                            for (bytes in arrayOf("BroadcastRaw", uuid, raw, permission).serialize()) {
+                                v.sendData(TrChatBungee.TRCHAT_CHANNEL, bytes)
+                            }
+                        }
+                    }
+                } else {
+                    server<ProxyServer>().servers.forEach { (_, v) ->
+                        if (ports.contains(v.address.port)) {
+                            v.players.filter { permission == "null" || it.hasPermission(permission) }.forEach {
+                                adventure.player(it).sendMessage(Identity.identity(UUID.fromString(uuid)), message, MessageType.CHAT)
+                            }
                         }
                     }
                 }
+
                 adventure.console().sendMessage(message)
             }
             "SendLang" -> {

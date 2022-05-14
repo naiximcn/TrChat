@@ -1,8 +1,7 @@
 Options:
-  # 需要从bc给trchat.admin权限才可跨服并且让子服频道接收
   Join-Permission: 'trchat.admin'
-  Range: ALL
   Proxy: true
+  Double-Transfer: true
   Auto-Join: true
 
 Bindings:

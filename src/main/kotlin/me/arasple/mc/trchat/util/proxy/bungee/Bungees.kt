@@ -4,12 +4,18 @@ import com.google.common.io.ByteStreams
 import me.arasple.mc.trchat.TrChat
 import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.proxy.bukkit.Players
+import me.arasple.mc.trchat.util.proxy.common.MessageReader
 import me.arasple.mc.trchat.util.proxy.serialize
+import me.arasple.mc.trchat.util.sendProcessedMessage
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.messaging.PluginMessageListener
+import taboolib.common.platform.function.console
+import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.platform.function.submit
 import java.io.IOException
+import java.util.*
 
 /**
  * @author Arasple
@@ -19,9 +25,9 @@ import java.io.IOException
 class Bungees : PluginMessageListener {
 
     override fun onPluginMessageReceived(channel: String, player: Player, message: ByteArray) {
-        val data = ByteStreams.newDataInput(message)
         if (channel == BUNGEE_CHANNEL) {
             try {
+                val data = ByteStreams.newDataInput(message)
                 val subChannel = data.readUTF()
                 if (subChannel == "PlayerList") {
                     data.readUTF() // server
@@ -32,14 +38,35 @@ class Bungees : PluginMessageListener {
         }
         if (channel == TRCHAT_CHANNEL) {
             try {
-                val subChannel = data.readUTF()
-                if (subChannel == "GlobalMute") {
-                    when (data.readUTF()) {
-                        "on" -> TrChat.isGlobalMuting = true
-                        "off" -> TrChat.isGlobalMuting = false
-                    }
+                val data = MessageReader.read(message)
+                if (data.isCompleted) {
+                    execute(data.build())
                 }
             } catch (_: IOException) {
+            }
+        }
+    }
+
+    private fun execute(data: Array<String>) {
+        when (data[0]) {
+            "GlobalMute" -> {
+                when (data[1]) {
+                    "on" -> TrChat.isGlobalMuting = true
+                    "off" -> TrChat.isGlobalMuting = false
+                }
+            }
+            "BroadcastRaw" -> {
+                val uuid = UUID.fromString(data[1])
+                val raw = data[2]
+                val permission = data[3]
+                val message = GsonComponentSerializer.gson().deserialize(raw)
+
+                if (permission == "null") {
+                    onlinePlayers().forEach { it.sendProcessedMessage(uuid, message) }
+                } else {
+                    onlinePlayers().filter { it.hasPermission(permission) }.forEach { it.sendProcessedMessage(uuid, message) }
+                }
+                console().sendProcessedMessage(uuid, message)
             }
         }
     }
@@ -64,8 +91,8 @@ class Bungees : PluginMessageListener {
             }
         }
 
-        fun sendBukkitMessage(player: Player, vararg args: String) {
-            submit(async = true) {
+        fun sendBukkitMessage(player: Player, vararg args: String, async: Boolean = true) {
+            submit(async = async) {
                 try {
                     for (bytes in args.serialize()) {
                         player.sendPluginMessage(TrChat.plugin, TRCHAT_CHANNEL, bytes)

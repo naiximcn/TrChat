@@ -12,6 +12,7 @@ import me.arasple.mc.trchat.util.*
 import me.arasple.mc.trchat.util.proxy.Proxy
 import me.arasple.mc.trchat.util.proxy.sendBukkitMessage
 import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import taboolib.common.platform.command.command
@@ -24,6 +25,7 @@ import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
 import taboolib.platform.util.toProxyLocation
 import java.util.*
+import kotlin.properties.Delegates
 
 /**
  * @author wlys
@@ -52,36 +54,43 @@ open class Channel(
                         if (sender is Player) {
                             execute(sender, argument)
                         } else {
-//                            val builder = Component.text()
-//                            console?.let { format ->
-//                                format.prefix.forEach { prefix ->
-//                                    builder.append(prefix.value.first().content.toTextComponent(player)) }
-//                                builder.append(format.msg.serialize(player, argument, settings.disabledFunctions))
-//                                format.suffix.forEach { suffix ->
-//                                    builder.append(suffix.value.first().content.toTextComponent(player)) }
-//                            } ?: return@execute
-//                            val component = builder.build()
-//
-//                            if (settings.proxy && Proxy.isEnabled) {
-//                                val gson = gson(component)
-//                                if (settings.ports != null) {
-//                                    player.sendBukkitMessage(
-//                                        "ForwardRaw",
-//                                        player.uniqueId.toString(),
-//                                        gson,
-//                                        settings.joinPermission ?: "null",
-//                                        settings.ports.joinToString(";")
-//                                    )
-//                                } else {
-//                                    player.sendBukkitMessage(
-//                                        "BroadcastRaw",
-//                                        player.uniqueId.toString(),
-//                                        gson,
-//                                        settings.joinPermission ?: "null"
-//                                    )
-//                                }
-//                                return
-//                            }
+                            val builder = Component.text()
+                            console?.let { format ->
+                                format.prefix.forEach { prefix ->
+                                    builder.append(prefix.value.first().content.toTextComponent(sender)) }
+                                builder.append(format.msg.serialize(sender, argument, settings.disabledFunctions))
+                                format.suffix.forEach { suffix ->
+                                    builder.append(suffix.value.first().content.toTextComponent(sender)) }
+                            } ?: return@execute
+                            val component = builder.build()
+
+                            if (settings.proxy && Proxy.isEnabled) {
+                                val gson = gson(component)
+                                val player = Bukkit.getOnlinePlayers().iterator().next()
+                                if (settings.ports != null) {
+                                    player.sendBukkitMessage(
+                                        "ForwardRaw",
+                                        UUID.randomUUID().toString(),
+                                        gson,
+                                        settings.joinPermission ?: "null",
+                                        settings.ports.joinToString(";"),
+                                        settings.doubleTransfer.toString()
+                                    )
+                                } else {
+                                    player.sendBukkitMessage(
+                                        "BroadcastRaw",
+                                        UUID.randomUUID().toString(),
+                                        gson,
+                                        settings.joinPermission ?: "null",
+                                        settings.doubleTransfer.toString()
+                                    )
+                                }
+                                return@execute
+                            }
+                            listeners.forEach {
+                                getProxyPlayer(it)?.sendProcessedMessage(it, component)
+                            }
+                            sender.sendProcessedMessage(UUID.randomUUID(), component)
                         }
                     }
                 }
@@ -130,14 +139,16 @@ open class Channel(
                     player.uniqueId.toString(),
                     gson,
                     settings.joinPermission ?: "null",
-                    settings.ports.joinToString(";")
+                    settings.ports.joinToString(";"),
+                    settings.doubleTransfer.toString()
                 )
             } else {
                 player.sendBukkitMessage(
                     "BroadcastRaw",
                     player.uniqueId.toString(),
                     gson,
-                    settings.joinPermission ?: "null"
+                    settings.joinPermission ?: "null",
+                    settings.doubleTransfer.toString()
                 )
             }
             return
@@ -180,7 +191,16 @@ open class Channel(
 
         val channels = mutableListOf<Channel>()
 
-        var defaultChannel: Channel? = null
+        var defaultChannel: Channel? by Delegates.observable(null) { _, oldValue, newValue ->
+            if (newValue == null) {
+                return@observable
+            }
+            Bukkit.getOnlinePlayers().forEach {
+                if (it.getSession().channel == oldValue) {
+                    it.getSession().channel = newValue
+                }
+            }
+        }
 
         fun join(player: Player, channel: String, hint: Boolean = true) {
             channels.firstOrNull { it.id == channel }?.let {

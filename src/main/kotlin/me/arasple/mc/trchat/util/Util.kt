@@ -15,12 +15,12 @@ import org.bukkit.entity.Player
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.ProxyCommandSender
-import taboolib.common.platform.ProxyPlayer
 import taboolib.common.platform.function.console
 import taboolib.library.configuration.ConfigurationSection
 import taboolib.module.lang.sendLang
 import taboolib.platform.util.sendLang
 import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Util
@@ -82,21 +82,33 @@ fun Player.getDataContainer(): ConfigurationSection {
 }
 
 fun CommandSender.sendProcessedMessage(sender: Player, component: Component) {
+    sendProcessedMessage(sender.uniqueId, component)
+}
+
+fun CommandSender.sendProcessedMessage(uuid: UUID, component: Component) {
     if (!HookPlugin.getInteractiveChat().sendMessage(this, component)) {
         if (TrChat.paperEnv) {
-            sendMessage(sender.identity(), component, MessageType.CHAT)
+            sendMessage(Identity.identity(uuid), component, MessageType.CHAT)
         } else {
-            Util.adventure.sender(this).sendMessage(Identity.identity(sender.uniqueId), component, MessageType.CHAT)
+            Util.adventure.sender(this).sendMessage(Identity.identity(uuid), component, MessageType.CHAT)
         }
     }
 }
 
-fun ProxyPlayer.sendProcessedMessage(sender: Player, component: Component) {
-    cast<Player>().sendProcessedMessage(sender, component)
+fun ProxyCommandSender.sendProcessedMessage(sender: Player, component: Component) {
+    cast<CommandSender>().sendProcessedMessage(sender, component)
 }
 
-fun Condition?.pass(player: Player): Boolean {
-    return this?.eval(player) != false
+fun ProxyCommandSender.sendProcessedMessage(uuid: UUID, component: Component) {
+    cast<CommandSender>().sendProcessedMessage(uuid, component)
+}
+
+fun Condition?.pass(commandSender: CommandSender): Boolean {
+    return if (commandSender is Player) {
+        this?.eval(commandSender) != false
+    } else {
+        true
+    }
 }
 
 fun notify(notify: Array<out ProxyCommandSender>, node: String, vararg args: Any) {

@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("io.izzel.taboolib") version "1.38"
+    id("io.izzel.taboolib") version "1.40"
     id("org.jetbrains.kotlin.jvm") version "1.6.10"
     id("org.tabooproject.shrinkingkt") version "1.0.6"
 }
@@ -39,7 +39,7 @@ taboolib {
         "expansion-javascript"
     )
     classifier = null
-    version = "6.0.7-58"
+    version = "6.0.7-64"
 }
 
 configure<org.tabooproject.shrinkingkt.ShrinkingExt> {

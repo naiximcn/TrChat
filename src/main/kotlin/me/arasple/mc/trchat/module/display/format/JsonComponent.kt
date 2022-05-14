@@ -4,7 +4,7 @@ import me.arasple.mc.trchat.module.display.format.part.json.*
 import me.arasple.mc.trchat.util.pass
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
-import org.bukkit.entity.Player
+import org.bukkit.command.CommandSender
 
 /**
  * @author Arasple
@@ -21,16 +21,16 @@ open class JsonComponent(
     val font: List<Font>?
 ) {
 
-    open fun toTextComponent(player: Player, vararg vars: String): TextComponent {
-        val builder = text?.firstOrNull { it.condition.pass(player) }?.process(player, *vars) ?: Component.text()
+    open fun toTextComponent(sender: CommandSender, vararg vars: String): TextComponent {
+        val builder = text?.firstOrNull { it.condition.pass(sender) }?.process(sender, *vars) ?: Component.text()
 
-        hover?.process(builder, player, *vars)
-        suggest?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
-        command?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
-        url?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
-        insertion?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
-        copy?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
-        font?.firstOrNull { it.condition.pass(player) }?.process(builder, player, *vars)
+        hover?.process(builder, sender, *vars)
+        suggest?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+        command?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+        url?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+        insertion?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+        copy?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+        font?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
 
         return builder.build()
     }
