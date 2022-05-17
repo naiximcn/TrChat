@@ -2,11 +2,9 @@ package me.arasple.mc.trchat.module.display.format
 
 import me.arasple.mc.trchat.api.TrChatAPI
 import me.arasple.mc.trchat.module.display.format.part.json.*
+import me.arasple.mc.trchat.module.display.function.*
 import me.arasple.mc.trchat.module.display.function.Function
 import me.arasple.mc.trchat.module.display.function.Function.Companion.replaceRegex
-import me.arasple.mc.trchat.module.display.function.InventoryShow
-import me.arasple.mc.trchat.module.display.function.ItemShow
-import me.arasple.mc.trchat.module.display.function.Mention
 import me.arasple.mc.trchat.util.color.DefaultColor
 import me.arasple.mc.trchat.util.color.MessageColors
 import me.arasple.mc.trchat.util.legacy
@@ -40,14 +38,17 @@ class MsgComponent(
             return toTextComponent(sender, message)
         }
 
-        if (!disabledFunctions.contains("Item-Show")) {
+        if (!disabledFunctions.contains("Item-Show") && sender.passPermission(ItemShow.permission)) {
             message = ItemShow.replaceMessage(message, sender)
         }
-        if (!disabledFunctions.contains("Mention")) {
+        if (!disabledFunctions.contains("Mention") && sender.passPermission(Mention.permission)) {
             message = Mention.replaceMessage(message, sender)
         }
-        if (!disabledFunctions.contains("Inventory-Show")) {
+        if (!disabledFunctions.contains("Inventory-Show") && sender.passPermission(InventoryShow.permission)) {
             message = InventoryShow.replaceMessage(message)
+        }
+        if (!disabledFunctions.contains("EnderChest-Show") && sender.passPermission(EnderChestShow.permission)) {
+            message = EnderChestShow.replaceMessage(message)
         }
         Function.functions.filter { it.condition.pass(sender) && !disabledFunctions.contains(it.id) }.forEach {
             message = message.replaceRegex(it.regex, it.filterTextPattern, "{{${it.id}:{0}}}")
@@ -69,6 +70,10 @@ class MsgComponent(
                     }
                     "INVENTORY" -> {
                         component.append(InventoryShow.createComponent(sender))
+                        continue
+                    }
+                    "ENDERCHEST" -> {
+                        component.append(EnderChestShow.createComponent(sender))
                         continue
                     }
                     else -> {
@@ -104,6 +109,10 @@ class MsgComponent(
     companion object {
 
         private val parser = VariableReader()
+
+        private fun Player.passPermission(permission: String?): Boolean {
+            return permission == null || permission == "null" || hasPermission(permission)
+        }
 
     }
 }

@@ -1,6 +1,7 @@
 package me.arasple.mc.trchat.util.color
 
 import net.md_5.bungee.api.ChatColor
+import org.bukkit.entity.HumanEntity
 import org.bukkit.entity.Player
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
@@ -22,15 +23,28 @@ object MessageColors {
     private val specialColors = arrayOf(
         "rainbow",
         "gradients",
-        "hex"
+        "hex",
+        "anvil",
+        "sign",
+        "book"
     )
 
-    fun replaceWithPermission(player: Player, strings: List<String>): List<String> {
-        return strings.map { replaceWithPermission(player, it) }
+    fun replaceWithPermission(player: HumanEntity, strings: List<String>, type: Type = Type.DEFAULT): List<String> {
+        return strings.map { replaceWithPermission(player, it, type) }
     }
 
-    fun replaceWithPermission(player: Player, s: String): String {
+    fun replaceWithPermission(player: HumanEntity, s: String, type: Type = Type.DEFAULT): String {
         var string = s
+
+        if (type == Type.ANVIL && player.hasPermission("trchat.color.anvil.*")) {
+            return string.colorify()
+        }
+        if (type == Type.SIGN && player.hasPermission("trchat.color.sign.*")) {
+            return string.colorify()
+        }
+        if (type == Type.BOOK && player.hasPermission("trchat.color.book.*")) {
+            return string.colorify()
+        }
 
         if (player.hasPermission("$COLOR_PERMISSION_NODE*")) {
             string = string.colored()
@@ -97,5 +111,9 @@ object MessageColors {
                 null
             }
         }.filterNot { it in specialColors }
+    }
+
+    enum class Type {
+        DEFAULT, ANVIL, SIGN, BOOK
     }
 }

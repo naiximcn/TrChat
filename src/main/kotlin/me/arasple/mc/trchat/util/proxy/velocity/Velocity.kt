@@ -10,6 +10,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.messaging.PluginMessageListener
+import org.bukkit.plugin.messaging.PluginMessageRecipient
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.platform.function.submit
@@ -80,11 +81,11 @@ class Velocity : PluginMessageListener {
             }
         }
 
-        fun sendBukkitMessage(player: Player, vararg args: String, async: Boolean = true) {
+        fun sendBukkitMessage(recipient: PluginMessageRecipient, vararg args: String, async: Boolean = true) {
             submit(async = async) {
                 try {
                     for (bytes in args.serialize()) {
-                        player.sendPluginMessage(TrChat.plugin, OUTGOING_CHANNEL, bytes)
+                        recipient.sendPluginMessage(TrChat.plugin, OUTGOING_CHANNEL, bytes)
                     }
                 } catch (e: IOException) {
                     e.printStackTrace()

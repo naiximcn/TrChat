@@ -7,6 +7,7 @@ import me.arasple.mc.trchat.util.proxy.common.MessageBuilder
 import me.arasple.mc.trchat.util.proxy.velocity.Velocity
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.bukkit.plugin.messaging.PluginMessageRecipient
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.function.console
@@ -53,10 +54,10 @@ object Proxy {
         }
     }
 
-    fun sendBukkitMessage(player: Player, vararg args: String) {
+    fun sendBukkitMessage(recipient: PluginMessageRecipient, vararg args: String) {
         when (platform) {
-            Platform.BUNGEE -> Bungees.sendBukkitMessage(player, *args)
-            Platform.VELOCITY -> Velocity.sendBukkitMessage(player, *args)
+            Platform.BUNGEE -> Bungees.sendBukkitMessage(recipient, *args)
+            Platform.VELOCITY -> Velocity.sendBukkitMessage(recipient, *args)
             else -> return
         }
     }
@@ -74,7 +75,7 @@ object Proxy {
     }
 }
 
-fun Player.sendBukkitMessage(vararg args: String) {
+fun PluginMessageRecipient.sendBukkitMessage(vararg args: String) {
     Proxy.sendBukkitMessage(this, *args)
 }
 

@@ -66,9 +66,8 @@ open class Channel(
 
                             if (settings.proxy && Proxy.isEnabled) {
                                 val gson = gson(component)
-                                val player = Bukkit.getOnlinePlayers().iterator().next()
                                 if (settings.ports != null) {
-                                    player.sendBukkitMessage(
+                                    Bukkit.getServer().sendBukkitMessage(
                                         "ForwardRaw",
                                         UUID.randomUUID().toString(),
                                         gson,
@@ -77,7 +76,7 @@ open class Channel(
                                         settings.doubleTransfer.toString()
                                     )
                                 } else {
-                                    player.sendBukkitMessage(
+                                    Bukkit.getServer().sendBukkitMessage(
                                         "BroadcastRaw",
                                         UUID.randomUUID().toString(),
                                         gson,

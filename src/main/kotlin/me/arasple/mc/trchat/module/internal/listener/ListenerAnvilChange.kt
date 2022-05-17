@@ -5,7 +5,6 @@ import me.arasple.mc.trchat.api.config.Filters
 import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.util.Internal
 import me.arasple.mc.trchat.util.color.MessageColors
-import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.inventory.PrepareAnvilEvent
 import org.bukkit.inventory.meta.ItemMeta
@@ -26,7 +25,7 @@ object ListenerAnvilChange {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onAnvilCraft(e: PrepareAnvilEvent) {
-        val p = e.view.player as? Player ?: return
+        val p = e.view.player
         val result = e.result
 
         if (e.inventory.type != InventoryType.ANVIL || result.isAir()) {
@@ -40,7 +39,7 @@ object ListenerAnvilChange {
                 setDisplayName(TrChatAPI.filterString(p, displayName).filtered)
             }
             if (Settings.CONF.getBoolean("Color.Anvil")) {
-                setDisplayName(MessageColors.replaceWithPermission(p, displayName))
+                setDisplayName(MessageColors.replaceWithPermission(p, displayName, MessageColors.Type.ANVIL))
             }
         }
         e.result = result

@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack
 import taboolib.common.io.digest
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
-import taboolib.common.reflect.Reflex.Companion.invokeMethod
 import taboolib.common.util.replaceWithOrder
 import taboolib.common5.util.parseMillis
 import taboolib.library.xseries.XMaterial
@@ -31,21 +30,21 @@ import java.util.concurrent.TimeUnit
  * @since 2022/3/18 19:14
  */
 @PlatformSide([Platform.BUKKIT])
-object InventoryShow {
+object EnderChestShow {
 
-    @ConfigNode("General.Inventory-Show.Enabled", "function.yml")
+    @ConfigNode("General.EnderChest-Show.Enabled", "function.yml")
     var enabled = true
 
-    @ConfigNode("General.Inventory-Show.Permission", "function.yml")
+    @ConfigNode("General.EnderChest-Show.Permission", "function.yml")
     var permission = "null"
 
-    @ConfigNode("General.Inventory-Show.Format", "function.yml")
+    @ConfigNode("General.EnderChest-Show.Format", "function.yml")
     var format = "&8[&3{0}'s Inventory&8]"
 
-    @ConfigNode("General.Inventory-Show.Cooldown", "function.yml")
+    @ConfigNode("General.EnderChest-Show.Cooldown", "function.yml")
     val cooldown = ConfigNodeTransfer<String, Long> { parseMillis() }
 
-    @ConfigNode("General.Inventory-Show.Keys", "function.yml")
+    @ConfigNode("General.EnderChest-Show.Keys", "function.yml")
     var keys = listOf<String>()
 
     val cache: Cache<String, Inventory> = CacheBuilder.newBuilder()
@@ -58,45 +57,31 @@ object InventoryShow {
         } else {
             var result = message
             keys.forEach {
-                result = result.replaceFirst(it, "{{INVENTORY:SELF}}", ignoreCase = true)
+                result = result.replaceFirst(it, "{{ENDERCHEST:SELF}}", ignoreCase = true)
             }
             return result
         }
     }
 
     fun createComponent(player: Player): Component {
-        val menu = buildMenu<Linked<ItemStack>>("${player.name}'s Inventory") {
-            rows(6)
+        val menu = buildMenu<Linked<ItemStack>>("${player.name}'s Ender Chest") {
+            rows(3)
             slots(inventorySlots)
             elements {
-                (9..35).map { player.inventory.getItem(it).replaceAir() } +
-                        (0..8).map { player.inventory.getItem(it).replaceAir() }
+                (0..26).map { player.enderChest.getItem(it).replaceAir() }
             }
             onGenerate { _, element, _, _ ->
                 element
             }
-            onBuild {
-                it.setItem(0, PLACEHOLDER_ITEM)
-                it.setItem(1, player.inventory.invokeMethod<ItemStack>("getItemInOffHand").replaceAir())
-                it.setItem(2, buildItem(XMaterial.PLAYER_HEAD) { name = "§e${player.name}" })
-                it.setItem(3, player.inventory.itemInHand.replaceAir())
-                it.setItem(4, PLACEHOLDER_ITEM)
-                it.setItem(5, player.inventory.helmet.replaceAir())
-                it.setItem(6, player.inventory.chestplate.replaceAir())
-                it.setItem(7, player.inventory.leggings.replaceAir())
-                it.setItem(8, player.inventory.boots.replaceAir())
-                (9..17).forEach { slot -> it.setItem(slot, PLACEHOLDER_ITEM) }
-            }
         }
         val sha1 = Base64.getEncoder().encodeToString(player.inventory.serializeToByteArray()).digest("sha-1")
         cache.put(sha1, menu)
-        return legacy(format.replaceWithOrder(player.name).colorify()).clickEvent(ClickEvent.runCommand("/view-inventory $sha1"))
+        return legacy(format.replaceWithOrder(player.name).colorify()).clickEvent(ClickEvent.runCommand("/view-enderchest $sha1"))
     }
 
     private val inventorySlots = IntRange(18, 53).toList()
 
     private val AIR_ITEM = buildItem(XMaterial.GRAY_STAINED_GLASS_PANE) { name = "§r" }
-    private val PLACEHOLDER_ITEM = buildItem(XMaterial.WHITE_STAINED_GLASS_PANE) { name = "§r" }
 
     private fun ItemStack?.replaceAir() = if (isAir()) AIR_ITEM else this!!
 }

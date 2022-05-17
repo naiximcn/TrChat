@@ -22,7 +22,7 @@ object ListenerBookEdit {
         val p = e.player
         if (Settings.CONF.getBoolean("Color.Book", true)) {
             val meta = e.newBookMeta
-            meta.pages = MessageColors.replaceWithPermission(p, meta.pages)
+            meta.pages = MessageColors.replaceWithPermission(p, meta.pages, MessageColors.Type.BOOK)
             e.newBookMeta = meta
         }
     }

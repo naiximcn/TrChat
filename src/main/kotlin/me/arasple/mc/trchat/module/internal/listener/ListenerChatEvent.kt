@@ -2,6 +2,7 @@ package me.arasple.mc.trchat.module.internal.listener
 
 import me.arasple.mc.trchat.api.config.Settings
 import me.arasple.mc.trchat.module.display.channel.Channel
+import me.arasple.mc.trchat.module.display.function.EnderChestShow
 import me.arasple.mc.trchat.module.display.function.InventoryShow
 import me.arasple.mc.trchat.module.display.function.ItemShow
 import me.arasple.mc.trchat.module.internal.hook.HookPlugin
@@ -21,10 +22,6 @@ import taboolib.platform.util.sendLang
  */
 @PlatformSide([Platform.BUKKIT])
 object ListenerChatEvent {
-
-    var hooks = arrayOf(
-        "PlayMoreSounds"
-    )
 
     @SubscribeEvent(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onChat(e: AsyncPlayerChatEvent) {
@@ -46,9 +43,12 @@ object ListenerChatEvent {
         }
 
         e.handlers.registeredListeners
-            .filter { it.plugin.isEnabled
-                    && (it.priority == org.bukkit.event.EventPriority.MONITOR
-                    && it.isIgnoringCancelled) || hooks.contains(it.plugin.name) }.forEach {
+            .filter {
+//                it.plugin.isEnabled
+//                    && (it.priority == org.bukkit.event.EventPriority.MONITOR
+//                    && it.isIgnoringCancelled) || hooks.contains(it.plugin.name)
+                Settings.CONF.getStringList("Options.ChatEvent-Hooks").contains(it.plugin.name)
+            }.forEach {
                 try {
                     it.callEvent(AsyncPlayerChatEvent(e.isAsynchronous, e.player, e.message, e.recipients))
                 } catch (e: Throwable) {
@@ -108,6 +108,15 @@ object ListenerChatEvent {
                 return false
             } else {
                 player.updateCooldown(CooldownType.INVENTORY_SHOW, InventoryShow.cooldown.get())
+            }
+        }
+        if (!player.hasPermission("trchat.bypass.enderchestcd")) {
+            val enderchestCooldown = player.getCooldownLeft(CooldownType.ENDERCHEST_SHOW)
+            if (EnderChestShow.keys.any { message.contains(it, ignoreCase = true) } && enderchestCooldown > 0) {
+                player.sendLang("Cooldowns-EnderChest-Show", enderchestCooldown / 1000)
+                return false
+            } else {
+                player.updateCooldown(CooldownType.ENDERCHEST_SHOW, EnderChestShow.cooldown.get())
             }
         }
         player.updateCooldown(CooldownType.CHAT, Settings.chatCooldown.get())

@@ -39,7 +39,7 @@ taboolib {
         "expansion-javascript"
     )
     classifier = null
-    version = "6.0.7-64"
+    version = "6.0.8-3"
 }
 
 configure<org.tabooproject.shrinkingkt.ShrinkingExt> {

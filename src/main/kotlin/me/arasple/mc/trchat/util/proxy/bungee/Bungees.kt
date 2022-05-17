@@ -11,6 +11,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.messaging.PluginMessageListener
+import org.bukkit.plugin.messaging.PluginMessageRecipient
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.onlinePlayers
 import taboolib.common.platform.function.submit
@@ -91,11 +92,11 @@ class Bungees : PluginMessageListener {
             }
         }
 
-        fun sendBukkitMessage(player: Player, vararg args: String, async: Boolean = true) {
+        fun sendBukkitMessage(recipient: PluginMessageRecipient, vararg args: String, async: Boolean = true) {
             submit(async = async) {
                 try {
                     for (bytes in args.serialize()) {
-                        player.sendPluginMessage(TrChat.plugin, TRCHAT_CHANNEL, bytes)
+                        recipient.sendPluginMessage(TrChat.plugin, TRCHAT_CHANNEL, bytes)
                     }
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -103,7 +104,7 @@ class Bungees : PluginMessageListener {
             }
         }
 
-        fun sendBungeeData(player: Player, vararg args: String) {
+        fun sendBungeeData(recipient: PluginMessageRecipient, vararg args: String) {
             val out = ByteStreams.newDataOutput()
 
             for (arg in args) {
@@ -113,7 +114,7 @@ class Bungees : PluginMessageListener {
                     e.printStackTrace()
                 }
             }
-            player.sendPluginMessage(TrChat.plugin, BUNGEE_CHANNEL, out.toByteArray())
+            recipient.sendPluginMessage(TrChat.plugin, BUNGEE_CHANNEL, out.toByteArray())
         }
     }
 }

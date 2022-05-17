@@ -26,6 +26,9 @@ object Mention {
     @ConfigNode("General.Mention.Enabled", "function.yml")
     var enabled = true
 
+    @ConfigNode("General.Mention.Permission", "function.yml")
+    var permission = "null"
+
     @ConfigNode("General.Mention.Format", "function.yml")
     var format = "&8[&3{0} &bx{1}&8]"
 

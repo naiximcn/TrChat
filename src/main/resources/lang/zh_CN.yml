@@ -87,6 +87,7 @@ Mentions-Notify:
     pitch: 2
 
 Inventory-Show-Unavailable: '&c&l该背包已过期或不存在...'
+EnderChest-Show-Unavailable: '&c&l该末影箱已过期或不存在...'
 
 Private-Message-Spy-Format: '&8[&3监听&8] &6{0} &2-> &3{1}&f: &7{2}'
 Private-Message-Spy-On:

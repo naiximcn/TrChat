@@ -31,6 +31,9 @@ object ItemShow {
     @ConfigNode("General.Item-Show.Enabled", "function.yml")
     var enabled = true
 
+    @ConfigNode("General.Item-Show.Permission", "function.yml")
+    var permission = "null"
+
     @ConfigNode("General.Item-Show.Format", "function.yml")
     var format = "&8[&3{0} &bx{1}&8]"
 

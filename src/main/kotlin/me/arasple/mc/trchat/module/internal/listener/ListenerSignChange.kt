@@ -27,7 +27,7 @@ object ListenerSignChange {
             e.setLine(index, l.let {
                 var line = it
                 if (Settings.CONF.getBoolean("Color.Sign")) {
-                    line = MessageColors.replaceWithPermission(p, line ?: "")
+                    line = MessageColors.replaceWithPermission(p, line ?: "", MessageColors.Type.SIGN)
                 }
                 if (Filters.CONF.getBoolean("Enable.Sign")) {
                     TrChatAPI.filterString(p, line).filtered
