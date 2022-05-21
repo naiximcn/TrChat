@@ -92,7 +92,7 @@ object TrChatAPI {
 
     @JvmStatic
     fun eval(player: Player, script: String): CompletableFuture<Any?> {
-        return mirrorNow("API:Script:Evaluation") {
+        return mirrorNow("Handler:Script:Evaluation") {
             return@mirrorNow try {
                 KetherShell.eval(script, namespace = listOf("trchat", "trmenu", "trhologram")) {
                     sender = adaptPlayer(player)

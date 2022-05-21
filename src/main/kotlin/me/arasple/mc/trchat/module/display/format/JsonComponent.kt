@@ -5,6 +5,7 @@ import me.arasple.mc.trchat.util.pass
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import org.bukkit.command.CommandSender
+import taboolib.common5.mirrorNow
 
 /**
  * @author Arasple
@@ -22,16 +23,18 @@ open class JsonComponent(
 ) {
 
     open fun toTextComponent(sender: CommandSender, vararg vars: String): TextComponent {
-        val builder = text?.firstOrNull { it.condition.pass(sender) }?.process(sender, *vars) ?: Component.text()
+        return mirrorNow("Chat:Format:Json") {
+            val builder = text?.firstOrNull { it.condition.pass(sender) }?.process(sender, *vars) ?: Component.text()
 
-        hover?.process(builder, sender, *vars)
-        suggest?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
-        command?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
-        url?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
-        insertion?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
-        copy?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
-        font?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+            hover?.process(builder, sender, *vars)
+            suggest?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+            command?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+            url?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+            insertion?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+            copy?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+            font?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
 
-        return builder.build()
+            builder.build()
+        }
     }
 }

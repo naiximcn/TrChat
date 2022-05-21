@@ -70,8 +70,9 @@ fun Player.checkMute(): Boolean {
         sendLang("General-Global-Muting")
         return false
     }
-    if (this.getSession().isMuted) {
-        sendLang("General-Muted", muteDateFormat.format(getDataContainer().getLong("mute_time")))
+    val session = getSession()
+    if (session.isMuted) {
+        sendLang("General-Muted", muteDateFormat.format(session.muteTime), session.muteReason)
         return false
     }
     return true

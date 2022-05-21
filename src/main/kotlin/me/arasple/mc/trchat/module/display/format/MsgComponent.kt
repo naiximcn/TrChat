@@ -14,6 +14,7 @@ import net.kyori.adventure.text.TextComponent
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import taboolib.common.util.VariableReader
+import taboolib.common5.mirrorNow
 
 /**
  * @author wlys
@@ -92,18 +93,20 @@ class MsgComponent(
     }
 
     override fun toTextComponent(sender: CommandSender, vararg vars: String): TextComponent {
-        val message = vars[0]
-        val builder = legacy(message).toBuilder()
+        return mirrorNow("Chat:Format:Msg") {
+            val message = vars[0]
+            val builder = legacy(message).toBuilder()
 
-        hover?.process(builder, sender, *vars)
-        suggest?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
-        command?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
-        url?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
-        insertion?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
-        copy?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
-        font?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+            hover?.process(builder, sender, *vars)
+            suggest?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+            command?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+            url?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+            insertion?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+            copy?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
+            font?.firstOrNull { it.condition.pass(sender) }?.process(builder, sender, *vars)
 
-        return builder.build()
+            builder.build()
+        }
     }
 
     companion object {

@@ -11,6 +11,7 @@ import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.platform.command.command
 import taboolib.common.platform.function.onlinePlayers
+import taboolib.common5.Demand
 import taboolib.common5.util.parseMillis
 import taboolib.expansion.createHelper
 import taboolib.platform.util.sendLang
@@ -33,14 +34,31 @@ object CommandMute {
                 suggestion<CommandSender> { _, _ ->
                     onlinePlayers().map { it.name }
                 }
-                dynamic("time") {
+                execute<CommandSender> { sender, _, argument ->
+                    Bukkit.getPlayer(argument)?.let {
+                        val session = it.getSession()
+                        session.updateMuteTime("999d".parseMillis())
+                        sender.sendLang("Mute-Muted-Player", it.name, "999d", "null")
+                    } ?: sender.sendLang("Command-Player-Not-Exist")
+                }
+                dynamic("options", optional = true) {
                     suggestion<CommandSender>(uncheck = true) { _, _ ->
-                        listOf("1h", "12h", "3d", "5m")
+                        listOf("-t 1h", "-t 2d", "-t 15m", "-r 原因", "--cancel")
                     }
                     execute<CommandSender> { sender, context, argument ->
                         Bukkit.getPlayer(context.argument(-1))?.let {
-                            it.getSession().updateMuteTime(argument.parseMillis())
-                            sender.sendLang("Mute-Muted-Player", it.name, argument)
+                            val session = it.getSession()
+                            val de = Demand("mute $argument")
+                            if (de.tags.contains("cancel")) {
+                                session.updateMuteTime(0)
+                                sender.sendLang("Mute-Cancel-Muted-Player", it.name)
+                            } else {
+                                val time = de.get("t") ?: "999d"
+                                val reason = de.get("r")
+                                session.updateMuteTime(time.parseMillis())
+                                session.setMuteReason(reason)
+                                sender.sendLang("Mute-Muted-Player", it.name, time, reason ?: "null")
+                            }
                         } ?: sender.sendLang("Command-Player-Not-Exist")
                     }
                 }

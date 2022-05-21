@@ -14,6 +14,7 @@ import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.reflect.Reflex.Companion.invokeMethod
 import taboolib.common.util.replaceWithOrder
+import taboolib.common5.mirrorNow
 import taboolib.common5.util.parseMillis
 import taboolib.library.xseries.XMaterial
 import taboolib.module.configuration.ConfigNode
@@ -65,32 +66,34 @@ object InventoryShow {
     }
 
     fun createComponent(player: Player): Component {
-        val menu = buildMenu<Linked<ItemStack>>("${player.name}'s Inventory") {
-            rows(6)
-            slots(inventorySlots)
-            elements {
-                (9..35).map { player.inventory.getItem(it).replaceAir() } +
-                        (0..8).map { player.inventory.getItem(it).replaceAir() }
+        return mirrorNow("Function:InventoryShow:CreateComponent") {
+            val menu = buildMenu<Linked<ItemStack>>("${player.name}'s Inventory") {
+                rows(6)
+                slots(inventorySlots)
+                elements {
+                    (9..35).map { player.inventory.getItem(it).replaceAir() } +
+                            (0..8).map { player.inventory.getItem(it).replaceAir() }
+                }
+                onGenerate { _, element, _, _ ->
+                    element
+                }
+                onBuild {
+                    it.setItem(0, PLACEHOLDER_ITEM)
+                    it.setItem(1, player.inventory.invokeMethod<ItemStack>("getItemInOffHand").replaceAir())
+                    it.setItem(2, buildItem(XMaterial.PLAYER_HEAD) { name = "§e${player.name}" })
+                    it.setItem(3, player.inventory.itemInHand.replaceAir())
+                    it.setItem(4, PLACEHOLDER_ITEM)
+                    it.setItem(5, player.inventory.helmet.replaceAir())
+                    it.setItem(6, player.inventory.chestplate.replaceAir())
+                    it.setItem(7, player.inventory.leggings.replaceAir())
+                    it.setItem(8, player.inventory.boots.replaceAir())
+                    (9..17).forEach { slot -> it.setItem(slot, PLACEHOLDER_ITEM) }
+                }
             }
-            onGenerate { _, element, _, _ ->
-                element
-            }
-            onBuild {
-                it.setItem(0, PLACEHOLDER_ITEM)
-                it.setItem(1, player.inventory.invokeMethod<ItemStack>("getItemInOffHand").replaceAir())
-                it.setItem(2, buildItem(XMaterial.PLAYER_HEAD) { name = "§e${player.name}" })
-                it.setItem(3, player.inventory.itemInHand.replaceAir())
-                it.setItem(4, PLACEHOLDER_ITEM)
-                it.setItem(5, player.inventory.helmet.replaceAir())
-                it.setItem(6, player.inventory.chestplate.replaceAir())
-                it.setItem(7, player.inventory.leggings.replaceAir())
-                it.setItem(8, player.inventory.boots.replaceAir())
-                (9..17).forEach { slot -> it.setItem(slot, PLACEHOLDER_ITEM) }
-            }
+            val sha1 = Base64.getEncoder().encodeToString(player.inventory.serializeToByteArray()).digest("sha-1")
+            cache.put(sha1, menu)
+            legacy(format.replaceWithOrder(player.name).colorify()).clickEvent(ClickEvent.runCommand("/view-inventory $sha1"))
         }
-        val sha1 = Base64.getEncoder().encodeToString(player.inventory.serializeToByteArray()).digest("sha-1")
-        cache.put(sha1, menu)
-        return legacy(format.replaceWithOrder(player.name).colorify()).clickEvent(ClickEvent.runCommand("/view-inventory $sha1"))
     }
 
     private val inventorySlots = IntRange(18, 53).toList()

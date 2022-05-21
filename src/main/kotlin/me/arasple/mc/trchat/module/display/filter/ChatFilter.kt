@@ -132,7 +132,7 @@ object ChatFilter {
      * @return 过滤后的字符串
      */
     fun filter(string: String, execute: Boolean = true): FilteredObject {
-        return mirrorNow("Handler:Filter:doFilter") {
+        return mirrorNow("Handler:DoFilter") {
             Filter.doFilter(string, execute).also {
                 Metrics.increase(1, it.sensitiveWords)
             }

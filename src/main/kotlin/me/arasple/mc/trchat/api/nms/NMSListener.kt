@@ -28,10 +28,9 @@ object NMSListener {
         when (e.packet.name) {
             "PacketPlayOutChat" -> {
                 session.addMessage(e.packet)
-                // FIXME: 2022/5/17 style丢失
-//                if (!Filters.CONF.getBoolean("Enable.Chat") || !session.isFilterEnabled) {
-//                    return
-//                }
+                if (!Filters.CONF.getBoolean("Enable.Chat") || !session.isFilterEnabled) {
+                    return
+                }
 //                val type = if (majorLegacy >= 11700) {
 //                    e.packet.read<Any>("type")!!.invokeMethod<Byte>("a")
 //                } else if (majorLegacy >= 11200) {
@@ -42,15 +41,15 @@ object NMSListener {
 //                if (type != 0.toByte()) {
 //                    return
 //                }
-//                if (majorLegacy >= 11700) {
-//                    e.packet.write("message", NMS.INSTANCE.filterIChatComponent(e.packet.read<Any>("message")))
-//                } else {
-//                    e.packet.write("a", NMS.INSTANCE.filterIChatComponent(e.packet.read<Any>("a")))
-//                }
-//                kotlin.runCatching {
-//                    val components = e.packet.read<Array<BaseComponent>>("components") ?: return
-//                    e.packet.write("components", components.map { filterComponent(it) }.toTypedArray())
-//                }
+                if (majorLegacy >= 11700) {
+                    e.packet.write("message", NMS.INSTANCE.filterIChatComponent(e.packet.read<Any>("message")))
+                } else {
+                    e.packet.write("a", NMS.INSTANCE.filterIChatComponent(e.packet.read<Any>("a")))
+                }
+                kotlin.runCatching {
+                    val components = e.packet.read<Array<BaseComponent>>("components") ?: return
+                    e.packet.write("components", components.map { filterComponent(it) }.toTypedArray())
+                }
                 return
             }
             "PacketPlayOutWindowItems" -> {

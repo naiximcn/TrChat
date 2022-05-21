@@ -13,6 +13,7 @@ import taboolib.common.io.digest
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.util.replaceWithOrder
+import taboolib.common5.mirrorNow
 import taboolib.common5.util.parseMillis
 import taboolib.library.xseries.XMaterial
 import taboolib.module.configuration.ConfigNode
@@ -64,19 +65,21 @@ object EnderChestShow {
     }
 
     fun createComponent(player: Player): Component {
-        val menu = buildMenu<Linked<ItemStack>>("${player.name}'s Ender Chest") {
-            rows(3)
-            slots(inventorySlots)
-            elements {
-                (0..26).map { player.enderChest.getItem(it).replaceAir() }
+        return mirrorNow("Function:EnderChestShow:CreateComponent") {
+            val menu = buildMenu<Linked<ItemStack>>("${player.name}'s Ender Chest") {
+                rows(3)
+                slots(inventorySlots)
+                elements {
+                    (0..26).map { player.enderChest.getItem(it).replaceAir() }
+                }
+                onGenerate { _, element, _, _ ->
+                    element
+                }
             }
-            onGenerate { _, element, _, _ ->
-                element
-            }
+            val sha1 = Base64.getEncoder().encodeToString(player.inventory.serializeToByteArray()).digest("sha-1")
+            cache.put(sha1, menu)
+            legacy(format.replaceWithOrder(player.name).colorify()).clickEvent(ClickEvent.runCommand("/view-enderchest $sha1"))
         }
-        val sha1 = Base64.getEncoder().encodeToString(player.inventory.serializeToByteArray()).digest("sha-1")
-        cache.put(sha1, menu)
-        return legacy(format.replaceWithOrder(player.name).colorify()).clickEvent(ClickEvent.runCommand("/view-enderchest $sha1"))
     }
 
     private val inventorySlots = IntRange(18, 53).toList()

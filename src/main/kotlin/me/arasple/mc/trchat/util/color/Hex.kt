@@ -1,9 +1,9 @@
 package me.arasple.mc.trchat.util.color
 
 import net.md_5.bungee.api.ChatColor
-import org.bukkit.command.CommandSender
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
+import taboolib.common5.mirrorNow
 import taboolib.module.nms.MinecraftVersion
 import java.awt.Color
 import java.util.*
@@ -60,16 +60,6 @@ object Hex {
     }
 
     /**
-     * Sends a CommandSender a colored message
-     *
-     * @param sender  The CommandSender to send to
-     * @param message The message to send
-     */
-    fun sendMessage(sender: CommandSender, message: String) {
-        sender.sendMessage(colorify(message))
-    }
-
-    /**
      * Parses gradients, hex colors, and legacy color codes
      *
      * @param message The message
@@ -85,143 +75,148 @@ object Hex {
     }
 
     internal fun parseRainbow(message: String): String {
-        var parsed = message
-        var matcher = RAINBOW_PATTERN.matcher(parsed)
-        while (matcher.find()) {
-            val parsedRainbow = StringBuilder()
+        return mirrorNow("Handler:Color:Rainbow") {
+            var parsed = message
+            var matcher = RAINBOW_PATTERN.matcher(parsed)
+            while (matcher.find()) {
+                val parsedRainbow = StringBuilder()
 
-            // Possible parameters and their defaults
-            var speed = -1
-            var saturation = 1.0f
-            var brightness = 1.0f
-            val looping = getCaptureGroup(matcher, "looping") != null
-            val speedGroup = getCaptureGroup(matcher, "speed")
-            if (speedGroup != null) {
-                try {
-                    speed = speedGroup.toInt()
-                } catch (ignored: NumberFormatException) {
-                }
-            }
-            val saturationGroup = getCaptureGroup(matcher, "saturation")
-            if (saturationGroup != null) {
-                try {
-                    saturation = saturationGroup.toFloat()
-                } catch (ignored: NumberFormatException) {
-                }
-            }
-            val brightnessGroup = getCaptureGroup(matcher, "brightness")
-            if (brightnessGroup != null) {
-                try {
-                    brightness = brightnessGroup.toFloat()
-                } catch (ignored: NumberFormatException) {
-                }
-            }
-            val stop = findStop(parsed, matcher.end())
-            val content = parsed.substring(matcher.end(), stop)
-            var contentLength = content.length
-            val chars = content.toCharArray()
-            for (i in 0 until chars.size - 1) if (chars[i] == '&' && "KkLlMmNnOoRr".indexOf(chars[i + 1]) > -1) contentLength -= 2
-            val length = if (looping) Math.min(contentLength, CHARS_UNTIL_LOOP) else contentLength
-            var rainbow: ColorGenerator
-            rainbow = if (speed == -1) {
-                Rainbow(length, saturation, brightness)
-            } else {
-                AnimatedRainbow(length, saturation, brightness, speed)
-            }
-            var compoundedFormat: String = "" // Carry the format codes through the rainbow gradient
-            var i = 0
-            while (i < chars.size) {
-                val c = chars[i]
-                if (c == '&' && i + 1 < chars.size) {
-                    val next = chars[i + 1]
-                    val color = org.bukkit.ChatColor.getByChar(next)
-                    if (color != null && color.isFormat) {
-                        compoundedFormat += ChatColor.COLOR_CHAR.toString() + next
-                        i++ // Skip next character
-                        i++
-                        continue
+                // Possible parameters and their defaults
+                var speed = -1
+                var saturation = 1.0f
+                var brightness = 1.0f
+                val looping = getCaptureGroup(matcher, "looping") != null
+                val speedGroup = getCaptureGroup(matcher, "speed")
+                if (speedGroup != null) {
+                    try {
+                        speed = speedGroup.toInt()
+                    } catch (ignored: NumberFormatException) {
                     }
                 }
-                parsedRainbow.append(translateHex(rainbow.next())).append(compoundedFormat).append(c)
-                i++
+                val saturationGroup = getCaptureGroup(matcher, "saturation")
+                if (saturationGroup != null) {
+                    try {
+                        saturation = saturationGroup.toFloat()
+                    } catch (ignored: NumberFormatException) {
+                    }
+                }
+                val brightnessGroup = getCaptureGroup(matcher, "brightness")
+                if (brightnessGroup != null) {
+                    try {
+                        brightness = brightnessGroup.toFloat()
+                    } catch (ignored: NumberFormatException) {
+                    }
+                }
+                val stop = findStop(parsed, matcher.end())
+                val content = parsed.substring(matcher.end(), stop)
+                var contentLength = content.length
+                val chars = content.toCharArray()
+                for (i in 0 until chars.size - 1) if (chars[i] == '&' && "KkLlMmNnOoRr".indexOf(chars[i + 1]) > -1) contentLength -= 2
+                val length = if (looping) contentLength.coerceAtMost(CHARS_UNTIL_LOOP) else contentLength
+                val rainbow: ColorGenerator = if (speed == -1) {
+                    Rainbow(length, saturation, brightness)
+                } else {
+                    AnimatedRainbow(length, saturation, brightness, speed)
+                }
+                var compoundedFormat = "" // Carry the format codes through the rainbow gradient
+                var i = 0
+                while (i < chars.size) {
+                    val c = chars[i]
+                    if (c == '&' && i + 1 < chars.size) {
+                        val next = chars[i + 1]
+                        val color = org.bukkit.ChatColor.getByChar(next)
+                        if (color != null && color.isFormat) {
+                            compoundedFormat += ChatColor.COLOR_CHAR.toString() + next
+                            i++ // Skip next character
+                            i++
+                            continue
+                        }
+                    }
+                    parsedRainbow.append(translateHex(rainbow.next())).append(compoundedFormat).append(c)
+                    i++
+                }
+                val before = parsed.substring(0, matcher.start())
+                val after = parsed.substring(stop)
+                parsed = before + parsedRainbow + after
+                matcher = RAINBOW_PATTERN.matcher(parsed)
             }
-            val before = parsed.substring(0, matcher.start())
-            val after = parsed.substring(stop)
-            parsed = before + parsedRainbow + after
-            matcher = RAINBOW_PATTERN.matcher(parsed)
+            return@mirrorNow parsed
         }
-        return parsed
     }
 
     internal fun parseGradients(message: String): String {
-        var parsed = message
-        var matcher = GRADIENT_PATTERN.matcher(parsed)
-        while (matcher.find()) {
-            val parsedGradient = StringBuilder()
-            var speed = -1
-            val looping = getCaptureGroup(matcher, "loop") != null
-            val hexSteps = Arrays.stream(
-                getCaptureGroup(matcher, "hex")!!.substring(1).split(":").toTypedArray()
-            )
-                .map { x: String -> if (x.length != 4) x else String.format("#%s%s%s%s%s%s", x[1], x[1], x[2], x[2], x[3], x[3]) }
-                .map { nm: String? -> Color.decode(nm) }
-                .collect(Collectors.toList())
-            val speedGroup = getCaptureGroup(matcher, "speed")
-            if (speedGroup != null) {
-                try {
-                    speed = speedGroup.toInt()
-                } catch (ignored: NumberFormatException) {
-                }
-            }
-            val stop = findStop(parsed, matcher.end())
-            val content = parsed.substring(matcher.end(), stop)
-            var contentLength = content.length
-            val chars = content.toCharArray()
-            for (i in 0 until chars.size - 1) if (chars[i] == '&' && "KkLlMmNnOoRr".indexOf(chars[i + 1]) > -1) contentLength -= 2
-            val length = if (looping) Math.min(contentLength, CHARS_UNTIL_LOOP) else contentLength
-            val gradient: ColorGenerator = if (speed == -1) {
-                Gradient(hexSteps, length)
-            } else {
-                AnimatedGradient(hexSteps, length, speed)
-            }
-            var compoundedFormat = "" // Carry the format codes through the gradient
-            var i = 0
-            while (i < chars.size) {
-                val c = chars[i]
-                if (c == '&' && i + 1 < chars.size) {
-                    val next = chars[i + 1]
-                    val color = org.bukkit.ChatColor.getByChar(next)
-                    if (color != null && color.isFormat) {
-                        compoundedFormat += ChatColor.COLOR_CHAR.toString() + next
-                        i++ // Skip next character
-                        i++
-                        continue
+        return mirrorNow("Handler:Color:Gradients") {
+            var parsed = message
+            var matcher = GRADIENT_PATTERN.matcher(parsed)
+            while (matcher.find()) {
+                val parsedGradient = StringBuilder()
+                var speed = -1
+                val looping = getCaptureGroup(matcher, "loop") != null
+                val hexSteps = Arrays.stream(
+                    getCaptureGroup(matcher, "hex")!!.substring(1).split(":").toTypedArray()
+                )
+                    .map { x: String -> if (x.length != 4) x else String.format("#%s%s%s%s%s%s", x[1], x[1], x[2], x[2], x[3], x[3]) }
+                    .map { nm: String? -> Color.decode(nm) }
+                    .collect(Collectors.toList())
+                val speedGroup = getCaptureGroup(matcher, "speed")
+                if (speedGroup != null) {
+                    try {
+                        speed = speedGroup.toInt()
+                    } catch (ignored: NumberFormatException) {
                     }
                 }
-                parsedGradient.append(translateHex(gradient.next())).append(compoundedFormat).append(c)
-                i++
+                val stop = findStop(parsed, matcher.end())
+                val content = parsed.substring(matcher.end(), stop)
+                var contentLength = content.length
+                val chars = content.toCharArray()
+                for (i in 0 until chars.size - 1) if (chars[i] == '&' && "KkLlMmNnOoRr".indexOf(chars[i + 1]) > -1) contentLength -= 2
+                val length = if (looping) contentLength.coerceAtMost(CHARS_UNTIL_LOOP) else contentLength
+                val gradient: ColorGenerator = if (speed == -1) {
+                    Gradient(hexSteps, length)
+                } else {
+                    AnimatedGradient(hexSteps, length, speed)
+                }
+                var compoundedFormat = "" // Carry the format codes through the gradient
+                var i = 0
+                while (i < chars.size) {
+                    val c = chars[i]
+                    if (c == '&' && i + 1 < chars.size) {
+                        val next = chars[i + 1]
+                        val color = org.bukkit.ChatColor.getByChar(next)
+                        if (color != null && color.isFormat) {
+                            compoundedFormat += ChatColor.COLOR_CHAR.toString() + next
+                            i++ // Skip next character
+                            i++
+                            continue
+                        }
+                    }
+                    parsedGradient.append(translateHex(gradient.next())).append(compoundedFormat).append(c)
+                    i++
+                }
+                val before = parsed.substring(0, matcher.start())
+                val after = parsed.substring(stop)
+                parsed = before + parsedGradient + after
+                matcher = GRADIENT_PATTERN.matcher(parsed)
             }
-            val before = parsed.substring(0, matcher.start())
-            val after = parsed.substring(stop)
-            parsed = before + parsedGradient + after
-            matcher = GRADIENT_PATTERN.matcher(parsed)
+            return@mirrorNow parsed
         }
-        return parsed
     }
 
     internal fun parseHex(message: String): String {
-        var parsed = message
-        for (pattern: Pattern in HEX_PATTERNS) {
-            var matcher = pattern.matcher(parsed)
-            while (matcher.find()) {
-                val color = translateHex(cleanHex(matcher.group()))
-                val before = parsed.substring(0, matcher.start())
-                val after = parsed.substring(matcher.end())
-                parsed = before + color + after
-                matcher = pattern.matcher(parsed)
+        return mirrorNow("Handler:Color:Hex") {
+            var parsed = message
+            for (pattern: Pattern in HEX_PATTERNS) {
+                var matcher = pattern.matcher(parsed)
+                while (matcher.find()) {
+                    val color = translateHex(cleanHex(matcher.group()))
+                    val before = parsed.substring(0, matcher.start())
+                    val after = parsed.substring(matcher.end())
+                    parsed = before + color + after
+                    matcher = pattern.matcher(parsed)
+                }
             }
+            return@mirrorNow parsed
         }
-        return parsed
     }
 
     private fun parseLegacy(message: String): String {
@@ -341,7 +336,7 @@ object Hex {
             return color
         }
 
-        private class TwoStopGradient internal constructor(
+        private class TwoStopGradient(
             private val startColor: Color,
             private val endColor: Color,
             private val lowerRange: Float,
@@ -426,7 +421,7 @@ object Hex {
     }
 }
 
-internal fun String.colorify() = Hex.colorify(this)
-internal fun String.parseHex() = Hex.parseHex(this)
-internal fun String.parseRainbow() = Hex.parseRainbow(this)
-internal fun String.parseGradients() = Hex.parseGradients(this)
+fun String.colorify() = Hex.colorify(this)
+fun String.parseHex() = Hex.parseHex(this)
+fun String.parseRainbow() = Hex.parseRainbow(this)
+fun String.parseGradients() = Hex.parseGradients(this)

@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.Platform
 import taboolib.common.platform.PlatformSide
 import taboolib.common.util.replaceWithOrder
+import taboolib.common5.mirrorNow
 import taboolib.common5.util.parseMillis
 import taboolib.module.configuration.ConfigNode
 import taboolib.module.configuration.ConfigNodeTransfer
@@ -70,18 +71,20 @@ object ItemShow {
     }
 
     fun createComponent(player: Player, slot: Int): Component {
-        val item = (player.inventory.getItem(slot - 1) ?: ItemStack(Material.AIR)).run {
-            if (compatible) {
-                buildItem(this) { material = Material.STONE }
-            } else {
-                clone()
+        return mirrorNow("Function:ItemShow:CreateComponent") {
+            val item = (player.inventory.getItem(slot - 1) ?: ItemStack(Material.AIR)).run {
+                if (compatible) {
+                    buildItem(this) { material = Material.STONE }
+                } else {
+                    clone()
+                }
             }
-        }
-        return cache.getIfPresent(item) ?: kotlin.run {
-            HookPlugin.getInteractiveChat().createItemDisplayComponent(player, item) ?:
-            legacy(format.replaceWithOrder(item.getDisplayName(player), item.amount.toString()).colorify())
-                .hoverItemFixed(item, player)
-                .also { cache.put(item, it) }
+            cache.getIfPresent(item) ?: kotlin.run {
+                HookPlugin.getInteractiveChat().createItemDisplayComponent(player, item) ?:
+                legacy(format.replaceWithOrder(item.getDisplayName(player), item.amount.toString()).colorify())
+                    .hoverItemFixed(item, player)
+                    .also { cache.put(item, it) }
+            }
         }
     }
 

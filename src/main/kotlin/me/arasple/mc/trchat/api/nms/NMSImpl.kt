@@ -78,12 +78,21 @@ class NMSImpl : NMS() {
     }
 
     private fun filterComponent(component: Component): Component {
-        return if (component is TextComponent && component.content().isNotEmpty()) {
+        val newComponent = if (component is TextComponent && component.content().isNotEmpty()) {
             component.content(filter(component.content()).filtered)
-        } else if (component.children().isNotEmpty()) {
-            Component.text { builder -> component.children().forEach { builder.append(filterComponent(it)) } }
         } else {
             component
+        }
+        return if (newComponent.children().isNotEmpty()) {
+            Component.text { builder ->
+                newComponent.children().forEach { builder.append(filterComponent(it)) }
+                builder.style(newComponent.style())
+                if (newComponent is TextComponent) {
+                    builder.content(newComponent.content())
+                }
+            }
+        } else {
+            newComponent
         }
     }
 }

@@ -33,7 +33,11 @@ class ChatSession(
 
     val isFilterEnabled get() = player.getDataContainer().getBoolean("filter", true)
 
-    val isMuted get() = (player.getDataContainer().getLong("mute_time", 0)) > System.currentTimeMillis()
+    val muteTime get() = player.getDataContainer().getLong("mute_time", 0)
+
+    val isMuted get() = muteTime > System.currentTimeMillis()
+
+    val muteReason get() = player.getDataContainer().getString("mute_reason", "null")!!
 
     val isVanishing get() = player.getDataContainer().getBoolean("vanish", false)
 
@@ -43,6 +47,10 @@ class ChatSession(
 
     fun updateMuteTime(time: Long) {
         player.getDataContainer()["mute_time"] = System.currentTimeMillis() + time
+    }
+
+    fun setMuteReason(reason: String?) {
+        player.getDataContainer()["mute_reason"] = reason
     }
 
     fun switchSpy(): Boolean {

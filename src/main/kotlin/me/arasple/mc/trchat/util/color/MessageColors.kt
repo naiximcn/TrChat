@@ -94,10 +94,6 @@ object MessageColors {
     }
 
     fun catchDefaultMessageColor(player: Player, defaultColor: DefaultColor): DefaultColor {
-        if (player.hasPermission("$FORCE_CHAT_COLOR_PERMISSION_NODE*")) {
-            return defaultColor
-        }
-
         return getColorsFromPermissions(player, FORCE_CHAT_COLOR_PERMISSION_NODE).firstOrNull()?.let { DefaultColor(it) } ?: defaultColor
     }
 
