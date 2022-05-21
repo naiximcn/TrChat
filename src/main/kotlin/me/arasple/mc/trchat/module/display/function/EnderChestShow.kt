@@ -82,7 +82,7 @@ object EnderChestShow {
         }
     }
 
-    private val inventorySlots = IntRange(18, 53).toList()
+    private val inventorySlots = IntRange(0, 26).toList()
 
     private val AIR_ITEM = buildItem(XMaterial.GRAY_STAINED_GLASS_PANE) { name = "§r" }
 
