@@ -6,7 +6,7 @@ Enable:
 
 Cloud-Thesaurus:
   Enabled: true
-  Ignored: []
+  Ignored: ['nt']
   Urls:
     - 'https://raw.githubusercontent.com/Yurinann/Filter-Thesaurus-Cloud/main/database.json' # 感谢南城提供的词库
 
