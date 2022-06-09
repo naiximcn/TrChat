@@ -1,4 +1,4 @@
-name: TrChat build
+name: TrChat build with Actions
 on: [ push ]
 
 jobs:
